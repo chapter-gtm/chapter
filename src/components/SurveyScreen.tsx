@@ -15,6 +15,8 @@ import {
   Trash2,
   Users2,
 } from "lucide-react";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   ResizableHandle,
@@ -68,6 +70,12 @@ export function SurveyScreen() {
           <Tabs defaultValue="all">
             <div className="flex items-center px-4 py-2">
               <h1 className="text-xl font-bold">Surveys</h1>
+              <div className="ml-auto mr-4">
+                <Button>
+                  <PlusCircledIcon className="mr-2 h-4 w-4" />
+                  Add survey
+                </Button>
+              </div>
               <TabsList className="ml-auto">
                 <TabsTrigger
                   value="all"
