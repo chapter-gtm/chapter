@@ -1,21 +1,21 @@
 "use client";
-import { useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { Survey } from "@/types/survey";
 
 interface SurveyListProps {
   surveys: Survey[];
+  selectedSurvey: Survey | null;
+  handleSelection: Function;
 }
 
-export function SurveyList({ surveys }: SurveyListProps) {
-  const [selectedSurvey, setSelectedSurvey] = useState(
-    surveys.length > 0 ? surveys[0] : null,
-  );
-
+export function SurveyList({
+  surveys,
+  selectedSurvey,
+  handleSelection,
+}: SurveyListProps) {
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
@@ -24,9 +24,11 @@ export function SurveyList({ surveys }: SurveyListProps) {
             key={item.id}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              selectedSurvey.id === item.id && "bg-muted",
+              selectedSurvey !== null &&
+                selectedSurvey.id === item.id &&
+                "bg-muted",
             )}
-            onClick={() => setSelectedSurvey(item)}
+            onClick={() => handleSelection(item)}
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -36,12 +38,12 @@ export function SurveyList({ surveys }: SurveyListProps) {
                 <div
                   className={cn(
                     "ml-auto text-xs",
-                    selectedSurvey.id === item.id
+                    selectedSurvey !== null && selectedSurvey.id === item.id
                       ? "text-foreground"
                       : "text-muted-foreground",
                   )}
                 >
-                  {item.created_ts.toLocaleDateString}
+                  {item.created_ts.toString()}
                 </div>
               </div>
               <div className="text-xs font-medium">{item.objective}</div>
