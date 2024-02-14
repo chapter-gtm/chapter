@@ -1,4 +1,4 @@
-# Nectar Survey App
+# Nectar Console App
 
 
 ## Getting Started
