@@ -34,7 +34,7 @@ enum SurveyOutroAction {
   SHARE = "Share with someone",
 }
 
-enum SurveyStage {
+export enum SurveyStage {
   NOT_STARTED = "Not Started",
   STARTED = "Started",
   COMPLETED = "Completed",
