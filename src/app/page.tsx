@@ -1,4 +1,10 @@
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Nectar Console",
+  description: "Deep interview-like insights at survey-like speed",
+};
 
 export default function Home() {
   return (

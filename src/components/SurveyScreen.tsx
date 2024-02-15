@@ -27,7 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { SurveyList } from "@/components/SurveyList";
-import { SurveyForm } from "@/components/SurveyForm";
+import { SurveyDetails } from "@/components/SurveyDetails";
 import { Survey } from "@/types/survey";
 
 async function getSurveys() {
@@ -120,7 +120,7 @@ export function SurveyScreen() {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]}>
-          <SurveyForm survey={selectedSurvey} />
+          <SurveyDetails survey={selectedSurvey} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>

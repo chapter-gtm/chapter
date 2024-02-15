@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -49,11 +50,11 @@ type SurveyFormValues = z.infer<typeof surveyFormSchema>;
 // This can come from your database or API.
 const defaultValues: Partial<SurveyFormValues> = {};
 
-interface SurveyFormProps {
+interface SurveyDefinitionProps {
   survey: Survey | null;
 }
 
-export function SurveyForm({ survey }: SurveyFormProps) {
+export function SurveyDefinition({ survey }: SurveyDefinitionProps) {
   const form = useForm<SurveyFormValues>({
     resolver: zodResolver(surveyFormSchema),
     defaultValues,
@@ -73,12 +74,17 @@ export function SurveyForm({ survey }: SurveyFormProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Survey Definition</h3>
-        <p className="text-sm text-muted-foreground">
-          This is your survey definition.
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Survey Definition
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Your survey definition.
+          </p>
+        </div>
       </div>
+      <Separator className="my-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
