@@ -51,7 +51,12 @@ export function SurveyResults({ survey }: SurveyResultsProps) {
         </div>
       </div>
       <Separator className="my-4" />
-      <DataTable columns={resultColumns} data={submissions} filters={filters} />
+      <DataTable
+        columns={resultColumns}
+        data={submissions}
+        filters={filters}
+        filterColumnName="email"
+      />
     </>
   );
 }
