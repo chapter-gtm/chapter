@@ -59,8 +59,6 @@ export const resultColumns: ColumnDef<Submission>[] = [
       <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("date")}</div>,
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: "email",
@@ -106,7 +104,5 @@ export const resultColumns: ColumnDef<Submission>[] = [
     cell: ({ row }) => (
       <div className="w-[80px]">{row.getValue("sentiment")}</div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
 ];
