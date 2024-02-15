@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { SurveyDefinition } from "@/components/SurveyDefinition";
-import { SurveyResults } from "@/components/SurveyResults";
+import { SurveyDefinition } from "@/components/survey/SurveyDefinition";
+import { SurveyResults } from "@/components/survey/SurveyResults";
 import { Survey } from "@/types/survey";
 
 interface SurveyDetailsProps {

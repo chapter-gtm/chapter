@@ -1,34 +1,20 @@
 "use client";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import {
-  AlertCircle,
-  Archive,
-  ArchiveX,
-  File,
-  Inbox,
-  MessagesSquare,
-  PenBox,
-  Search,
-  Send,
-  ShoppingCart,
-  Trash2,
-  Users2,
-} from "lucide-react";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { SurveyDetails } from "@/components/survey/SurveyDetails";
+import { SurveyList } from "@/components/survey/SurveyList";
 import { Button } from "@/components/ui/button";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Input } from "@/components/ui/input";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-import { SurveyList } from "@/components/SurveyList";
-import { SurveyDetails } from "@/components/SurveyDetails";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Survey } from "@/types/survey";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 async function getSurveys() {
   const response = await fetch("http://localhost/survey", {

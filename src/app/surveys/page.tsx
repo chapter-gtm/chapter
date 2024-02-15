@@ -1,4 +1,4 @@
-import { SurveyScreen } from "@/components/SurveyScreen";
+import { SurveyScreen } from "@/components/survey/SurveyScreen";
 
 export default async function SurveyPage() {
   return (
