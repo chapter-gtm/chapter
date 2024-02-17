@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { UserNav } from "@/components/UserNav";
-import { MainNav } from "@/components/MainNav";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
@@ -40,7 +39,6 @@ export function Header() {
             height={14}
             alt="Logo"
           />
-          <MainNav />
           <div className="ml-auto flex items-center space-x-4">
             <UserNav />
           </div>
