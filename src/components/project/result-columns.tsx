@@ -13,7 +13,7 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 
 import { ProjectStage } from "@/types/project";
 
-export const submissionSchema = z.object({
+export const projectResponseSchema = z.object({
   id: z.string(),
   date: z.string(),
   email: z.string(),
@@ -21,7 +21,7 @@ export const submissionSchema = z.object({
   sentiment: z.number(),
 });
 
-type Submission = z.infer<typeof submissionSchema>;
+type Submission = z.infer<typeof projectResponseSchema>;
 
 export const filters = [
   {

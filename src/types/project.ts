@@ -77,6 +77,14 @@ export enum ProjectState {
   CLOSED = "Closed",
 }
 
+export type ProjectResponse = {
+  id: string;
+  date: string;
+  email: string;
+  stage: string;
+  sentiment: number;
+};
+
 export type Project = {
   name: string;
   goal: string;

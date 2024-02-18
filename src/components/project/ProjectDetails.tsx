@@ -34,9 +34,7 @@ export async function ProjectDetails({ id }: ProjectDetailsProps) {
   }
   return (
     <>
-      {errorOccurred ? (
-        <ErrorMessage />
-      ) : (
+      {!errorOccurred && project !== null ? (
         <div className="hidden md:block">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
@@ -72,6 +70,8 @@ export async function ProjectDetails({ id }: ProjectDetailsProps) {
             </div>
           </div>
         </div>
+      ) : (
+        <ErrorMessage />
       )}
     </>
   );

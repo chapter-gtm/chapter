@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -35,6 +33,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   filters: ToolbarFilter[];
   filterColumnName: string;
+  onRowClick: <TData>(data: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -42,6 +41,7 @@ export function DataTable<TData, TValue>({
   data,
   filters,
   filterColumnName,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -105,6 +105,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={(event: React.MouseEvent<HTMLTableRowElement>) => {
+                    onRowClick(row.original);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
