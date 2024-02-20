@@ -27,7 +27,7 @@ import {
   projectResponseSchema,
   filters,
 } from "@/components/project/result-columns";
-import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
+import { ProjectResponseDetails } from "@/components/project/ProjectResponseDetails";
 
 interface ProjectResultsProps {
   project: Project;
@@ -64,7 +64,8 @@ export function ProjectResults({ project }: ProjectResultsProps) {
       <div className="flex items-center justify-between h-full">
         <div className="space-y-1 px-6 ">
           <h2 className="text-xl font-semibold">
-            {submissions.length} {submissions.length === 1 ? 'Response' : 'Responses'}
+            {submissions.length}{" "}
+            {submissions.length === 1 ? "Response" : "Responses"}
           </h2>
         </div>
       </div>
@@ -96,14 +97,13 @@ export function ProjectResults({ project }: ProjectResultsProps) {
             />
           </div>
         </ResizablePanel>
-        <ResizableHandle  />
-        
+        <ResizableHandle />
         <ResizablePanel
           defaultSize={defaultLayout[1]}
           minSize={30}
           maxSize={100}
         >
-          <ProjectResponseTranscript projectResponse={selectedRow} />
+          <ProjectResponseDetails projectResponse={selectedRow} />
         </ResizablePanel>
       </ResizablePanelGroup>
     </>

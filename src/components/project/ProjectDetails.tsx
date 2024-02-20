@@ -21,14 +21,14 @@ async function getProject(id: string) {
 }
 
 interface ProjectDetailsProps {
-  id: string;
+  projectId: string;
 }
 
-export async function ProjectDetails({ id }: ProjectDetailsProps) {
+export async function ProjectDetails({ projectId }: ProjectDetailsProps) {
   let project: Project | null = null;
   let errorOccurred = true;
   try {
-    project = await getProject(id);
+    project = await getProject(projectId);
     errorOccurred = false;
   } catch (error) {
     errorOccurred = true;
@@ -37,11 +37,12 @@ export async function ProjectDetails({ id }: ProjectDetailsProps) {
     <>
       {!errorOccurred && project !== null ? (
         <div className="hidden md:block">
-          <div className="bg-background">      
+          <div className="bg-background">
             <Tabs defaultValue="definition" className="h-full space-y-6 ">
               <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 px-6">
                 <div className="w-1/3 pe-12">
-                  <div className="truncate text-ellipsis text-slate-700 text-base font-medium">{project.name}
+                  <div className="truncate text-ellipsis text-slate-700 text-base font-medium">
+                    {project.name}
                   </div>
                 </div>
                 <div className="flex w-1/3 space-between flex-1 items-center justify-center">
@@ -59,22 +60,19 @@ export async function ProjectDetails({ id }: ProjectDetailsProps) {
                   <Button variant="outline">Preview</Button>
                 </div>
               </div>
-              
               <TabsContent
                 value="definition"
                 className="border-none p-0 outline-none h-full"
-                >
+              >
                 <ProjectDefinition project={project} />
-                
               </TabsContent>
-              
               <div>
                 <TabsContent
                   value="results"
                   className="h-full flex-col border-none p-0 data-[state=active]:flex"
                 >
-                <ProjectResults project={project} />
-              </TabsContent>
+                  <ProjectResults project={project} />
+                </TabsContent>
               </div>
             </Tabs>
           </div>
