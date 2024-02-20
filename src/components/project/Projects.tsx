@@ -42,27 +42,25 @@ export async function Projects() {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between px-6 pt-4">
             <div className="space-y-1">
-              <h2 className="text-2xl font-semibold tracking-tight">
+              <h2 className="text-lg font-semibold tracking-tight text-slate-700">
                 Projects
               </h2>
-              <p className="text-sm text-muted-foreground">
-                Here are all your research projects.
-              </p>
             </div>
           </div>
-          <Separator className="my-4" />
-          {projects.map((item, index) => (
-            <div
-              key={index}
-              className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3"
-            >
-              <div className="hidden items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
+          {/* <Separator className="my-4" /> */}
+          
+          <div className="md:grid  lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-4 px-6">
+            {projects.map((item, index) => (
+              <div
+                key={index}
+                className="items-start justify-center"
+              >
                 <ProjectCard project={item} />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </>

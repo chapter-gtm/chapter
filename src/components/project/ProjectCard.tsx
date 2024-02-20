@@ -5,6 +5,7 @@ import {
   PlusIcon,
   StarIcon,
 } from "@radix-ui/react-icons";
+import { Badge } from "@/components/ui/badge";
 import {
   Construction,
   RadioTower,
@@ -18,6 +19,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -40,43 +42,50 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link href={`/projects/${project.id}`}>
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>{project.name}</CardTitle>
-          <CardDescription>{project.goal}</CardDescription>
-        </CardHeader>
+      <Card className="w-full h-56 items-center">
+        
+
         <CardContent>
-          <div className="flex space-x-4 text-sm text-muted-foreground">
-            {project.state === ProjectState.IN_DEVELOPMENT && (
-              <div className="flex items-center">
-                <Construction />
-                <div>{project.state}</div>
+          
+          <div className="flex flex-col py-3 justify-between ">
+            <div className="flex flex-row justify-between pb-2 h-12">
+              <div className="flex space-x-4 text-sm text-muted-foreground">
+                {project.state === ProjectState.IN_DEVELOPMENT && (
+                  <div className="flex items-center">
+                    <Badge variant="outline">{project.state}</Badge>     
+                  </div>
+                )}
+                {project.state === ProjectState.LIVE && (
+                  <div className="flex items-center">
+                    <Badge variant="outline">{project.state}</Badge>
+                  </div>
+                )}
+                {(project.state === ProjectState.EXPIRED ||
+                  project.state === ProjectState.CLOSED) && (
+                  <div className="flex items-center">
+                    <Badge variant="outline">{project.state}</Badge>
+                  </div>
+                )}
+
+                
               </div>
-            )}
-            {project.state === ProjectState.LIVE && (
               <div className="flex items-center">
-                <RadioTower />
-                <div>{project.state}</div>
+                <Avatar className="w-7 h-7">
+                  <AvatarImage 
+                    className=""
+                    src={project.authors[0].avatar_url}
+                    alt={project.authors[0].name}
+                  />
+                  <AvatarFallback>{project.authors[0].name}</AvatarFallback>
+                </Avatar>
               </div>
-            )}
-            {(project.state === ProjectState.EXPIRED ||
-              project.state === ProjectState.CLOSED) && (
-              <div className="flex items-center">
-                <CheckCircleIcon />
-                <div>{project.state}</div>
-              </div>
-            )}
-            <div className="flex items-center">
-              <Avatar>
-                <AvatarImage
-                  src={project.authors[0].avatar_url}
-                  alt={project.authors[0].name}
-                />
-                <AvatarFallback>{project.authors[0].name}</AvatarFallback>
-              </Avatar>
             </div>
+          
+            <CardTitle className="flex text-base font-medium">{project.name}</CardTitle>
+
           </div>
         </CardContent>
+        
       </Card>
     </Link>
   );

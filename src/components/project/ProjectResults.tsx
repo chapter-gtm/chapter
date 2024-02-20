@@ -61,12 +61,11 @@ export function ProjectResults({ project }: ProjectResultsProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Project Results
+      <div className="flex items-center justify-between h-full">
+        <div className="space-y-1 px-6 ">
+          <h2 className="text-xl font-semibold">
+            {submissions.length} {submissions.length === 1 ? 'Response' : 'Responses'}
           </h2>
-          <p className="text-sm text-muted-foreground">Your project results.</p>
         </div>
       </div>
       <Separator className="my-4" />
@@ -77,7 +76,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
             sizes,
           )}`;
         }}
-        className="h-full max-h-[800px] items-stretch"
+        className="h-full items-stretch px-6"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -85,19 +84,23 @@ export function ProjectResults({ project }: ProjectResultsProps) {
           collapsible={true}
           minSize={50}
           maxSize={400}
+          className="h-full bg-orange-300"
         >
-          <DataTable
-            columns={resultColumns}
-            data={submissions}
-            filters={filters}
-            filterColumnName="email"
-            onRowClick={handleRowClick}
-          />
+          <div className="pe-6">
+            <DataTable
+              columns={resultColumns}
+              data={submissions}
+              filters={filters}
+              filterColumnName="email"
+              onRowClick={handleRowClick}
+            />
+          </div>
         </ResizablePanel>
-        <ResizableHandle withHandle />
+        <ResizableHandle  />
+        
         <ResizablePanel
           defaultSize={defaultLayout[1]}
-          minSize={0}
+          minSize={30}
           maxSize={100}
         >
           <ProjectResponseTranscript projectResponse={selectedRow} />
