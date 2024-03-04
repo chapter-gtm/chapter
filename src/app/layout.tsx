@@ -2,7 +2,6 @@ import Sidebar from "@/components/MainSidebar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Mail } from "@/components/project/mail";
 import { cookies } from "next/headers";
 import { accounts, mails } from "@/components/project/data";
 import {
@@ -24,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const layout = cookies().get("react-resizable-panels:layout");
-  const collapsed = false;
+  const collapsed = cookies().get("react-resizable-panels:collapsed");
 
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
   const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
@@ -34,7 +33,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="bg-background h-screen flex">
           <div className="flex flex-1 overflow-hidden">
-            
             <Sidebar className="w-60 justify-between" />
             <main className="flex flex-1 flex-col">{children}</main>
           </div>
