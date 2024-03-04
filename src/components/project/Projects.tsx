@@ -29,7 +29,6 @@ export async function Projects() {
   let errorOccurred = true;
   try {
     projects = await getProjects();
-    // projects = [];
     errorOccurred = false;
   } catch (error) {
     errorOccurred = true;
