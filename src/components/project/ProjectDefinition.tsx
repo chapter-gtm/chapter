@@ -94,15 +94,16 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                 <Switch />
               </div>
               <Label className="text-sm font-normal text-slate-500">
-                Select "on" if you don't want users to share.
+                Select &quot;on&quot; if you don&apos;t want users to share.
               </Label>
             </div>
           </CardContent>
         </div>
         <div className="flex border-t border-slate-200 justify-end">
           <div className="flex p-6">
-            <Button variant="outline" className="w-full">Save changes</Button>
-
+            <Button variant="outline" className="w-full">
+              Save changes
+            </Button>
           </div>
         </div>
       </div>
@@ -114,32 +115,30 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
         <div className="flex-none h-96 w-full bg-gray-600"></div>    
       </div> */}
 
-
-    
-        <div className="flex flex-1 flex-col overflow-auto bg-slate-100 gap-4">
+      <div className="flex flex-1 flex-col overflow-auto bg-slate-100 gap-4">
         <div className="w-2/3 mx-auto">
-         <ul className="flex-1 overflow-y-auto space-y-4 py-6">
-          <li>
-          <Card className="flex-none">
-            <EmojiHeader status="Welcome" />
-            <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-1">
-                  <div className="flex flex-col space-y-3">
-                    <Label htmlFor="name">Welcome message</Label>
-                    <Input
-                      id="name"
-                      placeholder="How you'd like to start the conversation"
-                    />
-                  </div>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-          </li>
+          <ul className="flex-1 overflow-y-auto space-y-4 py-6">
+            <li>
+              <Card className="flex-none">
+                <EmojiHeader status="Welcome" />
+                <CardContent>
+                  <form>
+                    <div className="grid w-full items-center gap-1">
+                      <div className="flex flex-col space-y-3">
+                        <Label htmlFor="name">Welcome message</Label>
+                        <Input
+                          id="name"
+                          placeholder="How you'd like to start the conversation"
+                        />
+                      </div>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </li>
 
-          <li>
-          <Card className="flex-none">
+            <li>
+              <Card className="flex-none">
                 <EmojiHeader status="Thread" />
 
                 <CardContent>
@@ -183,72 +182,66 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                   </form>
                 </CardContent>
               </Card>
-          </li>
+            </li>
 
-          <li>
-          <Button
-            variant="outline"
-            className="w-full border-dashed bg-white/20"
-          >
-            Add thread
-          </Button>
-          </li>
+            <li>
+              <Button
+                variant="outline"
+                className="w-full border-dashed bg-white/20"
+              >
+                Add thread
+              </Button>
+            </li>
 
-          <li>
-          <Card className="flex-none">
-            <EmojiHeader status="Thanks" />
+            <li>
+              <Card className="flex-none">
+                <EmojiHeader status="Thanks" />
 
-            <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-3">
-                  <div className="flex flex-col space-y-3">
-                    <Label htmlFor="name">Message</Label>
-                    <Input
-                      id="name"
-                      placeholder="Wow! thanks for sharing your insights with us."
-                    />
-                  </div>
-                  <Separator className="my-4" />
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col space-y-3">
-                      <div className="flex flex-row justify-start space-x-3 items-center">
-                        <Label htmlFor="name">Add calendar link</Label>
-                        <Switch />
+                <CardContent>
+                  <form>
+                    <div className="grid w-full items-center gap-3">
+                      <div className="flex flex-col space-y-3">
+                        <Label htmlFor="name">Message</Label>
+                        <Input
+                          id="name"
+                          placeholder="Wow! thanks for sharing your insights with us."
+                        />
                       </div>
+                      <Separator className="my-4" />
 
-                      <div className="flex flex-row justify-between space-x-3 items-center">
-                        <Input id="name" placeholder="url/" />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col space-y-3">
+                          <div className="flex flex-row justify-start space-x-3 items-center">
+                            <Label htmlFor="name">Add calendar link</Label>
+                            <Switch />
+                          </div>
+
+                          <div className="flex flex-row justify-between space-x-3 items-center">
+                            <Input id="name" placeholder="url/" />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col space-y-3">
+                          <div className="flex flex-row justify-start space-x-3 items-center">
+                            <Label htmlFor="name">Add marketing link</Label>
+                            <Switch />
+                          </div>
+                          <div className="flex flex-row justify-between space-x-3 items-center">
+                            <Input id="name" placeholder="url/" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="flex flex-col space-y-3">
-                      <div className="flex flex-row justify-start space-x-3 items-center">
-                        <Label htmlFor="name">Add marketing link</Label>
-                        <Switch />
-                      </div>
-                      <div className="flex flex-row justify-between space-x-3 items-center">
-                        <Input id="name" placeholder="url/" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-          </li>
-          <li>
-            <div className="flex-none w-full bg-gray-600 h-96"></div>
-          </li>
+                  </form>
+                </CardContent>
+              </Card>
+            </li>
+            <li>
+              <div className="flex-none w-full bg-gray-600 h-96"></div>
+            </li>
           </ul>
-
-          
-          
-          
-          
         </div>
-        </div>
-      
+      </div>
     </>
   );
 }
