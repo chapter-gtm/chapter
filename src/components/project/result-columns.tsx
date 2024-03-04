@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 
-import { ProjectStage } from "@/types/project";
+import { ProjectResponseStage } from "@/types/project";
 
 export const projectResponseSchema = z.object({
   id: z.string(),
@@ -71,7 +71,7 @@ export const resultColumns: ColumnDef<Submission>[] = [
   },
   {
     accessorKey: "stage",
-  header: ({ column }) => (
+    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Stage" />
     ),
     cell: ({ row }) => {

@@ -1,10 +1,15 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 import { Separator } from "@/components/ui/separator";
-import { Project } from "@/types/project";
+import {
+  Project,
+  ProjectResponseStage,
+  Question,
+  QuestionFormat,
+} from "@/types/project";
 import {
   Card,
   CardHeader,
@@ -12,12 +17,14 @@ import {
   CardDescription,
   CardTitle,
   CardFooter,
-} from "../ui/card";
-import { ScrollArea } from "../ui/scroll-area";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectContent,
@@ -34,11 +41,47 @@ import { Switch } from "@/components/ui/switch";
 
 import EmojiHeader from "@/components/project/EmojiHeader";
 
+async function updateProject(id: string, project: Project) {
+  console.log(`${id} and ${project}`);
+  const jwtToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk2MzA1MTAsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTU0NDExMCwiZXh0cmFzIjp7fX0.3MN81qpno7LJFaShVyGOd-PbvJeTzJgOAWrsOaHctb0";
+  const response = await fetch("http://localhost:8000/api/projects/" + id, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+    body: JSON.stringify(project),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+}
+
 interface ProjectDefinitionProps {
   project: Project;
 }
 
 export function ProjectDefinition({ project }: ProjectDefinitionProps) {
+  const [projectData, setProjectData] = useState<Project>(project);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const saveChanges = setTimeout(async () => {
+      try {
+        await updateProject(projectData.id, projectData);
+        toast({
+          title: "Your changes have been saved!",
+        });
+      } catch {
+        toast({
+          title: "Oops! Failed to save :(",
+          variant: "destructive",
+        });
+      }
+    }, 10000);
+    return () => clearTimeout(saveChanges);
+  }, [projectData, toast]);
+
   return (
     <>
       <div className="flex flex-col bg-background pt-6 w-96 justify-between">
@@ -47,17 +90,46 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
             <div className="grid gap-y-6">
               <div className="grid gap-3">
                 <Label htmlFor="subject">Project name</Label>
-                <Input id="subject" placeholder="I need help with..." />
+                <Input
+                  id="subject"
+                  placeholder="A short name for this project."
+                  value={projectData.name}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setProjectData({
+                      ...projectData,
+                      ["name"]: event.target.value,
+                    });
+                  }}
+                />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="subject">Target user</Label>
-                <Input id="subject" placeholder="e.g. Product Managers" />
+                <Input
+                  id="subject"
+                  placeholder="e.g. Product Managers, UX Researchers"
+                  value={projectData.candidatePersonas.join(", ")}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setProjectData({
+                      ...projectData,
+                      ["candidatePersonas"]: event.target.value
+                        .split(",")
+                        .map((token) => token.trim()),
+                    });
+                  }}
+                />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="description">Project goal</Label>
                 <Textarea
                   id="description"
-                  placeholder="Please include all information relevant to your issue."
+                  placeholder="What do you expect to learn from this project?"
+                  value={projectData.goal}
+                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+                    setProjectData({
+                      ...projectData,
+                      ["goal"]: event.target.value,
+                    });
+                  }}
                 />
               </div>
               <Separator className="bg-slate-100 my-4" />
@@ -77,7 +149,16 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
             <div className="grid gap-y-6">
               <div className="grid gap-3">
                 <Label htmlFor="subject">Interviewer name</Label>
-                <Input id="subject" placeholder="I need help with..." />
+                <Input
+                  id="subject"
+                  placeholder="I need help with..."
+                  value={
+                    projectData.authors.length > 0
+                      ? projectData.authors[0].name
+                      : ""
+                  }
+                  readOnly
+                />
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="subject">Interviewer calendar link</Label>
@@ -108,13 +189,6 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
         </div>
       </div>
 
-      {/* <div className="flex flex-1 flex-col overflow-auto gap-3">
-        <div className="flex-none h-96 w-full bg-gray-600"></div>
-        <div className="flex-none h-96 w-full bg-gray-600"></div>
-        <div className="flex-none h-96 w-full bg-gray-600"></div>    
-        <div className="flex-none h-96 w-full bg-gray-600"></div>    
-      </div> */}
-
       <div className="flex flex-1 flex-col overflow-auto bg-slate-100 gap-4">
         <div className="w-2/3 mx-auto">
           <ul className="flex-1 overflow-y-auto space-y-4 py-6">
@@ -129,6 +203,19 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         <Input
                           id="name"
                           placeholder="How you'd like to start the conversation"
+                          value={projectData.intro.title}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            project.intro.title = event.target.value;
+                            setProjectData({
+                              ...projectData,
+                              ["intro"]: {
+                                title: event.target.value,
+                                description: projectData.intro.description,
+                              },
+                            });
+                          }}
                         />
                       </div>
                     </div>
@@ -137,57 +224,93 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
               </Card>
             </li>
 
-            <li>
-              <Card className="flex-none">
-                <EmojiHeader status="Thread" />
+            {projectData.components.map((component, index) => (
+              <li key={index}>
+                <Card className="flex-none">
+                  <EmojiHeader status="Thread" />
 
-                <CardContent>
-                  <form>
-                    <div className="grid w-full items-center gap-1">
-                      <div className="flex flex-col space-y-3">
-                        <Label htmlFor="name">Question</Label>
-                        <Input
-                          id="name"
-                          placeholder="How you'd like to start the conversation"
-                        />
-                        <div className="flex flex-row space-x-3 items-center">
-                          <Button variant={"outline"} size={"sm"}>
-                            <SparklesIcon className="mr-2 h-4 w-4" />
-                            Improve
-                          </Button>
-                          <p className="text-xs text-slate-400 flex">
-                            Remove bias or hypothetical questioning using AI
-                          </p>
+                  <CardContent>
+                    <form>
+                      <div className="grid w-full items-center gap-1">
+                        <div className="flex flex-col space-y-3">
+                          <Label htmlFor="name">Question</Label>
+                          <Input
+                            id="name"
+                            placeholder="How you'd like to start the conversation"
+                            value={component.question}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>,
+                            ) => {
+                              const updatedComponents: Question[] = [
+                                ...projectData.components,
+                              ];
+                              updatedComponents[index].question =
+                                event.target.value;
+                              setProjectData({
+                                ...projectData,
+                                ["components"]: updatedComponents,
+                              });
+                            }}
+                          />
+                          <div className="flex flex-row space-x-3 items-center">
+                            <Button variant={"outline"} size={"sm"}>
+                              <SparklesIcon className="mr-2 h-4 w-4" />
+                              Improve
+                            </Button>
+                            <p className="text-xs text-slate-400 flex">
+                              Remove bias or hypothetical questioning using AI
+                            </p>
+                          </div>
+                        </div>
+
+                        <Separator className="my-4" />
+
+                        <div className="flex flex-row items-center justify-between ">
+                          <Label htmlFor="name"># of followup questions</Label>
+                          <Select
+                            defaultValue={component.max_followups.toString()}
+                            onValueChange={(value: string) => {
+                              project.components[index].max_followups =
+                                parseInt(value);
+                            }}
+                          >
+                            <SelectTrigger className="w-[120px]">
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectItem value="1">1</SelectItem>
+                                <SelectItem value="2">2</SelectItem>
+                                <SelectItem value="3">3</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
-
-                      <Separator className="my-4" />
-
-                      <div className="flex flex-row items-center justify-between ">
-                        <Label htmlFor="name"># of followup questions</Label>
-                        <Select>
-                          <SelectTrigger className="w-[120px]">
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="1">1</SelectItem>
-                              <SelectItem value="2">2</SelectItem>
-                              <SelectItem value="3">3</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </li>
+                    </form>
+                  </CardContent>
+                </Card>
+              </li>
+            ))}
 
             <li>
               <Button
                 variant="outline"
                 className="w-full border-dashed bg-white/20"
+                onClick={() => {
+                  const updatedComponents: Question[] = [
+                    ...projectData.components,
+                    {
+                      question: "",
+                      format: QuestionFormat.OPEN_ENDED,
+                      max_followups: 2,
+                    },
+                  ];
+                  setProjectData({
+                    ...projectData,
+                    ["components"]: updatedComponents,
+                  });
+                }}
               >
                 Add thread
               </Button>
@@ -205,6 +328,22 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         <Input
                           id="name"
                           placeholder="Wow! thanks for sharing your insights with us."
+                          value={projectData.outros.COMPLETED.title}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>,
+                          ) => {
+                            setProjectData({
+                              ...projectData,
+                              ["outros"]: {
+                                [ProjectResponseStage.COMPLETED]: {
+                                  title: event.target.value,
+                                  description:
+                                    projectData.outros.COMPLETED.description,
+                                  actions: projectData.outros.COMPLETED.actions,
+                                },
+                              },
+                            });
+                          }}
                         />
                       </div>
                       <Separator className="my-4" />
@@ -217,7 +356,17 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                           </div>
 
                           <div className="flex flex-row justify-between space-x-3 items-center">
-                            <Input id="name" placeholder="url/" />
+                            <Input
+                              id="name"
+                              placeholder="url/"
+                              value={project.authors[0].calendar_link}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>,
+                              ) => {
+                                project.authors[0].calendar_link =
+                                  event.target.value;
+                              }}
+                            />
                           </div>
                         </div>
 

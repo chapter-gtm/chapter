@@ -9,8 +9,13 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Project } from "@/types/project";
 
 async function getProject(id: string) {
-  const response = await fetch("http://localhost/projects/" + id, {
+  const jwtToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk2MzA1MTAsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTU0NDExMCwiZXh0cmFzIjp7fX0.3MN81qpno7LJFaShVyGOd-PbvJeTzJgOAWrsOaHctb0";
+  const response = await fetch("http://localhost:8000/api/projects/" + id, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch data");

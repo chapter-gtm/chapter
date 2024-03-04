@@ -8,8 +8,8 @@ export type ProjectStructure = {
   max_followups: number;
 };
 
-enum QuestionFormat {
-  OPEN_ENDED = "Open Ended",
+export enum QuestionFormat {
+  OPEN_ENDED = "OPEN_ENDED",
 }
 
 export type Question = {
@@ -44,11 +44,11 @@ enum SurveyOutroAction {
   SHARE = "Share with someone",
 }
 
-export enum ProjectStage {
-  NOT_STARTED = "Not Started",
-  STARTED = "Started",
-  COMPLETED = "Completed",
-  ABORTED = "Aborted",
+export enum ProjectResponseStage {
+  NOT_STARTED = "NOT_STARTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  ABORTED = "ABORTED",
 }
 
 export type ProjectOutro = {
@@ -88,21 +88,24 @@ export type ProjectResponse = {
 export type Project = {
   name: string;
   goal: string;
-  candidate_personas: string[];
+  candidatePersonas: string[];
   components: Question[];
   authors: User[];
   company: Organization;
   id: string;
   orgid: string;
   intro: ProjectIntro;
-  outros: {
-    [key in ProjectStage]: ProjectOutro;
-  };
-  question_flags: QuestionFlag[];
-  question_actions: QuestionAction[];
-  created_ts: Date;
-  published_ts: Date;
-  closed_ts: Date;
-  expiry_ts: Date;
+  outros: Required<{ [key in ProjectResponseStage.COMPLETED]: ProjectOutro }> &
+    Partial<{
+      [key in Exclude<
+        ProjectResponseStage,
+        ProjectResponseStage.COMPLETED
+      >]: ProjectOutro;
+    }>;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
+  closedAt: Date;
+  expiredAt: Date;
   state: ProjectState;
 };
