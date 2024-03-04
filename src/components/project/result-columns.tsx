@@ -26,7 +26,7 @@ type Submission = z.infer<typeof projectResponseSchema>;
 export const filters = [
   {
     tableColumnName: "stage",
-    label: "Stage",
+    label: "Filter",
     filterOptions: [
       {
         value: "Not Started",
@@ -71,7 +71,7 @@ export const resultColumns: ColumnDef<Submission>[] = [
   },
   {
     accessorKey: "stage",
-    header: ({ column }) => (
+  header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Stage" />
     ),
     cell: ({ row }) => {

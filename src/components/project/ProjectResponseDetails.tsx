@@ -1,12 +1,26 @@
 import Link from "next/link";
-import { Maximize2 } from "lucide-react";
+import { Maximize2, AlertCircle, Info, ExternalLink } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 import { ProjectResponse } from "@/types/project";
 import { Badge } from "@/components/ui/badge";
+import { ProjectTranscript } from "./ProjectTranscript";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { PropList } from "./PropList";
+import {
+  ProjectResponseIdentity,
+} from "./ProjectResponseIdentity";
+
+import { EmptySelectionCard } from "./EmptySelectionCard";
 
 function getProjectResponse(projectId: string, projectResponseId: string) {
   // TODO: Fetch project responses
@@ -32,6 +46,7 @@ export function ProjectResponseDetails({
   projectResponseId,
   projectResponse,
 }: ProjectResponseDetailsProps) {
+  
   let response = null;
   if (projectResponse !== undefined) {
     response = projectResponse;
@@ -39,64 +54,56 @@ export function ProjectResponseDetails({
     response = getProjectResponse(projectId, projectResponseId);
   }
   return (
-    <div className="flex flex-col justify-start items-center px-6 h-dvh">
+    <div className="flex flex-1 flex-col justify-start items-center px-6 h-full">
       {response !== null ? (
-        <div className="w-full">
-          <Link href={`/projects/${projectId}/responses/${projectResponseId}`}>
-            <Button variant="outline">
-              <Maximize2 />
-            </Button>
-          </Link>
-          <div className="flex flex-col justify-center w-full rounded-xl text-center py-6 bg-slate-100">
-            <div className="mx-auto">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </div>
-            <h1 className="text-3xl text-slate-400 font-bold mt-4">
-              Add a name...
-            </h1>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-row justify-between py-2 items-center">
+            <TooltipProvider delayDuration={0}>
+
+              <div className="flex flex-row items-center gap-x-2 ">
+            
+              
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={`/projects/${projectId}/responses/${projectResponseId}`}
+                    >
+                      <Button variant="outline" size="icon" disabled={false}>
+                        <Maximize2 className="h-4 w-4" />
+                        <span className="sr-only">Share profile</span>
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>View fullscreen</TooltipContent>
+                </Tooltip>
+                <p className="text-sm text-slate-700 font-medium">#312</p>
+
+              </div>
+              
+              <div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" disabled={false}>
+                    <ExternalLink className="h-4 w-4" />
+                    <span className="sr-only">Share profile</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Share link</TooltipContent>
+              </Tooltip>
+              </div>
+            </TooltipProvider>
           </div>
-          <div>
-            <div className="w-full">
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Date</TableCell>
-                    <TableCell>asdj kj asdk</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Stage</TableCell>
-                    <TableCell>
-                      <Badge>Completed</Badge>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Sentiment</TableCell>
-                    <TableCell>
-                      <Badge>High intent</Badge>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-            <div className="w-full mt-12">
-              <Tabs defaultValue="definition" className="h-full space-y-6 ">
-                <TabsList>
-                  <TabsTrigger value="transcript" className="relative">
-                    Transcript
-                  </TabsTrigger>
-                  <TabsTrigger value="activity" disabled>
-                    Activity
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+
+          <div className="flex-1 space-y-6 pb-4">
+            <ProjectResponseIdentity />
+            <PropList />
           </div>
         </div>
       ) : (
-        <div className="p-8 text-center text-muted-foreground">No response</div>
+        <div className="flex flex-1 py-8">
+          <EmptySelectionCard 
+            title="Nothing selected" description="Choose an item from the list to view it's details"/>
+        </div>
       )}
     </div>
   );

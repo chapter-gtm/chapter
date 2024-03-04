@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Metadata } from "next";
 import { ProjectDetails } from "@/components/project/ProjectDetails";
-import { ProjectResponseDetails } from "@/components/project/ProjectResponseDetails";
+import { ProjectResponseDetailsFull } from "@/components/project/ProjectResponseDetailsFull";
 
 export const metadata: Metadata = {
   title: "Dashboatd: Nectar Console",
@@ -15,18 +15,10 @@ export default function ProjectDetailsPage({
 }) {
   return (
     <>
-      <div>
-        <div className="bg-background h-full">
-          <div className="col-span-3 lg:col-span-4">
-            <div className="h-full ">
-              <ProjectResponseDetails
-                projectId={params.project_id}
-                projectResponseId={params.project_response_id}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProjectResponseDetailsFull
+        projectId={params.project_id}
+        projectResponseId={params.project_response_id}
+      />
     </>
   );
 }

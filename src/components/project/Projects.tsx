@@ -1,9 +1,11 @@
 import { Satellite } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
+import { Button } from "@/components/ui/button";
 import { ProjectCard } from "@/components/project/ProjectCard";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { Project } from "@/types/project";
+import { EmptySelectionCard } from "./EmptySelectionCard";
+import { PageHeaderRow } from "./PageHeaderRow";
 
 async function getProjects() {
   const response = await fetch("http://localhost/projects", {
@@ -22,47 +24,35 @@ export async function Projects() {
   let errorOccurred = true;
   try {
     projects = await getProjects();
+    // projects = [];
     errorOccurred = false;
   } catch (error) {
     errorOccurred = true;
   }
   return (
     <>
-      {errorOccurred ? (
-        <ErrorMessage />
-      ) : projects.length <= 0 ? (
-        <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed">
-          <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-            <Satellite />
-            <h3 className="mt-4 text-lg font-semibold">
-              Let&apos;s launch your first research project!
-            </h3>
-            <p className="mb-4 mt-2 text-sm text-muted-foreground">Go!</p>
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between px-6 pt-4">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold tracking-tight text-slate-700">
-                Projects
-              </h2>
+      <div className="flex flex-1 flex-col overflow-auto">
+        <div className="w-2/3 mx-auto pt-4">
+          <PageHeaderRow title="Projects" action="Create project" />
+          {errorOccurred ? (
+            <ErrorMessage />
+          ) : projects.length <= 0 ? (
+            <EmptySelectionCard
+              title="Create your first project"
+              description="Launch your conversational survey today, and get qualitative insights without the hassle of scheduling."
+              action="Create project"
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-4">
+              {projects.map((item, index) => (
+                <div key={index} className="items-start justify-center">
+                  <ProjectCard project={item} />
+                </div>
+              ))}
             </div>
-          </div>
-          {/* <Separator className="my-4" /> */}
-          
-          <div className="md:grid  lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-4 px-6">
-            {projects.map((item, index) => (
-              <div
-                key={index}
-                className="items-start justify-center"
-              >
-                <ProjectCard project={item} />
-              </div>
-            ))}
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 }

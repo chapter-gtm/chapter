@@ -36,47 +36,51 @@ export async function ProjectDetails({ projectId }: ProjectDetailsProps) {
   return (
     <>
       {!errorOccurred && project !== null ? (
-        <div className="hidden md:block">
-          <div className="bg-background">
-            <Tabs defaultValue="definition" className="h-full space-y-6 ">
-              <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 px-6">
-                <div className="w-1/3 pe-12">
-                  <div className="truncate text-ellipsis text-slate-700 text-base font-medium">
-                    {project.name}
-                  </div>
-                </div>
-                <div className="flex w-1/3 space-between flex-1 items-center justify-center">
-                  <TabsList>
-                    <TabsTrigger value="definition" className="relative">
-                      Create
-                    </TabsTrigger>
-                    <TabsTrigger value="results">Responses</TabsTrigger>
-                    <TabsTrigger value="insights" disabled>
-                      Insights
-                    </TabsTrigger>
-                  </TabsList>
-                </div>
-                <div className="flex justify-end w-1/3">
-                  <Button variant="outline">Preview</Button>
-                </div>
+        <Tabs defaultValue="definition">
+          <div className="flex flex-col h-dvh overflow-hidden">
+            {/* <div className="flex items-center justify-between py-4 border-b border-slate-100 h-16"></div> */}
+
+            <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6 ">
+              <div className="flex flex-1 flex-shrink-0 overflow-hidden   me-8">
+                <p className="text-slate-700 text-base font-medium truncate text-ellipsis">
+                  {project.name}
+                </p>
               </div>
-              <TabsContent
-                value="definition"
-                className="border-none p-0 outline-none h-full"
-              >
-                <ProjectDefinition project={project} />
-              </TabsContent>
-              <div>
-                <TabsContent
-                  value="results"
-                  className="h-full flex-col border-none p-0 data-[state=active]:flex"
-                >
-                  <ProjectResults project={project} />
-                </TabsContent>
+
+              <div className="space-between flex-1 items-center justify-center">
+                <TabsList>
+                  <TabsTrigger value="definition" className="relative">
+                    Create
+                  </TabsTrigger>
+                  <TabsTrigger value="results">Responses</TabsTrigger>
+                  <TabsTrigger value="insights" disabled>
+                    Insights
+                  </TabsTrigger>
+                </TabsList>
               </div>
-            </Tabs>
+              <div className="overflow-hidden justify-end">
+                <Button variant="outline" className="me-2">
+                  Preview
+                </Button>
+                <Button variant="default">Publish</Button>
+              </div>
+            </div>
+
+            <TabsContent
+              value="definition"
+              className="mt-0 data-[state=active]:flex flex-1 overflow-hidden p-0"
+            >
+              <ProjectDefinition project={project} />
+            </TabsContent>
+
+            <TabsContent
+              value="results"
+              className="content-start border-none p-0 data-[state=active]:flex flex-1 overflow-hidden mt-0"
+            >
+              <ProjectResults project={project} />
+            </TabsContent>
           </div>
-        </div>
+        </Tabs>
       ) : (
         <ErrorMessage />
       )}

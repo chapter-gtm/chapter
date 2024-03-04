@@ -38,7 +38,7 @@ function getProjectResponses() {
   const responses = [
     {
       id: "1234",
-      date: "2024-02-14T10:00:30.123456Z",
+      date: "Feb. 12",
       email: "bob@example.com",
       stage: "Completed",
       sentiment: 4,
@@ -61,33 +61,29 @@ export function ProjectResults({ project }: ProjectResultsProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between h-full">
-        <div className="space-y-1 px-6 ">
-          <h2 className="text-xl font-semibold">
-            {submissions.length}{" "}
-            {submissions.length === 1 ? "Response" : "Responses"}
-          </h2>
-        </div>
-      </div>
-      <Separator className="my-4" />
       <ResizablePanelGroup
         direction="horizontal"
         onLayout={(sizes: number[]) => {
           document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-            sizes,
+            sizes
           )}`;
         }}
-        className="h-full items-stretch px-6"
+        className="items-stretch"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
-          minSize={50}
-          maxSize={400}
-          className="h-full bg-orange-300"
+          minSize={25}
+          maxSize={80}
         >
-          <div className="pe-6">
+          <div className="px-6">
+            <div className="items-center justify-between py-5">
+              <h2 className="text-xl font-semibold my-2">
+                {submissions.length}{" "}
+                {submissions.length === 1 ? "Response" : "Responses"}
+              </h2>
+            </div>
             <DataTable
               columns={resultColumns}
               data={submissions}
@@ -100,8 +96,8 @@ export function ProjectResults({ project }: ProjectResultsProps) {
         <ResizableHandle />
         <ResizablePanel
           defaultSize={defaultLayout[1]}
-          minSize={30}
-          maxSize={100}
+          minSize={25}
+          maxSize={50}
         >
           <ProjectResponseDetails projectResponse={selectedRow} />
         </ResizablePanel>

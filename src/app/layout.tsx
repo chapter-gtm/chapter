@@ -1,7 +1,15 @@
-import { Sidebar } from "@/components/MainSidebar";
+import Sidebar from "@/components/MainSidebar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Mail } from "@/components/project/mail";
+import { cookies } from "next/headers";
+import { accounts, mails } from "@/components/project/data";
+import {
+  ResizableHandle,
+  ResizablePanelGroup,
+  ResizablePanel,
+} from "@/components/ui/resizable";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,17 +23,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const layout = cookies().get("react-resizable-panels:layout");
+  const collapsed = false;
+
+  const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
+  const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="border-t ">
-          <div className="bg-background">
-            <div className="grid md:grid-cols-8">
-              <Sidebar className="hidden lg:block" />
-              <div className="col-span-7 lg:col-span-7 lg:border-l">
-                <div className="">{children}</div>
-              </div>
-            </div>
+        <div className="bg-background h-screen flex">
+          <div className="flex flex-1 overflow-hidden">
+            
+            <Sidebar className="w-60 justify-between" />
+            <main className="flex flex-1 flex-col">{children}</main>
           </div>
         </div>
       </body>
