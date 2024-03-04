@@ -65,18 +65,16 @@ export function ProjectTranscript({
   ]);
   return (
     <>
-      <div className="overflow-y-auto" >
+      <div className="overflow-y-auto">
         <div className="flex flex-col gap-y-3">
-         
-
           <div className="">
             {messages.map((message, index) => (
-              <div className="">
+              <div key={index} className="">
                 <div
                   key={index}
                   className={cn(
                     "flex-1 w-max max-w-[75%] px-3 py-2 text-xs text-slate-500",
-                    message.role === "user" ? "ml-auto" : "ml-0"
+                    message.role === "user" ? "ml-auto" : "ml-0",
                   )}
                 >
                   {message.role}
@@ -88,7 +86,7 @@ export function ProjectTranscript({
                     "flex-1 w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm",
                     message.role === "user"
                       ? "ml-auto bg-primary text-primary-foreground"
-                      : "bg-muted"
+                      : "bg-muted",
                   )}
                 >
                   {message.content}
