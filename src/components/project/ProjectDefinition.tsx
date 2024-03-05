@@ -10,6 +10,7 @@ import {
   Question,
   QuestionFormat,
   ProjectOutroAction,
+  ProjectOutro,
 } from "@/types/project";
 import {
   Card,
@@ -60,15 +61,21 @@ async function updateProject(id: string, project: Project) {
 
 interface ProjectDefinitionProps {
   project: Project;
+  setProject: React.Dispatch<React.SetStateAction<Project | null>>;
 }
 
-export function ProjectDefinition({ project }: ProjectDefinitionProps) {
-  const [projectData, setProjectData] = useState<Project>(project);
+export function ProjectDefinition({
+  project,
+  setProject,
+}: ProjectDefinitionProps) {
   const [dataChanged, setDataChanged] = useState(false);
   const { toast } = useToast();
   const saveChanges = useCallback(async () => {
     try {
-      await updateProject(projectData.id, projectData);
+      if (!dataChanged) {
+        return;
+      }
+      await updateProject(project.id, project);
       setDataChanged(false);
       toast({
         title: "Your changes have been saved!",
@@ -79,7 +86,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
         variant: "destructive",
       });
     }
-  }, [projectData, toast]);
+  }, [project, dataChanged, toast]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", saveChanges);
@@ -90,7 +97,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
 
   useEffect(() => {
     setDataChanged(true);
-  }, [projectData]);
+  }, [project]);
 
   return (
     <>
@@ -103,10 +110,10 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                 <Input
                   id="subject"
                   placeholder="A short name for this project."
-                  value={projectData.name}
+                  value={project.name}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setProjectData({
-                      ...projectData,
+                    setProject({
+                      ...project,
                       ["name"]: event.target.value,
                     });
                   }}
@@ -118,10 +125,10 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                 <Input
                   id="subject"
                   placeholder="e.g. Product Managers, UX Researchers"
-                  value={projectData.candidatePersonas.join(", ")}
+                  value={project.candidatePersonas.join(", ")}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setProjectData({
-                      ...projectData,
+                    setProject({
+                      ...project,
                       ["candidatePersonas"]: event.target.value
                         .split(",")
                         .map((token) => token.trim()),
@@ -135,10 +142,10 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                 <Textarea
                   id="description"
                   placeholder="What do you expect to learn from this project?"
-                  value={projectData.goal}
+                  value={project.goal}
                   onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                    setProjectData({
-                      ...projectData,
+                    setProject({
+                      ...project,
                       ["goal"]: event.target.value,
                     });
                   }}
@@ -166,9 +173,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                   id="subject"
                   placeholder="I need help with..."
                   value={
-                    projectData.authors.length > 0
-                      ? projectData.authors[0].name
-                      : ""
+                    project.authors.length > 0 ? project.authors[0].name : ""
                   }
                   readOnly
                 />
@@ -193,16 +198,16 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         <Input
                           id="name"
                           placeholder="How you'd like to start the conversation"
-                          value={projectData.intro.title}
+                          value={project.intro.title}
                           onChange={(
                             event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             project.intro.title = event.target.value;
-                            setProjectData({
-                              ...projectData,
+                            setProject({
+                              ...project,
                               ["intro"]: {
                                 title: event.target.value,
-                                description: projectData.intro.description,
+                                description: project.intro.description,
                               },
                             });
                           }}
@@ -215,7 +220,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
               </Card>
             </li>
 
-            {projectData.components.map((component, index) => (
+            {project.components.map((component, index) => (
               <li key={index}>
                 <Card className="flex-none">
                   <EmojiHeader status="Thread" />
@@ -233,12 +238,12 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                               event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
                               const updatedComponents: Question[] = [
-                                ...projectData.components,
+                                ...project.components,
                               ];
                               updatedComponents[index].question =
                                 event.target.value;
-                              setProjectData({
-                                ...projectData,
+                              setProject({
+                                ...project,
                                 ["components"]: updatedComponents,
                               });
                             }}
@@ -264,8 +269,8 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                             onValueChange={(value: string) => {
                               project.components[index].max_followups =
                                 parseInt(value);
-                              saveChanges();
                             }}
+                            onOpenChange={saveChanges}
                           >
                             <SelectTrigger className="w-[120px]">
                               <SelectValue placeholder="Select" />
@@ -292,18 +297,17 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                 className="w-full border-dashed bg-white/20"
                 onClick={() => {
                   const updatedComponents: Question[] = [
-                    ...projectData.components,
+                    ...project.components,
                     {
                       question: "",
                       format: QuestionFormat.OPEN_ENDED,
                       max_followups: 2,
                     },
                   ];
-                  setProjectData({
-                    ...projectData,
+                  setProject({
+                    ...project,
                     ["components"]: updatedComponents,
                   });
-                  saveChanges();
                 }}
               >
                 Add thread
@@ -322,18 +326,18 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         <Input
                           id="name"
                           placeholder="Wow! thanks for sharing your insights with us."
-                          value={projectData.outros.COMPLETED.title}
+                          value={project.outros.COMPLETED.title}
                           onChange={(
                             event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
-                            setProjectData({
-                              ...projectData,
+                            setProject({
+                              ...project,
                               ["outros"]: {
                                 [ProjectResponseStage.COMPLETED]: {
                                   title: event.target.value,
                                   description:
-                                    projectData.outros.COMPLETED.description,
-                                  actions: projectData.outros.COMPLETED.actions,
+                                    project.outros.COMPLETED.description,
+                                  actions: project.outros.COMPLETED.actions,
                                 },
                               },
                             });
@@ -348,38 +352,34 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                           <div className="flex flex-row justify-start space-x-3 items-center">
                             <Label htmlFor="name">Add calendar link</Label>
                             <Switch
-                              checked={projectData.outros.COMPLETED.actions.includes(
+                              checked={project.outros.COMPLETED.actions.includes(
                                 ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                               )}
                               onCheckedChange={(checked: boolean) => {
                                 let newActions: ProjectOutroAction[] = [];
                                 if (checked) {
-                                  console.log("Adding author cal");
                                   newActions = [
-                                    ...projectData.outros.COMPLETED.actions,
+                                    ...project.outros.COMPLETED.actions,
                                     ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                                   ];
                                 } else {
-                                  console.log("Removing author cal");
-                                  projectData.outros.COMPLETED.actions.filter(
+                                  project.outros.COMPLETED.actions.filter(
                                     (value) =>
                                       value !==
                                       ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                                   );
                                 }
-                                setProjectData({
-                                  ...projectData,
+                                setProject({
+                                  ...project,
                                   ["outros"]: {
                                     [ProjectResponseStage.COMPLETED]: {
-                                      title: projectData.outros.COMPLETED.title,
+                                      title: project.outros.COMPLETED.title,
                                       description:
-                                        projectData.outros.COMPLETED
-                                          .description,
+                                        project.outros.COMPLETED.description,
                                       actions: newActions,
                                     },
                                   },
                                 });
-                                saveChanges();
                               }}
                             />
                           </div>

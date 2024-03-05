@@ -1,3 +1,5 @@
+"use client";
+import React, { useEffect, useState, useRef } from "react";
 import { ServerCrash } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,18 +31,26 @@ interface ProjectDetailsProps {
   projectId: string;
 }
 
-export async function ProjectDetails({ projectId }: ProjectDetailsProps) {
-  let project: Project | null = null;
-  let errorOccurred = true;
-  try {
-    project = await getProject(projectId);
-    errorOccurred = false;
-  } catch (error) {
-    errorOccurred = true;
-  }
+export function ProjectDetails({ projectId }: ProjectDetailsProps) {
+  const errorOccurred = useRef<boolean>(true);
+  const [project, setProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        const proj = await getProject(projectId);
+        setProject(proj);
+        errorOccurred.current = false;
+      } catch (error) {
+        errorOccurred.current = true;
+      }
+    };
+    fetchProject();
+  }, [projectId]);
+
   return (
     <>
-      {!errorOccurred && project !== null ? (
+      {!errorOccurred.current && project !== null ? (
         <Tabs defaultValue="definition">
           <div className="flex flex-col h-dvh overflow-hidden">
             {/* <div className="flex items-center justify-between py-4 border-b border-slate-100 h-16"></div> */}
@@ -75,7 +85,7 @@ export async function ProjectDetails({ projectId }: ProjectDetailsProps) {
               value="definition"
               className="mt-0 data-[state=active]:flex flex-1 overflow-hidden p-0"
             >
-              <ProjectDefinition project={project} />
+              <ProjectDefinition project={project} setProject={setProject} />
             </TabsContent>
 
             <TabsContent
