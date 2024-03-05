@@ -1,13 +1,3 @@
-export type Candidate = {
-  personas: string[];
-  location: string;
-};
-
-export type ProjectStructure = {
-  starter_questions: string[];
-  max_followups: number;
-};
-
 export enum QuestionFormat {
   OPEN_ENDED = "OPEN_ENDED",
 }
@@ -15,20 +5,20 @@ export enum QuestionFormat {
 export type Question = {
   question: string;
   format: QuestionFormat;
-  max_followups: number;
+  followups: number;
 };
 
 export type User = {
   email: string;
   name: string;
   title: string;
-  avatar_url: string;
-  calendar_link: string;
+  avatarUrl: string;
+  calendarLink: string;
 };
 
 export type Organization = {
   name: string;
-  logo_url: string;
+  logoUrl: string;
   url: string;
   description: string;
 };
@@ -89,7 +79,7 @@ export type Project = {
   candidatePersonas: string[];
   components: Question[];
   authors: User[];
-  company: Organization;
+  org: Organization;
   id: string;
   orgid: string;
   intro: ProjectIntro;

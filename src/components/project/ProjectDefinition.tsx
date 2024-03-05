@@ -1,50 +1,34 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { PlusCircledIcon } from "@radix-ui/react-icons";
-
-import { Separator } from "@/components/ui/separator";
-import {
-  Project,
-  ProjectResponseStage,
-  Question,
-  QuestionFormat,
-  ProjectOutroAction,
-  ProjectOutro,
-} from "@/types/project";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardDescription,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  SelectGroup,
-  SelectLabel,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { SparkleIcon, SparklesIcon } from "lucide-react";
-import { Toggle } from "@radix-ui/react-toggle";
+import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Project,
+  ProjectOutroAction,
+  ProjectResponseStage,
+  Question,
+  QuestionFormat,
+} from "@/types/project";
+import { SparklesIcon, Trash2 } from "lucide-react";
 
 import EmojiHeader from "@/components/project/EmojiHeader";
 
 async function updateProject(id: string, project: Project) {
-  console.log(`${id} and ${project}`);
   const jwtToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk3MTgxNjMsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTYzMTc2MywiZXh0cmFzIjp7fX0.E-kpf93IqSY272vvY7I1Xe_qXcohJtFCzrgCBxQI8fY";
   const response = await fetch("http://localhost:8000/api/projects/" + id, {
@@ -153,15 +137,6 @@ export function ProjectDefinition({
                 />
               </div>
               <Separator className="bg-slate-100 my-4" />
-
-              <div className="grid gap-3">
-                <Label htmlFor="description">Project tags</Label>
-                <div className="flex flex-wrap gap-1 pt-2">
-                  <Badge variant="outline">Problem severity</Badge>
-                  <Badge variant="outline">Time</Badge>
-                  <Badge variant="outline">Other options</Badge>
-                </div>
-              </div>
             </div>
           </CardContent>
           <Separator className="bg-slate-100 my-4" />
@@ -225,6 +200,22 @@ export function ProjectDefinition({
                 <Card className="flex-none">
                   <EmojiHeader status="Thread" />
 
+                  <Button
+                    variant={"outline"}
+                    onClick={() => {
+                      const updatedComponents: Question[] = [
+                        ...project.components.slice(0, index),
+                        ...project.components.slice(index + 1),
+                      ];
+                      setProject({
+                        ...project,
+                        ["components"]: updatedComponents,
+                      });
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+
                   <CardContent>
                     <form>
                       <div className="grid w-full items-center gap-1">
@@ -265,9 +256,9 @@ export function ProjectDefinition({
                         <div className="flex flex-row items-center justify-between ">
                           <Label htmlFor="name"># of followup questions</Label>
                           <Select
-                            defaultValue={component.max_followups.toString()}
+                            defaultValue={component.followups.toString()}
                             onValueChange={(value: string) => {
-                              project.components[index].max_followups =
+                              project.components[index].followups =
                                 parseInt(value);
                             }}
                             onOpenChange={saveChanges}
@@ -301,7 +292,7 @@ export function ProjectDefinition({
                     {
                       question: "",
                       format: QuestionFormat.OPEN_ENDED,
-                      max_followups: 2,
+                      followups: 2,
                     },
                   ];
                   setProject({
@@ -389,9 +380,6 @@ export function ProjectDefinition({
                   </form>
                 </CardContent>
               </Card>
-            </li>
-            <li>
-              <div className="flex-none w-full bg-gray-600 h-96"></div>
             </li>
           </ul>
         </div>
