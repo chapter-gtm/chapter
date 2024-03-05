@@ -38,10 +38,8 @@ export type ProjectIntro = {
   description: string;
 };
 
-enum SurveyOutroAction {
-  SCHEDULE_CALL = "Talk to a Human",
-  REQUEST_CALLBACK = "Request callback",
-  SHARE = "Share with someone",
+export enum ProjectOutroAction {
+  AUTHOR_CALENDAR_LINK = "AUTHOR_CALENDAR_LINK",
 }
 
 export enum ProjectResponseStage {
@@ -54,7 +52,7 @@ export enum ProjectResponseStage {
 export type ProjectOutro = {
   title: string;
   description: string;
-  actions: SurveyOutroAction[];
+  actions: ProjectOutroAction[];
 };
 
 enum QuestionFlag {

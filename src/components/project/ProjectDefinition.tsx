@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
@@ -9,6 +9,7 @@ import {
   ProjectResponseStage,
   Question,
   QuestionFormat,
+  ProjectOutroAction,
 } from "@/types/project";
 import {
   Card,
@@ -44,7 +45,7 @@ import EmojiHeader from "@/components/project/EmojiHeader";
 async function updateProject(id: string, project: Project) {
   console.log(`${id} and ${project}`);
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk2MzA1MTAsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTU0NDExMCwiZXh0cmFzIjp7fX0.3MN81qpno7LJFaShVyGOd-PbvJeTzJgOAWrsOaHctb0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk3MTgxNjMsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTYzMTc2MywiZXh0cmFzIjp7fX0.E-kpf93IqSY272vvY7I1Xe_qXcohJtFCzrgCBxQI8fY";
   const response = await fetch("http://localhost:8000/api/projects/" + id, {
     method: "PATCH",
     headers: {
@@ -63,24 +64,33 @@ interface ProjectDefinitionProps {
 
 export function ProjectDefinition({ project }: ProjectDefinitionProps) {
   const [projectData, setProjectData] = useState<Project>(project);
+  const [dataChanged, setDataChanged] = useState(false);
   const { toast } = useToast();
+  const saveChanges = useCallback(async () => {
+    try {
+      await updateProject(projectData.id, projectData);
+      setDataChanged(false);
+      toast({
+        title: "Your changes have been saved!",
+      });
+    } catch {
+      toast({
+        title: "Oops! Failed to save :(",
+        variant: "destructive",
+      });
+    }
+  }, [projectData, toast]);
 
   useEffect(() => {
-    const saveChanges = setTimeout(async () => {
-      try {
-        await updateProject(projectData.id, projectData);
-        toast({
-          title: "Your changes have been saved!",
-        });
-      } catch {
-        toast({
-          title: "Oops! Failed to save :(",
-          variant: "destructive",
-        });
-      }
-    }, 10000);
-    return () => clearTimeout(saveChanges);
-  }, [projectData, toast]);
+    window.addEventListener("beforeunload", saveChanges);
+    return () => {
+      window.removeEventListener("beforeunload", saveChanges);
+    };
+  }, [saveChanges]);
+
+  useEffect(() => {
+    setDataChanged(true);
+  }, [projectData]);
 
   return (
     <>
@@ -100,6 +110,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                       ["name"]: event.target.value,
                     });
                   }}
+                  onBlur={saveChanges}
                 />
               </div>
               <div className="grid gap-3">
@@ -116,6 +127,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         .map((token) => token.trim()),
                     });
                   }}
+                  onBlur={saveChanges}
                 />
               </div>
               <div className="grid gap-3">
@@ -130,6 +142,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                       ["goal"]: event.target.value,
                     });
                   }}
+                  onBlur={saveChanges}
                 />
               </div>
               <Separator className="bg-slate-100 my-4" />
@@ -160,32 +173,9 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                   readOnly
                 />
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="subject">Interviewer calendar link</Label>
-                <Input id="subject" placeholder="e.g. Product Managers" />
-              </div>
             </div>
           </CardContent>
           <Separator className="bg-slate-100 my-4" />
-          <CardContent>
-            <div className="grid gap-y-2">
-              <div className="flex flex-row justify-between gap-3">
-                <Label htmlFor="subject">Privacy</Label>
-
-                <Switch />
-              </div>
-              <Label className="text-sm font-normal text-slate-500">
-                Select &quot;on&quot; if you don&apos;t want users to share.
-              </Label>
-            </div>
-          </CardContent>
-        </div>
-        <div className="flex border-t border-slate-200 justify-end">
-          <div className="flex p-6">
-            <Button variant="outline" className="w-full">
-              Save changes
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -216,6 +206,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                               },
                             });
                           }}
+                          onBlur={saveChanges}
                         />
                       </div>
                     </div>
@@ -251,6 +242,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                                 ["components"]: updatedComponents,
                               });
                             }}
+                            onBlur={saveChanges}
                           />
                           <div className="flex flex-row space-x-3 items-center">
                             <Button variant={"outline"} size={"sm"}>
@@ -272,6 +264,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                             onValueChange={(value: string) => {
                               project.components[index].max_followups =
                                 parseInt(value);
+                              saveChanges();
                             }}
                           >
                             <SelectTrigger className="w-[120px]">
@@ -310,6 +303,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                     ...projectData,
                     ["components"]: updatedComponents,
                   });
+                  saveChanges();
                 }}
               >
                 Add thread
@@ -344,6 +338,7 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                               },
                             });
                           }}
+                          onBlur={saveChanges}
                         />
                       </div>
                       <Separator className="my-4" />
@@ -352,31 +347,41 @@ export function ProjectDefinition({ project }: ProjectDefinitionProps) {
                         <div className="flex flex-col space-y-3">
                           <div className="flex flex-row justify-start space-x-3 items-center">
                             <Label htmlFor="name">Add calendar link</Label>
-                            <Switch />
-                          </div>
-
-                          <div className="flex flex-row justify-between space-x-3 items-center">
-                            <Input
-                              id="name"
-                              placeholder="url/"
-                              value={project.authors[0].calendar_link}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>,
-                              ) => {
-                                project.authors[0].calendar_link =
-                                  event.target.value;
+                            <Switch
+                              checked={projectData.outros.COMPLETED.actions.includes(
+                                ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                              )}
+                              onCheckedChange={(checked: boolean) => {
+                                let newActions: ProjectOutroAction[] = [];
+                                if (checked) {
+                                  console.log("Adding author cal");
+                                  newActions = [
+                                    ...projectData.outros.COMPLETED.actions,
+                                    ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                                  ];
+                                } else {
+                                  console.log("Removing author cal");
+                                  projectData.outros.COMPLETED.actions.filter(
+                                    (value) =>
+                                      value !==
+                                      ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                                  );
+                                }
+                                setProjectData({
+                                  ...projectData,
+                                  ["outros"]: {
+                                    [ProjectResponseStage.COMPLETED]: {
+                                      title: projectData.outros.COMPLETED.title,
+                                      description:
+                                        projectData.outros.COMPLETED
+                                          .description,
+                                      actions: newActions,
+                                    },
+                                  },
+                                });
+                                saveChanges();
                               }}
                             />
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col space-y-3">
-                          <div className="flex flex-row justify-start space-x-3 items-center">
-                            <Label htmlFor="name">Add marketing link</Label>
-                            <Switch />
-                          </div>
-                          <div className="flex flex-row justify-between space-x-3 items-center">
-                            <Input id="name" placeholder="url/" />
                           </div>
                         </div>
                       </div>
