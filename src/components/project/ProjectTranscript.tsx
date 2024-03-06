@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { ProjectResponse } from "@/types/project";
+import { ProjectResponse, QuestionThread } from "@/types/project";
+import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 function getProjectResponse(projectId: string, projectResponseId: string) {
@@ -17,80 +18,38 @@ function getProjectResponse(projectId: string, projectResponseId: string) {
   return response;
 }
 
-interface ProjectResponseDetailsProps {
-  projectId?: string;
-  projectResponseId?: string;
-  projectResponse?: ProjectResponse | null;
+interface ProjectResponseTranscriptProps {
+  projectResponse: ProjectResponse;
 }
 
 export function ProjectTranscript({
-  projectId,
-  projectResponseId,
   projectResponse,
-}: ProjectResponseDetailsProps) {
-  let response = null;
-  if (projectResponse !== undefined) {
-    response = projectResponse;
-  } else if (projectId !== undefined && projectResponseId !== undefined) {
-    response = getProjectResponse(projectId, projectResponseId);
-  }
-
-  const [completionState, setCompletionState] = React.useState("Completed");
-  const [messages, setMessages] = React.useState([
-    {
-      role: "agent",
-      content:
-        "When was the last time you had a less than ideal listening experience? What was it, and what made it challenging?",
-    },
-    {
-      role: "user",
-      content:
-        "Last night in my basement. I listened via a bluetooth speaker. But the empty room, the walls and the speaker direction led to a muffled bad sound hurting my ears over time.",
-    },
-    {
-      role: "agent",
-      content:
-        "Interesting, can you tell me more about how the room's layout and the speaker's position affected the sound quality?",
-    },
-    {
-      role: "user",
-      content:
-        "There was coming reverbation coming from the whalls which had bad impact on the sound. The direction of the speaker leads to reduced availability of both highs and lows of the signal. Overall an unpleasant sound experience..",
-    },
-    {
-      role: "agent",
-      content:
-        "That sounds frustrating. Can you elaborate on how the speaker's direction affected the availability of the highs and lows of the signal?",
-    },
-  ]);
+}: ProjectResponseTranscriptProps) {
   return (
     <>
       <div className="overflow-y-auto">
         <div className="flex flex-col gap-y-3">
           <div className="">
-            {messages.map((message, index) => (
-              <div key={index} className="">
-                <div
-                  key={index}
-                  className={cn(
-                    "flex-1 w-max max-w-[75%] px-3 py-2 text-xs text-slate-500",
-                    message.role === "user" ? "ml-auto" : "ml-0",
-                  )}
-                >
-                  {message.role}
-                </div>
-
-                <div
-                  key={index}
-                  className={cn(
-                    "flex-1 w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm",
-                    message.role === "user"
-                      ? "ml-auto bg-primary text-primary-foreground"
-                      : "bg-muted",
-                  )}
-                >
-                  {message.content}
-                </div>
+            {projectResponse.id}
+            {projectResponse.transcript.map((thread, threadIndex) => (
+              <div key={threadIndex}>
+                {thread.qa_pairs.map((qaPair, qaPairIndex) => (
+                  <div key={qaPairIndex}>
+                    <div className="flex-1 w-max max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-0">
+                      Agent
+                    </div>
+                    <div className="flex-1 w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm bg-muted">
+                      {qaPair.question}
+                    </div>
+                    <div className="flex-1 w-max max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-auto">
+                      User
+                    </div>
+                    <div className="flex-1 w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
+                      {qaPair.answer}
+                    </div>
+                  </div>
+                ))}
+                <Separator className="bg-slate-100 my-4" />
               </div>
             ))}
           </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { z } from "zod";
+import { ZodTypeAny, z } from "zod";
 import { parseISO } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -42,7 +42,7 @@ function titleCaseToCamelCase(titleCaseString: string): string {
 }
 
 async function getProjectResponses(id: string) {
-  // TODO: Fetch project responses
+  // TODO: Fetch project responseRecords
   const jwtToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4MDYwOTQsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTcxOTY5NCwiZXh0cmFzIjp7fX0.1bjE2vGjg1gV1B_8oE-h80YX3-lfSA3W07vhtAFxRy8";
   const response = await fetch(
@@ -58,14 +58,18 @@ async function getProjectResponses(id: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const projectResponses =
+  const projectResponses: ProjectResponse[] =
     "items" in data
       ? data["items"].map((item: any) => ({
           ...item,
           startedAt: parseISO(item.startedAt),
         }))
       : [];
-  return z.array(ProjectResponseRecord).parse(
+
+  const responses = new Map<string, ProjectResponse>();
+  projectResponses.forEach((resp) => responses.set(resp.id, resp));
+
+  const responseRecords = z.array(ProjectResponseRecord).parse(
     projectResponses.map((response: ProjectResponse) => {
       const record: Record<string, any> = {
         id: response.id,
@@ -79,20 +83,33 @@ async function getProjectResponses(id: string) {
       return record;
     }),
   );
+
+  return {
+    responses: responses,
+    responseRecords: responseRecords,
+  };
 }
 
 export function ProjectResults({ project }: ProjectResultsProps) {
   const defaultCollapsed = false;
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
-  const [responses, setResponses] = useState<ProjectResponseRecordSchema[]>([]);
+  const [responses, setResponses] = useState<Map<string, ProjectResponse>>(
+    new Map(),
+  );
+  const [responseRecords, setResponseRecords] = useState<
+    ProjectResponseRecordSchema[]
+  >([]);
   const [selectedRow, setSelectedRow] = useState<ProjectResponse | null>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const resp = await getProjectResponses(project.id);
-        setResponses(resp);
+        const { responses, responseRecords } = await getProjectResponses(
+          project.id,
+        );
+        setResponses(responses);
+        setResponseRecords(responseRecords);
       } catch (error) {
         console.log(error);
       }
@@ -101,7 +118,12 @@ export function ProjectResults({ project }: ProjectResultsProps) {
   }, [project]);
 
   const handleRowClick = function <TData>(data: TData) {
-    setSelectedRow(data as ProjectResponse);
+    const record: ProjectResponseRecordSchema =
+      data as ProjectResponseRecordSchema;
+    const resp: ProjectResponse | undefined = responses.get(record.id);
+    if (resp !== undefined) {
+      setSelectedRow(resp);
+    }
   };
 
   return (
@@ -117,13 +139,13 @@ export function ProjectResults({ project }: ProjectResultsProps) {
           <div className="px-6">
             <div className="items-center justify-between py-5">
               <h2 className="text-xl font-semibold my-2">
-                {responses.length}{" "}
-                {responses.length === 1 ? "Response" : "Responses"}
+                {responseRecords.length}{" "}
+                {responseRecords.length === 1 ? "Response" : "Responses"}
               </h2>
             </div>
             <DataTable
               columns={resultColumns}
-              data={responses}
+              data={responseRecords}
               filters={filters}
               filterColumnName="participant"
               onRowClick={handleRowClick}
