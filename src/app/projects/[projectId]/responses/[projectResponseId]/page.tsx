@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 export default function ProjectDetailsPage({
   params,
 }: {
-  params: { project_id: string; project_response_id: string };
+  params: { projectId: string; projectResponseId: string };
 }) {
   return (
     <>
       <ProjectResponseDetailsFull
-        projectId={params.project_id}
-        projectResponseId={params.project_response_id}
+        projectId={params.projectId}
+        projectResponseId={params.projectResponseId}
       />
     </>
   );

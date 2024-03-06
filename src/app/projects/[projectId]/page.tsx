@@ -10,12 +10,12 @@ export const metadata: Metadata = {
 export default function ProjectDetailsPage({
   params,
 }: {
-  params: { project_id: string };
+  params: { projectId: string };
 }) {
   return (
     <>
-      <div>      
-        <ProjectDetails projectId={params.project_id} />
+      <div>
+        <ProjectDetails projectId={params.projectId} />
       </div>
     </>
   );
