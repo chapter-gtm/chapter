@@ -1,8 +1,5 @@
-"use client";
-import { cn } from "@/lib/utils";
-import { ProjectResponse, QuestionThread } from "@/types/project";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ProjectResponse } from "@/types/project";
 
 function getProjectResponse(projectId: string, projectResponseId: string) {
   // TODO: Fetch project responses
@@ -21,7 +18,7 @@ interface ProjectResponseTranscriptProps {
   projectResponse: ProjectResponse;
 }
 
-export function ProjectTranscript({
+export function ProjectResponseTranscript({
   projectResponse,
 }: ProjectResponseTranscriptProps) {
   return (
@@ -29,7 +26,6 @@ export function ProjectTranscript({
       <div className="overflow-y-auto">
         <div className="flex flex-col gap-y-3">
           <div className="">
-            {projectResponse.id}
             {projectResponse.transcript.map((thread, threadIndex) => (
               <div key={threadIndex}>
                 {thread.qa_pairs.map((qaPair, qaPairIndex) => (

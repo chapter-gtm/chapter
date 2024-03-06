@@ -1,6 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -24,69 +24,62 @@ import {
 } from "@radix-ui/react-icons";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ProjectTranscript } from "./ProjectTranscript";
+import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
 import { PropList } from "./PropList";
 
-function getProjectResponse(projectId: string, projectResponseId: string) {
-  // TODO: Fetch project responses
-  const response = {
-    id: "1234",
-    date: "Feb 12, 2024",
-    email: "bob@example.com",
-    stage: "Completed",
-    sentiment: "Positive",
-  };
-
-  return response;
+async function getProjectResponse(
+  projectId: string,
+  projectResponseId: string,
+) {
+  const jwtToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4MDYwOTQsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTcxOTY5NCwiZXh0cmFzIjp7fX0.1bjE2vGjg1gV1B_8oE-h80YX3-lfSA3W07vhtAFxRy8";
+  const response = await fetch(
+    "http://localhost:8000/api/projects/" +
+      projectId +
+      "/responses/" +
+      projectResponseId,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  const data = await response.json();
+  const projectResponse = data as ProjectResponse;
+  return projectResponse;
 }
 
-interface ProjectResponseDetailsProps {
+interface ProjectResponseDetailsFullProps {
   projectId?: string;
   projectResponseId?: string;
-  projectResponse?: ProjectResponse | null;
+  projectResponse?: ProjectResponse;
 }
 
 export function ProjectResponseDetailsFull({
   projectId,
   projectResponseId,
   projectResponse,
-}: ProjectResponseDetailsProps) {
-  let response = null;
-  if (projectResponse !== undefined) {
-    response = projectResponse;
-  } else if (projectId !== undefined && projectResponseId !== undefined) {
-    response = getProjectResponse(projectId, projectResponseId);
-  }
+}: ProjectResponseDetailsFullProps) {
+  const [response, setResponse] = useState<ProjectResponse | null>(null);
 
-  const [completionState, setCompletionState] = React.useState("Completed");
+  useEffect(() => {
+    const fetchProject = async () => {
+      try {
+        if (projectResponse !== undefined) {
+          setResponse(projectResponse);
+        } else if (projectId !== undefined && projectResponseId !== undefined) {
+          const resp = await getProjectResponse(projectId, projectResponseId);
+          setResponse(resp);
+        }
+      } catch (error) {}
+    };
+    fetchProject();
+  }, [projectId, projectResponseId, projectResponse]);
 
-  const [messages, setMessages] = React.useState([
-    {
-      role: "agent",
-      content:
-        "When was the last time you had a less than ideal listening experience? What was it, and what made it challenging?",
-    },
-    {
-      role: "user",
-      content:
-        "Last night in my basement. I listened via a bluetooth speaker. But the empty room, the walls and the speaker direction led to a muffled bad sound hurting my ears over time.",
-    },
-    {
-      role: "agent",
-      content:
-        "Interesting, can you tell me more about how the room's layout and the speaker's position affected the sound quality?",
-    },
-    {
-      role: "user",
-      content:
-        "There was coming reverbation coming from the whalls which had bad impact on the sound. The direction of the speaker leads to reduced availability of both highs and lows of the signal. Overall an unpleasant sound experience..",
-    },
-    {
-      role: "agent",
-      content:
-        "That sounds frustrating. Can you elaborate on how the speaker's direction affected the availability of the highs and lows of the signal?",
-    },
-  ]);
   return (
     <div className="grid grid-cols-4 justify-start content-start">
       <div className="col-span-3 border-e border-slate-100 h-dvh">
@@ -130,7 +123,9 @@ export function ProjectResponseDetailsFull({
             </div>
             <TabsContent value="transcript">
               <div className="w-2/3 mx-auto">
-                <ProjectTranscript />
+                {response !== null && (
+                  <ProjectResponseTranscript projectResponse={response} />
+                )}
               </div>
             </TabsContent>
           </Tabs>
@@ -139,7 +134,7 @@ export function ProjectResponseDetailsFull({
 
       <div className="col-span-1 pt-2 px-6 space-y-5">
         <ProjectResponseIdentity />
-        <PropList/>
+        <PropList />
       </div>
     </div>
   );

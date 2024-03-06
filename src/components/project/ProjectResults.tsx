@@ -158,7 +158,9 @@ export function ProjectResults({ project }: ProjectResultsProps) {
           minSize={20}
           maxSize={50}
         >
-          <ProjectResponseDetails projectResponse={selectedRow} />
+          {selectedRow !== null && (
+            <ProjectResponseDetails projectResponse={selectedRow} />
+          )}
         </ResizablePanel>
       </ResizablePanelGroup>
     </>

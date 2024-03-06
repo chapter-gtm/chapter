@@ -110,7 +110,7 @@ export const RatingLabel: { [key: number]: string } = {
 
 export type ProjectResponse = {
   org_id: string;
-  project_id: string;
+  projectId: string;
   id: string;
   utm: string;
   participant: Participant;
