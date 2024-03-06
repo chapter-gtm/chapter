@@ -101,11 +101,11 @@ export type Score = {
 };
 
 export const RatingLabel: { [key: number]: string } = {
-  1: "Bad",
-  2: "Poor",
-  3: "Average",
-  4: "Good",
-  5: "Excellent",
+  1: "Very Low",
+  2: "Low",
+  3: "Medium",
+  4: "High",
+  5: "Very High",
 };
 
 export type ProjectResponse = {

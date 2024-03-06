@@ -20,12 +20,12 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
-import { Project, ProjectResponse, RatingLabel } from "@/types/project";
+import { Project, ProjectResponse } from "@/types/project";
 import { DataTable } from "@/components/data-table/data-table";
 import {
   resultColumns,
-  projectResponseSchema,
-  ResponseZODType,
+  ProjectResponseRecord,
+  ProjectResponseRecordSchema,
   filters,
 } from "@/components/project/result-columns";
 import { ProjectResponseDetails } from "@/components/project/ProjectResponseDetails";
@@ -34,10 +34,17 @@ interface ProjectResultsProps {
   project: Project;
 }
 
+function titleCaseToCamelCase(titleCaseString: string): string {
+  return titleCaseString
+    .replace(/\s(.)/g, ($1) => $1.toUpperCase())
+    .replace(/\s/g, "")
+    .replace(/^(.)/, ($1) => $1.toLowerCase());
+}
+
 async function getProjectResponses(id: string) {
   // TODO: Fetch project responses
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk3MTgxNjMsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTYzMTc2MywiZXh0cmFzIjp7fX0.E-kpf93IqSY272vvY7I1Xe_qXcohJtFCzrgCBxQI8fY";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4MDYwOTQsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTcxOTY5NCwiZXh0cmFzIjp7fX0.1bjE2vGjg1gV1B_8oE-h80YX3-lfSA3W07vhtAFxRy8";
   const response = await fetch(
     "http://localhost:8000/api/projects/" + id + "/responses",
     {
@@ -58,13 +65,19 @@ async function getProjectResponses(id: string) {
           startedAt: parseISO(item.startedAt),
         }))
       : [];
-  return z.array(projectResponseSchema).parse(
-    projectResponses.map((response: ProjectResponse) => ({
-      id: response.id,
-      date: response.startedAt.toLocaleString(),
-      participant: response.participant.name,
-      stage: response.state.stage,
-    })),
+  return z.array(ProjectResponseRecord).parse(
+    projectResponses.map((response: ProjectResponse) => {
+      const record: Record<string, any> = {
+        id: response.id,
+        date: response.startedAt.toLocaleString(),
+        participant: response.participant.name,
+        stage: response.state.stage,
+      };
+      response.scores.forEach((item) => {
+        record[titleCaseToCamelCase(item.name)] = item.score;
+      });
+      return record;
+    }),
   );
 }
 
@@ -72,7 +85,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
   const defaultCollapsed = false;
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
-  const [responses, setResponses] = useState<ResponseZODType[]>([]);
+  const [responses, setResponses] = useState<ProjectResponseRecordSchema[]>([]);
   const [selectedRow, setSelectedRow] = useState<ProjectResponse | null>(null);
 
   useEffect(() => {

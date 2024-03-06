@@ -13,15 +13,10 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 
 import { ProjectResponseStage, RatingLabel } from "@/types/project";
 
-export const projectResponseSchema = z.object({
-  id: z.string(),
-  date: z.string(),
-  participant: z.string(),
-  stage: z.nativeEnum(ProjectResponseStage),
-});
+export const ProjectResponseRecord = z.record(z.any());
+export type ProjectResponseRecordSchema = z.infer<typeof ProjectResponseRecord>;
 
-export type ResponseZODType = z.infer<typeof projectResponseSchema>;
-
+// TODO: Add score filters dynamically based on score definitions from the project
 export const filters = [
   {
     tableColumnName: "stage",
@@ -51,7 +46,8 @@ export const filters = [
   },
 ];
 
-export const resultColumns: ColumnDef<ResponseZODType>[] = [
+// TODO: Add scores dynamically based on score definitions from the project
+export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -95,6 +91,26 @@ export const resultColumns: ColumnDef<ResponseZODType>[] = [
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "inputQuality",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Input Quality" />
+    ),
+    cell: ({ row }) => {
+      const score: number = row.getValue("inputQuality");
+      return <div className="w-[80px]">{RatingLabel[score]}</div>;
+    },
+  },
+  {
+    accessorKey: "problemSeverity",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Problem Severity" />
+    ),
+    cell: ({ row }) => {
+      const score: number = row.getValue("problemSeverity");
+      return <div className="w-[80px]">{RatingLabel[score]}</div>;
     },
   },
 ];
