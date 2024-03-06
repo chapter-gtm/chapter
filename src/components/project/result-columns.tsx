@@ -11,17 +11,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 
-import { ProjectResponseStage } from "@/types/project";
+import { ProjectResponseStage, RatingLabel } from "@/types/project";
 
 export const projectResponseSchema = z.object({
   id: z.string(),
   date: z.string(),
-  email: z.string(),
-  stage: z.string(),
-  sentiment: z.number(),
+  participant: z.string(),
+  stage: z.nativeEnum(ProjectResponseStage),
 });
 
-type Submission = z.infer<typeof projectResponseSchema>;
+export type ResponseZODType = z.infer<typeof projectResponseSchema>;
 
 export const filters = [
   {
@@ -29,22 +28,22 @@ export const filters = [
     label: "Filter",
     filterOptions: [
       {
-        value: "Not Started",
+        value: ProjectResponseStage.NOT_STARTED,
         label: "Not Started",
         icon: CircleIcon,
       },
       {
-        value: "Started",
-        label: "Started",
+        value: ProjectResponseStage.IN_PROGRESS,
+        label: "Incomplete",
         icon: StopwatchIcon,
       },
       {
-        value: "Completed",
+        value: ProjectResponseStage.COMPLETED,
         label: "Completed",
         icon: CheckCircledIcon,
       },
       {
-        value: "Aborted",
+        value: ProjectResponseStage.ABORTED,
         label: "Aborted",
         icon: CrossCircledIcon,
       },
@@ -52,7 +51,7 @@ export const filters = [
   },
 ];
 
-export const resultColumns: ColumnDef<Submission>[] = [
+export const resultColumns: ColumnDef<ResponseZODType>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -61,11 +60,13 @@ export const resultColumns: ColumnDef<Submission>[] = [
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("date")}</div>,
   },
   {
-    accessorKey: "email",
+    accessorKey: "participant",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="Participant" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="w-[80px]">{row.getValue("participant")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -85,7 +86,7 @@ export const resultColumns: ColumnDef<Submission>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          {stage.icon && (
+          {stage.hasOwnProperty("icon") && stage.icon && (
             <stage.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
           <span>{stage.label}</span>
@@ -95,14 +96,5 @@ export const resultColumns: ColumnDef<Submission>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-  },
-  {
-    accessorKey: "sentiment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Sentiment" />
-    ),
-    cell: ({ row }) => (
-      <div className="w-[80px]">{row.getValue("sentiment")}</div>
-    ),
   },
 ];
