@@ -65,12 +65,61 @@ export enum ProjectState {
   CLOSED = "Closed",
 }
 
-export type ProjectResponse = {
-  id: string;
-  date: string;
+export type Participant = {
   email: string;
-  stage: string;
-  sentiment: number;
+  name: string;
+};
+
+export type ProjectResponseState = {
+  stage: ProjectResponseStage;
+  component_next_index: number;
+  followup_count: number;
+};
+
+enum QuestionType {
+  STARTER = "STARTER",
+  FOLLOWUP = "FOLLOWUP",
+}
+
+export type QAPair = {
+  question: string;
+  question_type: QuestionType;
+  question_ts: Date;
+  answer: string;
+  answer_ts: Date;
+};
+
+export type QuestionThread = {
+  question: string;
+  qa_pairs: QAPair[];
+};
+
+export type Score = {
+  name: string;
+  score: number;
+  reason: string;
+};
+
+export const RatingLabel: { [key: number]: string } = {
+  1: "Bad",
+  2: "Poor",
+  3: "Average",
+  4: "Good",
+  5: "Excellent",
+};
+
+export type ProjectResponse = {
+  org_id: string;
+  project_id: string;
+  id: string;
+  utm: string;
+  participant: Participant;
+  state: ProjectResponseState;
+  startedAt: Date;
+  endedAt: Date;
+  transcript: QuestionThread[];
+  scores: Score[];
+  tags: string[];
 };
 
 export type Project = {

@@ -73,22 +73,18 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   </div>
                 )}
               </div>
-  
             </div> */}
-
-            
           </div>
           <div className="flex flex-row justify-between items-center">
             <Avatar className="w-7 h-7">
               <AvatarImage
                 className=""
-                src={project.authors[0].avatar_url}
+                src={project.authors[0].avatarUrl}
                 alt={project.authors[0].name}
               />
               <AvatarFallback>{project.authors[0].name}</AvatarFallback>
             </Avatar>
             <p className="text-xs font-medium text-slate-400">12 Responses</p>
-          
           </div>
         </div>
       </div>
