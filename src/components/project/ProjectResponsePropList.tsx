@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { useState } from "react";
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import {
   ProjectResponse,
@@ -11,6 +13,10 @@ import {
   Score,
   RatingLabel,
 } from "@/types/project";
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 interface ProjectResponsePropListProps {
   projectResponse: ProjectResponse;
@@ -50,25 +56,31 @@ export function ProjectResponsePropList({
           {projectResponse.state.stage}
         </div>
       </li>
-      {projectResponse.scores.map((score: Score, index: number) => (
-        <li
-          key={index}
-          className="flex flex-row justify-start w-full items-center"
-        >
-          <p className="w-2/5 flex-none text-sm font-normal text-slate-600 leading-none">
-            {score.name}
-          </p>
-          <div className="flex items-center gap-x-2 font-medium text-sm text-xs border py-1 px-2 rounded-full">
-            <span
-              className={classNames(
-                scoreColor[score.score],
-                "h-1.5 w-1.5 rounded-full",
-              )}
-            ></span>
-            {RatingLabel[score.score]}
-          </div>
-        </li>
-      ))}
+      <Accordion type="single" collapsible className="w-full">
+        {projectResponse.scores.map((score: Score, index: number) => (
+          <li
+            key={index}
+            className="flex flex-row justify-start w-full items-center"
+          >
+            {" "}
+            <AccordionItem value="item-1 w-full">
+              <AccordionTrigger className="w-2/5 flex-none text-sm font-normal text-slate-600 leading-none">
+                {score.name}
+                <div className="flex items-center gap-x-2 font-medium text-sm text-xs border py-1 px-2 rounded-full">
+                  <span
+                    className={classNames(
+                      scoreColor[score.score],
+                      "h-1.5 w-1.5 rounded-full",
+                    )}
+                  ></span>
+                  {RatingLabel[score.score]}
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>{score.reason}</AccordionContent>
+            </AccordionItem>
+          </li>
+        ))}
+      </Accordion>
     </ul>
   );
 }
