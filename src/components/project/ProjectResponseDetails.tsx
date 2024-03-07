@@ -10,8 +10,8 @@ import Link from "next/link";
 
 import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
 import { ProjectResponse } from "@/types/project";
-import { ProjectResponseIdentity } from "./ProjectResponseIdentity";
-import { PropList } from "./PropList";
+import { ProjectResponseIdentity } from "@/components/project/ProjectResponseIdentity";
+import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
 
 import { EmptySelectionCard } from "./EmptySelectionCard";
 
@@ -60,7 +60,7 @@ export function ProjectResponseDetails({
           </div>
           <div className="flex-1 space-y-6 pb-4">
             <ProjectResponseIdentity />
-            <PropList />
+            <ProjectResponsePropList projectResponse={projectResponse} />
             <ProjectResponseTranscript projectResponse={projectResponse} />
           </div>
         </div>

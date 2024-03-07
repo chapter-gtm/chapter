@@ -9,7 +9,7 @@ import { PageHeaderRow } from "./PageHeaderRow";
 
 async function getProjects() {
   const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4MDYwOTQsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTcxOTY5NCwiZXh0cmFzIjp7fX0.1bjE2vGjg1gV1B_8oE-h80YX3-lfSA3W07vhtAFxRy8";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4OTU3NzgsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTgwOTM3OCwiZXh0cmFzIjp7fX0.f1reY5_k-8m5tRU9G9Y5ZVVgfQpgV8wEyQb7kyknyyg";
   const response = await fetch("http://localhost:8000/api/projects", {
     method: "GET",
     headers: {
