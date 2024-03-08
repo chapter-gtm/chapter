@@ -18,30 +18,17 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  Project,
+  type Project,
   ProjectOutroAction,
   ProjectResponseStage,
-  Question,
+  type Question,
   QuestionFormat,
 } from "@/types/project";
 import { SparklesIcon, Trash2 } from "lucide-react";
+import { updateProject } from "@/utils/nectar/projects";
+import { getUserAccessToken } from "@/utils/supabase/client";
 
 import EmojiHeader from "@/components/project/EmojiHeader";
-
-async function updateProject(id: string, project: Project) {
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk3MTgxNjMsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTYzMTc2MywiZXh0cmFzIjp7fX0.E-kpf93IqSY272vvY7I1Xe_qXcohJtFCzrgCBxQI8fY";
-  const response = await fetch("http://localhost:8000/api/projects/" + id, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${jwtToken}`,
-    },
-    body: JSON.stringify(project),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-}
 
 interface ProjectDefinitionProps {
   project: Project;
@@ -59,7 +46,11 @@ export function ProjectDefinition({
       if (!dataChanged) {
         return;
       }
-      await updateProject(project.id, project);
+      const userToken = await getUserAccessToken();
+      if (userToken === undefined) {
+        throw Error("User needs to login!");
+      }
+      await updateProject(userToken, project.id, project);
       setDataChanged(false);
       toast({
         title: "Your changes have been saved!",

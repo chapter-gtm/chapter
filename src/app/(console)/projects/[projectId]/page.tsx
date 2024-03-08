@@ -14,9 +14,7 @@ export default function ProjectDetailsPage({
 }) {
   return (
     <>
-      <div>
-        <ProjectDetails projectId={params.projectId} />
-      </div>
+      <ProjectDetails projectId={params.projectId} />
     </>
   );
 }

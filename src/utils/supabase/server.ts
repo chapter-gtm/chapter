@@ -34,3 +34,9 @@ export function createClient() {
     },
   );
 }
+
+export async function getUserAccessToken() {
+  const supabase = createClient();
+  const session = await supabase.auth.getSession();
+  return session.data.session?.access_token;
+}

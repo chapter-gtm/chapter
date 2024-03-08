@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ZodTypeAny, z } from "zod";
-import { parseISO } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -20,7 +19,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
-import { Project, ProjectResponse } from "@/types/project";
+import { type Project, type ProjectResponse } from "@/types/project";
 import { DataTable } from "@/components/data-table/data-table";
 import {
   resultColumns,
@@ -29,6 +28,8 @@ import {
   filters,
 } from "@/components/project/result-columns";
 import { ProjectResponseDetails } from "@/components/project/ProjectResponseDetails";
+import { getProjectResponses } from "@/utils/nectar/projects";
+import { getUserAccessToken } from "@/utils/supabase/client";
 
 interface ProjectResultsProps {
   project: Project;
@@ -39,55 +40,6 @@ function titleCaseToCamelCase(titleCaseString: string): string {
     .replace(/\s(.)/g, ($1) => $1.toUpperCase())
     .replace(/\s/g, "")
     .replace(/^(.)/, ($1) => $1.toLowerCase());
-}
-
-async function getProjectResponses(id: string) {
-  // TODO: Fetch project responseRecords
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4OTU3NzgsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTgwOTM3OCwiZXh0cmFzIjp7fX0.f1reY5_k-8m5tRU9G9Y5ZVVgfQpgV8wEyQb7kyknyyg";
-  const response = await fetch(
-    "http://localhost:8000/api/projects/" + id + "/responses",
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    },
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  const data = await response.json();
-  const projectResponses: ProjectResponse[] =
-    "items" in data
-      ? data["items"].map((item: any) => ({
-          ...item,
-          startedAt: parseISO(item.startedAt),
-        }))
-      : [];
-
-  const responses = new Map<string, ProjectResponse>();
-  projectResponses.forEach((resp) => responses.set(resp.id, resp));
-
-  const responseRecords = z.array(ProjectResponseRecord).parse(
-    projectResponses.map((response: ProjectResponse) => {
-      const record: Record<string, any> = {
-        id: response.id,
-        date: response.startedAt.toLocaleString(),
-        participant: response.participant.name,
-        stage: response.state.stage,
-      };
-      response.scores.forEach((item) => {
-        record[titleCaseToCamelCase(item.name)] = item.score;
-      });
-      return record;
-    }),
-  );
-
-  return {
-    responses: responses,
-    responseRecords: responseRecords,
-  };
 }
 
 export function ProjectResults({ project }: ProjectResultsProps) {
@@ -105,10 +57,34 @@ export function ProjectResults({ project }: ProjectResultsProps) {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const { responses, responseRecords } = await getProjectResponses(
+        const userToken = await getUserAccessToken();
+        if (userToken === undefined) {
+          throw Error("User needs to login!");
+        }
+        const projectResponses = await getProjectResponses(
+          userToken,
           project.id,
         );
-        setResponses(responses);
+
+        const responseMap = new Map<string, ProjectResponse>();
+        projectResponses.forEach((resp) => responseMap.set(resp.id, resp));
+
+        const responseRecords = z.array(ProjectResponseRecord).parse(
+          projectResponses.map((response: ProjectResponse) => {
+            const record: Record<string, any> = {
+              id: response.id,
+              date: response.startedAt.toLocaleString(),
+              participant: response.participant.name,
+              stage: response.state.stage,
+            };
+            response.scores.forEach((item) => {
+              record[titleCaseToCamelCase(item.name)] = item.score;
+            });
+            return record;
+          }),
+        );
+
+        setResponses(responseMap);
         setResponseRecords(responseRecords);
       } catch (error) {
         console.log(error);

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Metadata } from "next";
-import { ProjectDetails } from "@/components/project/ProjectDetails";
 import { ProjectResponseDetailsFull } from "@/components/project/ProjectResponseDetailsFull";
 
 export const metadata: Metadata = {

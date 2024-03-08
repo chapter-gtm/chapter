@@ -8,24 +8,9 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ProjectDefinition } from "@/components/project/ProjectDefinition";
 import { ProjectResults } from "@/components/project/ProjectResults";
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { Project } from "@/types/project";
-
-async function getProject(id: string) {
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4OTU3NzgsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTgwOTM3OCwiZXh0cmFzIjp7fX0.f1reY5_k-8m5tRU9G9Y5ZVVgfQpgV8wEyQb7kyknyyg";
-  const response = await fetch("http://localhost:8000/api/projects/" + id, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${jwtToken}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  const data = await response.json();
-  const project = data as Project;
-  return project;
-}
+import { type Project } from "@/types/project";
+import { getProject } from "@/utils/nectar/projects";
+import { getUserAccessToken } from "@/utils/supabase/client";
 
 interface ProjectDetailsProps {
   projectId: string;
@@ -38,7 +23,11 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const proj = await getProject(projectId);
+        const userToken = await getUserAccessToken();
+        if (userToken === undefined) {
+          throw Error("User needs to login!");
+        }
+        const proj = await getProject(userToken, projectId);
         setProject(proj);
         errorOccurred.current = false;
       } catch (error) {

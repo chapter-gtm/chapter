@@ -6,29 +6,18 @@ import { ErrorMessage } from "@/components/ErrorMessage";
 import { Project } from "@/types/project";
 import { EmptySelectionCard } from "./EmptySelectionCard";
 import { PageHeaderRow } from "./PageHeaderRow";
-
-async function getProjects() {
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4OTU3NzgsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTgwOTM3OCwiZXh0cmFzIjp7fX0.f1reY5_k-8m5tRU9G9Y5ZVVgfQpgV8wEyQb7kyknyyg";
-  const response = await fetch("http://localhost:8000/api/projects", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${jwtToken}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  const data = await response.json();
-  const projects = "items" in data ? (data["items"] as Project[]) : [];
-  return projects;
-}
+import { getProjects } from "@/utils/nectar/projects";
+import { getUserAccessToken } from "@/utils/supabase/server";
 
 export async function Projects() {
   let projects: Project[] = [];
   let errorOccurred = true;
   try {
-    projects = await getProjects();
+    const userToken = await getUserAccessToken();
+    if (userToken === undefined) {
+      throw Error("User needs to login!");
+    }
+    projects = await getProjects(userToken);
     errorOccurred = false;
   } catch (error) {
     errorOccurred = true;

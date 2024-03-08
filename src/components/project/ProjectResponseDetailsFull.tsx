@@ -27,59 +27,39 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
 import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
-
-async function getProjectResponse(
-  projectId: string,
-  projectResponseId: string,
-) {
-  const jwtToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDk4OTU3NzgsInN1YiI6InRlc3RAbmVjdGFyLnJ1biIsImlhdCI6MTcwOTgwOTM3OCwiZXh0cmFzIjp7fX0.f1reY5_k-8m5tRU9G9Y5ZVVgfQpgV8wEyQb7kyknyyg";
-  const response = await fetch(
-    "http://localhost:8000/api/projects/" +
-      projectId +
-      "/responses/" +
-      projectResponseId,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    },
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  const data = await response.json();
-  const projectResponse = data as ProjectResponse;
-  return projectResponse;
-}
+import { getProjectResponse } from "@/utils/nectar/projects";
+import { getUserAccessToken } from "@/utils/supabase/client";
 
 interface ProjectResponseDetailsFullProps {
   projectId?: string;
   projectResponseId?: string;
-  projectResponse?: ProjectResponse;
 }
 
 export function ProjectResponseDetailsFull({
   projectId,
   projectResponseId,
-  projectResponse,
 }: ProjectResponseDetailsFullProps) {
   const [response, setResponse] = useState<ProjectResponse | null>(null);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        if (projectResponse !== undefined) {
-          setResponse(projectResponse);
-        } else if (projectId !== undefined && projectResponseId !== undefined) {
-          const resp = await getProjectResponse(projectId, projectResponseId);
+        if (projectId !== undefined && projectResponseId !== undefined) {
+          const userToken = await getUserAccessToken();
+          if (userToken === undefined) {
+            throw Error("User needs to login!");
+          }
+          const resp = await getProjectResponse(
+            userToken,
+            projectId,
+            projectResponseId,
+          );
           setResponse(resp);
         }
       } catch (error) {}
     };
     fetchProject();
-  }, [projectId, projectResponseId, projectResponse]);
+  }, [projectId, projectResponseId]);
 
   return (
     <>
