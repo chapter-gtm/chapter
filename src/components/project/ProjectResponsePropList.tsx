@@ -56,13 +56,13 @@ export function ProjectResponsePropList({
           {projectResponse.state.stage}
         </div>
       </li>
-      <Accordion type="single" collapsible className="w-full">
-        {projectResponse.scores.map((score: Score, index: number) => (
-          <li
-            key={index}
-            className="flex flex-row justify-start w-full items-center"
-          >
-            {" "}
+      {projectResponse.scores.map((score: Score, index: number) => (
+        <li
+          key={index}
+          className="flex flex-row justify-start w-full items-center"
+        >
+          {" "}
+          <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1 w-full">
               <AccordionTrigger className="w-2/5 flex-none text-sm font-normal text-slate-600 leading-none">
                 {score.name}
@@ -78,9 +78,9 @@ export function ProjectResponsePropList({
               </AccordionTrigger>
               <AccordionContent>{score.reason}</AccordionContent>
             </AccordionItem>
-          </li>
-        ))}
-      </Accordion>
+          </Accordion>
+        </li>
+      ))}
     </ul>
   );
 }
