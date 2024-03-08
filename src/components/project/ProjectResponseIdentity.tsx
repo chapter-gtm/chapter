@@ -16,7 +16,6 @@ import {
   Cross1Icon,
   RocketIcon,
 } from "@radix-ui/react-icons";
-import { PropList } from "./PropList";
 function getProjectResponse(projectId: string, projectResponseId: string) {
   // TODO: Fetch project responses
   const response = {
