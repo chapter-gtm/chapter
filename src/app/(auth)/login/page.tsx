@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "./actions";
+import { login } from "@/utils/supabase/auth";
 
 import { Metadata } from "next";
 import Image from "next/image";
