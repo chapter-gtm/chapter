@@ -1,13 +1,12 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { ServerCrash } from "lucide-react";
+import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button, buttonVariants } from "@/components/ui/button";
 
+import { ErrorMessage } from "@/components/ErrorMessage";
 import { ProjectDefinition } from "@/components/project/ProjectDefinition";
 import { ProjectResults } from "@/components/project/ProjectResults";
-import { ErrorMessage } from "@/components/ErrorMessage";
 import { type Project } from "@/types/project";
 import { getProject } from "@/utils/nectar/projects";
 import { getUserAccessToken } from "@/utils/supabase/client";
@@ -17,7 +16,6 @@ interface ProjectDetailsProps {
 }
 
 export function ProjectDetails({ projectId }: ProjectDetailsProps) {
-  const errorOccurred = useRef<boolean>(true);
   const [project, setProject] = useState<Project | null>(null);
 
   useEffect(() => {
@@ -29,17 +27,14 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
         }
         const proj = await getProject(userToken, projectId);
         setProject(proj);
-        errorOccurred.current = false;
-      } catch (error) {
-        errorOccurred.current = true;
-      }
+      } catch (error) {}
     };
     fetchProject();
   }, [projectId]);
 
   return (
     <>
-      {!errorOccurred.current && project !== null ? (
+      {project !== null ? (
         <Tabs defaultValue="definition">
           <div className="flex flex-col h-dvh overflow-hidden">
             {/* <div className="flex items-center justify-between py-4 border-b border-slate-100 h-16"></div> */}

@@ -1,6 +1,4 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,12 +10,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { User } from "@/types/user";
 import { getNameInitials } from "@/utils/misc";
 import { getUserProfile } from "@/utils/nectar/users";
-import { getUserAccessToken } from "@/utils/supabase/client";
 import { logout } from "@/utils/supabase/auth";
+import { getUserAccessToken } from "@/utils/supabase/client";
+import { ChevronDown } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 type UserNavProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>;
 
