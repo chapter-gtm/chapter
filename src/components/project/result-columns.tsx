@@ -67,6 +67,15 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "utm",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="UTM" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("utm")}</div>,
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
     accessorKey: "stage",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Stage" />

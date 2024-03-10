@@ -74,6 +74,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
             const record: Record<string, any> = {
               id: response.id,
               date: response.startedAt.toLocaleString(),
+              utm: response.utm,
               participant: response.participant.name,
               stage: response.state.stage,
             };
