@@ -5,6 +5,7 @@ import { Layers, PieChart } from "lucide-react";
 
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UserNav } from "@/components/UserNav";
+import { Header } from "@/components/Header";
 
 type SideBarProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>;
 
@@ -12,6 +13,9 @@ export default function Sidebar({ className }: SideBarProps) {
   return (
     <div className="border-e border-slate-200">
       <div className="space-y-4 px-3 pt-3">
+        <div className="items-center justify-start">
+          <Header />
+        </div>
         <div className="items-center justify-start">
           <UserNav className={className} />
         </div>
