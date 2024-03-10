@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -22,6 +25,7 @@ interface NavProps {
 }
 
 export function MainNav({ links, isCollapsed }: NavProps) {
+  const pathname = usePathname();
   return (
     <div
       data-collapsed={isCollapsed}
@@ -38,8 +42,9 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                     className={cn(
                       buttonVariants({ variant: link.variant, size: "icon" }),
                       "h-9 w-9",
-                      link.variant === "default" &&
-                        "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white",
+                      pathname === link.route
+                        ? "bg-muted hover:bg-muted"
+                        : "hover:bg-transparent hover:underline",
                     )}
                   >
                     <link.icon className="h-4 w-4" />
@@ -65,8 +70,9 @@ export function MainNav({ links, isCollapsed }: NavProps) {
               href={link.route}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
-                link.variant === "default" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                pathname === link.route
+                  ? "bg-muted hover:bg-muted"
+                  : "hover:bg-transparent hover:underline",
                 "justify-start",
               )}
             >

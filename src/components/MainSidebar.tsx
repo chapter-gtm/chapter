@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { MainNav } from "@/components/MainNav";
@@ -27,7 +29,7 @@ export default function Sidebar({ className }: SideBarProps) {
                 title: "Dashboard",
                 label: "",
                 icon: PieChart,
-                variant: "secondary",
+                variant: "ghost",
                 route: "/dashboard",
               },
               {
