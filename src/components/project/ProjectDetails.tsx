@@ -61,7 +61,6 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
                 <Button variant="outline" className="me-2">
                   Preview
                 </Button>
-                <Button variant="default">Publish</Button>
               </div>
             </div>
 

@@ -25,7 +25,7 @@ import {
   QuestionFormat,
 } from "@/types/project";
 import { SparklesIcon, Trash2 } from "lucide-react";
-import { updateProject } from "@/utils/nectar/projects";
+import { updateProject, publishProject } from "@/utils/nectar/projects";
 import { getUserAccessToken } from "@/utils/supabase/client";
 
 import EmojiHeader from "@/components/project/EmojiHeader";
@@ -50,7 +50,7 @@ export function ProjectDefinition({
       if (userToken === undefined) {
         throw Error("User needs to login!");
       }
-      await updateProject(userToken, project.id, project);
+      await updateProject(userToken, project);
       setDataChanged(false);
       toast({
         title: "Your changes have been saved!",
@@ -74,6 +74,14 @@ export function ProjectDefinition({
     setDataChanged(true);
   }, [project]);
 
+  const handlePublish = async () => {
+    const userToken = await getUserAccessToken();
+    if (userToken === undefined) {
+      throw Error("User needs to login!");
+    }
+    await publishProject(userToken, project.id);
+  };
+
   return (
     <>
       <div className="flex flex-col bg-background pt-6 w-96 justify-between">
@@ -81,6 +89,9 @@ export function ProjectDefinition({
           <CardContent>
             <div className="grid gap-y-6">
               <div className="grid gap-3">
+                <Button variant="default" onClick={handlePublish}>
+                  Publish
+                </Button>
                 <Label htmlFor="subject">Project name</Label>
                 <Input
                   id="subject"

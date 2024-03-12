@@ -72,18 +72,33 @@ export async function createProject(token: string) {
   return project;
 }
 
-export async function updateProject(
-  token: string,
-  id: string,
-  project: Project,
-) {
-  const response = await fetch("http://localhost:8000/api/projects/" + id, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
+export async function publishProject(token: string, projectId: string) {
+  const response = await fetch(
+    "http://localhost:8000/api/projects/" + projectId + "/publications",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: "{}",
     },
-    body: JSON.stringify(project),
-  });
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+}
+
+export async function updateProject(token: string, project: Project) {
+  const response = await fetch(
+    "http://localhost:8000/api/projects/" + project.id,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(project),
+    },
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
