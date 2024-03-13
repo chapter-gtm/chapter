@@ -44,7 +44,7 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                       "h-9 w-9",
                       pathname === link.route
                         ? "bg-muted hover:bg-muted"
-                        : "hover:bg-transparent hover:underline",
+                        : "hover:bg-transparent hover:underline"
                     )}
                   >
                     <link.icon className="h-4 w-4" />
@@ -72,14 +72,14 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                 buttonVariants({ variant: link.variant, size: "sm" }),
                 pathname === link.route
                   ? "bg-muted hover:bg-muted"
-                  : "hover:bg-transparent hover:underline",
-                "justify-start",
+                  : "hover:bg-slate-100",
+                "justify-start"
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
               {link.title}
             </Link>
-          ),
+          )
         )}
       </nav>
     </div>

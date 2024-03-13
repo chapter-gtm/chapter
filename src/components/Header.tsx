@@ -10,7 +10,7 @@ export function Header() {
             <Image
               src="/images/logos/logo.svg"
               width={90}
-              height={14}
+              height={12}
               alt="Logo"
             />
           </Link>

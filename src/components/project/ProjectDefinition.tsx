@@ -89,9 +89,13 @@ export function ProjectDefinition({
           <CardContent>
             <div className="grid gap-y-6">
               <div className="grid gap-3">
-                <Button variant="default" onClick={handlePublish}>
-                  Publish
-                </Button>
+                <div className="flex flex-row items-center justify-end gap-x-2">
+                  <p className="text-sm text-slate-500">Changes saved...</p>
+                  <Button variant="default" onClick={handlePublish}>
+                    Publish
+                  </Button>
+                </div>
+
                 <Label htmlFor="subject">Project name</Label>
                 <Input
                   id="subject"
@@ -141,7 +145,6 @@ export function ProjectDefinition({
               <Separator className="bg-slate-100 my-4" />
             </div>
           </CardContent>
-          <Separator className="bg-slate-100 my-4" />
           <CardContent>
             <div className="grid gap-y-6">
               <div className="grid gap-3">
@@ -157,7 +160,6 @@ export function ProjectDefinition({
               </div>
             </div>
           </CardContent>
-          <Separator className="bg-slate-100 my-4" />
         </div>
       </div>
 
@@ -177,7 +179,7 @@ export function ProjectDefinition({
                           placeholder="How you'd like to start the conversation"
                           value={project.intro.title}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>,
+                            event: React.ChangeEvent<HTMLInputElement>
                           ) => {
                             project.intro.title = event.target.value;
                             setProject({
@@ -200,23 +202,27 @@ export function ProjectDefinition({
             {project.components.map((component, index) => (
               <li key={index}>
                 <Card className="flex-none">
-                  <EmojiHeader status="Thread" />
+                  <div className="flex flex-row items-center justify-between">
+                    <EmojiHeader status="Thread" />
 
-                  <Button
-                    variant={"outline"}
-                    onClick={() => {
-                      const updatedComponents: Question[] = [
-                        ...project.components.slice(0, index),
-                        ...project.components.slice(index + 1),
-                      ];
-                      setProject({
-                        ...project,
-                        ["components"]: updatedComponents,
-                      });
-                    }}
-                  >
-                    <Trash2 />
-                  </Button>
+                    <Button
+                      className="me-6"
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={() => {
+                        const updatedComponents: Question[] = [
+                          ...project.components.slice(0, index),
+                          ...project.components.slice(index + 1),
+                        ];
+                        setProject({
+                          ...project,
+                          ["components"]: updatedComponents,
+                        });
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
 
                   <CardContent>
                     <form>
@@ -228,7 +234,7 @@ export function ProjectDefinition({
                             placeholder="How you'd like to start the conversation"
                             value={component.question}
                             onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>,
+                              event: React.ChangeEvent<HTMLInputElement>
                             ) => {
                               const updatedComponents: Question[] = [
                                 ...project.components,
@@ -321,7 +327,7 @@ export function ProjectDefinition({
                           placeholder="Wow! thanks for sharing your insights with us."
                           value={project.outros.COMPLETED.title}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>,
+                            event: React.ChangeEvent<HTMLInputElement>
                           ) => {
                             setProject({
                               ...project,
@@ -346,7 +352,7 @@ export function ProjectDefinition({
                             <Label htmlFor="name">Add calendar link</Label>
                             <Switch
                               checked={project.outros.COMPLETED.actions.includes(
-                                ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                                ProjectOutroAction.AUTHOR_CALENDAR_LINK
                               )}
                               onCheckedChange={(checked: boolean) => {
                                 let newActions: ProjectOutroAction[] = [];
@@ -359,7 +365,7 @@ export function ProjectDefinition({
                                   project.outros.COMPLETED.actions.filter(
                                     (value) =>
                                       value !==
-                                      ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                                      ProjectOutroAction.AUTHOR_CALENDAR_LINK
                                   );
                                 }
                                 setProject({
