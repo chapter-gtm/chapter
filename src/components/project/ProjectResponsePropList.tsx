@@ -7,6 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import { toTitleCase } from "@/utils/misc";
+
 import {
   ProjectResponse,
   ProjectResponseStage,
@@ -54,7 +56,7 @@ export function ProjectResponsePropList({
                 "h-1.5 w-1.5 rounded-full"
               )}
             ></span>
-            {projectResponse.state.stage}
+            {toTitleCase(projectResponse.state.stage)}
           </div>
         </div>
       </li>

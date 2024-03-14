@@ -48,12 +48,12 @@ export function UserNav({ className }: UserNavProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className={cn("", className)}>
-              <Avatar className="mr-2 h-5 w-5">
+              <Avatar className="mr-2 h-5 w-5 rounded-lg">
                 <AvatarImage
                   src={currentUser.avatarUrl}
                   alt={currentUser.name}
                 />
-                <AvatarFallback>
+                <AvatarFallback className="text-xs bg-slate-200">
                   {getNameInitials(currentUser.name)}
                 </AvatarFallback>
               </Avatar>
@@ -63,7 +63,7 @@ export function UserNav({ className }: UserNavProps) {
               <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuContent className="w-56" align="start" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">

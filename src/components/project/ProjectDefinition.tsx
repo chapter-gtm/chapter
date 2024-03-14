@@ -1,6 +1,8 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 
+import clsx from "clsx";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -80,6 +82,10 @@ export function ProjectDefinition({
     setDataChanged(true);
   }, [project]);
 
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   const handlePublish = async () => {
     const userToken = await getUserAccessToken();
     if (userToken === undefined) {
@@ -90,10 +96,20 @@ export function ProjectDefinition({
 
   return (
     <>
-      <div className="flex flex-col bg-background pt-3 w-96 justify-start">
+      <div className="flex flex-col bg-background  w-96 justify-start">
         <div>
-          <div className="flex flex-row items-center justify-end gap-x-2 pb-3 px-3">
-            <p className="text-sm text-slate-500">Changes saved...</p>
+          <div
+            className={clsx(
+              "flex flex-row pt-3 items-center justify-between gap-x-2 pb-3 px-6",
+              {
+                "bg-orange-100": !dataChanged,
+              }
+            )}
+          >
+            {!dataChanged && (
+              <p className="text-sm text-slate-500">Changes auto saved...</p>
+            )}
+
             <Button variant="default" onClick={handlePublish}>
               Publish
             </Button>

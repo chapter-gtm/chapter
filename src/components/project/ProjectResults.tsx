@@ -47,7 +47,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
   const [responses, setResponses] = useState<Map<string, ProjectResponse>>(
-    new Map(),
+    new Map()
   );
   const [responseRecords, setResponseRecords] = useState<
     ProjectResponseRecordSchema[]
@@ -63,7 +63,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
         }
         const projectResponses = await getProjectResponses(
           userToken,
-          project.id,
+          project.id
         );
 
         const responseMap = new Map<string, ProjectResponse>();
@@ -82,7 +82,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
               record[titleCaseToCamelCase(item.name)] = item.score;
             });
             return record;
-          }),
+          })
         );
 
         setResponses(responseMap);
@@ -110,8 +110,8 @@ export function ProjectResults({ project }: ProjectResultsProps) {
           defaultSize={defaultLayout[0]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
-          minSize={20}
-          maxSize={80}
+          minSize={30}
+          maxSize={70}
         >
           <div className="px-6">
             <div className="items-center justify-between py-5">
