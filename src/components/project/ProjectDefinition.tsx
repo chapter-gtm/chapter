@@ -2,6 +2,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,18 +90,20 @@ export function ProjectDefinition({
 
   return (
     <>
-      <div className="flex flex-col bg-background pt-6 w-96 justify-between">
-        <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col bg-background pt-3 w-96 justify-start">
+        <div>
+          <div className="flex flex-row items-center justify-end gap-x-2 pb-3 px-3">
+            <p className="text-sm text-slate-500">Changes saved...</p>
+            <Button variant="default" onClick={handlePublish}>
+              Publish
+            </Button>
+          </div>
+          <Separator className="bg-slate-100" />
+        </div>
+        <div className="flex flex-col gap-y-3 pt-8">
           <CardContent>
             <div className="grid gap-y-6">
               <div className="grid gap-3">
-                <div className="flex flex-row items-center justify-end gap-x-2">
-                  <p className="text-sm text-slate-500">Changes saved...</p>
-                  <Button variant="default" onClick={handlePublish}>
-                    Publish
-                  </Button>
-                </div>
-
                 <Label htmlFor="subject">Project name</Label>
                 <Input
                   id="subject"
@@ -205,23 +213,31 @@ export function ProjectDefinition({
                   <div className="flex flex-row items-center justify-between">
                     <EmojiHeader status="Thread" />
 
-                    <Button
-                      className="me-6"
-                      variant={"outline"}
-                      size={"icon"}
-                      onClick={() => {
-                        const updatedComponents: Question[] = [
-                          ...project.components.slice(0, index),
-                          ...project.components.slice(index + 1),
-                        ];
-                        setProject({
-                          ...project,
-                          ["components"]: updatedComponents,
-                        });
-                      }}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" className="me-6">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">More</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            const updatedComponents: Question[] = [
+                              ...project.components.slice(0, index),
+                              ...project.components.slice(index + 1),
+                            ];
+                            setProject({
+                              ...project,
+                              ["components"]: updatedComponents,
+                            });
+                          }}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Cancel</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   <CardContent>

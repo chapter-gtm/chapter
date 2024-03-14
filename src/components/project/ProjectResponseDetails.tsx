@@ -14,6 +14,7 @@ import { ProjectResponseIdentity } from "@/components/project/ProjectResponseIde
 import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
 
 import { EmptySelectionCard } from "./EmptySelectionCard";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 interface ProjectResponseDetailsProps {
   projectResponse?: ProjectResponse;
