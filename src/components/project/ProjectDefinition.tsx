@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -95,14 +96,15 @@ export function ProjectDefinition({
   };
 
   return (
-    <>
-      <div className="flex flex-col bg-background  w-96 justify-start">
+    <div className="flex flex-1 overflow-hidden">
+      {/* Start of column */}
+      <div className="flex flex-col bg-background pt-3 w-96 justify-start">
         <div>
           <div
             className={clsx(
-              "flex flex-row pt-3 items-center justify-between gap-x-2 pb-3 px-6",
+              "flex flex-row items-center justify-between gap-x-2 pb-3 px-6",
               {
-                "bg-orange-100": !dataChanged,
+                "bg-gray-100": !dataChanged,
               }
             )}
           >
@@ -187,16 +189,16 @@ export function ProjectDefinition({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col overflow-auto bg-slate-100 gap-4">
-        <div className="w-2/3 mx-auto">
-          <ul className="flex-1 overflow-y-auto space-y-4 py-6">
+      <div className="flex flex-1 flex-col">
+        <div className="flex-1 overflow-y-auto bg-slate-100">
+          <ul role="list" className="space-y-4 w-2/3 mx-auto py-4 mb-20">
             <li>
-              <Card className="flex-none">
+              <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
                 <EmojiHeader status="Welcome" />
                 <CardContent>
                   <form>
-                    <div className="grid w-full items-center gap-1">
-                      <div className="flex flex-col space-y-3">
+                    <div className="items-center gap-1">
+                      <div className="space-y-3">
                         <Label htmlFor="name">Welcome message</Label>
                         <Input
                           id="name"
@@ -220,105 +222,91 @@ export function ProjectDefinition({
                     </div>
                   </form>
                 </CardContent>
-              </Card>
+              </div>
             </li>
 
             {project.components.map((component, index) => (
-              <li key={index}>
-                <Card className="flex-none">
-                  <div className="flex flex-row items-center justify-between">
-                    <EmojiHeader status="Thread" />
-
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" className="me-6">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">More</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => {
-                            const updatedComponents: Question[] = [
-                              ...project.components.slice(0, index),
-                              ...project.components.slice(index + 1),
-                            ];
-                            setProject({
-                              ...project,
-                              ["components"]: updatedComponents,
-                            });
-                          }}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Cancel</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
-                  <CardContent>
-                    <form>
-                      <div className="grid w-full items-center gap-1">
-                        <div className="flex flex-col space-y-3">
-                          <Label htmlFor="name">Question</Label>
-                          <Input
-                            id="name"
-                            placeholder="How you'd like to start the conversation"
-                            value={component.question}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              const updatedComponents: Question[] = [
-                                ...project.components,
-                              ];
-                              updatedComponents[index].question =
-                                event.target.value;
-                              setProject({
-                                ...project,
-                                ["components"]: updatedComponents,
-                              });
-                            }}
-                            onBlur={saveChanges}
-                          />
-                          <div className="flex flex-row space-x-3 items-center">
-                            <Button variant={"outline"} size={"sm"}>
-                              <SparklesIcon className="mr-2 h-4 w-4" />
-                              Improve
-                            </Button>
-                            <p className="text-xs text-slate-400 flex">
-                              Remove bias or hypothetical questioning using AI
-                            </p>
-                          </div>
-                        </div>
-
-                        <Separator className="my-4" />
-
-                        <div className="flex flex-row items-center justify-between ">
-                          <Label htmlFor="name"># of followup questions</Label>
-                          <Select
-                            defaultValue={component.followups.toString()}
-                            onValueChange={(value: string) => {
-                              project.components[index].followups =
-                                parseInt(value);
-                            }}
-                            onOpenChange={saveChanges}
+              <li>
+                <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
+                  <form>
+                    <div className="flex flex-row items-center justify-between relative">
+                      <EmojiHeader status="Thread" />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="me-6"
                           >
-                            <SelectTrigger className="w-[120px]">
-                              <SelectValue placeholder="Select" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectItem value="1">1</SelectItem>
-                                <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">3</SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sr-only">More</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuGroup>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                const updatedComponents: Question[] = [
+                                  ...project.components.slice(0, index),
+                                  ...project.components.slice(index + 1),
+                                ];
+                                setProject({
+                                  ...project,
+                                  ["components"]: updatedComponents,
+                                });
+                              }}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>Cancel</DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <div className="flex flex-col px-6 py-3 gap-y-4">
+                      <Label htmlFor="name">Question</Label>
+                      <Input
+                        id="name"
+                        placeholder="How you'd like to start the conversation"
+                        value="asdasdj kkaj sd"
+                      />
+                      <div className="flex flex-row gap-x-3 items-center">
+                        <Button variant={"outline"} size={"sm"}>
+                          <SparklesIcon className="mr-2 h-4 w-4" />
+                          Improve
+                        </Button>
+                        <p className="text-xs text-slate-400 flex">
+                          Remove bias or hypothetical questioning using AI
+                        </p>
                       </div>
-                    </form>
-                  </CardContent>
-                </Card>
+                    </div>
+                    <Separator className="mt-2" />
+                    <div className="flex flex-col px-6 py-2">
+                      <div className="flex flex-row items-center justify-between h-12  relative">
+                        <Label htmlFor="name"># of followup questions</Label>
+                        <Select
+                          defaultValue={component.followups.toString()}
+                          onValueChange={(value: string) => {
+                            project.components[index].followups =
+                              parseInt(value);
+                          }}
+                          onOpenChange={saveChanges}
+                        >
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="1">1</SelectItem>
+                              <SelectItem value="2">2</SelectItem>
+                              <SelectItem value="3">3</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </li>
             ))}
 
@@ -346,84 +334,73 @@ export function ProjectDefinition({
             </li>
 
             <li>
-              <Card className="flex-none">
-                <EmojiHeader status="Thanks" />
+              <form>
+                <div className="flex flex-col bg-white rounded-lg border border-slate-200">
+                  <EmojiHeader status="Thanks" />
 
-                <CardContent>
-                  <form>
-                    <div className="grid w-full items-center gap-3">
-                      <div className="flex flex-col space-y-3">
-                        <Label htmlFor="name">Message</Label>
-                        <Input
-                          id="name"
-                          placeholder="Wow! thanks for sharing your insights with us."
-                          value={project.outros.COMPLETED.title}
-                          onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            setProject({
-                              ...project,
-                              ["outros"]: {
-                                [ProjectResponseStage.COMPLETED]: {
-                                  title: event.target.value,
-                                  description:
-                                    project.outros.COMPLETED.description,
-                                  actions: project.outros.COMPLETED.actions,
-                                },
-                              },
-                            });
-                          }}
-                          onBlur={saveChanges}
-                        />
-                      </div>
-                      <Separator className="my-4" />
+                  <div className="space-y-3 px-6">
+                    <Label htmlFor="name">Message</Label>
+                    <Input
+                      id="name"
+                      placeholder="Wow! thanks for sharing your insights with us."
+                      value={project.outros.COMPLETED.title}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        setProject({
+                          ...project,
+                          ["outros"]: {
+                            [ProjectResponseStage.COMPLETED]: {
+                              title: event.target.value,
+                              description: project.outros.COMPLETED.description,
+                              actions: project.outros.COMPLETED.actions,
+                            },
+                          },
+                        });
+                      }}
+                      onBlur={saveChanges}
+                    />
+                  </div>
+                  <Separator className="mt-3" />
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col space-y-3">
-                          <div className="flex flex-row justify-start space-x-3 items-center">
-                            <Label htmlFor="name">Add calendar link</Label>
-                            <Switch
-                              checked={project.outros.COMPLETED.actions.includes(
-                                ProjectOutroAction.AUTHOR_CALENDAR_LINK
-                              )}
-                              onCheckedChange={(checked: boolean) => {
-                                let newActions: ProjectOutroAction[] = [];
-                                if (checked) {
-                                  newActions = [
-                                    ...project.outros.COMPLETED.actions,
-                                    ProjectOutroAction.AUTHOR_CALENDAR_LINK,
-                                  ];
-                                } else {
-                                  project.outros.COMPLETED.actions.filter(
-                                    (value) =>
-                                      value !==
-                                      ProjectOutroAction.AUTHOR_CALENDAR_LINK
-                                  );
-                                }
-                                setProject({
-                                  ...project,
-                                  ["outros"]: {
-                                    [ProjectResponseStage.COMPLETED]: {
-                                      title: project.outros.COMPLETED.title,
-                                      description:
-                                        project.outros.COMPLETED.description,
-                                      actions: newActions,
-                                    },
-                                  },
-                                });
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
+                  <div className="flex flex-row justify-start space-x-3 items-center h-12 px-6">
+                    <Label htmlFor="name">Add calendar link</Label>
+                    <Switch
+                      checked={project.outros.COMPLETED.actions.includes(
+                        ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                      )}
+                      onCheckedChange={(checked: boolean) => {
+                        let newActions: ProjectOutroAction[] = [];
+                        if (checked) {
+                          newActions = [
+                            ...project.outros.COMPLETED.actions,
+                            ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                          ];
+                        } else {
+                          project.outros.COMPLETED.actions.filter(
+                            (value) =>
+                              value !== ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                          );
+                        }
+                        setProject({
+                          ...project,
+                          ["outros"]: {
+                            [ProjectResponseStage.COMPLETED]: {
+                              title: project.outros.COMPLETED.title,
+                              description: project.outros.COMPLETED.description,
+                              actions: newActions,
+                            },
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </form>
             </li>
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }

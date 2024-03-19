@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -14,7 +15,7 @@ import { ProjectResponseIdentity } from "@/components/project/ProjectResponseIde
 import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
 
 import { EmptySelectionCard } from "./EmptySelectionCard";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 
 interface ProjectResponseDetailsProps {
   projectResponse?: ProjectResponse;
@@ -24,10 +25,10 @@ export function ProjectResponseDetails({
   projectResponse,
 }: ProjectResponseDetailsProps) {
   return (
-    <div className="flex flex-1 flex-col justify-start items-center px-6 h-full">
+    <div className="flex flex-col justify-start h-full overflow-hidden">
       {projectResponse !== undefined ? (
-        <div className="flex flex-col w-full">
-          <div className="flex flex-row justify-between py-2 items-center">
+        <>
+          <div className="flex flex-row justify-between py-2 items-center px-6 ">
             <TooltipProvider delayDuration={0}>
               <div className="flex flex-row items-center gap-x-2 ">
                 <Tooltip>
@@ -59,12 +60,27 @@ export function ProjectResponseDetails({
               </div>
             </TooltipProvider>
           </div>
-          <div className="flex-1 space-y-6 pb-4">
-            <ProjectResponseIdentity />
-            <ProjectResponsePropList projectResponse={projectResponse} />
-            <ProjectResponseTranscript projectResponse={projectResponse} />
+          <div className="px-6 ">
+            <Separator className="bg-slate-100 px-6 " />
           </div>
-        </div>
+          <div className="flex-1 overflow-y-auto px-6 ">
+            <ProjectResponseIdentity />
+            <div className="flex flex-col gap-y-3 py-12">
+              <ProjectResponsePropList projectResponse={projectResponse} />
+
+              <Tabs>
+                <TabsList className="mt-12">
+                  <TabsTrigger value="account">Transcript</TabsTrigger>
+                  <TabsTrigger value="" disabled>
+                    Activity
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+
+              <ProjectResponseTranscript projectResponse={projectResponse} />
+            </div>
+          </div>
+        </>
       ) : (
         <div className="flex flex-1 py-8">
           <EmptySelectionCard

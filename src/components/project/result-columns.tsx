@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import { z } from "zod";
 import {
@@ -46,6 +47,16 @@ export const filters = [
   },
 ];
 
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+function toShortDate(currentDate: Date) {
+  const options = { month: "short", day: "2-digit" } as const;
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
+  return formattedDate;
+}
+
 // TODO: Add scores dynamically based on score definitions from the project
 export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
   {
@@ -82,7 +93,7 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const stage = filters[0].filterOptions.find(
-        (stage) => stage.value === row.getValue("stage"),
+        (stage) => stage.value === row.getValue("stage")
       );
 
       if (!stage) {
@@ -109,7 +120,15 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const score: number = row.getValue("inputQuality");
-      return <div className="w-[80px]">{RatingLabel[score]}</div>;
+      return (
+        <div className="flex">
+          <div
+            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
+          >
+            {RatingLabel[score]?.label}
+          </div>
+        </div>
+      );
     },
   },
   {
@@ -119,7 +138,15 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const score: number = row.getValue("problemSeverity");
-      return <div className="w-[80px]">{RatingLabel[score]}</div>;
+      return (
+        <div className="flex">
+          <div
+            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
+          >
+            {RatingLabel[score]?.label}
+          </div>
+        </div>
+      );
     },
   },
 ];

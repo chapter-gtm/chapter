@@ -100,12 +100,12 @@ export type Score = {
   reason: string;
 };
 
-export const RatingLabel: { [key: number]: string } = {
-  1: "Very Low",
-  2: "Low",
-  3: "Medium",
-  4: "High",
-  5: "Very High",
+export const RatingLabel: { [key: number]: { label: string; color: string } } = {
+  1: { label: "Very Low", color: "bg-green-100" },
+  2: { label: "Low", color: "bg-blue-100" },
+  3: { label: "Medium", color: "bg-yellow-100" },
+  4: { label: "High", color: "bg-orange-100" },
+  5: { label: "Very High", color: "bg-red-100" },
 };
 
 export type ProjectResponse = {

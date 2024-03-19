@@ -43,7 +43,7 @@ export function ProjectResponsePropList({
   };
 
   return (
-    <ul className="flex-1 space-y-4 list-none">
+    <ul className="space-y-4 list-none">
       <li className="flex flex-row justify-start w-full items-center">
         <p className="basis-2/5 text-sm font-normal text-slate-600 leading-none">
           Stage
@@ -64,7 +64,7 @@ export function ProjectResponsePropList({
       {projectResponse.scores.map((score: Score, index: number) => (
         <li
           key={index}
-          className="flex flex-row gap-x-2 justify-start w-full items-center"
+          className="flex flex-row gap-x-2 justify-start  items-center"
         >
           {" "}
           <Accordion type="single" collapsible className="w-full border-none">
