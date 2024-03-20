@@ -1,7 +1,9 @@
 import { type User } from "@/types/user";
 
+const NECTAR_API_BASE = "https://api.nectar.run";
+
 export async function getUserProfile(token: string) {
-  const response = await fetch("http://localhost:8000/api/me", {
+  const response = await fetch(NECTAR_API_BASE + "/api/me", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

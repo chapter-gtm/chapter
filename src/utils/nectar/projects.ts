@@ -1,8 +1,10 @@
 import { parseISO } from "date-fns";
 import { type Project, type ProjectResponse } from "@/types/project";
 
+const NECTAR_API_BASE = "https://api.nectar.run";
+
 export async function getProjects(token: string) {
-  const response = await fetch("http://localhost:8000/api/projects", {
+  const response = await fetch(NECTAR_API_BASE + "/api/projects", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -17,7 +19,7 @@ export async function getProjects(token: string) {
 }
 
 export async function getProject(token: string, id: string) {
-  const response = await fetch("http://localhost:8000/api/projects/" + id, {
+  const response = await fetch(NECTAR_API_BASE + "/api/projects/" + id, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -33,7 +35,7 @@ export async function getProject(token: string, id: string) {
 
 export async function getProjectResponses(token: string, id: string) {
   const response = await fetch(
-    "http://localhost:8000/api/projects/" + id + "/responses",
+    NECTAR_API_BASE + "/api/projects/" + id + "/responses",
     {
       method: "GET",
       headers: {
@@ -57,7 +59,7 @@ export async function getProjectResponses(token: string, id: string) {
 }
 
 export async function createProject(token: string) {
-  const response = await fetch("http://localhost:8000/api/projects/", {
+  const response = await fetch(NECTAR_API_BASE + "/api/projects/", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -74,7 +76,7 @@ export async function createProject(token: string) {
 
 export async function publishProject(token: string, projectId: string) {
   const response = await fetch(
-    "http://localhost:8000/api/projects/" + projectId + "/publications",
+    NECTAR_API_BASE + "/api/projects/" + projectId + "/publications",
     {
       method: "POST",
       headers: {
@@ -90,7 +92,7 @@ export async function publishProject(token: string, projectId: string) {
 
 export async function updateProject(token: string, project: Project) {
   const response = await fetch(
-    "http://localhost:8000/api/projects/" + project.id,
+    NECTAR_API_BASE + "/api/projects/" + project.id,
     {
       method: "PATCH",
       headers: {
@@ -110,7 +112,8 @@ export async function getProjectResponse(
   projectResponseId: string,
 ) {
   const response = await fetch(
-    "http://localhost:8000/api/projects/" +
+    NECTAR_API_BASE +
+      "/api/projects/" +
       projectId +
       "/responses/" +
       projectResponseId,
