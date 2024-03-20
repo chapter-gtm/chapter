@@ -105,7 +105,7 @@ export function ProjectDefinition({
               "flex flex-row items-center justify-between gap-x-2 pb-3 px-6",
               {
                 "bg-gray-100": !dataChanged,
-              }
+              },
             )}
           >
             {!dataChanged && (
@@ -205,7 +205,7 @@ export function ProjectDefinition({
                           placeholder="How you'd like to start the conversation"
                           value={project.intro.title}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
+                            event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             project.intro.title = event.target.value;
                             setProject({
@@ -226,7 +226,7 @@ export function ProjectDefinition({
             </li>
 
             {project.components.map((component, index) => (
-              <li>
+              <li key={index}>
                 <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
                   <form>
                     <div className="flex flex-row items-center justify-between relative">
@@ -268,7 +268,21 @@ export function ProjectDefinition({
                       <Input
                         id="name"
                         placeholder="How you'd like to start the conversation"
-                        value="asdasdj kkaj sd"
+                        value={component.question}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>,
+                        ) => {
+                          const updatedComponents: Question[] = [
+                            ...project.components,
+                          ];
+                          updatedComponents[index].question =
+                            event.target.value;
+                          setProject({
+                            ...project,
+                            ["components"]: updatedComponents,
+                          });
+                        }}
+                        onBlur={saveChanges}
                       />
                       <div className="flex flex-row gap-x-3 items-center">
                         <Button variant={"outline"} size={"sm"}>
@@ -345,7 +359,7 @@ export function ProjectDefinition({
                       placeholder="Wow! thanks for sharing your insights with us."
                       value={project.outros.COMPLETED.title}
                       onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
+                        event: React.ChangeEvent<HTMLInputElement>,
                       ) => {
                         setProject({
                           ...project,
@@ -365,7 +379,7 @@ export function ProjectDefinition({
                   <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                     <Switch
                       checked={project.outros.COMPLETED.actions.includes(
-                        ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                        ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                       )}
                       onCheckedChange={(checked: boolean) => {
                         let newActions: ProjectOutroAction[] = [];
@@ -377,7 +391,7 @@ export function ProjectDefinition({
                         } else {
                           project.outros.COMPLETED.actions.filter(
                             (value) =>
-                              value !== ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                              value !== ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                           );
                         }
                         setProject({
