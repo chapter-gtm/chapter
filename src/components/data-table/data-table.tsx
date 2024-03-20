@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -73,15 +73,15 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="relative space-y-6">
       <DataTableToolbar
         table={table}
         filters={filters}
         filterColumnName={filterColumnName}
       />
-      <div className="rounded-md border">
+      <div className="relative overflow-y-auto max-h-[66vh]  border rounded-lg">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-secondary">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -91,7 +91,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -113,7 +113,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -132,6 +132,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       <DataTablePagination table={table} />
     </div>
   );

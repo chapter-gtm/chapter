@@ -71,14 +71,15 @@ export function ProjectResponsePropList({
             <AccordionItem value="item-1" className="border-none">
               <div className="flex flex-row items-center">
                 <div className="basis-2/5 text-sm">{score.name}</div>
+
                 <div className="basis-3/5 items-center flex flex-row justify-between">
                   <div
                     className={classNames(
-                      scoreColor[score.score],
+                      RatingLabel[score.score].color,
                       "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg"
                     )}
                   >
-                    {RatingLabel[score.score]}
+                    {RatingLabel[score.score].label}
                   </div>
 
                   <AccordionTrigger className="p-2 rounded-lg flex-none text-sm font-normal text-slate-700 leading-none hover:no-underline hover:bg-slate-50"></AccordionTrigger>

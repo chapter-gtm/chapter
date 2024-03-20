@@ -362,9 +362,7 @@ export function ProjectDefinition({
                     />
                   </div>
                   <Separator className="mt-3" />
-
-                  <div className="flex flex-row justify-start space-x-3 items-center h-12 px-6">
-                    <Label htmlFor="name">Add calendar link</Label>
+                  <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                     <Switch
                       checked={project.outros.COMPLETED.actions.includes(
                         ProjectOutroAction.AUTHOR_CALENDAR_LINK
@@ -394,6 +392,7 @@ export function ProjectDefinition({
                         });
                       }}
                     />
+                    <Label htmlFor="name">Add calendar link</Label>
                   </div>
                 </div>
               </form>

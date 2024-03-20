@@ -36,9 +36,7 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
     <>
       {project !== null ? (
         <Tabs defaultValue="definition" className="h-dvh">
-          <div className="flex flex-col h-full">
-            {/* <div className="flex items-center justify-between py-4 border-b border-slate-100 h-16"></div> */}
-
+          <div className="flex flex-col flex-1 h-full">
             <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6 ">
               <div className="flex flex-1 flex-shrink-0 overflow-hidden   me-8">
                 <p className="text-slate-700 text-base font-medium truncate text-ellipsis">
@@ -66,14 +64,14 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
 
             <TabsContent
               value="definition"
-              className="mt-0 flex flex-col h-full"
+              className="mt-0 data-[state=active]:flex flex-col h-full"
             >
               <ProjectDefinition project={project} setProject={setProject} />
             </TabsContent>
 
             <TabsContent
               value="results"
-              className="content-start border-none p-0 data-[state=active]:flex flex-1 mt-0"
+              className="mt-0 data-[state=active]:flex flex-col flex-1 h-full"
             >
               <ProjectResults project={project} />
             </TabsContent>

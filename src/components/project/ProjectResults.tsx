@@ -105,21 +105,51 @@ export function ProjectResults({ project }: ProjectResultsProps) {
 
   return (
     <>
-      <ResizablePanelGroup direction="horizontal" className="items-stretch">
+      {/* <div className="flex flex-1 flex-row">
+        <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
+          <div className="items-center justify-between py-5 h-20 w-full">
+            <h2 className="text-xl font-semibold">
+              {responseRecords.length}{" "}
+              {responseRecords.length === 1 ? "Response" : "Responses"}
+            </h2>
+          </div>
+          <div className="flex flex-col pb-24">
+            <DataTable
+              columns={resultColumns}
+              data={responseRecords}
+              filters={filters}
+              filterColumnName="participant"
+              onRowClick={handleRowClick}
+            />
+          </div>
+        </div>
+
+        <div className="w-96">
+          {selectedRow !== null && (
+            <ProjectResponseDetails projectResponse={selectedRow} />
+          )}
+        </div>
+      </div> */}
+
+      <ResizablePanelGroup
+        direction="horizontal"
+        className="flex flex-col flex-1 h-full"
+      >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
-          minSize={30}
-          maxSize={70}
+          minSize={20}
+          maxSize={80}
         >
-          <div className="px-6">
-            <div className="items-center justify-between py-5">
-              <h2 className="text-xl font-semibold my-2">
+          <div className="flex flex-col flex-1 px-6 pb-20">
+            <div className="items-center justify-between py-5 h-20 w-full">
+              <h2 className="text-xl font-semibold">
                 {responseRecords.length}{" "}
                 {responseRecords.length === 1 ? "Response" : "Responses"}
               </h2>
             </div>
+
             <DataTable
               columns={resultColumns}
               data={responseRecords}
@@ -132,8 +162,8 @@ export function ProjectResults({ project }: ProjectResultsProps) {
         <ResizableHandle />
         <ResizablePanel
           defaultSize={defaultLayout[1]}
-          minSize={20}
-          maxSize={50}
+          minSize={10}
+          maxSize={40}
         >
           {selectedRow !== null && (
             <ProjectResponseDetails projectResponse={selectedRow} />
