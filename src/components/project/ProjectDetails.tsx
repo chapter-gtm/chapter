@@ -36,15 +36,15 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
     <>
       {project !== null ? (
         <Tabs defaultValue="definition" className="h-dvh">
-          <div className="flex flex-col flex-1 h-full">
+          <div className="flex flex-col flex-1 h-full ">
             <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6 ">
-              <div className="flex flex-1 flex-shrink-0 overflow-hidden   me-8">
+              <div className="basis-1/3 flex-1 flex-shrink-0 overflow-hidden   me-8">
                 <p className="text-slate-700 text-base font-medium truncate text-ellipsis">
                   {project.name}
                 </p>
               </div>
 
-              <div className="space-between flex-1 items-center justify-center">
+              <div className="space-between basis-1/3 items-center justify-center">
                 <TabsList>
                   <TabsTrigger value="definition" className="relative">
                     Create
@@ -55,10 +55,8 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <div className="overflow-hidden justify-end">
-                <Button variant="outline" className="me-2">
-                  Preview
-                </Button>
+              <div className="basis-1/3 flex overflow-hidden justify-end">
+                <Button variant="outline">Preview</Button>
               </div>
             </div>
 

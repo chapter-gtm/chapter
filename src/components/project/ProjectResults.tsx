@@ -105,41 +105,42 @@ export function ProjectResults({ project }: ProjectResultsProps) {
 
   return (
     <>
-      {/* <div className="flex flex-1 flex-row">
-        <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
-          <div className="items-center justify-between py-5 h-20 w-full">
-            <h2 className="text-xl font-semibold">
-              {responseRecords.length}{" "}
-              {responseRecords.length === 1 ? "Response" : "Responses"}
-            </h2>
-          </div>
-          <div className="flex flex-col pb-24">
-            <DataTable
-              columns={resultColumns}
-              data={responseRecords}
-              filters={filters}
-              filterColumnName="participant"
-              onRowClick={handleRowClick}
-            />
+      <div className="flex flex-row ">
+        <div className="basis-4/5">
+          <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
+            <div className="items-center justify-between py-5 h-20 w-full">
+              <h2 className="text-xl font-semibold">
+                {responseRecords.length}{" "}
+                {responseRecords.length === 1 ? "Response" : "Responses"}
+              </h2>
+            </div>
+            <div className="flex flex-col pb-24">
+              <DataTable
+                columns={resultColumns}
+                data={responseRecords}
+                filters={filters}
+                filterColumnName="participant"
+                onRowClick={handleRowClick}
+              />
+            </div>
           </div>
         </div>
-
-        <div className="w-96">
+        <div className="basis-1/5">
           {selectedRow !== null && (
             <ProjectResponseDetails projectResponse={selectedRow} />
           )}
         </div>
-      </div> */}
+      </div>
 
-      <ResizablePanelGroup
+      {/* <ResizablePanelGroup
         direction="horizontal"
-        className="flex flex-col flex-1 h-full"
+        className="flex flex-col h-full w-full"
       >
         <ResizablePanel
-          defaultSize={defaultLayout[0]}
+          defaultSize={defaultLayout[75]}
           collapsedSize={navCollapsedSize}
           collapsible={true}
-          minSize={20}
+          minSize={60}
           maxSize={80}
         >
           <div className="flex flex-col flex-1 px-6 pb-20">
@@ -161,15 +162,15 @@ export function ProjectResults({ project }: ProjectResultsProps) {
         </ResizablePanel>
         <ResizableHandle />
         <ResizablePanel
-          defaultSize={defaultLayout[1]}
-          minSize={10}
+          defaultSize={defaultLayout[25]}
+          minSize={20}
           maxSize={40}
         >
           {selectedRow !== null && (
             <ProjectResponseDetails projectResponse={selectedRow} />
           )}
         </ResizablePanel>
-      </ResizablePanelGroup>
+      </ResizablePanelGroup> */}
     </>
   );
 }
