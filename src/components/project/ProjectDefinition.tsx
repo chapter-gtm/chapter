@@ -25,7 +25,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import {
   type Project,
   ProjectOutroAction,
@@ -49,7 +48,6 @@ export function ProjectDefinition({
   setProject,
 }: ProjectDefinitionProps) {
   const [dataChanged, setDataChanged] = useState(false);
-  const { toast } = useToast();
   const saveChanges = useCallback(async () => {
     try {
       if (!dataChanged) {
@@ -66,7 +64,7 @@ export function ProjectDefinition({
     } catch {
       // add a message here too
     }
-  }, [project, dataChanged, toast]);
+  }, [project, dataChanged]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", saveChanges);
@@ -98,7 +96,7 @@ export function ProjectDefinition({
           "flex flex-row items-center justify-end gap-x-2 px-6 h-12",
           {
             "bg-orange-100 justify-between": !dataChanged,
-          }
+          },
         )}
       >
         {!dataChanged && (
@@ -164,7 +162,7 @@ export function ProjectDefinition({
                     placeholder="What do you expect to learn from this project?"
                     value={project.goal}
                     onChange={(
-                      event: React.ChangeEvent<HTMLTextAreaElement>
+                      event: React.ChangeEvent<HTMLTextAreaElement>,
                     ) => {
                       setProject({
                         ...project,
@@ -211,7 +209,7 @@ export function ProjectDefinition({
                             placeholder="How you'd like to start the conversation"
                             value={project.intro.title}
                             onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
+                              event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
                               project.intro.title = event.target.value;
                               setProject({
@@ -276,7 +274,7 @@ export function ProjectDefinition({
                           placeholder="How you'd like to start the conversation"
                           value={component.question}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
+                            event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             const updatedComponents: Question[] = [
                               ...project.components,
@@ -365,7 +363,7 @@ export function ProjectDefinition({
                         placeholder="Wow! thanks for sharing your insights with us."
                         value={project.outros.COMPLETED.title}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
+                          event: React.ChangeEvent<HTMLInputElement>,
                         ) => {
                           setProject({
                             ...project,
@@ -386,7 +384,7 @@ export function ProjectDefinition({
                     <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                       <Switch
                         checked={project.outros.COMPLETED.actions.includes(
-                          ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                          ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                         )}
                         onCheckedChange={(checked: boolean) => {
                           let newActions: ProjectOutroAction[] = [];
@@ -399,7 +397,7 @@ export function ProjectDefinition({
                             project.outros.COMPLETED.actions.filter(
                               (value) =>
                                 value !==
-                                ProjectOutroAction.AUTHOR_CALENDAR_LINK
+                                ProjectOutroAction.AUTHOR_CALENDAR_LINK,
                             );
                           }
                           setProject({
