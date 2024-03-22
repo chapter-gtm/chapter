@@ -105,8 +105,8 @@ export function ProjectResults({ project }: ProjectResultsProps) {
 
   return (
     <>
-      <div className="flex flex-row ">
-        <div className="basis-4/5">
+      <div className="flex flex-row h-full">
+        <div className="basis-3/4">
           <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
             <div className="items-center justify-between py-5 h-20 w-full">
               <h2 className="text-xl font-semibold">
@@ -125,7 +125,7 @@ export function ProjectResults({ project }: ProjectResultsProps) {
             </div>
           </div>
         </div>
-        <div className="basis-1/5">
+        <div className="basis-1/4 flex flex-col">
           {selectedRow !== null && (
             <ProjectResponseDetails projectResponse={selectedRow} />
           )}

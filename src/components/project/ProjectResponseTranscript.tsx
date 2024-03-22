@@ -23,28 +23,26 @@ export function ProjectResponseTranscript({
 }: ProjectResponseTranscriptProps) {
   return (
     <>
-      <div className="flex-1 overflow-y-auto bg-slate-100 rounded-lg p-10">
-        {projectResponse.transcript.map((thread, threadIndex) => (
-          <div className="flex flex-col gap-y-3" key={threadIndex}>
-            {thread.qa_pairs.map((qaPair, qaPairIndex) => (
-              <div key={qaPairIndex}>
-                <div className=" w-max max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-0">
-                  Agent
-                </div>
-                <div className=" w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm bg-white">
-                  {qaPair.question}
-                </div>
-                <div className=" w-max max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-auto">
-                  User
-                </div>
-                <div className=" w-max max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
-                  {qaPair.answer}
-                </div>
+      {projectResponse.transcript.map((thread, threadIndex) => (
+        <div className="flex flex-col gap-y-3 p-3" key={threadIndex}>
+          {thread.qa_pairs.map((qaPair, qaPairIndex) => (
+            <div key={qaPairIndex}>
+              <div className="max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-0">
+                Agent
               </div>
-            ))}
-          </div>
-        ))}
-      </div>
+              <div className=" max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm bg-white">
+                {qaPair.question}
+              </div>
+              <div className="max-w-[75%] px-3 py-2 text-xs text-slate-500 ml-auto">
+                User
+              </div>
+              <div className=" max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
+                {qaPair.answer}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
     </>
   );
 }

@@ -27,43 +27,44 @@ export function ProjectResponseDetails({
   return (
     <>
       {projectResponse !== undefined ? (
-        <div className="flex flex-1 flex-col">
-          <div className="flex flex-row justify-between py-2 items-center px-6 ">
-            <TooltipProvider delayDuration={0}>
-              <div className="flex flex-row items-center gap-x-2 ">
-                <p className="text-sm text-slate-700 font-medium">#312</p>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={`/projects/${projectResponse.projectId}/responses/${projectResponse.id}`}
-                    >
+        <>
+          <div className="flex flex-col px-6 ">
+            <div className="flex flex-row justify-between py-2 items-center">
+              <TooltipProvider delayDuration={0}>
+                <div className="flex flex-row items-center gap-x-2 ">
+                  <p className="text-sm text-slate-700 font-medium">#312</p>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={`/projects/${projectResponse.projectId}/responses/${projectResponse.id}`}
+                      >
+                        <Button variant="ghost" size="icon" disabled={false}>
+                          <Maximize2 className="h-4 w-4" />
+                          <span className="sr-only">Share profile</span>
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>View fullscreen</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Button variant="ghost" size="icon" disabled={false}>
-                        <Maximize2 className="h-4 w-4" />
+                        <ExternalLink className="h-4 w-4" />
                         <span className="sr-only">Share profile</span>
                       </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>View fullscreen</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" disabled={false}>
-                      <ExternalLink className="h-4 w-4" />
-                      <span className="sr-only">Share profile</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Share link</TooltipContent>
-                </Tooltip>
-              </div>
-            </TooltipProvider>
-          </div>
-
-          <div className="flex flex-col gap-y-3 py-4 px-6">
+                    </TooltipTrigger>
+                    <TooltipContent>Share link</TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
+            </div>
             <ProjectResponsePropList projectResponse={projectResponse} />
           </div>
 
-          <ProjectResponseTranscript projectResponse={projectResponse} />
-        </div>
+          <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-slate-100/50">
+            <ProjectResponseTranscript projectResponse={projectResponse} />
+          </div>
+        </>
       ) : (
         <div className="flex flex-1 flex-col py-8">
           <EmptySelectionCard
