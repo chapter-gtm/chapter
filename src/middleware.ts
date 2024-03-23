@@ -6,6 +6,12 @@ export async function middleware(request: NextRequest) {
   const response = await updateSession(request);
   const supabase = createClient();
 
+  const publicUrls = ["/reset-password"];
+
+  if (publicUrls.includes(request.nextUrl.pathname)) {
+    return response;
+  }
+
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
     return NextResponse.rewrite(new URL("/login", request.url));

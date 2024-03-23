@@ -1,17 +1,40 @@
+"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/utils/supabase/auth";
-
-import { Metadata } from "next";
+import { login, sendResetPasswordLink } from "@/utils/supabase/auth";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
-};
-
 export default function AuthenticationPage() {
+  const [message, setMessage] = useState("");
+  const [showLogin, setShowLogin] = useState(true);
+
+  const handleLogin = async (formData: FormData) => {
+    try {
+      const data = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      };
+      await login(data.email, data.password);
+    } catch (error) {
+      setMessage("Failed to sign you in. Please try again!");
+    }
+  };
+
+  const handleResetPassword = async (formData: FormData) => {
+    try {
+      const data = {
+        email: formData.get("email") as string,
+      };
+      await sendResetPasswordLink(data.email);
+      setMessage("Password reset link sent to email!");
+    } catch (error) {
+      setMessage(
+        "Failed to send password reset link via email. Please contact support",
+      );
+    }
+  };
   return (
     <>
       <div className="md:hidden">
@@ -54,45 +77,103 @@ export default function AuthenticationPage() {
           </div>
         </div>
 
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-            </div>
-            <div className="grid gap-6">
-              <form>
-                <div className="grid gap-2">
-                  <div className="grid gap-1">
-                    <Label className="sr-only" htmlFor="email">
-                      Email
+        {showLogin ? (
+          <div className="lg:p-8">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Sign in
+                </h1>
+              </div>
+              <div className="grid gap-6">
+                <p>{message}</p>
+                <form>
+                  <div className="grid gap-2">
+                    <div className="grid gap-1">
+                      <Label className="sr-only" htmlFor="email">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        autoCorrect="off"
+                        required
+                      />
+                    </div>
+                    <Label className="sr-only" htmlFor="password">
+                      Password
                     </Label>
                     <Input
-                      id="email"
-                      name="email"
-                      placeholder="name@example.com"
-                      type="email"
-                      autoCapitalize="none"
-                      autoComplete="email"
-                      autoCorrect="off"
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="Your Password"
                       required
                     />
+                    <Button formAction={handleLogin}>Sign In</Button>
+                    <Button
+                      onClick={() => {
+                        setShowLogin(false);
+                        setMessage("");
+                      }}
+                      variant="link"
+                    >
+                      Reset my password
+                    </Button>
                   </div>
-                  <Label className="sr-only" htmlFor="password">
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="Your Password"
-                    required
-                  />
-                  <Button formAction={login}>Sign In</Button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="lg:p-8">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Reset Password
+                </h1>
+              </div>
+              <div className="grid gap-6">
+                <p>{message}</p>
+                <form>
+                  <div className="grid gap-2">
+                    <div className="grid gap-1">
+                      <Label className="sr-only" htmlFor="email">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        autoCorrect="off"
+                        required
+                      />
+                    </div>
+                    <Button formAction={handleResetPassword}>
+                      Send reset link to emaill
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowLogin(true);
+                        setMessage("");
+                      }}
+                      variant="link"
+                    >
+                      Sign in
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
