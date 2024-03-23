@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getUserProfile } from "@/utils/nectar/users";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient, getUserAccessToken } from "@/utils/supabase/server";
 
 export async function login(email: string, password: string) {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  // Step #1: Authenticate with supabase
   const { error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
@@ -18,6 +18,13 @@ export async function login(email: string, password: string) {
   if (error) {
     throw Error((error as Error).message);
   }
+
+  // Step #2: Check if the user exists in Nectar
+  const userToken = await getUserAccessToken();
+  if (userToken === undefined) {
+    throw Error("User needs to login!");
+  }
+  await getUserProfile(userToken);
 
   revalidatePath("/", "layout");
   redirect("/");
