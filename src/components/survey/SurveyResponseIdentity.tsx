@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ProjectResponse } from "@/types/project";
+import { SurveyResponse } from "@/types/survey";
 import { Badge } from "@/components/ui/badge";
 import {
   ChevronDownIcon,
@@ -16,8 +16,8 @@ import {
   Cross1Icon,
   RocketIcon,
 } from "@radix-ui/react-icons";
-function getProjectResponse(projectId: string, projectResponseId: string) {
-  // TODO: Fetch project responses
+function getSurveyResponse(surveyId: string, surveyResponseId: string) {
+  // TODO: Fetch survey responses
   const response = {
     id: "1234",
     date: "Feb 12, 2024",
@@ -29,22 +29,22 @@ function getProjectResponse(projectId: string, projectResponseId: string) {
   return response;
 }
 
-interface ProjectResponseDetailsProps {
-  projectId?: string;
-  projectResponseId?: string;
-  projectResponse?: ProjectResponse | null;
+interface SurveyResponseDetailsProps {
+  surveyId?: string;
+  surveyResponseId?: string;
+  surveyResponse?: SurveyResponse | null;
 }
 
-export function ProjectResponseIdentity({
-  projectId,
-  projectResponseId,
-  projectResponse,
-}: ProjectResponseDetailsProps) {
+export function SurveyResponseIdentity({
+  surveyId,
+  surveyResponseId,
+  surveyResponse,
+}: SurveyResponseDetailsProps) {
   let response = null;
-  if (projectResponse !== undefined) {
-    response = projectResponse;
-  } else if (projectId !== undefined && projectResponseId !== undefined) {
-    response = getProjectResponse(projectId, projectResponseId);
+  if (surveyResponse !== undefined) {
+    response = surveyResponse;
+  } else if (surveyId !== undefined && surveyResponseId !== undefined) {
+    response = getSurveyResponse(surveyId, surveyResponseId);
   }
 
   const [completionState, setCompletionState] = React.useState("Completed");

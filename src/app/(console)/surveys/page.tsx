@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { Metadata } from "next";
-import { Projects } from "@/components/project/Projects";
+import { Surveys } from "@/components/survey/Surveys";
 
 export const metadata: Metadata = {
-  title: "Projects: Nectar Console",
+  title: "Surveys: Nectar Console",
   description: "Deep interview-like insights at survey-like speed",
 };
 
-export default function ProjectsPage() {
-  return <Projects />;
+export default function SurveysPage() {
+  return <Surveys />;
 }

@@ -34,15 +34,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
-import { Project, ProjectState } from "@/types/project";
+import { Survey, SurveyState } from "@/types/survey";
 
-interface ProjectCardProps {
-  project: Project;
+interface SurveyCardProps {
+  survey: Survey;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function SurveyCard({ survey }: SurveyCardProps) {
   return (
-    <Link href={`/projects/${project.id}`}>
+    <Link href={`/surveys/${survey.id}`}>
       <div className="w-full h-64 items-center border-slate-200 bg-white border p-3 rounded-lg hover:bg-accent">
         <div className="flex flex-col py-3 justify-between h-full ">
           <div className="flex-1 group">
@@ -50,39 +50,17 @@ export function ProjectCard({ project }: ProjectCardProps) {
               🚀
             </div>
             <div className=" text-base font-medium line-clamp-2">
-              {project.name}
+              {survey.name}
             </div>
-            {/* <div className="flex flex-row justify-between pb-2 h-12">
-              <div className="flex space-x-4 text-sm text-muted-foreground">
-                {project.state === ProjectState.IN_DEVELOPMENT && (
-                  <div className="flex items-center">
-                    <Badge variant="outline">{project.state}</Badge>
-                  </div>
-                )}
-                {project.state === ProjectState.LIVE && (
-                  <div className="flex items-center">
-                    <Badge variant="outline" className="yellow">
-                      {project.state}
-                    </Badge>
-                  </div>
-                )}
-                {(project.state === ProjectState.EXPIRED ||
-                  project.state === ProjectState.CLOSED) && (
-                  <div className="flex items-center">
-                    <Badge variant="outline">{project.state}</Badge>
-                  </div>
-                )}
-              </div>
-            </div> */}
           </div>
           <div className="flex flex-row justify-between items-center">
             <Avatar className="w-7 h-7">
               <AvatarImage
                 className=""
-                src={project.authors[0].avatarUrl}
-                alt={project.authors[0].name}
+                src={survey.authors[0].avatarUrl}
+                alt={survey.authors[0].name}
               />
-              <AvatarFallback>{project.authors[0].name}</AvatarFallback>
+              <AvatarFallback>{survey.authors[0].name}</AvatarFallback>
             </Avatar>
             <p className="text-xs font-medium text-slate-400">12 Responses</p>
           </div>

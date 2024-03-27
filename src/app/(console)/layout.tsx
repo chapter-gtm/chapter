@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import { cookies } from "next/headers";
-import { accounts, mails } from "@/components/project/data";
 import {
   ResizableHandle,
   ResizablePanelGroup,

@@ -26,27 +26,24 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  type Project,
-  ProjectOutroAction,
-  ProjectResponseStage,
+  type Survey,
+  SurveyOutroAction,
+  SurveyResponseStage,
   type Question,
   QuestionFormat,
-} from "@/types/project";
+} from "@/types/survey";
 import { SparklesIcon, Trash2 } from "lucide-react";
-import { updateProject, publishProject } from "@/utils/nectar/projects";
+import { updateSurvey, publishSurvey } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 
-import EmojiHeader from "@/components/project/EmojiHeader";
+import EmojiHeader from "@/components/survey/EmojiHeader";
 
-interface ProjectDefinitionProps {
-  project: Project;
-  setProject: React.Dispatch<React.SetStateAction<Project | null>>;
+interface SurveyDefinitionProps {
+  survey: Survey;
+  setSurvey: React.Dispatch<React.SetStateAction<Survey | null>>;
 }
 
-export function ProjectDefinition({
-  project,
-  setProject,
-}: ProjectDefinitionProps) {
+export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
   const [dataChanged, setDataChanged] = useState(false);
   const saveChanges = useCallback(async () => {
     try {
@@ -57,14 +54,14 @@ export function ProjectDefinition({
       if (userToken === undefined) {
         throw Error("User needs to login!");
       }
-      await updateProject(userToken, project);
+      await updateSurvey(userToken, survey);
       setDataChanged(false);
 
       // add a message here
     } catch {
       // add a message here too
     }
-  }, [project, dataChanged]);
+  }, [survey, dataChanged]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", saveChanges);
@@ -75,7 +72,7 @@ export function ProjectDefinition({
 
   useEffect(() => {
     setDataChanged(true);
-  }, [project]);
+  }, [survey]);
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -86,7 +83,7 @@ export function ProjectDefinition({
     if (userToken === undefined) {
       throw Error("User needs to login!");
     }
-    await publishProject(userToken, project.id);
+    await publishSurvey(userToken, survey.id);
   };
 
   return (
@@ -124,14 +121,14 @@ export function ProjectDefinition({
             <CardContent>
               <div className="grid gap-y-6">
                 <div className="grid gap-3">
-                  <Label htmlFor="subject">Project name</Label>
+                  <Label htmlFor="subject">Survey name</Label>
                   <Input
                     id="subject"
-                    placeholder="A short name for this project."
-                    value={project.name}
+                    placeholder="A short name for this survey."
+                    value={survey.name}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setProject({
-                        ...project,
+                      setSurvey({
+                        ...survey,
                         ["name"]: event.target.value,
                       });
                     }}
@@ -143,10 +140,10 @@ export function ProjectDefinition({
                   <Input
                     id="subject"
                     placeholder="e.g. Product Managers, UX Researchers"
-                    value={project.candidatePersonas.join(", ")}
+                    value={survey.candidatePersonas.join(", ")}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setProject({
-                        ...project,
+                      setSurvey({
+                        ...survey,
                         ["candidatePersonas"]: event.target.value
                           .split(",")
                           .map((token) => token.trim()),
@@ -156,16 +153,16 @@ export function ProjectDefinition({
                   />
                 </div>
                 <div className="grid gap-3">
-                  <Label htmlFor="description">Project goal</Label>
+                  <Label htmlFor="description">Survey goal</Label>
                   <Textarea
                     id="description"
-                    placeholder="What do you expect to learn from this project?"
-                    value={project.goal}
+                    placeholder="What do you expect to learn from this survey?"
+                    value={survey.goal}
                     onChange={(
                       event: React.ChangeEvent<HTMLTextAreaElement>,
                     ) => {
-                      setProject({
-                        ...project,
+                      setSurvey({
+                        ...survey,
                         ["goal"]: event.target.value,
                       });
                     }}
@@ -183,7 +180,7 @@ export function ProjectDefinition({
                     id="subject"
                     placeholder="I need help with..."
                     value={
-                      project.authors.length > 0 ? project.authors[0].name : ""
+                      survey.authors.length > 0 ? survey.authors[0].name : ""
                     }
                     readOnly
                   />
@@ -207,16 +204,16 @@ export function ProjectDefinition({
                           <Input
                             id="name"
                             placeholder="How you'd like to start the conversation"
-                            value={project.intro.title}
+                            value={survey.intro.title}
                             onChange={(
                               event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
-                              project.intro.title = event.target.value;
-                              setProject({
-                                ...project,
+                              survey.intro.title = event.target.value;
+                              setSurvey({
+                                ...survey,
                                 ["intro"]: {
                                   title: event.target.value,
-                                  description: project.intro.description,
+                                  description: survey.intro.description,
                                 },
                               });
                             }}
@@ -229,7 +226,7 @@ export function ProjectDefinition({
                 </div>
               </li>
 
-              {project.components.map((component, index) => (
+              {survey.components.map((component, index) => (
                 <li key={index}>
                   <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
                     <form>
@@ -251,11 +248,11 @@ export function ProjectDefinition({
                               <DropdownMenuItem
                                 onClick={() => {
                                   const updatedComponents: Question[] = [
-                                    ...project.components.slice(0, index),
-                                    ...project.components.slice(index + 1),
+                                    ...survey.components.slice(0, index),
+                                    ...survey.components.slice(index + 1),
                                   ];
-                                  setProject({
-                                    ...project,
+                                  setSurvey({
+                                    ...survey,
                                     ["components"]: updatedComponents,
                                   });
                                 }}
@@ -277,12 +274,12 @@ export function ProjectDefinition({
                             event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             const updatedComponents: Question[] = [
-                              ...project.components,
+                              ...survey.components,
                             ];
                             updatedComponents[index].question =
                               event.target.value;
-                            setProject({
-                              ...project,
+                            setSurvey({
+                              ...survey,
                               ["components"]: updatedComponents,
                             });
                           }}
@@ -305,7 +302,7 @@ export function ProjectDefinition({
                           <Select
                             defaultValue={component.followups.toString()}
                             onValueChange={(value: string) => {
-                              project.components[index].followups =
+                              survey.components[index].followups =
                                 parseInt(value);
                             }}
                             onOpenChange={saveChanges}
@@ -334,15 +331,15 @@ export function ProjectDefinition({
                   className="w-full border-dashed bg-white/20"
                   onClick={() => {
                     const updatedComponents: Question[] = [
-                      ...project.components,
+                      ...survey.components,
                       {
                         question: "",
                         format: QuestionFormat.OPEN_ENDED,
                         followups: 2,
                       },
                     ];
-                    setProject({
-                      ...project,
+                    setSurvey({
+                      ...survey,
                       ["components"]: updatedComponents,
                     });
                   }}
@@ -361,19 +358,16 @@ export function ProjectDefinition({
                       <Input
                         id="name"
                         placeholder="Wow! thanks for sharing your insights with us."
-                        value={project.outros.COMPLETED.title}
+                        value={survey.outro.title}
                         onChange={(
                           event: React.ChangeEvent<HTMLInputElement>,
                         ) => {
-                          setProject({
-                            ...project,
-                            ["outros"]: {
-                              [ProjectResponseStage.COMPLETED]: {
-                                title: event.target.value,
-                                description:
-                                  project.outros.COMPLETED.description,
-                                actions: project.outros.COMPLETED.actions,
-                              },
+                          setSurvey({
+                            ...survey,
+                            ["outro"]: {
+                              title: event.target.value,
+                              description: survey.outro.description,
+                              actions: survey.outro.actions,
                             },
                           });
                         }}
@@ -383,32 +377,29 @@ export function ProjectDefinition({
                     <Separator className="mt-3" />
                     <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                       <Switch
-                        checked={project.outros.COMPLETED.actions.includes(
-                          ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                        checked={survey.outro.actions.includes(
+                          SurveyOutroAction.AUTHOR_CALENDAR_LINK,
                         )}
                         onCheckedChange={(checked: boolean) => {
-                          let newActions: ProjectOutroAction[] = [];
+                          let newActions: SurveyOutroAction[] = [];
                           if (checked) {
                             newActions = [
-                              ...project.outros.COMPLETED.actions,
-                              ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                              ...survey.outro.actions,
+                              SurveyOutroAction.AUTHOR_CALENDAR_LINK,
                             ];
                           } else {
-                            project.outros.COMPLETED.actions.filter(
+                            survey.outro.actions.filter(
                               (value) =>
                                 value !==
-                                ProjectOutroAction.AUTHOR_CALENDAR_LINK,
+                                SurveyOutroAction.AUTHOR_CALENDAR_LINK,
                             );
                           }
-                          setProject({
-                            ...project,
-                            ["outros"]: {
-                              [ProjectResponseStage.COMPLETED]: {
-                                title: project.outros.COMPLETED.title,
-                                description:
-                                  project.outros.COMPLETED.description,
-                                actions: newActions,
-                              },
+                          setSurvey({
+                            ...survey,
+                            ["outro"]: {
+                              title: survey.outro.title,
+                              description: survey.outro.description,
+                              actions: newActions,
                             },
                           });
                         }}

@@ -1,10 +1,10 @@
 import { parseISO } from "date-fns";
-import { type Project, type ProjectResponse } from "@/types/project";
+import { type Survey, type SurveyResponse } from "@/types/survey";
 
-const NECTAR_API_BASE = "https://api.nectar.run";
+const NECTAR_API_BASE = "https://api.nectar.run/api";
 
-export async function getProjects(token: string) {
-  const response = await fetch(NECTAR_API_BASE + "/api/projects", {
+export async function getSurveys(token: string) {
+  const response = await fetch(NECTAR_API_BASE + "/surveys", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -14,12 +14,12 @@ export async function getProjects(token: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const projects = "items" in data ? (data["items"] as Project[]) : [];
-  return projects;
+  const surveys = "items" in data ? (data["items"] as Survey[]) : [];
+  return surveys;
 }
 
-export async function getProject(token: string, id: string) {
-  const response = await fetch(NECTAR_API_BASE + "/api/projects/" + id, {
+export async function getSurvey(token: string, id: string) {
+  const response = await fetch(NECTAR_API_BASE + "/surveys/" + id, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -29,13 +29,13 @@ export async function getProject(token: string, id: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const project = data as Project;
-  return project;
+  const survey = data as Survey;
+  return survey;
 }
 
-export async function getProjectResponses(token: string, id: string) {
+export async function getSurveyResponses(token: string, id: string) {
   const response = await fetch(
-    NECTAR_API_BASE + "/api/projects/" + id + "/responses",
+    NECTAR_API_BASE + "/surveys/" + id + "/responses",
     {
       method: "GET",
       headers: {
@@ -47,7 +47,7 @@ export async function getProjectResponses(token: string, id: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const projectResponses: ProjectResponse[] =
+  const surveyResponses: SurveyResponse[] =
     "items" in data
       ? data["items"].map((item: any) => ({
           ...item,
@@ -55,11 +55,11 @@ export async function getProjectResponses(token: string, id: string) {
         }))
       : [];
 
-  return projectResponses;
+  return surveyResponses;
 }
 
-export async function createProject(token: string) {
-  const response = await fetch(NECTAR_API_BASE + "/api/projects/", {
+export async function createSurvey(token: string) {
+  const response = await fetch(NECTAR_API_BASE + "/surveys/", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -70,13 +70,13 @@ export async function createProject(token: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const project = data as Project;
-  return project;
+  const survey = data as Survey;
+  return survey;
 }
 
-export async function publishProject(token: string, projectId: string) {
+export async function publishSurvey(token: string, surveyId: string) {
   const response = await fetch(
-    NECTAR_API_BASE + "/api/projects/" + projectId + "/publications",
+    NECTAR_API_BASE + "/surveys/" + surveyId + "/publications",
     {
       method: "POST",
       headers: {
@@ -90,33 +90,30 @@ export async function publishProject(token: string, projectId: string) {
   }
 }
 
-export async function updateProject(token: string, project: Project) {
-  const response = await fetch(
-    NECTAR_API_BASE + "/api/projects/" + project.id,
-    {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(project),
+export async function updateSurvey(token: string, survey: Survey) {
+  const response = await fetch(NECTAR_API_BASE + "/surveys/" + survey.id, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+    body: JSON.stringify(survey),
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
 }
 
-export async function getProjectResponse(
+export async function getSurveyResponse(
   token: string,
-  projectId: string,
-  projectResponseId: string,
+  surveyId: string,
+  surveyResponseId: string,
 ) {
   const response = await fetch(
     NECTAR_API_BASE +
-      "/api/projects/" +
-      projectId +
+      "/api/surveys/" +
+      surveyId +
       "/responses/" +
-      projectResponseId,
+      surveyResponseId,
     {
       method: "GET",
       headers: {
@@ -128,6 +125,6 @@ export async function getProjectResponse(
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const projectResponse = data as ProjectResponse;
-  return projectResponse;
+  const surveyResponse = data as SurveyResponse;
+  return surveyResponse;
 }

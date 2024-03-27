@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
-import { ProjectResponse } from "@/types/project";
+import { SurveyResponse } from "@/types/survey";
 
-function getProjectResponse(projectId: string, projectResponseId: string) {
-  // TODO: Fetch project responses
+function getSurveyResponse(surveyId: string, surveyResponseId: string) {
+  // TODO: Fetch survey responses
   const response = {
     id: "1234",
     date: "Feb 12, 2024",
@@ -14,16 +14,16 @@ function getProjectResponse(projectId: string, projectResponseId: string) {
   return response;
 }
 
-interface ProjectResponseTranscriptProps {
-  projectResponse: ProjectResponse;
+interface SurveyResponseTranscriptProps {
+  surveyResponse: SurveyResponse;
 }
 
-export function ProjectResponseTranscript({
-  projectResponse,
-}: ProjectResponseTranscriptProps) {
+export function SurveyResponseTranscript({
+  surveyResponse,
+}: SurveyResponseTranscriptProps) {
   return (
     <>
-      {projectResponse.transcript.map((thread, threadIndex) => (
+      {surveyResponse.transcript.map((thread, threadIndex) => (
         <div className="flex flex-col gap-y-3 p-3" key={threadIndex}>
           {thread.qa_pairs.map((qaPair, qaPairIndex) => (
             <div key={qaPairIndex}>

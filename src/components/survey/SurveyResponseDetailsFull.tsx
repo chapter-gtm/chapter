@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-import { ProjectResponseIdentity } from "@/components/project/ProjectResponseIdentity";
+import { SurveyResponseIdentity } from "@/components/survey/SurveyResponseIdentity";
 
 import { Maximize2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ProjectResponse } from "@/types/project";
+import { SurveyResponse } from "@/types/survey";
 import { Badge } from "@/components/ui/badge";
 import {
   ChevronDownIcon,
@@ -25,41 +25,41 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
-import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
-import { getProjectResponse } from "@/utils/nectar/projects";
+import { SurveyResponseTranscript } from "@/components/survey/SurveyResponseTranscript";
+import { SurveyResponsePropList } from "@/components/survey/SurveyResponsePropList";
+import { getSurveyResponse } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 
-interface ProjectResponseDetailsFullProps {
-  projectId?: string;
-  projectResponseId?: string;
+interface SurveyResponseDetailsFullProps {
+  surveyId?: string;
+  surveyResponseId?: string;
 }
 
-export function ProjectResponseDetailsFull({
-  projectId,
-  projectResponseId,
-}: ProjectResponseDetailsFullProps) {
-  const [response, setResponse] = useState<ProjectResponse | null>(null);
+export function SurveyResponseDetailsFull({
+  surveyId,
+  surveyResponseId,
+}: SurveyResponseDetailsFullProps) {
+  const [response, setResponse] = useState<SurveyResponse | null>(null);
 
   useEffect(() => {
-    const fetchProject = async () => {
+    const fetchSurvey = async () => {
       try {
-        if (projectId !== undefined && projectResponseId !== undefined) {
+        if (surveyId !== undefined && surveyResponseId !== undefined) {
           const userToken = await getUserAccessToken();
           if (userToken === undefined) {
             throw Error("User needs to login!");
           }
-          const resp = await getProjectResponse(
+          const resp = await getSurveyResponse(
             userToken,
-            projectId,
-            projectResponseId,
+            surveyId,
+            surveyResponseId,
           );
           setResponse(resp);
         }
       } catch (error) {}
     };
-    fetchProject();
-  }, [projectId, projectResponseId]);
+    fetchSurvey();
+  }, [surveyId, surveyResponseId]);
 
   return (
     <>
@@ -118,7 +118,7 @@ export function ProjectResponseDetailsFull({
                 <TabsContent value="transcript">
                   <div className="w-2/3 mx-auto">
                     {response !== null && (
-                      <ProjectResponseTranscript projectResponse={response} />
+                      <SurveyResponseTranscript surveyResponse={response} />
                     )}
                   </div>
                 </TabsContent>
@@ -127,9 +127,9 @@ export function ProjectResponseDetailsFull({
           </div>
 
           <div className="col-span-1 pt-2 px-6 space-y-5">
-            <ProjectResponseIdentity />
+            <SurveyResponseIdentity />
             {response !== null && (
-              <ProjectResponsePropList projectResponse={response} />
+              <SurveyResponsePropList surveyResponse={response} />
             )}
           </div>
         </div>

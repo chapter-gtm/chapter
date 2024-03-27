@@ -12,34 +12,34 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 
-import { ProjectResponseStage, RatingLabel } from "@/types/project";
+import { SurveyResponseStage, RatingLabel } from "@/types/survey";
 
-export const ProjectResponseRecord = z.record(z.any());
-export type ProjectResponseRecordSchema = z.infer<typeof ProjectResponseRecord>;
+export const SurveyResponseRecord = z.record(z.any());
+export type SurveyResponseRecordSchema = z.infer<typeof SurveyResponseRecord>;
 
-// TODO: Add score filters dynamically based on score definitions from the project
+// TODO: Add score filters dynamically based on score definitions from the survey
 export const filters = [
   {
     tableColumnName: "stage",
     label: "Filter",
     filterOptions: [
       {
-        value: ProjectResponseStage.NOT_STARTED,
+        value: SurveyResponseStage.NOT_STARTED,
         label: "Not Started",
         icon: CircleIcon,
       },
       {
-        value: ProjectResponseStage.IN_PROGRESS,
+        value: SurveyResponseStage.IN_PROGRESS,
         label: "Incomplete",
         icon: StopwatchIcon,
       },
       {
-        value: ProjectResponseStage.COMPLETED,
+        value: SurveyResponseStage.COMPLETED,
         label: "Completed",
         icon: CheckCircledIcon,
       },
       {
-        value: ProjectResponseStage.ABORTED,
+        value: SurveyResponseStage.ABORTED,
         label: "Aborted",
         icon: CrossCircledIcon,
       },
@@ -57,8 +57,8 @@ function toShortDate(currentDate: Date) {
   return formattedDate;
 }
 
-// TODO: Add scores dynamically based on score definitions from the project
-export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
+// TODO: Add scores dynamically based on score definitions from the survey
+export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -93,7 +93,7 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const stage = filters[0].filterOptions.find(
-        (stage) => stage.value === row.getValue("stage")
+        (stage) => stage.value === row.getValue("stage"),
       );
 
       if (!stage) {
@@ -120,24 +120,6 @@ export const resultColumns: ColumnDef<ProjectResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const score: number = row.getValue("inputQuality");
-      return (
-        <div className="flex">
-          <div
-            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
-          >
-            {RatingLabel[score]?.label}
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "problemSeverity",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Problem Severity" />
-    ),
-    cell: ({ row }) => {
-      const score: number = row.getValue("problemSeverity");
       return (
         <div className="flex">
           <div

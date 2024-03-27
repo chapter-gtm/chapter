@@ -5,42 +5,42 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { ErrorMessage } from "@/components/ErrorMessage";
-import { ProjectDefinition } from "@/components/project/ProjectDefinition";
-import { ProjectResults } from "@/components/project/ProjectResults";
-import { type Project } from "@/types/project";
-import { getProject } from "@/utils/nectar/projects";
+import { SurveyDefinition } from "@/components/survey/SurveyDefinition";
+import { SurveyResponses } from "@/components/survey/SurveyResponses";
+import { type Survey } from "@/types/survey";
+import { getSurvey } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 
-interface ProjectDetailsProps {
-  projectId: string;
+interface SurveyDetailsProps {
+  surveyId: string;
 }
 
-export function ProjectDetails({ projectId }: ProjectDetailsProps) {
-  const [project, setProject] = useState<Project | null>(null);
+export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
+  const [survey, setSurvey] = useState<Survey | null>(null);
 
   useEffect(() => {
-    const fetchProject = async () => {
+    const fetchSurvey = async () => {
       try {
         const userToken = await getUserAccessToken();
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
-        const proj = await getProject(userToken, projectId);
-        setProject(proj);
+        const proj = await getSurvey(userToken, surveyId);
+        setSurvey(proj);
       } catch (error) {}
     };
-    fetchProject();
-  }, [projectId]);
+    fetchSurvey();
+  }, [surveyId]);
 
   return (
     <>
-      {project !== null ? (
+      {survey !== null ? (
         <Tabs defaultValue="definition" className="h-dvh">
           <div className="flex flex-col flex-1 h-full ">
             <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6 ">
               <div className="basis-1/3 flex-1 flex-shrink-0 overflow-hidden   me-8">
                 <p className="text-slate-700 text-base font-medium truncate text-ellipsis">
-                  {project.name}
+                  {survey.name}
                 </p>
               </div>
 
@@ -64,14 +64,14 @@ export function ProjectDetails({ projectId }: ProjectDetailsProps) {
               value="definition"
               className="mt-0 data-[state=active]:flex flex-col h-full"
             >
-              <ProjectDefinition project={project} setProject={setProject} />
+              <SurveyDefinition survey={survey} setSurvey={setSurvey} />
             </TabsContent>
 
             <TabsContent
               value="results"
               className="mt-0 data-[state=active]:flex flex-col flex-1 h-full"
             >
-              <ProjectResults project={project} />
+              <SurveyResponses survey={survey} />
             </TabsContent>
           </div>
         </Tabs>

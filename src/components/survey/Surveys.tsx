@@ -1,39 +1,39 @@
 "use client";
-import { ProjectCard } from "@/components/project/ProjectCard";
+import { SurveyCard } from "@/components/survey/SurveyCard";
 import { Button } from "@/components/ui/button";
-import { Project } from "@/types/project";
-import { createProject, getProjects } from "@/utils/nectar/projects";
+import { Survey } from "@/types/survey";
+import { createSurvey, getSurveys } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { EmptySelectionCard } from "./EmptySelectionCard";
 
-export function Projects() {
+export function Surveys() {
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchSurveys = async () => {
       try {
         const userToken = await getUserAccessToken();
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
-        setProjects(await getProjects(userToken));
+        setSurveys(await getSurveys(userToken));
       } catch (error) {
         // TODO: Show a toast with error
       }
     };
-    fetchProjects();
+    fetchSurveys();
   }, []);
 
-  const handleCreateProject = async () => {
+  const handleCreateSurvey = async () => {
     const userToken = await getUserAccessToken();
     if (userToken === undefined) {
       throw Error("User needs to login!");
     }
-    const project: Project = await createProject(userToken);
-    router.push(`/projects/${project.id}`);
+    const survey: Survey = await createSurvey(userToken);
+    router.push(`/surveys/${survey.id}`);
   };
 
   return (
@@ -42,21 +42,21 @@ export function Projects() {
         <div className="w-2/3 mx-auto pt-4">
           <div className="flex flex-row justify-between space-y-1 items-center h-[44px] pb-5">
             <h2 className="text-lg font-semibold tracking-tight text-slate-700">
-              Projects
+              Surveys
             </h2>
-            <Button onClick={handleCreateProject}>Create new project</Button>
+            <Button onClick={handleCreateSurvey}>Create new survey</Button>
           </div>
-          {projects.length <= 0 ? (
+          {surveys.length <= 0 ? (
             <EmptySelectionCard
-              title="Create your first project"
+              title="Create your first survey"
               description="Launch your conversational survey today, and get qualitative insights without the hassle of scheduling."
-              action="Create project"
+              action="Create survey"
             />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-4">
-              {projects.map((item, index) => (
+              {surveys.map((item, index) => (
                 <div key={index} className="items-start justify-center">
-                  <ProjectCard project={item} />
+                  <SurveyCard survey={item} />
                 </div>
               ))}
             </div>

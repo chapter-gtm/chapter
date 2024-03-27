@@ -9,24 +9,24 @@ import {
 import { ExternalLink, Maximize2 } from "lucide-react";
 import Link from "next/link";
 
-import { ProjectResponseTranscript } from "@/components/project/ProjectResponseTranscript";
-import { ProjectResponse } from "@/types/project";
-import { ProjectResponseIdentity } from "@/components/project/ProjectResponseIdentity";
-import { ProjectResponsePropList } from "@/components/project/ProjectResponsePropList";
+import { SurveyResponseTranscript } from "@/components/survey/SurveyResponseTranscript";
+import { SurveyResponse } from "@/types/survey";
+import { SurveyResponseIdentity } from "@/components/survey/SurveyResponseIdentity";
+import { SurveyResponsePropList } from "@/components/survey/SurveyResponsePropList";
 
 import { EmptySelectionCard } from "./EmptySelectionCard";
 import { Separator } from "@/components/ui/separator";
 
-interface ProjectResponseDetailsProps {
-  projectResponse?: ProjectResponse;
+interface SurveyResponseDetailsProps {
+  surveyResponse?: SurveyResponse;
 }
 
-export function ProjectResponseDetails({
-  projectResponse,
-}: ProjectResponseDetailsProps) {
+export function SurveyResponseDetails({
+  surveyResponse,
+}: SurveyResponseDetailsProps) {
   return (
     <>
-      {projectResponse !== undefined ? (
+      {surveyResponse !== undefined ? (
         <>
           <div className="flex flex-col px-6 ">
             <div className="flex flex-row justify-between py-2 items-center">
@@ -36,7 +36,7 @@ export function ProjectResponseDetails({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
-                        href={`/projects/${projectResponse.projectId}/responses/${projectResponse.id}`}
+                        href={`/surveys/${surveyResponse.surveyId}/responses/${surveyResponse.id}`}
                       >
                         <Button variant="ghost" size="icon" disabled={false}>
                           <Maximize2 className="h-4 w-4" />
@@ -58,11 +58,11 @@ export function ProjectResponseDetails({
                 </div>
               </TooltipProvider>
             </div>
-            <ProjectResponsePropList projectResponse={projectResponse} />
+            <SurveyResponsePropList surveyResponse={surveyResponse} />
           </div>
 
           <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-slate-100/50">
-            <ProjectResponseTranscript projectResponse={projectResponse} />
+            <SurveyResponseTranscript surveyResponse={surveyResponse} />
           </div>
         </>
       ) : (

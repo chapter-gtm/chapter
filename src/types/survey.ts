@@ -23,26 +23,26 @@ export type Organization = {
   description: string;
 };
 
-export type ProjectIntro = {
+export type SurveyIntro = {
   title: string;
   description: string;
 };
 
-export enum ProjectOutroAction {
+export enum SurveyOutroAction {
   AUTHOR_CALENDAR_LINK = "AUTHOR_CALENDAR_LINK",
 }
 
-export enum ProjectResponseStage {
+export enum SurveyResponseStage {
   NOT_STARTED = "NOT_STARTED",
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
   ABORTED = "ABORTED",
 }
 
-export type ProjectOutro = {
+export type SurveyOutro = {
   title: string;
   description: string;
-  actions: ProjectOutroAction[];
+  actions: SurveyOutroAction[];
 };
 
 enum QuestionFlag {
@@ -58,20 +58,15 @@ enum QuestionAction {
   ABORT_SURVEY = "End Survey",
 }
 
-export enum ProjectState {
+export enum SurveyState {
   IN_DEVELOPMENT = "In development",
   LIVE = "Live",
   EXPIRED = "Expired",
   CLOSED = "Closed",
 }
 
-export type Participant = {
-  email: string;
-  name: string;
-};
-
-export type ProjectResponseState = {
-  stage: ProjectResponseStage;
+export type SurveyResponseState = {
+  stage: SurveyResponseStage;
   component_next_index: number;
   followup_count: number;
 };
@@ -96,25 +91,26 @@ export type QuestionThread = {
 
 export type Score = {
   name: string;
-  score: number;
-  reason: string;
+  value: number;
+  description: string;
 };
 
-export const RatingLabel: { [key: number]: { label: string; color: string } } = {
-  1: { label: "Very Low", color: "bg-green-100" },
-  2: { label: "Low", color: "bg-blue-100" },
-  3: { label: "Medium", color: "bg-yellow-100" },
-  4: { label: "High", color: "bg-orange-100" },
-  5: { label: "Very High", color: "bg-red-100" },
-};
+export const RatingLabel: { [key: number]: { label: string; color: string } } =
+  {
+    1: { label: "Very Low", color: "bg-green-100" },
+    2: { label: "Low", color: "bg-blue-100" },
+    3: { label: "Medium", color: "bg-yellow-100" },
+    4: { label: "High", color: "bg-orange-100" },
+    5: { label: "Very High", color: "bg-red-100" },
+  };
 
-export type ProjectResponse = {
+export type SurveyResponse = {
   org_id: string;
-  projectId: string;
+  surveyId: string;
   id: string;
   utm: string;
-  participant: Participant;
-  state: ProjectResponseState;
+  contactPseudoName: string;
+  state: SurveyResponseState;
   startedAt: Date;
   endedAt: Date;
   transcript: QuestionThread[];
@@ -122,7 +118,7 @@ export type ProjectResponse = {
   tags: string[];
 };
 
-export type Project = {
+export type Survey = {
   name: string;
   goal: string;
   candidatePersonas: string[];
@@ -131,18 +127,12 @@ export type Project = {
   org: Organization;
   id: string;
   orgid: string;
-  intro: ProjectIntro;
-  outros: Required<{ [key in ProjectResponseStage.COMPLETED]: ProjectOutro }> &
-    Partial<{
-      [key in Exclude<
-        ProjectResponseStage,
-        ProjectResponseStage.COMPLETED
-      >]: ProjectOutro;
-    }>;
+  intro: SurveyIntro;
+  outro: SurveyOutro;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date;
   closedAt: Date;
   expiredAt: Date;
-  state: ProjectState;
+  state: SurveyState;
 };

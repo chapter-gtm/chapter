@@ -30,11 +30,11 @@ export default function Sidebar({ className }: SideBarProps) {
                 route: "/dashboard",
               },
               {
-                title: "Projects",
+                title: "Surveys",
                 label: "",
                 icon: Layers,
                 variant: "ghost",
-                route: "/projects",
+                route: "/surveys",
               },
             ]}
           />

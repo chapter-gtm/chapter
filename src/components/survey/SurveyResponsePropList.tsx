@@ -10,23 +10,23 @@ import {
 import { toTitleCase } from "@/utils/misc";
 
 import {
-  ProjectResponse,
-  ProjectResponseStage,
+  SurveyResponse,
+  SurveyResponseStage,
   Score,
   RatingLabel,
-} from "@/types/project";
+} from "@/types/survey";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-interface ProjectResponsePropListProps {
-  projectResponse: ProjectResponse;
+interface SurveyResponsePropListProps {
+  surveyResponse: SurveyResponse;
 }
 
-export function ProjectResponsePropList({
-  projectResponse,
-}: ProjectResponsePropListProps) {
+export function SurveyResponsePropList({
+  surveyResponse,
+}: SurveyResponsePropListProps) {
   const scoreColor: { [key: number]: string } = {
     1: "bg-fuchsia-100",
     2: "bg-rose-100",
@@ -35,11 +35,11 @@ export function ProjectResponsePropList({
     5: "bg-indigo-100",
   };
 
-  const stageColor: { [key in ProjectResponseStage]: string } = {
-    [ProjectResponseStage.NOT_STARTED]: "bg-grey-400",
-    [ProjectResponseStage.IN_PROGRESS]: "bg-yellow-400",
-    [ProjectResponseStage.COMPLETED]: "bg-green-500",
-    [ProjectResponseStage.ABORTED]: "bg-rose-500",
+  const stageColor: { [key in SurveyResponseStage]: string } = {
+    [SurveyResponseStage.NOT_STARTED]: "bg-grey-400",
+    [SurveyResponseStage.IN_PROGRESS]: "bg-yellow-400",
+    [SurveyResponseStage.COMPLETED]: "bg-green-500",
+    [SurveyResponseStage.ABORTED]: "bg-rose-500",
   };
 
   return (
@@ -52,16 +52,16 @@ export function ProjectResponsePropList({
           <div className="flex items-center gap-x-2 font-normal text-slate-700 leading-none text-sm border py-1 px-2 rounded-full">
             <span
               className={classNames(
-                stageColor[projectResponse.state.stage],
-                "h-1.5 w-1.5 rounded-full"
+                stageColor[surveyResponse.state.stage],
+                "h-1.5 w-1.5 rounded-full",
               )}
             ></span>
-            {toTitleCase(projectResponse.state.stage)}
+            {toTitleCase(surveyResponse.state.stage)}
           </div>
         </div>
       </li>
 
-      {projectResponse.scores.map((score: Score, index: number) => (
+      {surveyResponse.scores.map((score: Score, index: number) => (
         <li
           key={index}
           className="flex flex-row gap-x-2 justify-start  items-center"
@@ -75,11 +75,11 @@ export function ProjectResponsePropList({
                 <div className="basis-3/5 items-center flex flex-row justify-between">
                   <div
                     className={classNames(
-                      RatingLabel[score.score].color,
-                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg"
+                      RatingLabel[score.value].color,
+                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg",
                     )}
                   >
-                    {RatingLabel[score.score].label}
+                    {RatingLabel[score.value].label}
                   </div>
 
                   <AccordionTrigger className="p-2 rounded-lg flex-none text-sm font-normal text-slate-700 leading-none hover:no-underline hover:bg-slate-50"></AccordionTrigger>
@@ -87,7 +87,7 @@ export function ProjectResponsePropList({
               </div>
 
               <AccordionContent className="py-2 text-slate-500">
-                {score.reason}
+                {score.description}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
