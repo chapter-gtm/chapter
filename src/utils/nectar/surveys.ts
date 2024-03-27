@@ -1,7 +1,8 @@
 import { parseISO } from "date-fns";
 import { type Survey, type SurveyResponse } from "@/types/survey";
 
-const NECTAR_API_BASE = "https://api.nectar.run/api";
+// TODO: Enable HTTPS and get a wildcard cert for nectar.run
+const NECTAR_API_BASE = "http://api.nectar.run/api";
 
 export async function getSurveys(token: string) {
   const response = await fetch(NECTAR_API_BASE + "/surveys", {
