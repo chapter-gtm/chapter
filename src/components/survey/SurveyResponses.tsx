@@ -112,11 +112,22 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
 
   const [sheetOpen, setSheetOpen] = useState(false);
 
+  const handleOpenSheet = function <TData>(data: TData) {
+    setSheetOpen(true);
+    const record: SurveyResponseRecordSchema =
+      data as SurveyResponseRecordSchema;
+    const resp: SurveyResponse | undefined = responses.get(record.id);
+    if (resp !== undefined) {
+      setSelectedRow(resp);
+    }
+    console.log("Sheet opened");
+  };
+
   return (
     <>
       <div className="flex flex-row h-full">
-        <Sheet onOpenChange={(open: boolean) => sheetOpen}>
-          <div className="basis-3/4">
+        <Sheet modal={false} open={sheetOpen}>
+          <div className="">
             <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
               <div className="items-center justify-between py-5 h-20 w-full">
                 <h2 className="text-xl font-semibold">
@@ -130,33 +141,34 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                   data={responseRecords}
                   filters={filters}
                   filterColumnName="participant"
-                  // onRowClick={() => setSheetOpen(true)}
-                  onRowClick={handleRowClick}
+                  onRowClick={handleOpenSheet}
+                  // onRowClick={handleRowClick}
                 />
               </div>
             </div>
           </div>
 
-          {/* <SheetContent>
+          <SheetContent>
             <SheetHeader>
               <SheetTitle>Edit profile</SheetTitle>
               <SheetDescription>
                 Make changes to your profile here. Click save when you're done.
               </SheetDescription>
             </SheetHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4 bg-orange-200">
-                Something
+            <div className="">
+              <div className="bg-orange-200">
+                {selectedRow !== null && (
+                  <SurveyResponseDetails surveyResponse={selectedRow} />
+                )}
               </div>
             </div>
-          </SheetContent> */}
+          </SheetContent>
         </Sheet>
 
-        <div className="basis-1/4 flex flex-col">
+        {/* <div className="basis-1/4 flex flex-col">
           {selectedRow !== null && (
-            <SurveyResponseDetails surveyResponse={selectedRow} />
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );

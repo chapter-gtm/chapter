@@ -22,6 +22,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import {
   DataTableToolbar,
