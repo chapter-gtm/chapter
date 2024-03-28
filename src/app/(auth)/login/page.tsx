@@ -1,18 +1,29 @@
 "use client";
-import { createClient } from "@/utils/supabase/client";
+import { createClient, getUserAccessToken } from "@/utils/supabase/client";
+import { getUserProfile } from "@/utils/nectar/users";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function AuthenticationPage() {
+  const [message, setMessage] = useState("");
   const router = useRouter();
   const supabase = createClient();
 
   supabase.auth.onAuthStateChange(async (event) => {
-    console.log(event);
     if (event != "INITIAL_SESSION" && event != "SIGNED_OUT") {
-      router.push("/");
+      try {
+        const userToken = await getUserAccessToken();
+        if (userToken === undefined) {
+          throw Error("User needs to login!");
+        }
+        await getUserProfile(userToken);
+        router.push("/");
+      } catch (error) {
+        setMessage("Something went wrong. Please contact support!");
+      }
     }
   });
 
@@ -84,6 +95,11 @@ export default function AuthenticationPage() {
                   },
                 }}
               />
+              {message !== "" && (
+                <div className="border border-gray-300 rounded-lg p-4">
+                  <p>{message}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
