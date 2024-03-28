@@ -23,18 +23,18 @@ export default function Sidebar({ className }: SideBarProps) {
             isCollapsed={false}
             links={[
               {
-                title: "Dashboard",
-                label: "",
-                icon: PieChart,
-                variant: "ghost",
-                route: "/dashboard",
-              },
-              {
                 title: "Surveys",
                 label: "",
                 icon: Layers,
                 variant: "ghost",
                 route: "/surveys",
+              },
+              {
+                title: "Insights",
+                label: "",
+                icon: PieChart,
+                variant: "ghost",
+                route: "/dashboard",
               },
             ]}
           />

@@ -56,6 +56,7 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                   className="flex items-center gap-4"
                 >
                   {link.title}
+
                   {link.label && (
                     <span className="ml-auto text-muted-foreground">
                       {link.label}
@@ -73,11 +74,18 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                 pathname === link.route
                   ? "bg-muted hover:bg-muted"
                   : "hover:bg-slate-100",
-                "justify-start"
+                "justify-start items-start"
               )}
             >
-              <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
+              <link.icon className="mr-2 h-4 w-4 mt-1" />
+              <span className="flex flex-col items-start">
+                {link.title}
+                {link.title == "Insights" ? (
+                  <span className="text-muted-foreground text-xs ">
+                    Coming soon
+                  </span>
+                ) : null}
+              </span>
             </Link>
           )
         )}
