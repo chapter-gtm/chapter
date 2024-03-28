@@ -1,9 +1,9 @@
 import { type User } from "@/types/user";
 
-// TODO: Enable HTTPS and get a wildcard cert for nectar.run
-const NECTAR_API_BASE = "http://api.nectar.run/api";
+const NECTAR_API_BASE = "https://api.nectar.run/api";
 
 export async function getUserProfile(token: string) {
+  console.log(token);
   const response = await fetch(NECTAR_API_BASE + "/me", {
     method: "GET",
     headers: {
