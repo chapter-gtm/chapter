@@ -18,6 +18,16 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 import { type Survey, type SurveyResponse } from "@/types/survey";
 import { DataTable } from "@/components/data-table/data-table";
@@ -47,7 +57,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map(),
+    new Map()
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -79,7 +89,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          }),
+          })
         );
 
         setResponses(responseMap);
@@ -100,28 +110,48 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
     }
   };
 
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
     <>
       <div className="flex flex-row h-full">
-        <div className="basis-3/4">
-          <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
-            <div className="items-center justify-between py-5 h-20 w-full">
-              <h2 className="text-xl font-semibold">
-                {responseRecords.length}{" "}
-                {responseRecords.length === 1 ? "Response" : "Responses"}
-              </h2>
-            </div>
-            <div className="flex flex-col pb-24">
-              <DataTable
-                columns={resultColumns}
-                data={responseRecords}
-                filters={filters}
-                filterColumnName="participant"
-                onRowClick={handleRowClick}
-              />
+        <Sheet onOpenChange={(open: boolean) => sheetOpen}>
+          <div className="basis-3/4">
+            <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
+              <div className="items-center justify-between py-5 h-20 w-full">
+                <h2 className="text-xl font-semibold">
+                  {responseRecords.length}{" "}
+                  {responseRecords.length === 1 ? "Response" : "Responses"}
+                </h2>
+              </div>
+              <div className="flex flex-col pb-24">
+                <DataTable
+                  columns={resultColumns}
+                  data={responseRecords}
+                  filters={filters}
+                  filterColumnName="participant"
+                  // onRowClick={() => setSheetOpen(true)}
+                  onRowClick={handleRowClick}
+                />
+              </div>
             </div>
           </div>
-        </div>
+
+          {/* <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Edit profile</SheetTitle>
+              <SheetDescription>
+                Make changes to your profile here. Click save when you're done.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4 bg-orange-200">
+                Something
+              </div>
+            </div>
+          </SheetContent> */}
+        </Sheet>
+
         <div className="basis-1/4 flex flex-col">
           {selectedRow !== null && (
             <SurveyResponseDetails surveyResponse={selectedRow} />

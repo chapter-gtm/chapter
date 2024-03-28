@@ -70,18 +70,18 @@ export function MainNav({ links, isCollapsed }: NavProps) {
               key={index}
               href={link.route}
               className={cn(
-                buttonVariants({ variant: link.variant, size: "sm" }),
+                buttonVariants({ variant: link.variant }),
                 pathname === link.route
                   ? "bg-muted hover:bg-muted"
                   : "hover:bg-slate-100",
-                "justify-start items-start"
+                "justify-start items-start pt-2 h-auto px-3"
               )}
             >
               <link.icon className="mr-2 h-4 w-4 mt-1" />
               <span className="flex flex-col items-start">
                 {link.title}
                 {link.title == "Insights" ? (
-                  <span className="text-muted-foreground text-xs ">
+                  <span className="text-muted-foreground text-xs font-normal">
                     Coming soon
                   </span>
                 ) : null}

@@ -75,10 +75,7 @@ export function UserNav({ className }: UserNavProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              Log out
-              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}

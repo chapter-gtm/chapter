@@ -43,13 +43,13 @@ interface SurveyCardProps {
 export function SurveyCard({ survey }: SurveyCardProps) {
   return (
     <Link href={`/surveys/${survey.id}`}>
-      <div className="w-full h-64 items-center border-slate-200 bg-white border p-3 rounded-lg hover:bg-accent">
-        <div className="flex flex-col py-3 justify-between h-full ">
+      <div className="w-full h-44 items-center border-slate-200 bg-white border p-3 rounded-lg hover:bg-slate-100/30">
+        <div className="flex flex-col justify-between h-full ">
           <div className="flex-1 group">
             <div className="w-16 h-16 rounded-lg bg-slate-100 flex justify-center items-center text-2xl mb-2 group-hover:border border-slate-200">
               🚀
             </div>
-            <div className=" text-base font-medium line-clamp-2">
+            <div className="text-base font-medium line-clamp-1">
               {survey.name}
             </div>
           </div>

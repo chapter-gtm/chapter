@@ -90,10 +90,10 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
     <>
       <div
         className={clsx(
-          "flex flex-row items-center justify-end gap-x-2 px-6 h-12",
+          "flex flex-row items-center justify-end gap-x-2 px-6 h-12 border-b border-slate-100",
           {
             "bg-orange-100 justify-between": !dataChanged,
-          },
+          }
         )}
       >
         {!dataChanged && (
@@ -106,7 +106,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
         )}
         <div className="space-x-2">
           <Button variant={"outline"} size={"sm"} onClick={saveChanges}>
-            Share
+            Preview
           </Button>
           <Button variant="default" size={"sm"} onClick={handlePublish}>
             Publish
@@ -159,7 +159,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                     placeholder="What do you expect to learn from this survey?"
                     value={survey.goal}
                     onChange={(
-                      event: React.ChangeEvent<HTMLTextAreaElement>,
+                      event: React.ChangeEvent<HTMLTextAreaElement>
                     ) => {
                       setSurvey({
                         ...survey,
@@ -167,22 +167,6 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                       });
                     }}
                     onBlur={saveChanges}
-                  />
-                </div>
-                <Separator className="bg-slate-100 my-4" />
-              </div>
-            </CardContent>
-            <CardContent>
-              <div className="grid gap-y-6">
-                <div className="grid gap-3">
-                  <Label htmlFor="subject">Interviewer name</Label>
-                  <Input
-                    id="subject"
-                    placeholder="I need help with..."
-                    value={
-                      survey.authors.length > 0 ? survey.authors[0].name : ""
-                    }
-                    readOnly
                   />
                 </div>
               </div>
@@ -196,7 +180,32 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
               <li>
                 <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
                   <EmojiHeader status="Welcome" />
-                  <CardContent>
+                  <CardContent className="space-y-4">
+                    <form>
+                      <div className="items-center gap-1">
+                        <div className="space-y-3">
+                          <Label htmlFor="name">Welcome title</Label>
+                          <Input
+                            id="name"
+                            placeholder="How you'd like to start the conversation"
+                            value={survey.intro.title}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              survey.intro.title = event.target.value;
+                              setSurvey({
+                                ...survey,
+                                ["intro"]: {
+                                  title: event.target.value,
+                                  description: survey.intro.description,
+                                },
+                              });
+                            }}
+                            onBlur={saveChanges}
+                          />
+                        </div>
+                      </div>
+                    </form>
                     <form>
                       <div className="items-center gap-1">
                         <div className="space-y-3">
@@ -204,11 +213,11 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           <Input
                             id="name"
                             placeholder="How you'd like to start the conversation"
-                            value={survey.intro.title}
+                            value={survey.intro.description}
                             onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>,
+                              event: React.ChangeEvent<HTMLInputElement>
                             ) => {
-                              survey.intro.title = event.target.value;
+                              survey.intro.description = event.target.value;
                               setSurvey({
                                 ...survey,
                                 ["intro"]: {
@@ -271,7 +280,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="How you'd like to start the conversation"
                           value={component.question}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>,
+                            event: React.ChangeEvent<HTMLInputElement>
                           ) => {
                             const updatedComponents: Question[] = [
                               ...survey.components,
@@ -360,7 +369,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                         placeholder="Wow! thanks for sharing your insights with us."
                         value={survey.outro.title}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>,
+                          event: React.ChangeEvent<HTMLInputElement>
                         ) => {
                           setSurvey({
                             ...survey,
@@ -378,7 +387,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                     <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                       <Switch
                         checked={survey.outro.actions.includes(
-                          SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                          SurveyOutroAction.AUTHOR_CALENDAR_LINK
                         )}
                         onCheckedChange={(checked: boolean) => {
                           let newActions: SurveyOutroAction[] = [];
@@ -390,8 +399,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           } else {
                             survey.outro.actions.filter(
                               (value) =>
-                                value !==
-                                SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                                value !== SurveyOutroAction.AUTHOR_CALENDAR_LINK
                             );
                           }
                           setSurvey({
