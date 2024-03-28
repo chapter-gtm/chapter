@@ -109,11 +109,7 @@ export async function getSurveyResponse(
   surveyResponseId: string,
 ) {
   const response = await fetch(
-    NECTAR_API_BASE +
-      "/api/surveys/" +
-      surveyId +
-      "/responses/" +
-      surveyResponseId,
+    NECTAR_API_BASE + "/surveys/" + surveyId + "/responses/" + surveyResponseId,
     {
       method: "GET",
       headers: {
