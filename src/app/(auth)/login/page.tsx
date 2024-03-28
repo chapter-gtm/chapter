@@ -71,7 +71,7 @@ export default function AuthenticationPage() {
                     default: {
                       colors: {
                         brand: "pink",
-                        brandAccent: "darkred",
+                        brandAccent: "orange",
                       },
                     },
                   },
