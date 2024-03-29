@@ -67,7 +67,7 @@ export function SurveyResponseIdentity({
         </Avatar>
       </div>
       <h1 className="text-2xl text-slate-300 font-medium mt-4">
-        Add a name...
+        {surveyResponse?.contactPseudoName}
       </h1>
     </div>
   );

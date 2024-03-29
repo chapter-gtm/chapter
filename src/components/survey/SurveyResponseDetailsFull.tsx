@@ -127,7 +127,7 @@ export function SurveyResponseDetailsFull({
           </div>
 
           <div className="col-span-1 pt-2 px-6 space-y-5">
-            <SurveyResponseIdentity />
+            <SurveyResponseIdentity surveyResponse={response} />
             {response !== null && (
               <SurveyResponsePropList surveyResponse={response} />
             )}

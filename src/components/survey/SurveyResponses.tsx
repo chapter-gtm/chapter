@@ -69,7 +69,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map()
+    new Map(),
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -101,7 +101,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setResponses(responseMap);
@@ -172,7 +172,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Link
-                      href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.surveyId}`}
+                      href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.id}`}
                     >
                       <Button variant="ghost" size="icon" disabled={false}>
                         <ExternalLink className="h-4 w-4" />
