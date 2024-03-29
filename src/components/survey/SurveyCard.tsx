@@ -34,10 +34,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
-import { Survey, SurveyState } from "@/types/survey";
+import { type SurveyMetadata, type SurveyState } from "@/types/survey";
 
 interface SurveyCardProps {
-  survey: Survey;
+  survey: SurveyMetadata;
 }
 
 export function SurveyCard({ survey }: SurveyCardProps) {
@@ -62,7 +62,10 @@ export function SurveyCard({ survey }: SurveyCardProps) {
               />
               <AvatarFallback>{survey.authors[0].name}</AvatarFallback>
             </Avatar>
-            <p className="text-xs font-medium text-slate-400">12 Responses</p>
+            <p className="text-xs font-medium text-slate-400">
+              {survey.responseCount}{" "}
+              {survey.responseCount === 1 ? " Response" : " Responses"}
+            </p>
           </div>
         </div>
       </div>

@@ -1,5 +1,9 @@
 import { parseISO } from "date-fns";
-import { type Survey, type SurveyResponse } from "@/types/survey";
+import {
+  type SurveyMetadata,
+  type Survey,
+  type SurveyResponse,
+} from "@/types/survey";
 
 const NECTAR_API_BASE = "https://api.nectar.run/api";
 
@@ -14,7 +18,7 @@ export async function getSurveys(token: string) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  const surveys = "items" in data ? (data["items"] as Survey[]) : [];
+  const surveys = "items" in data ? (data["items"] as SurveyMetadata[]) : [];
   return surveys;
 }
 

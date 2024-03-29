@@ -118,6 +118,17 @@ export type SurveyResponse = {
   tags: string[];
 };
 
+export type SurveyMetadata = {
+  id: string;
+  name: string;
+  authors: User[];
+  state: SurveyState;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date;
+  responseCount: number;
+};
+
 export type Survey = {
   name: string;
   goal: string;
