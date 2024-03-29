@@ -97,7 +97,7 @@ export type Score = {
 
 export const RatingLabel: { [key: number]: { label: string; color: string } } =
   {
-    1: { label: "Very Low", color: "bg-green-100" },
+    1: { label: "Very Low", color: "bg-teal-100" },
     2: { label: "Low", color: "bg-blue-100" },
     3: { label: "Medium", color: "bg-yellow-100" },
     4: { label: "High", color: "bg-orange-100" },

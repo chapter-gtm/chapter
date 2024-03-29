@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { ReactComponentElement, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ZodTypeAny, z } from "zod";
 import { Separator } from "@/components/ui/separator";
@@ -13,6 +13,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -28,6 +38,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+import { ChevronsRight, ExternalLink, Maximize2, LinkIcon } from "lucide-react";
 
 import { type Survey, type SurveyResponse } from "@/types/survey";
 import { DataTable } from "@/components/data-table/data-table";
@@ -123,44 +135,70 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
     console.log("Sheet opened");
   };
 
+  const handleCloseSheet = function () {
+    setSheetOpen(false);
+    console.log("Sheet closed");
+  };
+
   return (
     <>
       <div className="flex flex-row h-full">
         <Sheet modal={false} open={sheetOpen}>
-          <div className="">
-            <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
-              <div className="items-center justify-between py-5 h-20 w-full">
-                <h2 className="text-xl font-semibold">
-                  {responseRecords.length}{" "}
-                  {responseRecords.length === 1 ? "Response" : "Responses"}
-                </h2>
-              </div>
-              <div className="flex flex-col pb-24">
-                <DataTable
-                  columns={resultColumns}
-                  data={responseRecords}
-                  filters={filters}
-                  filterColumnName="participant"
-                  onRowClick={handleOpenSheet}
-                  // onRowClick={handleRowClick}
-                />
-              </div>
+          <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
+            <div className="flex flex-col pb-24">
+              <DataTable
+                columns={resultColumns}
+                data={responseRecords}
+                filters={filters}
+                filterColumnName="participant"
+                onRowClick={handleOpenSheet}
+                responseRecords={responseRecords}
+                // onRowClick={handleRowClick}
+              />
             </div>
           </div>
 
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Edit profile</SheetTitle>
-              <SheetDescription>
-                Make changes to your profile here. Click save when you're done.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="">
-              <div className="bg-orange-200">
-                {selectedRow !== null && (
-                  <SurveyResponseDetails surveyResponse={selectedRow} />
-                )}
+          <SheetContent className="sm:max-w-[500px] p-0 h-screen max-h-screen flex flex-col gap-y-0">
+            <TooltipProvider delayDuration={0}>
+              <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
+                <SheetClose
+                  onClick={handleCloseSheet}
+                  className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+                >
+                  <ChevronsRight className="h-4 w-4 mx-auto" />
+                  <span className="sr-only">Close</span>
+                </SheetClose>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.surveyId}`}
+                    >
+                      <Button variant="ghost" size="icon" disabled={false}>
+                        <ExternalLink className="h-4 w-4" />
+
+                        <span className="sr-only">Share profile</span>
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>View fullscreen</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" disabled={false}>
+                      <LinkIcon className="h-4 w-4" />
+                      <span className="sr-only">Share profile</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share link</TooltipContent>
+                </Tooltip>
               </div>
+            </TooltipProvider>
+
+            <div className="flex flex-col flex-1">
+              {selectedRow !== null && (
+                <SurveyResponseDetails surveyResponse={selectedRow} />
+              )}
             </div>
           </SheetContent>
         </Sheet>

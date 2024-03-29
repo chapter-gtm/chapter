@@ -23,19 +23,25 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filters: ToolbarFilter[];
   filterColumnName: string;
+  responseRecords: TData[];
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
   filterColumnName,
+  responseRecords,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex items-center justify-between relative">
+    <div className="flex items-center justify-between relative space-x-3 pt-3">
+      <h2 className="text-base font-medium text-slate-700">
+        {responseRecords.length}{" "}
+        {responseRecords.length === 1 ? "Response" : "Responses"}
+      </h2>
       <div className="flex flex-1 items-center space-x-2 relative">
-        <Input
+        {/* <Input
           placeholder={`Filter ${filterColumnName}s...`}
           value={
             (table.getColumn(filterColumnName)?.getFilterValue() as string) ??
@@ -47,7 +53,7 @@ export function DataTableToolbar<TData>({
               ?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
-        />
+        /> */}
         {filters.map((item, index) => (
           <DataTableFacetedFilter
             key={index}

@@ -53,7 +53,7 @@ export function SurveyResponsePropList({
             <span
               className={classNames(
                 stageColor[surveyResponse.state.stage],
-                "h-1.5 w-1.5 rounded-full",
+                "h-1.5 w-1.5 rounded-full"
               )}
             ></span>
             {toTitleCase(surveyResponse.state.stage)}
@@ -70,13 +70,15 @@ export function SurveyResponsePropList({
           <Accordion type="single" collapsible className="w-full border-none">
             <AccordionItem value="item-1" className="border-none">
               <div className="flex flex-row items-center">
-                <div className="basis-2/5 text-sm">{score.name}</div>
+                <div className="basis-2/5 text-sm text-slate-600">
+                  {score.name}
+                </div>
 
                 <div className="basis-3/5 items-center flex flex-row justify-between">
                   <div
                     className={classNames(
                       RatingLabel[score.value].color,
-                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg",
+                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg"
                     )}
                   >
                     {RatingLabel[score.value].label}

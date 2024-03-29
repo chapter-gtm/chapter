@@ -28,36 +28,7 @@ export function SurveyResponseDetails({
     <>
       {surveyResponse !== undefined ? (
         <>
-          <div className="flex flex-col px-6 ">
-            <div className="flex flex-row justify-between py-2 items-center">
-              <TooltipProvider delayDuration={0}>
-                <div className="flex flex-row items-center gap-x-2 ">
-                  <p className="text-sm text-slate-700 font-medium">#312</p>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={`/surveys/${surveyResponse.surveyId}/responses/${surveyResponse.id}`}
-                      >
-                        <Button variant="ghost" size="icon" disabled={false}>
-                          <Maximize2 className="h-4 w-4" />
-                          <span className="sr-only">Share profile</span>
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>View fullscreen</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" disabled={false}>
-                        <ExternalLink className="h-4 w-4" />
-                        <span className="sr-only">Share profile</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Share link</TooltipContent>
-                  </Tooltip>
-                </div>
-              </TooltipProvider>
-            </div>
+          <div className="flex flex-col px-6 py-4">
             <SurveyResponsePropList surveyResponse={surveyResponse} />
           </div>
 

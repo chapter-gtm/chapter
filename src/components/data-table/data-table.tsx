@@ -22,17 +22,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import {
   DataTableToolbar,
@@ -45,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   filters: ToolbarFilter[];
   filterColumnName: string;
   onRowClick: <TData>(data: TData) => void;
+  responseRecords: TData[];
 }
 
 export function DataTable<TData, TValue>({
@@ -53,6 +43,7 @@ export function DataTable<TData, TValue>({
   filters,
   filterColumnName,
   onRowClick,
+  responseRecords,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -89,6 +80,7 @@ export function DataTable<TData, TValue>({
         table={table}
         filters={filters}
         filterColumnName={filterColumnName}
+        responseRecords={responseRecords}
       />
       <div className="relative overflow-y-auto max-h-[66vh]  border rounded-lg">
         <Table>
