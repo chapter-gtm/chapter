@@ -35,12 +35,12 @@ export function DataTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex items-center justify-between relative space-x-3 pt-3">
-      <h2 className="text-base font-medium text-slate-700">
+    <div className="flex items-center justify-between relative space-x-3 p-3">
+      <h2 className="flex text-sm font-medium">
         {responseRecords.length}{" "}
         {responseRecords.length === 1 ? "Response" : "Responses"}
       </h2>
-      <div className="flex flex-1 items-center space-x-2 relative">
+      <div className="flex items-center space-x-2 relative">
         {/* <Input
           placeholder={`Filter ${filterColumnName}s...`}
           value={
@@ -72,8 +72,8 @@ export function DataTableToolbar<TData>({
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
+        <DataTableViewOptions table={table} />
       </div>
-      <DataTableViewOptions table={table} />
     </div>
   );
 }

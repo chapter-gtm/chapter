@@ -64,7 +64,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("date")}</div>,
+    cell: ({ row }) => <div className="flex">{row.getValue("date")}</div>,
   },
   {
     accessorKey: "participant",
@@ -72,7 +72,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
       <DataTableColumnHeader column={column} title="Participant" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px]">{row.getValue("participant")}</div>
+      <div className="flex">{row.getValue("participant")}</div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -82,7 +82,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="UTM" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("utm")}</div>,
+    cell: ({ row }) => <div className="flex">{row.getValue("utm")}</div>,
     enableSorting: false,
     enableHiding: true,
   },
@@ -93,7 +93,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const stage = filters[0].filterOptions.find(
-        (stage) => stage.value === row.getValue("stage"),
+        (stage) => stage.value === row.getValue("stage")
       );
 
       if (!stage) {
@@ -101,7 +101,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex items-center">
           {stage.hasOwnProperty("icon") && stage.icon && (
             <stage.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}

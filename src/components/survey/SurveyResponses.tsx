@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-
+import LoadingSpinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -144,8 +144,8 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
     <>
       <div className="flex flex-row h-full">
         <Sheet modal={false} open={sheetOpen}>
-          <div className="flex flex-col flex-1 px-6 pb-12 border-e border-slate-200">
-            <div className="flex flex-col pb-24">
+          <div className="flex flex-col flex-1 pb-12 border-e border-slate-200">
+            <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
               <DataTable
                 columns={resultColumns}
                 data={responseRecords}
@@ -158,7 +158,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
             </div>
           </div>
 
-          <SheetContent className="sm:max-w-[500px] p-0 h-screen max-h-screen flex flex-col gap-y-0">
+          <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
             <TooltipProvider delayDuration={0}>
               <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                 <SheetClose
@@ -194,19 +194,15 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                 </Tooltip>
               </div>
             </TooltipProvider>
+            <LoadingSpinner className="" />
 
-            <div className="flex flex-col flex-1">
+            <div className="flex-1 overflow-y-auto">
               {selectedRow !== null && (
                 <SurveyResponseDetails surveyResponse={selectedRow} />
               )}
             </div>
           </SheetContent>
         </Sheet>
-
-        {/* <div className="basis-1/4 flex flex-col">
-          {selectedRow !== null && (
-          )}
-        </div> */}
       </div>
     </>
   );

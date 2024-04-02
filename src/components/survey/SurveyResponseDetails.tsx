@@ -32,7 +32,7 @@ export function SurveyResponseDetails({
             <SurveyResponsePropList surveyResponse={surveyResponse} />
           </div>
 
-          <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-slate-100/50">
+          <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-zinc-100/50">
             <SurveyResponseTranscript surveyResponse={surveyResponse} />
           </div>
         </>

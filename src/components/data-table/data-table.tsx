@@ -75,16 +75,16 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="relative space-y-6">
+    <div className="relative space-y-1">
       <DataTableToolbar
         table={table}
         filters={filters}
         filterColumnName={filterColumnName}
         responseRecords={responseRecords}
       />
-      <div className="relative overflow-y-auto max-h-[66vh]  border rounded-lg">
+      <div className="relative overflow-y-auto border-t border-b">
         <Table>
-          <TableHeader className="sticky top-0 bg-secondary">
+          <TableHeader className="sticky top-0 border-b border-zinc-600">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

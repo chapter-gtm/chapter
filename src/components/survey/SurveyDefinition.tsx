@@ -87,17 +87,17 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
   };
 
   return (
-    <>
+    <div className="bg-white border rounded-lg border-zinc-200 flex-1">
       <div
         className={clsx(
-          "flex flex-row items-center justify-end gap-x-2 px-6 h-12 border-b border-slate-100",
+          "flex flex-row items-center justify-end gap-x-2 px-3 py-2 border-b border-slate-100",
           {
-            "bg-orange-100 justify-between": !dataChanged,
+            "justify-between": !dataChanged,
           }
         )}
       >
         {!dataChanged && (
-          <p className="text-sm text-slate-500 flex flex-inline items-center">
+          <p className="text-xs text-indigo-500 p-1 rounded-md flex flex-inline items-center bg-indigo-100 border border-indigo-500">
             <span>
               <CheckIcon size={"15"} className="me-1" />
             </span>
@@ -115,8 +115,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Start of column */}
-        <div className="flex flex-col bg-background w-96 justify-start">
+        <div className="flex flex-col w-96 justify-start">
           <div className="flex flex-col gap-y-3 pt-8">
             <CardContent>
               <div className="grid gap-y-6">
@@ -174,8 +173,8 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col">
-          <div className="flex-1 overflow-y-auto bg-slate-100">
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto bg-zinc-100">
             <ul role="list" className="space-y-4 w-2/3 mx-auto py-4 mb-20">
               <li>
                 <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
@@ -421,6 +420,6 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
