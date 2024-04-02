@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import clsx from "clsx";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -44,7 +44,11 @@ interface SurveyDefinitionProps {
 }
 
 export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   const [dataChanged, setDataChanged] = useState(false);
+  const [published, setPublished] = useState(false);
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   const saveChanges = useCallback(async () => {
     try {
       if (!dataChanged) {
@@ -56,10 +60,11 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       }
       await updateSurvey(userToken, survey);
       setDataChanged(false);
-
-      // add a message here
+      setIsError(false);
+      setMessage("Auto saved!");
     } catch {
-      // add a message here too
+      setIsError(false);
+      setMessage("Update failed!");
     }
   }, [survey, dataChanged]);
 
@@ -72,6 +77,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
 
   useEffect(() => {
     setDataChanged(true);
+    setPublished(false);
   }, [survey]);
 
   function classNames(...classes: string[]) {
@@ -83,7 +89,15 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
     if (userToken === undefined) {
       throw Error("User needs to login!");
     }
-    await publishSurvey(userToken, survey.id);
+    try {
+      await publishSurvey(userToken, survey.id);
+      setPublished(true);
+      setIsError(false);
+      setMessage("Survey published!");
+    } catch (error) {
+      setIsError(true);
+      setMessage("Publish failed!");
+    }
   };
 
   return (
@@ -91,17 +105,18 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       <div
         className={clsx(
           "flex flex-row items-center justify-end gap-x-2 px-3 py-2 border-b border-slate-100",
-          {
-            "justify-between": !dataChanged,
-          }
         )}
       >
-        {!dataChanged && (
+        {message && (
           <p className="text-xs text-indigo-500 p-1 rounded-md flex flex-inline items-center bg-indigo-100 border border-indigo-500">
             <span>
-              <CheckIcon size={"15"} className="me-1" />
+              {!isError ? (
+                <CheckIcon size={"15"} className="me-1" />
+              ) : (
+                <X size={"15"} className="me-1" />
+              )}
             </span>
-            Auto saved!
+            {message}
           </p>
         )}
         <div className="space-x-2">
@@ -158,7 +173,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                     placeholder="What do you expect to learn from this survey?"
                     value={survey.goal}
                     onChange={(
-                      event: React.ChangeEvent<HTMLTextAreaElement>
+                      event: React.ChangeEvent<HTMLTextAreaElement>,
                     ) => {
                       setSurvey({
                         ...survey,
@@ -189,7 +204,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                             placeholder="How you'd like to start the conversation"
                             value={survey.intro.title}
                             onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
+                              event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
                               survey.intro.title = event.target.value;
                               setSurvey({
@@ -214,7 +229,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                             placeholder="How you'd like to start the conversation"
                             value={survey.intro.description}
                             onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
+                              event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
                               survey.intro.description = event.target.value;
                               setSurvey({
@@ -279,7 +294,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="How you'd like to start the conversation"
                           value={component.question}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
+                            event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             const updatedComponents: Question[] = [
                               ...survey.components,
@@ -368,7 +383,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                         placeholder="Wow! thanks for sharing your insights with us."
                         value={survey.outro.title}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
+                          event: React.ChangeEvent<HTMLInputElement>,
                         ) => {
                           setSurvey({
                             ...survey,
@@ -386,7 +401,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                     <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                       <Switch
                         checked={survey.outro.actions.includes(
-                          SurveyOutroAction.AUTHOR_CALENDAR_LINK
+                          SurveyOutroAction.AUTHOR_CALENDAR_LINK,
                         )}
                         onCheckedChange={(checked: boolean) => {
                           let newActions: SurveyOutroAction[] = [];
@@ -398,7 +413,8 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           } else {
                             survey.outro.actions.filter(
                               (value) =>
-                                value !== SurveyOutroAction.AUTHOR_CALENDAR_LINK
+                                value !==
+                                SurveyOutroAction.AUTHOR_CALENDAR_LINK,
                             );
                           }
                           setSurvey({

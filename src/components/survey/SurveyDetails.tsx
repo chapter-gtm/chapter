@@ -58,7 +58,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
               </TabsList>
             </div>
             <div className="basis-1/3 flex overflow-hidden justify-end">
-              <Button variant="outline">Share</Button>
+              {survey?.publishedAt && <Button variant="outline">Share</Button>}
             </div>
           </div>
 

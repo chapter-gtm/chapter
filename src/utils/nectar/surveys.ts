@@ -71,7 +71,7 @@ export async function createSurvey(token: string) {
     body: "{}",
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error("Failed to create survey");
   }
   const data = await response.json();
   const survey = data as Survey;
@@ -90,7 +90,7 @@ export async function publishSurvey(token: string, surveyId: string) {
     },
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error("Failed to publish survey");
   }
 }
 
@@ -103,7 +103,7 @@ export async function updateSurvey(token: string, survey: Survey) {
     body: JSON.stringify(survey),
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error("Failed to update survey");
   }
 }
 
