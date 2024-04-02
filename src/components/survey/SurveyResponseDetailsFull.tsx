@@ -29,6 +29,7 @@ import { SurveyResponseTranscript } from "@/components/survey/SurveyResponseTran
 import { SurveyResponsePropList } from "@/components/survey/SurveyResponsePropList";
 import { getSurveyResponse } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
+import { Separator } from "@/components/ui/separator";
 
 interface SurveyResponseDetailsFullProps {
   surveyId?: string;
@@ -52,7 +53,7 @@ export function SurveyResponseDetailsFull({
           const resp = await getSurveyResponse(
             userToken,
             surveyId,
-            surveyResponseId,
+            surveyResponseId
           );
           setResponse(resp);
         }
@@ -64,59 +65,68 @@ export function SurveyResponseDetailsFull({
   return (
     <>
       {response !== null ? (
-        <div className="grid grid-cols-4 justify-start content-start">
-          <div className="col-span-3 border-e border-slate-100 h-dvh">
-            <div className="flex-1 border-b border-slate-100 pb-3 ">
-              <div className="flex flex-row justify-between w-full py-3 px-7 justify-start">
-                <div className="flex gap-4 items-center">
-                  <ToggleGroup type="single">
-                    <ToggleGroupItem
-                      value="a"
-                      className="border-slate-200 border"
-                    >
-                      <Cross1Icon className="w-3 h-3" />
-                    </ToggleGroupItem>
-                    <ToggleGroupItem
-                      value="a"
-                      className="border-slate-200 border"
-                    >
-                      <ChevronDownIcon className="w-3 h-3" />
-                    </ToggleGroupItem>
-                    <ToggleGroupItem
-                      value="b"
-                      className="border-slate-200 border"
-                    >
-                      <ChevronUpIcon className="w-3 h-3" />
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-                  <p className="text-sm font-medium text-slate-600">
-                    Respondant #312
-                  </p>
-                </div>
-                <div className="flex gap-4 items-center">
-                  <button className="border-slate-200 border p-2 rounded-lg hover:bg-slate-100">
-                    <Link2Icon className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-              <div className="w-2/3 mx-auto py-3 px-7 mt-12">
-                <h1 className="text-3xl font-semibold text-slate-600">
-                  Unknown
-                </h1>
-              </div>
+        <div className="flex flex-col h-screen overflow-hidden px-7 pb-16">
+          <div className="flex flex-row justify-between w-full py-3">
+            <div className="flex gap-4 items-center">
+              <ToggleGroup type="single">
+                <ToggleGroupItem
+                  value="a"
+                  className="border-zinc-200 border hover:bg-white"
+                >
+                  <Cross1Icon className="w-3 h-3" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="a"
+                  className="border-zinc-200 border hover:bg-white"
+                >
+                  <ChevronDownIcon className="w-3 h-3" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="b"
+                  className="border-zinc-200 border hover:bg-white"
+                >
+                  <ChevronUpIcon className="w-3 h-3" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+              <p className="text-sm font-medium text-slate-600">
+                {response !== null && <>{response?.contactPseudoName}</>}
+              </p>
             </div>
-            <div className="flex w-full">
-              <Tabs defaultValue="transcript" className="w-full ">
-                <div className="w-full flex flex-row border-b border-slate-100 justify-between py-3 items-center">
-                  <div className="w-2/3 mx-auto">
-                    <TabsList className="grid w-full grid-cols-2 w-[200px]">
-                      <TabsTrigger value="transcript">Transcript</TabsTrigger>
-                      <TabsTrigger value="password">Activity</TabsTrigger>
-                    </TabsList>
-                  </div>
+            <div className="flex gap-4 items-center">
+              <button className="border-slate-200 border p-2 rounded-lg hover:bg-white">
+                <Link2Icon className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-row border border-zinc-200 rounded-xl h-full overflow-hidden">
+            <div className="basis-1/5 pt-2 space-y-5 border-r border-zinc-200 h-full bg-zinc-50">
+              <SurveyResponseIdentity surveyResponse={response} />
+              <Separator className="w-full bg-zinc-200 my-3" />
+
+              {response !== null && (
+                <div className="px-7">
+                  <p className="font-medium my-3 text-sm">Properties</p>
+                  <SurveyResponsePropList surveyResponse={response} />
+                </div>
+              )}
+              <Separator className="w-full bg-zinc-200 my-3" />
+
+              {response !== null && (
+                <div className="px-7">
+                  <p className="font-medium my-3 text-sm">Insights</p>
+                </div>
+              )}
+            </div>
+            <div className="basis-4/5 bg-white">
+              <Tabs defaultValue="transcript" className="w-full">
+                <div className="w-full flex px-6 flex-row border-b border-slate-100 justify-between py-3 items-center">
+                  <TabsList className="grid w-full grid-cols-2 w-[200px]">
+                    <TabsTrigger value="transcript">Transcript</TabsTrigger>
+                    <TabsTrigger value="password">Activity</TabsTrigger>
+                  </TabsList>
                 </div>
                 <TabsContent value="transcript">
-                  <div className="w-2/3 mx-auto">
+                  <div className="w-2/3">
                     {response !== null && (
                       <SurveyResponseTranscript surveyResponse={response} />
                     )}
@@ -124,13 +134,6 @@ export function SurveyResponseDetailsFull({
                 </TabsContent>
               </Tabs>
             </div>
-          </div>
-
-          <div className="col-span-1 pt-2 px-6 space-y-5">
-            <SurveyResponseIdentity surveyResponse={response} />
-            {response !== null && (
-              <SurveyResponsePropList surveyResponse={response} />
-            )}
           </div>
         </div>
       ) : (

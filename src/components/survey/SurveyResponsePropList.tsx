@@ -27,14 +27,6 @@ interface SurveyResponsePropListProps {
 export function SurveyResponsePropList({
   surveyResponse,
 }: SurveyResponsePropListProps) {
-  const scoreColor: { [key: number]: string } = {
-    1: "bg-fuchsia-100",
-    2: "bg-rose-100",
-    3: "bg-yellow-100",
-    4: "bg-green-100",
-    5: "bg-indigo-100",
-  };
-
   const stageColor: { [key in SurveyResponseStage]: string } = {
     [SurveyResponseStage.NOT_STARTED]: "bg-grey-400",
     [SurveyResponseStage.IN_PROGRESS]: "bg-yellow-400",

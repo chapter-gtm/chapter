@@ -59,12 +59,9 @@ export function SurveyResponseIdentity({
     },
   ]);
   return (
-    <div className="mt-2 flex bg-slate-100 rounded-lg flex-col justify-center w-full text-center py-12">
+    <div className="mt-2 flex flex-col justify-center w-full text-center py-12">
       <div className="mx-auto">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Avatar className="bg-blue-200"></Avatar>
       </div>
       <h1 className="text-2xl text-slate-300 font-medium mt-4">
         {surveyResponse?.contactPseudoName}
