@@ -6,7 +6,7 @@ import { createSurvey, getSurveys } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EmptySelectionCard } from "./EmptySelectionCard";
+import Spinner from "@/components/ui/spinner";
 
 export function Surveys() {
   const router = useRouter();
@@ -47,11 +47,9 @@ export function Surveys() {
             <Button onClick={handleCreateSurvey}>Create new survey</Button>
           </div>
           {surveys.length <= 0 ? (
-            <EmptySelectionCard
-              title="Create your first survey"
-              description="Launch your conversational survey today, and get qualitative insights without the hassle of scheduling."
-              action="Create survey"
-            />
+            <div className="flex flex-col items-center justify-center h-[50vh]">
+              <Spinner className={""} />
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-4">
               {surveys.map((item, index) => (

@@ -1,9 +1,9 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-export default function LoadingSpinner({ className }: { className: string }) {
+export default function Spinner({ className }: { className: string }) {
   return (
-    <div className="h-96 w-96 bg-red-200">
+    <>
       <svg
         aria-hidden="true"
         className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -21,6 +21,6 @@ export default function LoadingSpinner({ className }: { className: string }) {
         />
       </svg>
       {/* <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"></svg> */}
-    </div>
+    </>
   );
 }

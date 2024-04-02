@@ -79,6 +79,15 @@ export function UserNav({ className }: UserNavProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      {currentUser === null && (
+        <Button
+          variant="outline"
+          className={cn("flex justify-start", className)}
+        >
+          <Avatar className="mr-2 h-5 w-5 rounded-lg bg-slate-50"></Avatar>
+          <div className="h-5 w-16 bg-slate-50 rounded-lg"></div>
+        </Button>
+      )}
     </>
   );
 }

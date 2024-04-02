@@ -13,7 +13,7 @@ type SideBarProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>;
 
 export default function Sidebar({ className }: SideBarProps) {
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col justify-between w-52">
       <div className="space-y-4 px-3 pt-3">
         <div className="items-center justify-start">
           <UserNav className={className} />

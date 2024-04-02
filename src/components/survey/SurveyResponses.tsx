@@ -69,7 +69,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const defaultLayout = [80, 20];
   const navCollapsedSize = 20;
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map(),
+    new Map()
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -101,7 +101,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          }),
+          })
         );
 
         setResponses(responseMap);
@@ -194,7 +194,6 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                 </Tooltip>
               </div>
             </TooltipProvider>
-            <LoadingSpinner className="" />
 
             <div className="flex-1 overflow-y-auto">
               {selectedRow !== null && (

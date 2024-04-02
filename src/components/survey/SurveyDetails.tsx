@@ -46,16 +46,18 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
               </div>
             </div>
 
-            <div className="space-between basis-1/3 items-center justify-center">
-              <TabsList className="bg-zinc-200 font-normal">
-                <TabsTrigger value="definition" className="relative">
-                  Create
-                </TabsTrigger>
-                <TabsTrigger value="results">Responses</TabsTrigger>
-                <TabsTrigger value="insights" disabled>
-                  Insights
-                </TabsTrigger>
-              </TabsList>
+            <div className="space-between basis-1/3 ">
+              <div className="flex items-center justify-center">
+                <TabsList className="bg-zinc-200 font-normal">
+                  <TabsTrigger value="definition" className="relative">
+                    Create
+                  </TabsTrigger>
+                  <TabsTrigger value="results">Responses</TabsTrigger>
+                  <TabsTrigger value="insights" disabled>
+                    Insights
+                  </TabsTrigger>
+                </TabsList>
+              </div>
             </div>
             <div className="basis-1/3 flex overflow-hidden justify-end">
               {survey?.publishedAt && <Button variant="outline">Share</Button>}
