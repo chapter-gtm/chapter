@@ -67,7 +67,7 @@ function titleCaseToCamelCase(titleCaseString: string): string {
 export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const [isPopulated, setIsPopulated] = useState(false);
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map()
+    new Map(),
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -90,7 +90,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
           surveyResponses.map((response: SurveyResponse) => {
             const record: Record<string, any> = {
               id: response.id,
-              date: response.startedAt.toLocaleString(),
+              date: response.startedAt,
               utm: response.utm,
               participant: response.contactPseudoName,
               stage: response.state.stage,
@@ -99,7 +99,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setResponses(responseMap);

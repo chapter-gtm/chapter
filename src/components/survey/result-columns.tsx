@@ -12,6 +12,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 
+import { humanDate } from "@/utils/misc";
 import { SurveyResponseStage, RatingLabel } from "@/types/survey";
 
 export const SurveyResponseRecord = z.record(z.any());
@@ -64,7 +65,9 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({ row }) => <div className="flex">{row.getValue("date")}</div>,
+    cell: ({ row }) => (
+      <div className="flex">{humanDate(row.getValue("date"))}</div>
+    ),
   },
   {
     accessorKey: "participant",
@@ -93,7 +96,7 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const stage = filters[0].filterOptions.find(
-        (stage) => stage.value === row.getValue("stage")
+        (stage) => stage.value === row.getValue("stage"),
       );
 
       if (!stage) {
