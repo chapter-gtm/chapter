@@ -47,7 +47,7 @@ export function SurveyCard({ survey }: SurveyCardProps) {
         <div className="flex flex-col justify-between h-full ">
           <div className="flex-1 group">
             <div className="w-16 h-16 rounded-lg bg-slate-100 flex justify-center items-center text-2xl mb-2 group-hover:border border-slate-200">
-              🚀
+              {survey.emoji}
             </div>
             <div className="text-base font-medium line-clamp-1">
               {survey.name}

@@ -121,6 +121,7 @@ export type SurveyResponse = {
 export type SurveyMetadata = {
   id: string;
   name: string;
+  emoji: string;
   authors: User[];
   state: SurveyState;
   createdAt: Date;
@@ -131,6 +132,7 @@ export type SurveyMetadata = {
 
 export type Survey = {
   name: string;
+  emoji: string;
   goal: string;
   candidatePersonas: string[];
   components: Question[];

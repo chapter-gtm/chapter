@@ -39,7 +39,9 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
           <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6">
             <div className="basis-1/3 flex-1 flex-shrink-0 overflow-hidden me-8">
               <div className="flex inline-block items-center space-x-2">
-                <Layers className="w-4 h-4" />
+                <div className="w-16 h-16 rounded-lg bg-slate-100 flex justify-center items-center text-2xl mb-2 group-hover:border border-slate-200">
+                  {survey.emoji}
+                </div>
                 <p className="text-sm font-medium truncate text-ellipsis">
                   {survey.name}
                 </p>

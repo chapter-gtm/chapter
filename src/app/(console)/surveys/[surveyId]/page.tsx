@@ -3,8 +3,7 @@ import { Metadata } from "next";
 import { SurveyDetails } from "@/components/survey/SurveyDetails";
 
 export const metadata: Metadata = {
-  title: "Dashboatd: Nectar Console",
-  description: "Deep interview-like insights at survey-like speed",
+  title: "Survey: Nectar Console",
 };
 
 export default function SurveyDetailsPage({
