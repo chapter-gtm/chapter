@@ -1,7 +1,7 @@
 "use client";
 import { SurveyCard } from "@/components/survey/SurveyCard";
 import { Button } from "@/components/ui/button";
-import { Survey } from "@/types/survey";
+import { SurveyMetadata, Survey } from "@/types/survey";
 import { createSurvey, getSurveys } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import Spinner from "@/components/ui/spinner";
 
 export function Surveys() {
   const router = useRouter();
-  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [surveys, setSurveys] = useState<SurveyMetadata[]>([]);
 
   useEffect(() => {
     const fetchSurveys = async () => {
