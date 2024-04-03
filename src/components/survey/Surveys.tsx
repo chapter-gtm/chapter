@@ -44,11 +44,13 @@ export function Surveys() {
             <h2 className="text-lg font-semibold tracking-tight text-slate-700">
               Surveys
             </h2>
-            <Button onClick={handleCreateSurvey}>Create new survey</Button>
+            <Button onClick={handleCreateSurvey}>Create survey</Button>
           </div>
           {surveys.length <= 0 ? (
-            <div className="flex flex-col items-center justify-center h-[50vh]">
-              <Spinner className={""} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-4 animate-pulse">
+              <div className="w-full h-44 bg-white/80 rounded-lg"></div>
+              <div className="w-full h-44 bg-white/50 rounded-lg"></div>
+              <div className="w-full h-44 bg-white/30 rounded-lg"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-3 gap-y-4">

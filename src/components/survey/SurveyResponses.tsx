@@ -65,9 +65,7 @@ function titleCaseToCamelCase(titleCaseString: string): string {
 }
 
 export function SurveyResponses({ survey }: SurveyResponsesProps) {
-  const defaultCollapsed = false;
-  const defaultLayout = [80, 20];
-  const navCollapsedSize = 20;
+  const [isPopulated, setIsPopulated] = useState(false);
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
     new Map()
   );
@@ -106,6 +104,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
 
         setResponses(responseMap);
         setResponseRecords(responseRecords);
+        setIsPopulated(true);
       } catch (error) {
         console.log(error);
       }
@@ -143,65 +142,69 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
   return (
     <>
       <div className="flex flex-row h-full">
-        <Sheet modal={false} open={sheetOpen}>
-          <div className="flex flex-col flex-1 pb-12 border-e border-slate-200">
-            <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
-              <DataTable
-                columns={resultColumns}
-                data={responseRecords}
-                filters={filters}
-                filterColumnName="participant"
-                onRowClick={handleOpenSheet}
-                responseRecords={responseRecords}
-                // onRowClick={handleRowClick}
-              />
+        {isPopulated ? (
+          <Sheet modal={false} open={sheetOpen}>
+            <div className="flex flex-col flex-1 pb-12">
+              <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
+                <DataTable
+                  columns={resultColumns}
+                  data={responseRecords}
+                  filters={filters}
+                  filterColumnName="participant"
+                  onRowClick={handleOpenSheet}
+                  responseRecords={responseRecords}
+                />
+              </div>
             </div>
-          </div>
 
-          <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
-            <TooltipProvider delayDuration={0}>
-              <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
-                <SheetClose
-                  onClick={handleCloseSheet}
-                  className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
-                >
-                  <ChevronsRight className="h-4 w-4 mx-auto" />
-                  <span className="sr-only">Close</span>
-                </SheetClose>
+            <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
+              <TooltipProvider delayDuration={0}>
+                <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
+                  <SheetClose
+                    onClick={handleCloseSheet}
+                    className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+                  >
+                    <ChevronsRight className="h-4 w-4 mx-auto" />
+                    <span className="sr-only">Close</span>
+                  </SheetClose>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.id}`}
-                    >
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.id}`}
+                      >
+                        <Button variant="ghost" size="icon" disabled={false}>
+                          <ExternalLink className="h-4 w-4" />
+
+                          <span className="sr-only">Share profile</span>
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>View fullscreen</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Button variant="ghost" size="icon" disabled={false}>
-                        <ExternalLink className="h-4 w-4" />
-
+                        <LinkIcon className="h-4 w-4" />
                         <span className="sr-only">Share profile</span>
                       </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>View fullscreen</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" disabled={false}>
-                      <LinkIcon className="h-4 w-4" />
-                      <span className="sr-only">Share profile</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Share link</TooltipContent>
-                </Tooltip>
-              </div>
-            </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent>Share link</TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
 
-            <div className="flex-1 overflow-y-auto">
-              {selectedRow !== null && (
-                <SurveyResponseDetails surveyResponse={selectedRow} />
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
+              <div className="flex-1 overflow-y-auto">
+                {selectedRow !== null && (
+                  <SurveyResponseDetails surveyResponse={selectedRow} />
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        ) : (
+          <div className="flex flex-col flex-1 pb-12 border-e border-slate-200 bg-white"></div>
+        )}
+        ;
       </div>
     </>
   );

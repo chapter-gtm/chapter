@@ -73,7 +73,7 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                 buttonVariants({ variant: link.variant }),
                 pathname === link.route
                   ? "bg-muted hover:bg-muted"
-                  : "hover:bg-slate-100",
+                  : "hover:bg-white/50",
                 "justify-start items-start pt-2 h-auto px-3"
               )}
             >

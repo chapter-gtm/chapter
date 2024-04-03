@@ -36,7 +36,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
     <>
       {survey !== null ? (
         <Tabs defaultValue="definition" className="h-dvh flex flex-col ">
-          <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6 ">
+          <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6">
             <div className="basis-1/3 flex-1 flex-shrink-0 overflow-hidden me-8">
               <div className="flex inline-block items-center space-x-2">
                 <Layers className="w-4 h-4" />
@@ -74,13 +74,20 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
 
           <TabsContent
             value="results"
-            className="mt-0 data-[state=active]:flex flex-col h-full pb-32  px-6"
+            className="mt-0 data-[state=active]:flex flex-col h-full pb-32 px-6"
           >
             <SurveyResponses survey={survey} />
           </TabsContent>
         </Tabs>
       ) : (
-        <ErrorMessage />
+        <div className="flex flex-col h-full pb-32 animate-pulse">
+          <div className="flex flex-row justify-between items-center h-16 py-4 px-6">
+            <div className="h-8 w-24 bg-zinc-200/60 rounded-lg"></div>
+            <div className="h-8 w-52 bg-zinc-200/60 rounded-lg"></div>
+            <div className="h-8 w-14 bg-zinc-200/60 rounded-lg"></div>
+          </div>
+          <div className="flex flex-1 bg-white rounded-lg mx-6"></div>
+        </div>
       )}
     </>
   );

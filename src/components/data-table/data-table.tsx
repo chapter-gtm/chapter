@@ -46,6 +46,8 @@ export function DataTable<TData, TValue>({
   responseRecords,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
+  const [selectedRow, setSelectedRow] = React.useState(0);
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -73,6 +75,21 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+
+  React.useEffect(() => {
+    function handleKeyDown(event: { keyCode: number }) {
+      if (event.keyCode === 38) {
+        // Up arrow
+        console.log("pressed up");
+      } else if (event.keyCode === 40) {
+        // Down arrow
+        console.log("pressed down");
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [table.getRowModel().rows?.length]);
 
   return (
     <div className="relative space-y-1">

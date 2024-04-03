@@ -6,7 +6,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import {
   DataTableFacetedFilter,
@@ -35,25 +35,12 @@ export function DataTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex items-center justify-between relative space-x-3 p-3">
+    <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
       <h2 className="flex text-sm font-medium">
         {responseRecords.length}{" "}
         {responseRecords.length === 1 ? "Response" : "Responses"}
       </h2>
       <div className="flex items-center space-x-2 relative">
-        {/* <Input
-          placeholder={`Filter ${filterColumnName}s...`}
-          value={
-            (table.getColumn(filterColumnName)?.getFilterValue() as string) ??
-            ""
-          }
-          onChange={(event) =>
-            table
-              .getColumn(filterColumnName)
-              ?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[150px] lg:w-[250px]"
-        /> */}
         {filters.map((item, index) => (
           <DataTableFacetedFilter
             key={index}
