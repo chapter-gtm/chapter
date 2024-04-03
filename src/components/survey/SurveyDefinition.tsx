@@ -147,6 +147,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       updatedComponents[index].question = improvedQuestion;
 
       setSurvey({ ...survey, ["components"]: updatedComponents });
+      saveChanges();
 
       const newStates: ThreadState[] = [...threadStates];
       newStates[index].showUndoOverImprove = true;
@@ -158,6 +159,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
     const updatedComponents: Question[] = [...survey.components];
     updatedComponents[index].question = threadStates[index].question;
     setSurvey({ ...survey, ["components"]: updatedComponents });
+    saveChanges();
 
     const newStates: ThreadState[] = [...threadStates];
     newStates[index].showUndoOverImprove = false;
@@ -419,10 +421,18 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                 <Select
                                   defaultValue={component.followups.toString()}
                                   onValueChange={(value: string) => {
-                                    survey.components[index].followups =
+                                    const updatedComponents: Question[] = [
+                                      ...survey.components,
+                                    ];
+                                    updatedComponents[index].followups =
                                       parseInt(value);
+
+                                    setSurvey({
+                                      ...survey,
+                                      ["components"]: updatedComponents,
+                                    });
+                                    saveChanges();
                                   }}
-                                  onOpenChange={saveChanges}
                                 >
                                   <SelectTrigger className="w-[120px]">
                                     <SelectValue placeholder="Select" />
@@ -522,6 +532,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                   },
                                 });
                               }}
+                              onBlur={saveChanges}
                             />
                             <Label htmlFor="name">Add calendar link</Label>
                           </div>
