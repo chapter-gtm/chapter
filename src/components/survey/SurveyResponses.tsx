@@ -171,6 +171,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
+                        target="blank"
                         href={`/surveys/${selectedRow?.surveyId}/responses/${selectedRow?.id}`}
                       >
                         <Button variant="ghost" size="icon" disabled={false}>

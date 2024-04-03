@@ -66,7 +66,7 @@ export function SurveyResponseDetailsFull({
     <>
       {response !== null ? (
         <div className="flex flex-col h-screen overflow-hidden px-7 pb-16">
-          <div className="flex flex-row justify-between w-full py-3">
+          {/* <div className="flex flex-row justify-between w-full py-3">
             <div className="flex gap-4 items-center">
               <ToggleGroup type="single">
                 <ToggleGroupItem
@@ -97,8 +97,8 @@ export function SurveyResponseDetailsFull({
                 <Link2Icon className="w-4 h-4" />
               </button>
             </div>
-          </div>
-          <div className="flex flex-row border border-zinc-200 rounded-xl h-full overflow-hidden">
+          </div> */}
+          <div className="flex flex-row border border-zinc-200 rounded-lg h-full overflow-hidden mt-3">
             <div className="basis-1/5 pt-2 space-y-5 border-r border-zinc-200 h-full bg-zinc-50">
               <SurveyResponseIdentity surveyResponse={response} />
               <Separator className="w-full bg-zinc-200 my-3" />
