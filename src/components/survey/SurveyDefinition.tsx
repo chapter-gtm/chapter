@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import clsx from "clsx";
-import { CheckIcon, X } from "lucide-react";
+import { CheckIcon, X, SparklesIcon, Trash2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -35,8 +35,11 @@ import {
   type Question,
   QuestionFormat,
 } from "@/types/survey";
-import { SparklesIcon, Trash2 } from "lucide-react";
-import { updateSurvey, publishSurvey } from "@/utils/nectar/surveys";
+import {
+  updateSurvey,
+  publishSurvey,
+  getImprovedQuestion,
+} from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 
 import EmojiHeader from "@/components/survey/EmojiHeader";
@@ -47,12 +50,29 @@ interface SurveyDefinitionProps {
   setSurvey: React.Dispatch<React.SetStateAction<Survey | null>>;
 }
 
+type ThreadState = {
+  question: string;
+  showUndoOverImprove: boolean;
+};
+
 export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [dataChanged, setDataChanged] = useState(false);
   const [published, setPublished] = useState(false);
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  // Handles improve and undo on thread questions
+  const initialThreadStates: ThreadState[] = [];
+  survey.components.map((component) => {
+    initialThreadStates.push({
+      question: component.question,
+      showUndoOverImprove: false,
+    });
+  });
+  const [threadStates, setThreadStates] =
+    useState<ThreadState[]>(initialThreadStates);
+
   const saveChanges = useCallback(async () => {
     try {
       if (!dataChanged) {
@@ -97,11 +117,11 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
   }
 
   const handlePublish = async () => {
-    const userToken = await getUserAccessToken();
-    if (userToken === undefined) {
-      throw Error("User needs to login!");
-    }
     try {
+      const userToken = await getUserAccessToken();
+      if (userToken === undefined) {
+        throw Error("User needs to login!");
+      }
       await publishSurvey(userToken, survey.id);
       setPublished(true);
       setIsError(false);
@@ -110,6 +130,38 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       setIsError(true);
       setMessage("Publish failed!");
     }
+  };
+
+  const handleImproveQuestion = async (index: number) => {
+    try {
+      const userToken = await getUserAccessToken();
+      if (userToken === undefined) {
+        throw Error("User needs to login!");
+      }
+      const improvedQuestion = await getImprovedQuestion(
+        userToken,
+        survey.id,
+        survey.components[index].question,
+      );
+      const updatedComponents: Question[] = [...survey.components];
+      updatedComponents[index].question = improvedQuestion;
+
+      setSurvey({ ...survey, ["components"]: updatedComponents });
+
+      const newStates: ThreadState[] = [...threadStates];
+      newStates[index].showUndoOverImprove = true;
+      setThreadStates(newStates);
+    } catch (error) {}
+  };
+
+  const handleRevertToLastQuestion = async (index: number) => {
+    const updatedComponents: Question[] = [...survey.components];
+    updatedComponents[index].question = threadStates[index].question;
+    setSurvey({ ...survey, ["components"]: updatedComponents });
+
+    const newStates: ThreadState[] = [...threadStates];
+    newStates[index].showUndoOverImprove = false;
+    setThreadStates(newStates);
   };
 
   return (
@@ -137,7 +189,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="A short name for this survey."
                           value={survey.name}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
+                            event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             setSurvey({
                               ...survey,
@@ -154,7 +206,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="e.g. Product Managers, UX Researchers"
                           value={survey.candidatePersonas.join(", ")}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
+                            event: React.ChangeEvent<HTMLInputElement>,
                           ) => {
                             setSurvey({
                               ...survey,
@@ -174,7 +226,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="What do you expect to learn from this survey?"
                           value={survey.goal}
                           onChange={(
-                            event: React.ChangeEvent<HTMLTextAreaElement>
+                            event: React.ChangeEvent<HTMLTextAreaElement>,
                           ) => {
                             setSurvey({
                               ...survey,
@@ -207,57 +259,53 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                         <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
                           <EmojiHeader status="Welcome" />
                           <CardContent className="space-y-4">
-                            <form>
-                              <div className="items-center gap-1">
-                                <div className="space-y-3">
-                                  <Label htmlFor="name">Welcome title</Label>
-                                  <Input
-                                    id="name"
-                                    placeholder="How you'd like to start the conversation"
-                                    value={survey.intro.title}
-                                    onChange={(
-                                      event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                      survey.intro.title = event.target.value;
-                                      setSurvey({
-                                        ...survey,
-                                        ["intro"]: {
-                                          title: event.target.value,
-                                          description: survey.intro.description,
-                                        },
-                                      });
-                                    }}
-                                    onBlur={saveChanges}
-                                  />
-                                </div>
+                            <div className="items-center gap-1">
+                              <div className="space-y-3">
+                                <Label htmlFor="name">Welcome title</Label>
+                                <Input
+                                  id="name"
+                                  placeholder="How you'd like to start the conversation"
+                                  value={survey.intro.title}
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>,
+                                  ) => {
+                                    survey.intro.title = event.target.value;
+                                    setSurvey({
+                                      ...survey,
+                                      ["intro"]: {
+                                        title: event.target.value,
+                                        description: survey.intro.description,
+                                      },
+                                    });
+                                  }}
+                                  onBlur={saveChanges}
+                                />
                               </div>
-                            </form>
-                            <form>
-                              <div className="items-center gap-1">
-                                <div className="space-y-3">
-                                  <Label htmlFor="name">Welcome message</Label>
-                                  <Input
-                                    id="name"
-                                    placeholder="How you'd like to start the conversation"
-                                    value={survey.intro.description}
-                                    onChange={(
-                                      event: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                      survey.intro.description =
-                                        event.target.value;
-                                      setSurvey({
-                                        ...survey,
-                                        ["intro"]: {
-                                          title: event.target.value,
-                                          description: survey.intro.description,
-                                        },
-                                      });
-                                    }}
-                                    onBlur={saveChanges}
-                                  />
-                                </div>
+                            </div>
+                            <div className="items-center gap-1">
+                              <div className="space-y-3">
+                                <Label htmlFor="name">Welcome message</Label>
+                                <Input
+                                  id="name"
+                                  placeholder="How you'd like to start the conversation"
+                                  value={survey.intro.description}
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>,
+                                  ) => {
+                                    survey.intro.description =
+                                      event.target.value;
+                                    setSurvey({
+                                      ...survey,
+                                      ["intro"]: {
+                                        title: event.target.value,
+                                        description: survey.intro.description,
+                                      },
+                                    });
+                                  }}
+                                  onBlur={saveChanges}
+                                />
                               </div>
-                            </form>
+                            </div>
                           </CardContent>
                         </div>
                       </li>
@@ -265,109 +313,130 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                       {survey.components.map((component, index) => (
                         <li key={index}>
                           <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
-                            <form>
-                              <div className="flex flex-row items-center justify-between relative">
-                                <EmojiHeader status="Thread" />
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      size="icon"
-                                      className="me-6"
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                      <span className="sr-only">More</span>
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuGroup>
-                                      <DropdownMenuItem
-                                        onClick={() => {
-                                          const updatedComponents: Question[] =
-                                            [
-                                              ...survey.components.slice(
-                                                0,
-                                                index
-                                              ),
-                                              ...survey.components.slice(
-                                                index + 1
-                                              ),
-                                            ];
-                                          setSurvey({
-                                            ...survey,
-                                            ["components"]: updatedComponents,
-                                          });
-                                        }}
-                                      >
-                                        Delete
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem>
-                                        Cancel
-                                      </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </div>
-                              <div className="flex flex-col px-6 py-3 gap-y-4">
-                                <Label htmlFor="name">Question</Label>
-                                <Input
-                                  id="name"
-                                  placeholder="How you'd like to start the conversation"
-                                  value={component.question}
-                                  onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                  ) => {
-                                    const updatedComponents: Question[] = [
-                                      ...survey.components,
-                                    ];
-                                    updatedComponents[index].question =
-                                      event.target.value;
-                                    setSurvey({
-                                      ...survey,
-                                      ["components"]: updatedComponents,
-                                    });
-                                  }}
-                                  onBlur={saveChanges}
-                                />
-                                <div className="flex flex-row gap-x-3 items-center">
-                                  <Button variant={"outline"} size={"sm"}>
-                                    <SparklesIcon className="mr-2 h-4 w-4" />
-                                    Improve
-                                  </Button>
-                                  <p className="text-xs text-slate-400 flex">
-                                    Remove bias or hypothetical questioning
-                                    using AI
-                                  </p>
-                                </div>
-                              </div>
-                              <Separator className="mt-2" />
-                              <div className="flex flex-col px-6 py-2">
-                                <div className="flex flex-row items-center justify-between h-12  relative">
-                                  <Label htmlFor="name">
-                                    # of followup questions
-                                  </Label>
-                                  <Select
-                                    defaultValue={component.followups.toString()}
-                                    onValueChange={(value: string) => {
-                                      survey.components[index].followups =
-                                        parseInt(value);
-                                    }}
-                                    onOpenChange={saveChanges}
+                            <div className="flex flex-row items-center justify-between relative">
+                              <EmojiHeader status="Thread" />
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="me-6"
                                   >
-                                    <SelectTrigger className="w-[120px]">
-                                      <SelectValue placeholder="Select" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectGroup>
-                                        <SelectItem value="1">1</SelectItem>
-                                        <SelectItem value="2">2</SelectItem>
-                                        <SelectItem value="3">3</SelectItem>
-                                      </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
+                                    <Trash2 className="h-4 w-4" />
+                                    <span className="sr-only">More</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuGroup>
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        const updatedComponents: Question[] = [
+                                          ...survey.components.slice(0, index),
+                                          ...survey.components.slice(index + 1),
+                                        ];
+                                        setSurvey({
+                                          ...survey,
+                                          ["components"]: updatedComponents,
+                                        });
+                                        setThreadStates([
+                                          ...threadStates.slice(0, index),
+                                          ...threadStates.slice(index + 1),
+                                        ]);
+                                      }}
+                                    >
+                                      Delete
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>Cancel</DropdownMenuItem>
+                                  </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                            <div className="flex flex-col px-6 py-3 gap-y-4">
+                              <Label htmlFor="name">Question</Label>
+                              <Input
+                                id="name"
+                                placeholder="How you'd like to start the conversation"
+                                value={component.question}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>,
+                                ) => {
+                                  const updatedComponents: Question[] = [
+                                    ...survey.components,
+                                  ];
+                                  updatedComponents[index].question =
+                                    event.target.value;
+                                  setSurvey({
+                                    ...survey,
+                                    ["components"]: updatedComponents,
+                                  });
+                                  const newStates: ThreadState[] = [
+                                    ...threadStates,
+                                  ];
+                                  newStates[index].question =
+                                    event.target.value;
+                                  setThreadStates(newStates);
+                                }}
+                                onBlur={saveChanges}
+                              />
+                              <div className="flex flex-row gap-x-3 items-center">
+                                {!threadStates[index].showUndoOverImprove ? (
+                                  <>
+                                    <Button
+                                      variant={"outline"}
+                                      size={"sm"}
+                                      onClick={() =>
+                                        handleImproveQuestion(index)
+                                      }
+                                    >
+                                      <SparklesIcon className="mr-2 h-4 w-4" />
+                                      Improve
+                                    </Button>
+                                    <p className="text-xs text-slate-400 flex">
+                                      Remove bias or hypothetical questioning
+                                      using AI
+                                    </p>
+                                  </>
+                                ) : (
+                                  <Button
+                                    variant={"outline"}
+                                    size={"sm"}
+                                    onClick={() =>
+                                      handleRevertToLastQuestion(index)
+                                    }
+                                  >
+                                    <Undo2 className="mr-2 h-4 w-4" />
+                                    Undo
+                                  </Button>
+                                )}
                               </div>
-                            </form>
+                            </div>
+                            <Separator className="mt-2" />
+                            <div className="flex flex-col px-6 py-2">
+                              <div className="flex flex-row items-center justify-between h-12  relative">
+                                <Label htmlFor="name">
+                                  # of followup questions
+                                </Label>
+                                <Select
+                                  defaultValue={component.followups.toString()}
+                                  onValueChange={(value: string) => {
+                                    survey.components[index].followups =
+                                      parseInt(value);
+                                  }}
+                                  onOpenChange={saveChanges}
+                                >
+                                  <SelectTrigger className="w-[120px]">
+                                    <SelectValue placeholder="Select" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      <SelectItem value="1">1</SelectItem>
+                                      <SelectItem value="2">2</SelectItem>
+                                      <SelectItem value="3">3</SelectItem>
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
                           </div>
                         </li>
                       ))}
@@ -389,6 +458,10 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                               ...survey,
                               ["components"]: updatedComponents,
                             });
+                            setThreadStates((oldStates) => [
+                              ...oldStates,
+                              { question: "", showUndoOverImprove: false },
+                            ]);
                           }}
                         >
                           Add thread
@@ -396,65 +469,63 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                       </li>
 
                       <li>
-                        <form>
-                          <div className="flex flex-col bg-white rounded-lg border border-slate-200">
-                            <EmojiHeader status="Thanks" />
+                        <div className="flex flex-col bg-white rounded-lg border border-slate-200">
+                          <EmojiHeader status="Thanks" />
 
-                            <div className="space-y-3 px-6">
-                              <Label htmlFor="name">Message</Label>
-                              <Input
-                                id="name"
-                                placeholder="Wow! thanks for sharing your insights with us."
-                                value={survey.outro.title}
-                                onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                  setSurvey({
-                                    ...survey,
-                                    ["outro"]: {
-                                      title: event.target.value,
-                                      description: survey.outro.description,
-                                      actions: survey.outro.actions,
-                                    },
-                                  });
-                                }}
-                                onBlur={saveChanges}
-                              />
-                            </div>
-                            <Separator className="mt-3" />
-                            <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
-                              <Switch
-                                checked={survey.outro.actions.includes(
-                                  SurveyOutroAction.AUTHOR_CALENDAR_LINK
-                                )}
-                                onCheckedChange={(checked: boolean) => {
-                                  let newActions: SurveyOutroAction[] = [];
-                                  if (checked) {
-                                    newActions = [
-                                      ...survey.outro.actions,
-                                      SurveyOutroAction.AUTHOR_CALENDAR_LINK,
-                                    ];
-                                  } else {
-                                    survey.outro.actions.filter(
-                                      (value) =>
-                                        value !==
-                                        SurveyOutroAction.AUTHOR_CALENDAR_LINK
-                                    );
-                                  }
-                                  setSurvey({
-                                    ...survey,
-                                    ["outro"]: {
-                                      title: survey.outro.title,
-                                      description: survey.outro.description,
-                                      actions: newActions,
-                                    },
-                                  });
-                                }}
-                              />
-                              <Label htmlFor="name">Add calendar link</Label>
-                            </div>
+                          <div className="space-y-3 px-6">
+                            <Label htmlFor="name">Message</Label>
+                            <Input
+                              id="name"
+                              placeholder="Wow! thanks for sharing your insights with us."
+                              value={survey.outro.title}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>,
+                              ) => {
+                                setSurvey({
+                                  ...survey,
+                                  ["outro"]: {
+                                    title: event.target.value,
+                                    description: survey.outro.description,
+                                    actions: survey.outro.actions,
+                                  },
+                                });
+                              }}
+                              onBlur={saveChanges}
+                            />
                           </div>
-                        </form>
+                          <Separator className="mt-3" />
+                          <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
+                            <Switch
+                              checked={survey.outro.actions.includes(
+                                SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                              )}
+                              onCheckedChange={(checked: boolean) => {
+                                let newActions: SurveyOutroAction[] = [];
+                                if (checked) {
+                                  newActions = [
+                                    ...survey.outro.actions,
+                                    SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                                  ];
+                                } else {
+                                  survey.outro.actions.filter(
+                                    (value) =>
+                                      value !==
+                                      SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                                  );
+                                }
+                                setSurvey({
+                                  ...survey,
+                                  ["outro"]: {
+                                    title: survey.outro.title,
+                                    description: survey.outro.description,
+                                    actions: newActions,
+                                  },
+                                });
+                              }}
+                            />
+                            <Label htmlFor="name">Add calendar link</Label>
+                          </div>
+                        </div>
                       </li>
                     </ul>
                   </div>

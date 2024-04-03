@@ -37,6 +37,33 @@ export async function getSurvey(token: string, id: string) {
   return survey;
 }
 
+export async function getImprovedQuestion(
+  token: string,
+  surveyId: string,
+  question: string,
+) {
+  const response = await fetch(
+    NECTAR_API_BASE +
+      "/surveys/" +
+      surveyId +
+      "/questions?" +
+      new URLSearchParams({
+        question: question,
+      }),
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  const data = await response.json();
+  return data["question"];
+}
+
 export async function getSurveyResponses(token: string, id: string) {
   const response = await fetch(
     NECTAR_API_BASE + "/surveys/" + id + "/responses",
