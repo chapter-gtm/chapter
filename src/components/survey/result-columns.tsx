@@ -134,4 +134,22 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
       );
     },
   },
+  {
+    accessorKey: "problemSeverity",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Problem Severity" />
+    ),
+    cell: ({ row }) => {
+      const score: number = row.getValue("problemSeverity");
+      return (
+        <div className="flex">
+          <div
+            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
+          >
+            {RatingLabel[score]?.label}
+          </div>
+        </div>
+      );
+    },
+  },
 ];

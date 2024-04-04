@@ -227,6 +227,12 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           onBlur={saveChanges}
                         />
                       </div>
+                      <Label htmlFor="description">Topics to score</Label>
+                      <div className="flex flex-row gap-x-2">
+                        <span className="border border-zinc-200 px-2 py-1 rounded-lg text-sm">
+                          Problem Severity
+                        </span>
+                      </div>
                     </div>
                   </CardContent>
                 </div>
