@@ -26,8 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Toaster } from "@/components/ui/sonner";
-
 import {
   type Survey,
   SurveyOutroAction,
@@ -43,6 +41,7 @@ import {
 import { getUserAccessToken } from "@/utils/supabase/client";
 
 import EmojiHeader from "@/components/survey/EmojiHeader";
+import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 interface SurveyDefinitionProps {
@@ -56,8 +55,6 @@ type ThreadState = {
 };
 
 export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
-  const [message, setMessage] = useState("");
-  const [isError, setIsError] = useState(false);
   const [dataChanged, setDataChanged] = useState(false);
   const [published, setPublished] = useState(false);
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -84,19 +81,10 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       }
       await updateSurvey(userToken, survey);
       setDataChanged(false);
-      setIsError(false);
-      setMessage("Auto saved!");
 
-      toast("Event has been created", {
-        description: "Sunday, December 03, 2023 at 9:00 AM",
-        action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        },
-      });
-    } catch {
-      setIsError(false);
-      setMessage("Update failed!");
+      toast.success("Auto saved!");
+    } catch (error: any) {
+      toast.error("Auto saved failed", { description: error.toString() });
     }
   }, [survey, dataChanged]);
 
@@ -124,11 +112,9 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       }
       await publishSurvey(userToken, survey.id);
       setPublished(true);
-      setIsError(false);
-      setMessage("Survey published!");
-    } catch (error) {
-      setIsError(true);
-      setMessage("Publish failed!");
+      toast.success("Survey published!");
+    } catch (error: any) {
+      toast.error("Publish failed", { description: error.toString() });
     }
   };
 
@@ -152,7 +138,9 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       const newStates: ThreadState[] = [...threadStates];
       newStates[index].showUndoOverImprove = true;
       setThreadStates(newStates);
-    } catch (error) {}
+    } catch (error: any) {
+      toast.error("Improve failed", { description: error.toString() });
+    }
   };
 
   const handleRevertToLastQuestion = async (index: number) => {
@@ -168,6 +156,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
 
   return (
     <>
+      <Toaster richColors />
       {survey && (
         <>
           <div className="bg-white border rounded-lg border-zinc-200 flex-1 overflow-hidden">
@@ -550,18 +539,6 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                     </span>
                     Publish
                   </p>
-                  {message && (
-                    <p className="text-xs text-indigo-500 p-1 rounded-md flex flex-inline items-center bg-indigo-100 border border-indigo-500">
-                      <span>
-                        {!isError ? (
-                          <CheckIcon size={"15"} className="me-1" />
-                        ) : (
-                          <X size={"15"} className="me-1" />
-                        )}
-                      </span>
-                      {message}
-                    </p>
-                  )}
                 </div>
                 <div className="flex flex-col gap-y-2 justify-center h-1/2">
                   <div className="w-12 h-12 rounded-xl bg-zinc-100 mx-auto"></div>
