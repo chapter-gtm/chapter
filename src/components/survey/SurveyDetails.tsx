@@ -10,6 +10,8 @@ import { SurveyResponses } from "@/components/survey/SurveyResponses";
 import { type Survey } from "@/types/survey";
 import { getSurvey } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 interface SurveyDetailsProps {
   surveyId: string;
@@ -32,8 +34,22 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
     fetchSurvey();
   }, [surveyId]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        "http://localhost:3001/surveys/" + surveyId,
+      );
+      toast.success("Survey url copied!");
+    } catch (error: any) {
+      toast.error("Copy survey url to clipboard failed", {
+        description: error.toString(),
+      });
+    }
+  };
+
   return (
     <>
+      <Toaster richColors />
       {survey !== null ? (
         <Tabs defaultValue="definition" className="h-dvh flex flex-col ">
           <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6">
@@ -62,7 +78,11 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
               </div>
             </div>
             <div className="basis-1/3 flex overflow-hidden justify-end">
-              {survey?.publishedAt && <Button variant="outline">Share</Button>}
+              {survey?.publishedAt && (
+                <Button variant="outline" onClick={handleShare}>
+                  Share
+                </Button>
+              )}
             </div>
           </div>
 
