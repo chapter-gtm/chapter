@@ -37,7 +37,7 @@ export function SurveyResponseTranscript({
                 User
               </div>
               <div className=" max-w-[75%] gap-2 rounded-lg px-3 py-2 text-sm ml-auto bg-primary text-primary-foreground">
-                {qaPair.answer}
+                {qaPair.answer !== "" ? qaPair.answer : "[No response]"}
               </div>
             </div>
           ))}
