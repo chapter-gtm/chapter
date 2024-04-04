@@ -7,14 +7,12 @@ interface PageHeaderProps {
 }
 
 export function PageHeaderRow({ title, action }: PageHeaderProps) {
-    return (
-        <div className="flex flex-row justify-between space-y-1 items-center h-[44px] pb-5">
-            <h2 className="text-lg font-semibold tracking-tight text-slate-700">
-                {title}
-            </h2>
-            { action && (
-                <Button>{action}</Button>
-            )}
-        </div>
-    );
+  return (
+    <div className="flex flex-row justify-between space-y-1 items-center h-[44px] pb-5">
+      <h2 className="text-sm font-semibold tracking-normal text-slate-700">
+        {title}
+      </h2>
+      {action && <Button>{action}</Button>}
+    </div>
+  );
 }

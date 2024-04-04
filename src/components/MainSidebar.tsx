@@ -3,7 +3,7 @@
 import React from "react";
 
 import { MainNav } from "@/components/MainNav";
-import { Layers, PieChart } from "lucide-react";
+import { Layers, PieChart, ActivityIcon } from "lucide-react";
 
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { UserNav } from "@/components/UserNav";
@@ -28,6 +28,13 @@ export default function Sidebar({ className }: SideBarProps) {
                 icon: Layers,
                 variant: "ghost",
                 route: "/surveys",
+              },
+              {
+                title: "Data",
+                label: "",
+                icon: ActivityIcon,
+                variant: "ghost",
+                route: "/streams",
               },
               {
                 title: "Insights",
