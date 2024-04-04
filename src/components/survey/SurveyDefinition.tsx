@@ -226,7 +226,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           id="description"
                           className="min-h-[130px]"
                           placeholder="What do you expect to learn from this survey?"
-                          value={survey.goal}
+                          value={survey.goal !== null ? survey.goal : ""}
                           onChange={(
                             event: React.ChangeEvent<HTMLTextAreaElement>,
                           ) => {
