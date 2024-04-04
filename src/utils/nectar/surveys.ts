@@ -15,7 +15,8 @@ export async function getSurveys(token: string) {
     },
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
   const data = await response.json();
   const surveys = "items" in data ? (data["items"] as SurveyMetadata[]) : [];
@@ -30,7 +31,8 @@ export async function getSurvey(token: string, id: string) {
     },
   });
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
   const data = await response.json();
   const survey = data as Survey;
@@ -75,7 +77,8 @@ export async function getSurveyResponses(token: string, id: string) {
     },
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
   const data = await response.json();
   const surveyResponses: SurveyResponse[] =
@@ -98,7 +101,8 @@ export async function createSurvey(token: string) {
     body: "{}",
   });
   if (!response.ok) {
-    throw new Error("Failed to create survey");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
   const data = await response.json();
   const survey = data as Survey;
@@ -117,7 +121,8 @@ export async function publishSurvey(token: string, surveyId: string) {
     },
   );
   if (!response.ok) {
-    throw new Error("Failed to publish survey");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
 }
 
@@ -130,7 +135,8 @@ export async function updateSurvey(token: string, survey: Survey) {
     body: JSON.stringify(survey),
   });
   if (!response.ok) {
-    throw new Error("Failed to update survey");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
 }
 
@@ -149,7 +155,8 @@ export async function getSurveyResponse(
     },
   );
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    const msg = await response.json();
+    throw new Error(msg?.detail);
   }
   const data = await response.json();
   const surveyResponse = data as SurveyResponse;
