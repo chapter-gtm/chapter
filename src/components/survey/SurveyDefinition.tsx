@@ -541,7 +541,9 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   </p>
                 </div>
                 <div className="flex flex-col gap-y-2 justify-center h-1/2">
-                  <div className="w-12 h-12 rounded-xl bg-zinc-100 mx-auto"></div>
+                  <div className="w-12 h-12 rounded-xl bg-slate-100 mx-auto flex justify-center items-center text-2xl mb-2 group-hover:border border-slate-200">
+                    {survey.emoji}
+                  </div>
                   <div className="text-2xl text-center font-medium text-zinc-600 mt-2">
                     {survey.name}
                   </div>
