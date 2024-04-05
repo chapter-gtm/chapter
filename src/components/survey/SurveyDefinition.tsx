@@ -156,7 +156,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
 
   return (
     <>
-      <Toaster richColors />
+      <Toaster theme="light" />
       {survey && (
         <>
           <div className="bg-white border rounded-lg border-zinc-200 flex-1 overflow-hidden">
@@ -195,7 +195,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                         <Input
                           id="subject"
                           placeholder="e.g. Product Managers, UX Researchers"
-                          value={survey.candidatePersonas.join(", ")}
+                          value={survey.candidatePersonas[0]}
                           onChange={(
                             event: React.ChangeEvent<HTMLInputElement>
                           ) => {
@@ -294,8 +294,8 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                     setSurvey({
                                       ...survey,
                                       ["intro"]: {
-                                        title: event.target.value,
-                                        description: survey.intro.description,
+                                        title: survey.intro.title,
+                                        description: event.target.value,
                                       },
                                     });
                                   }}

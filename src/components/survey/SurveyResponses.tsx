@@ -67,7 +67,7 @@ function titleCaseToCamelCase(titleCaseString: string): string {
 export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const [isPopulated, setIsPopulated] = useState(false);
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map(),
+    new Map()
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -99,7 +99,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          }),
+          })
         );
 
         setResponses(responseMap);
@@ -205,7 +205,6 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
         ) : (
           <div className="flex flex-col flex-1 pb-12 border-e border-slate-200 bg-white"></div>
         )}
-        ;
       </div>
     </>
   );
