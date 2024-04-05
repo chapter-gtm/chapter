@@ -72,8 +72,8 @@ export function MainNav({ links, isCollapsed }: NavProps) {
               className={cn(
                 buttonVariants({ variant: link.variant }),
                 pathname === link.route
-                  ? "bg-muted hover:bg-muted"
-                  : "hover:bg-white/50",
+                  ? "bg-zinc-200 hover:bg-zinc-300"
+                  : "hover:bg-zinc-200/60",
                 "justify-start items-start pt-2 h-auto px-3"
               )}
             >

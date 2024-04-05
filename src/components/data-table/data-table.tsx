@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   filterColumnName: string;
   onRowClick: <TData>(data: TData) => void;
   responseRecords: TData[];
+  canCreateInsight?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
   filterColumnName,
   onRowClick,
   responseRecords,
+  canCreateInsight,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -98,7 +100,9 @@ export function DataTable<TData, TValue>({
         filters={filters}
         filterColumnName={filterColumnName}
         responseRecords={responseRecords}
+        canCreateInsight={canCreateInsight}
       />
+
       <div className="relative overflow-y-auto border-t border-b">
         <Table>
           <TableHeader className="sticky top-0 border-b border-zinc-600">

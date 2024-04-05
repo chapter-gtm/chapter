@@ -5,15 +5,14 @@ import { TemplateCard } from "./survey/TemplateCard";
 
 export function Dashboard() {
   return (
-    <div className="w-full space-y-6 px-6 pt-4  space-y-6">
+    <div className="w-full space-y-2 px-6 mt-2">
       <PageHeaderRow title="Insights" />
-
       <div className="flex flex-col h-full">
         <div className="flex-1 overflow-y-auto bg-white rounded-lg border border-zinc-200">
           <div className="flex flex-row justify-between items-center h-12 py-4 px-6 border-b border-zinc-200">
             <p className="font-medium text-sm">Some Name</p>
           </div>
-          <div className="flex flex-row bg-yellow-200 h-full p-3">
+          <div className="flex flex-row h-full p-3">
             <div className="basis-1/3 bg-zinc-50 p-3">
               <div className="flex flex-col justify-start border border-dashed border-zinc-200 p-3 rounded-xl">
                 <p className="font-medium text-sm my-3">Choose a template</p>

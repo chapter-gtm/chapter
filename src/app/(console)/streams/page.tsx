@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { PageHeaderRow } from "@/components/survey/PageHeaderRow";
 
 import {
   TooltipContent,
@@ -57,9 +58,10 @@ export default function Streams() {
 
   return (
     <>
-      <div className="flex flex-row h-full">
+      <div className="flex h-full">
         <Sheet modal={false} open={sheetOpen}>
-          <div className="flex flex-col flex-1 pb-12">
+          <div className="flex flex-col flex-1 mt-2">
+            <PageHeaderRow title="Insights" />
             <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
               <DataTable
                 columns={resultColumns}
@@ -68,6 +70,7 @@ export default function Streams() {
                 filterColumnName=""
                 onRowClick={handleRowClick}
                 responseRecords={responseRecords}
+                canCreateInsight={true}
               />
             </div>
           </div>

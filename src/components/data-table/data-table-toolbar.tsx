@@ -2,16 +2,30 @@
 
 import React from "react";
 
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import {
   DataTableFacetedFilter,
   FilterOptions,
 } from "@/components/data-table/data-table-faceted-filter";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+} from "@/components/ui/dialog";
+import { Overlay } from "@radix-ui/react-dialog";
+import { Label } from "@radix-ui/react-label";
 
 export interface ToolbarFilter {
   tableColumnName: string;
@@ -24,6 +38,7 @@ interface DataTableToolbarProps<TData> {
   filters: ToolbarFilter[];
   filterColumnName: string;
   responseRecords: TData[];
+  canCreateInsight?: boolean;
 }
 
 export function DataTableToolbar<TData>({
@@ -31,6 +46,7 @@ export function DataTableToolbar<TData>({
   filters,
   filterColumnName,
   responseRecords,
+  canCreateInsight,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -60,6 +76,37 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
         <DataTableViewOptions table={table} />
+        {canCreateInsight && (
+          <>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="h-8 px-2">Create Insight</Button>
+              </DialogTrigger>
+
+              <DialogContent className="sm:max-w-[625px]">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-row gap-x-2 items-center">
+                    <div className="flex text-sm">Insight</div>
+                    <div className="flex">
+                      <ChevronRightIcon />
+                    </div>
+                    <div className="flex text-sm px-2 py-1 bg-zinc-100 rounded-lg">
+                      Creation
+                    </div>
+                  </div>
+                  <Input placeholder="Name" className="text-xl" />
+                  <Input placeholder="Goal" />
+                  <Label className="text-sm">Method template</Label>
+                  <div className="grid grid-rows-1 gap-4">
+                    <div className="col-span-1 h-12 bg-zinc-200"></div>
+                    <div className="col-span-1 h-12 bg-zinc-200"></div>
+                    <div className="col-span-1 h-12 bg-zinc-200"></div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </>
+        )}
       </div>
     </div>
   );
