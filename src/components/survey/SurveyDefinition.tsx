@@ -64,7 +64,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
     survey.candidatePersonas.map(
       (persona, index) =>
         ({
-          id: index,
+          id: index.toString(),
           text: persona,
         }) as TagType,
     ),
