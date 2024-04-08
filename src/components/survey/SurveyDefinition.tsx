@@ -128,7 +128,6 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       // Update the survey object to cause state update
       setSurvey({ ...survey, ["publishedAt"]: new Date() });
       setSurvey({ ...survey, ["state"]: SurveyState.LIVE });
-      saveChanges();
 
       toast.success("Survey published!");
     } catch (error: any) {

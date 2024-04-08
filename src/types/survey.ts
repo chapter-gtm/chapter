@@ -59,10 +59,10 @@ enum QuestionAction {
 }
 
 export enum SurveyState {
-  IN_DEVELOPMENT = "In development",
-  LIVE = "Live",
-  EXPIRED = "Expired",
-  CLOSED = "Closed",
+  IN_DEVELOPMENT = "IN_DEVELOPMENT",
+  LIVE = "LIVE",
+  EXPIRED = "EXPIRED",
+  CLOSED = "CLOSED",
 }
 
 export type SurveyResponseState = {
