@@ -33,6 +33,7 @@ import {
   SurveyResponseStage,
   type Question,
   QuestionFormat,
+  SurveyState,
 } from "@/types/survey";
 import {
   updateSurvey,
@@ -123,6 +124,12 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       }
       await publishSurvey(userToken, survey.id);
       setPublished(true);
+
+      // Update the survey object to cause state update
+      setSurvey({ ...survey, ["publishedAt"]: new Date() });
+      setSurvey({ ...survey, ["state"]: SurveyState.LIVE });
+      saveChanges();
+
       toast.success("Survey published!");
     } catch (error: any) {
       toast.error("Publish failed", { description: error.toString() });

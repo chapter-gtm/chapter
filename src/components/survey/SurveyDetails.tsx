@@ -7,7 +7,7 @@ import { Layers } from "lucide-react";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { SurveyDefinition } from "@/components/survey/SurveyDefinition";
 import { SurveyResponses } from "@/components/survey/SurveyResponses";
-import { type Survey } from "@/types/survey";
+import { type Survey, SurveyState } from "@/types/survey";
 import { getSurvey } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
@@ -78,7 +78,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
               </div>
             </div>
             <div className="basis-1/3 flex overflow-hidden justify-end">
-              {survey?.publishedAt && (
+              {survey.state === SurveyState.LIVE && (
                 <Button variant="outline" onClick={handleShare}>
                   Share
                 </Button>
