@@ -36,7 +36,7 @@ export async function logout() {
   await supabase.auth.signOut();
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/login");
 }
 
 export async function signup(formData: FormData) {
@@ -67,14 +67,11 @@ export async function sendResetPasswordLink(email: string) {
 
 export async function updatePassword(newPassword: string) {
   const supabase = createClient();
-  console.log("Listening for state change...");
   supabase.auth.onAuthStateChange(async (event, session) => {
     if (event == "PASSWORD_RECOVERY") {
-      console.log("Password recovery");
       const { data, error } = await supabase.auth.updateUser({
         password: newPassword,
       });
-      console.log(data);
 
       if (!data || error) throw Error((error as Error).message);
     }

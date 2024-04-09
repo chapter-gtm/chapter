@@ -2,15 +2,17 @@
 import { createClient, getUserAccessToken } from "@/utils/supabase/client";
 import { getUserProfile } from "@/utils/nectar/users";
 import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { ThemeSupa, ViewType, VIEWS } from "@supabase/auth-ui-shared";
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AuthenticationPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
+  const [authView, setAuthView] = useState<ViewType>(VIEWS.SIGN_IN);
 
   const customTheme = {
     default: {
@@ -39,19 +41,28 @@ export default function AuthenticationPage() {
       },
     },
   };
+  const code = searchParams.get("code");
 
   supabase.auth.onAuthStateChange(async (event) => {
-    if (event != "INITIAL_SESSION" && event != "SIGNED_OUT") {
-      try {
+    try {
+      if (code !== null && code !== "") {
+        // This is a hack as a result of https://github.com/supabase-community/auth-ui/issues/77
+        setAuthView(VIEWS.UPDATE_PASSWORD);
+        return;
+      } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
         const userToken = await getUserAccessToken();
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
         await getUserProfile(userToken);
         router.push("/");
-      } catch (error) {
-        setMessage("Something went wrong. Please contact support!");
+      } else if (event === "PASSWORD_RECOVERY") {
+        setAuthView(VIEWS.UPDATE_PASSWORD);
+      } else {
+        setAuthView(VIEWS.SIGN_IN);
       }
+    } catch (error) {
+      setMessage("Something went wrong. Please contact support!");
     }
   });
 
@@ -99,35 +110,68 @@ export default function AuthenticationPage() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="grid gap-6">
-              <Auth
-                supabaseClient={supabase}
-                providers={[]}
-                view="sign_in"
-                redirectTo="/"
-                appearance={{
-                  theme: ThemeSupa,
-                  variables: {
-                    default: {
-                      colors: {
-                        brand: "black",
-                        brandAccent: "black",
-                      },
-                      radii: {
-                        buttonBorderRadius: "2.5rem",
-                        inputBorderRadius: "0.7rem",
-                        borderRadiusButton: "0.7rem",
+              {authView === VIEWS.SIGN_IN ? (
+                <Auth
+                  supabaseClient={supabase}
+                  providers={[]}
+                  view={VIEWS.SIGN_IN}
+                  redirectTo="http://localhost:3000/login"
+                  appearance={{
+                    theme: ThemeSupa,
+                    variables: {
+                      default: {
+                        colors: {
+                          brand: "black",
+                          brandAccent: "black",
+                        },
+                        radii: {
+                          buttonBorderRadius: "2.5rem",
+                          inputBorderRadius: "0.7rem",
+                          borderRadiusButton: "0.7rem",
+                        },
                       },
                     },
-                  },
-                }}
-                localization={{
-                  variables: {
-                    sign_up: {
-                      link_text: "",
+                  }}
+                  localization={{
+                    variables: {
+                      sign_up: {
+                        link_text: "",
+                      },
                     },
-                  },
-                }}
-              />
+                  }}
+                />
+              ) : (
+                <Auth
+                  supabaseClient={supabase}
+                  providers={[]}
+                  view={VIEWS.UPDATE_PASSWORD}
+                  redirectTo="http://localhost:3000/login"
+                  appearance={{
+                    theme: ThemeSupa,
+                    variables: {
+                      default: {
+                        colors: {
+                          brand: "black",
+                          brandAccent: "black",
+                        },
+                        radii: {
+                          buttonBorderRadius: "2.5rem",
+                          inputBorderRadius: "0.7rem",
+                          borderRadiusButton: "0.7rem",
+                        },
+                      },
+                    },
+                  }}
+                  localization={{
+                    variables: {
+                      sign_up: {
+                        link_text: "",
+                      },
+                    },
+                  }}
+                />
+              )}
+
               {message !== "" && (
                 <div className="border border-gray-300 rounded-lg p-4">
                   <p>{message}</p>
