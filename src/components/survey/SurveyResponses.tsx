@@ -14,7 +14,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import LoadingSpinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -67,7 +66,7 @@ function titleCaseToCamelCase(titleCaseString: string): string {
 export function SurveyResponses({ survey }: SurveyResponsesProps) {
   const [isPopulated, setIsPopulated] = useState(false);
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map()
+    new Map(),
   );
   const [responseRecords, setResponseRecords] = useState<
     SurveyResponseRecordSchema[]
@@ -99,7 +98,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setResponses(responseMap);

@@ -6,7 +6,6 @@ import { createSurvey, getSurveys } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Spinner from "@/components/ui/spinner";
 
 export function Surveys() {
   const router = useRouter();
