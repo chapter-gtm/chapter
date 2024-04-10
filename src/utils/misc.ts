@@ -8,12 +8,23 @@ export function toTitleCase(input: string): string {
   return input.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-export function humanDate(date: Date): string {
+export function humanDate(date: Date, showTime: boolean = false): string {
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short",
     day: "numeric",
     month: "short",
   };
+
+  if (showTime) {
+    options["minute"] = "2-digit";
+    options["hour"] = "2-digit";
+    options["timeZoneName"] = "short";
+  }
+
+  console.log(date);
+  if (date === null) {
+    return "";
+  }
 
   return date.toLocaleDateString(undefined, options);
 }

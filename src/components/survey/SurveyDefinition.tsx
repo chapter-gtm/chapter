@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { humanDate } from "@/utils/misc";
 import { Textarea } from "@/components/ui/textarea";
 import { Tag as TagType, TagInput } from "@/components/tag-input/tag-input";
 
@@ -603,18 +604,14 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   <div className="text-2xl text-center font-medium text-zinc-600 mt-2">
                     {survey.name}
                   </div>
-                  <p className="text-center text-xs text-slate-500">
-                    Last published 3 hours ago.{" "}
-                  </p>
+                  {survey.publishedAt && (
+                    <p className="text-center text-xs text-slate-500">
+                      Last published at{" "}
+                      {humanDate(new Date(survey.publishedAt), true)}
+                    </p>
+                  )}
                   <div className="flex flex-row justify-center w-full mt-6">
                     <div className="space-x-2 mx-auto">
-                      <Button
-                        variant={"outline"}
-                        size={"sm"}
-                        onClick={saveChanges}
-                      >
-                        Preview
-                      </Button>
                       <Button
                         variant="default"
                         size={"sm"}
