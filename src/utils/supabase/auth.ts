@@ -57,10 +57,13 @@ export async function signup(formData: FormData) {
   redirect("/");
 }
 
-export async function sendResetPasswordLink(email: string) {
+export async function sendResetPasswordLink(
+  email: string,
+  redirectUrl: string,
+) {
   const supabase = createClient();
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `http://localhost:3000/reset-password`,
+    redirectTo: redirectUrl,
   });
   if (error) throw Error((error as Error).message);
 }

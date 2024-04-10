@@ -29,7 +29,9 @@ export default function AuthenticationPage() {
       const data = {
         email: formData.get("email") as string,
       };
-      await sendResetPasswordLink(data.email);
+      const currentDomain = window.location.host;
+      const redirectUrl = `https://${currentDomain}/reset-password`;
+      await sendResetPasswordLink(data.email, redirectUrl);
       setMessage("Password reset link sent to email!");
     } catch (error: any) {
       setMessage(error.toString());
