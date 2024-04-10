@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Layers } from "lucide-react";
+import { Layers, LinkIcon } from "lucide-react";
 import { ErrorMessage } from "@/components/ErrorMessage";
 import { SurveyDefinition } from "@/components/survey/SurveyDefinition";
 import { SurveyResponses } from "@/components/survey/SurveyResponses";
@@ -39,9 +39,9 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
       await navigator.clipboard.writeText(
         "http://localhost:3001/surveys/" + surveyId,
       );
-      toast.success("Survey url copied!");
+      toast.success("Survey link copied!");
     } catch (error: any) {
-      toast.error("Copy survey url to clipboard failed", {
+      toast.error("Copy survey link to clipboard failed", {
         description: error.toString(),
       });
     }
@@ -80,7 +80,8 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
             <div className="basis-1/3 flex overflow-hidden justify-end">
               {survey.state === SurveyState.LIVE && (
                 <Button variant="outline" onClick={handleShare}>
-                  Share
+                  <LinkIcon className="h-4 w-4" />
+                  Survey Link
                 </Button>
               )}
             </div>
