@@ -604,10 +604,14 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   <div className="text-2xl text-center font-medium text-zinc-600 mt-2">
                     {survey.name}
                   </div>
-                  {survey.publishedAt && (
+                  {survey.publishedAt ? (
                     <p className="text-center text-xs text-slate-500">
                       Last published at{" "}
                       {humanDate(new Date(survey.publishedAt), true)}
+                    </p>
+                  ) : (
+                    <p className="text-center text-xs text-slate-500">
+                      Not published yet.
                     </p>
                   )}
                   <div className="flex flex-row justify-center w-full mt-6">
