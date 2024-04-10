@@ -1,71 +1,41 @@
 "use client";
-import { createClient, getUserAccessToken } from "@/utils/supabase/client";
-import { getUserProfile } from "@/utils/nectar/users";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa, ViewType, VIEWS } from "@supabase/auth-ui-shared";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { login, sendResetPasswordLink } from "@/utils/supabase/auth";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export default function AuthenticationPage() {
   const [message, setMessage] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const supabase = createClient();
-  const [authView, setAuthView] = useState<ViewType>(VIEWS.SIGN_IN);
+  const [showLogin, setShowLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const customTheme = {
-    default: {
-      colors: {
-        brand: "hsl(153 60.0% 53.0%)",
-        brandAccent: "hsl(154 54.8% 45.1%)",
-        brandButtonText: "white",
-        // ..
-      },
-    },
-    dark: {
-      colors: {
-        brandButtonText: "white",
-        defaultButtonBackground: "#2e2e2e",
-        defaultButtonBackgroundHover: "#3e3e3e",
-        //..
-      },
-    },
-    // You can also add more theme variations with different names.
-    evenDarker: {
-      colors: {
-        brandButtonText: "white",
-        defaultButtonBackground: "#1e1e1e",
-        defaultButtonBackgroundHover: "#2e2e2e",
-        //..
-      },
-    },
-  };
-  const code = searchParams.get("code");
-
-  supabase.auth.onAuthStateChange(async (event) => {
+  const handleLogin = async (formData: FormData) => {
     try {
-      if (code !== null && code !== "") {
-        // This is a hack as a result of https://github.com/supabase-community/auth-ui/issues/77
-        setAuthView(VIEWS.UPDATE_PASSWORD);
-        return;
-      } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        const userToken = await getUserAccessToken();
-        if (userToken === undefined) {
-          throw Error("User needs to login!");
-        }
-        await getUserProfile(userToken);
-        router.push("/");
-      } else if (event === "PASSWORD_RECOVERY") {
-        setAuthView(VIEWS.UPDATE_PASSWORD);
-      } else {
-        setAuthView(VIEWS.SIGN_IN);
-      }
-    } catch (error) {
-      setMessage("Something went wrong. Please contact support!");
+      const data = {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      };
+      await login(data.email, data.password);
+    } catch (error: any) {
+      setMessage(error.toString());
+      setLoading(false);
     }
-  });
+  };
 
+  const handleResetPassword = async (formData: FormData) => {
+    try {
+      const data = {
+        email: formData.get("email") as string,
+      };
+      await sendResetPasswordLink(data.email);
+      setMessage("Password reset link sent to email!");
+    } catch (error: any) {
+      setMessage(error.toString());
+    }
+    setLoading(false);
+  };
   return (
     <>
       <div className="md:hidden">
@@ -107,79 +77,118 @@ export default function AuthenticationPage() {
             </blockquote>
           </div>
         </div>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="grid gap-6">
-              {authView === VIEWS.SIGN_IN ? (
-                <Auth
-                  supabaseClient={supabase}
-                  providers={[]}
-                  view={VIEWS.SIGN_IN}
-                  redirectTo="http://localhost:3000/login"
-                  appearance={{
-                    theme: ThemeSupa,
-                    variables: {
-                      default: {
-                        colors: {
-                          brand: "black",
-                          brandAccent: "black",
-                        },
-                        radii: {
-                          buttonBorderRadius: "2.5rem",
-                          inputBorderRadius: "0.7rem",
-                          borderRadiusButton: "0.7rem",
-                        },
-                      },
-                    },
-                  }}
-                  localization={{
-                    variables: {
-                      sign_up: {
-                        link_text: "",
-                      },
-                    },
-                  }}
-                />
-              ) : (
-                <Auth
-                  supabaseClient={supabase}
-                  providers={[]}
-                  view={VIEWS.UPDATE_PASSWORD}
-                  redirectTo="http://localhost:3000/login"
-                  appearance={{
-                    theme: ThemeSupa,
-                    variables: {
-                      default: {
-                        colors: {
-                          brand: "black",
-                          brandAccent: "black",
-                        },
-                        radii: {
-                          buttonBorderRadius: "2.5rem",
-                          inputBorderRadius: "0.7rem",
-                          borderRadiusButton: "0.7rem",
-                        },
-                      },
-                    },
-                  }}
-                  localization={{
-                    variables: {
-                      sign_up: {
-                        link_text: "",
-                      },
-                    },
-                  }}
-                />
-              )}
 
-              {message !== "" && (
-                <div className="border border-gray-300 rounded-lg p-4">
-                  <p>{message}</p>
-                </div>
-              )}
+        {showLogin ? (
+          <div className="lg:p-8">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Sign in
+                </h1>
+              </div>
+              <div className="grid gap-6">
+                <p>{message}</p>
+                <form>
+                  <div className="grid gap-2">
+                    <div className="grid gap-1">
+                      <Label className="sr-only" htmlFor="email">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        autoCorrect="off"
+                        required
+                      />
+                    </div>
+                    <Label className="sr-only" htmlFor="password">
+                      Password
+                    </Label>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="Your Password"
+                      required
+                    />
+                    <Button
+                      onClick={() => {
+                        setLoading(true);
+                      }}
+                      formAction={handleLogin}
+                    >
+                      {loading ? "Signing in..." : "Sign in"}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowLogin(false);
+                        setMessage("");
+                      }}
+                      variant="link"
+                    >
+                      Reset password
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="lg:p-8">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-2 text-center">
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Reset Password
+                </h1>
+              </div>
+              <div className="grid gap-6">
+                <p>{message}</p>
+                <form>
+                  <div className="grid gap-2">
+                    <div className="grid gap-1">
+                      <Label className="sr-only" htmlFor="email">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        autoCorrect="off"
+                        required
+                      />
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setLoading(true);
+                      }}
+                      formAction={handleResetPassword}
+                    >
+                      {loading
+                        ? "Sending email..."
+                        : "Send reset link to email"}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowLogin(true);
+                        setMessage("");
+                      }}
+                      variant="link"
+                    >
+                      Sign in
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

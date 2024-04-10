@@ -64,16 +64,3 @@ export async function sendResetPasswordLink(email: string) {
   });
   if (error) throw Error((error as Error).message);
 }
-
-export async function updatePassword(newPassword: string) {
-  const supabase = createClient();
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event == "PASSWORD_RECOVERY") {
-      const { data, error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
-
-      if (!data || error) throw Error((error as Error).message);
-    }
-  });
-}

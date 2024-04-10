@@ -2,33 +2,41 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updatePassword } from "@/utils/supabase/auth";
+import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ResetPasswordPage() {
+  const router = useRouter();
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
   const handleUpdatePassword = async (formData: FormData) => {
     try {
-      const data = {
+      const record = {
         password: formData.get("password") as string,
         confirmedPassword: formData.get("password") as string,
       };
 
-      if (data.password != data.confirmedPassword) {
+      if (record.password != record.confirmedPassword) {
         setMessage("Passwords don't match!");
         return;
       }
 
-      await updatePassword(data.password);
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.updateUser({
+        password: record.password,
+      });
+      if (!data || error) throw Error((error as Error).message);
       setMessage("Password updated successfully!");
-    } catch (error) {
-      setMessage("Failed to update your password. Please contact support");
+      await sleep(1000);
+      router.push("/");
+    } catch (error: any) {
+      setMessage(error.toString());
+      setLoading(false);
     }
-    await sleep(1000);
-    redirect("/");
   };
   return (
     <>
@@ -101,8 +109,13 @@ export default function ResetPasswordPage() {
                     placeholder="Confirm Your New Password"
                     required
                   />
-                  <Button formAction={handleUpdatePassword}>
-                    Set new password
+                  <Button
+                    onClick={() => {
+                      setLoading(true);
+                    }}
+                    formAction={handleUpdatePassword}
+                  >
+                    {loading ? "Setting password..." : "Set new password"}
                   </Button>
                 </div>
               </form>
