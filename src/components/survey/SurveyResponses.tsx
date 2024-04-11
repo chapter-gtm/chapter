@@ -37,6 +37,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 import { ChevronsRight, ExternalLink, Maximize2, LinkIcon } from "lucide-react";
 
@@ -104,8 +106,8 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
         setResponses(responseMap);
         setResponseRecords(responseRecords);
         setIsPopulated(true);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        toast.error("Failed to load data.", { description: error.toString() });
       }
     };
     fetchSurvey();
@@ -120,6 +122,23 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
     }
   };
 
+  const handleCopyResponseLink = async (
+    surveyId: string | undefined,
+    responseId: string | undefined,
+  ) => {
+    try {
+      const currentDomain = window.location.host;
+      await navigator.clipboard.writeText(
+        `https://${currentDomain}/surveys/${surveyId}/responses/${responseId}`,
+      );
+      toast.success("Survey response link copied!");
+    } catch (error: any) {
+      toast.error("Failed to copy response link.", {
+        description: error.toString(),
+      });
+    }
+  };
+
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const handleOpenSheet = function <TData>(data: TData) {
@@ -130,16 +149,15 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
     if (resp !== undefined) {
       setSelectedRow(resp);
     }
-    console.log("Sheet opened");
   };
 
   const handleCloseSheet = function () {
     setSheetOpen(false);
-    console.log("Sheet closed");
   };
 
   return (
     <>
+      <Toaster theme="light" />
       <div className="flex flex-row h-full">
         {isPopulated ? (
           <Sheet modal={false} open={sheetOpen}>
@@ -184,7 +202,17 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" disabled={false}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={false}
+                        onClick={() =>
+                          handleCopyResponseLink(
+                            selectedRow?.surveyId,
+                            selectedRow?.id,
+                          )
+                        }
+                      >
                         <LinkIcon className="h-4 w-4" />
                         <span className="sr-only">Share profile</span>
                       </Button>
