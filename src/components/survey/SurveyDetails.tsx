@@ -37,7 +37,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(
-        `${process.env.NEXT_PUBLIC_SURVEY_APP_URL!}/surveys/${surveyId}`,
+        `${process.env.NEXT_PUBLIC_SURVEY_APP_URL!}/surveys/${surveyId}`
       );
       toast.success("Survey link copied!");
     } catch (error: any) {
@@ -79,9 +79,13 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
             </div>
             <div className="basis-1/3 flex overflow-hidden justify-end">
               {survey.state === SurveyState.LIVE && (
-                <Button variant="outline" onClick={handleShare}>
+                <Button
+                  variant="outline"
+                  onClick={handleShare}
+                  className="flex gap-x-2"
+                >
                   <LinkIcon className="h-4 w-4" />
-                  Survey Link
+                  <p>Survey Link</p>
                 </Button>
               )}
             </div>

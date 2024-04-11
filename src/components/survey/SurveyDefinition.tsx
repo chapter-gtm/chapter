@@ -68,8 +68,8 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
         ({
           id: index.toString(),
           text: persona,
-        }) as TagType,
-    ),
+        } as TagType)
+    )
   );
 
   // Handles improve and undo on thread questions
@@ -147,7 +147,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       const improvedQuestion = await getImprovedQuestion(
         userToken,
         survey.id,
-        survey.components[index].question,
+        survey.components[index].question
       );
       const updatedComponents: Question[] = [...survey.components];
       updatedComponents[index].question = improvedQuestion;
@@ -185,7 +185,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
       const surveyClone: Survey = {
         ...survey,
         ["candidatePersonas"]: survey.candidatePersonas.filter(
-          (item) => item !== tag,
+          (item) => item !== tag
         ),
       };
       const userToken = await getUserAccessToken();
@@ -208,7 +208,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
         <>
           <div className="bg-white border rounded-lg border-zinc-200 flex-1 overflow-hidden">
             <div className="flex flex-row h-full">
-              <div className="basis-1/4 border-r border-zinc-100">
+              <div className="basis-1/3 border-r border-zinc-100">
                 <div className="flex flex-row justify-between w-full h-14 items-center px-4 bg-white border-b border-zinc-100">
                   <p className="font-medium text-sm">
                     <span className="bg-zinc-100 px-2 py-1 rounded-lg mr-1">
@@ -227,7 +227,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="A short name for this survey."
                           value={survey.name}
                           onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>,
+                            event: React.ChangeEvent<HTMLInputElement>
                           ) => {
                             setSurvey({
                               ...survey,
@@ -242,7 +242,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                         <TagInput
                           placeholder="e.g. Product Managers, UX Researchers"
                           tags={candidatePersonaTags}
-                          className="sm:min-w-[450px]"
+                          className="w-full"
                           setTags={(newTags) => {
                             setCandidatePersonaTags(newTags);
                             setSurvey({
@@ -264,7 +264,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           placeholder="What do you expect to learn from this survey?"
                           value={survey.goal !== null ? survey.goal : ""}
                           onChange={(
-                            event: React.ChangeEvent<HTMLTextAreaElement>,
+                            event: React.ChangeEvent<HTMLTextAreaElement>
                           ) => {
                             setSurvey({
                               ...survey,
@@ -313,7 +313,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                   placeholder="How you'd like to start the conversation"
                                   value={survey.intro.title}
                                   onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>,
+                                    event: React.ChangeEvent<HTMLInputElement>
                                   ) => {
                                     survey.intro.title = event.target.value;
                                     setSurvey({
@@ -338,7 +338,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                   placeholder="How you'd like to start the conversation"
                                   value={survey.intro.description}
                                   onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>,
+                                    event: React.ChangeEvent<HTMLInputElement>
                                   ) => {
                                     survey.intro.description =
                                       event.target.value;
@@ -406,7 +406,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                 placeholder="How you'd like to start the conversation"
                                 value={component.question}
                                 onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>,
+                                  event: React.ChangeEvent<HTMLInputElement>
                                 ) => {
                                   const updatedComponents: Question[] = [
                                     ...survey.components,
@@ -535,7 +535,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                               placeholder="Wow! thanks for sharing your insights with us."
                               value={survey.outro.title}
                               onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>,
+                                event: React.ChangeEvent<HTMLInputElement>
                               ) => {
                                 setSurvey({
                                   ...survey,
@@ -553,7 +553,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                           <div className="flex flex-row justify-start space-x-3 items-center py-5 px-6 relative">
                             <Switch
                               checked={survey.outro.actions.includes(
-                                SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                                SurveyOutroAction.AUTHOR_CALENDAR_LINK
                               )}
                               onCheckedChange={(checked: boolean) => {
                                 let newActions: SurveyOutroAction[] = [];
@@ -566,7 +566,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                   newActions = survey.outro.actions.filter(
                                     (value) =>
                                       value !==
-                                      SurveyOutroAction.AUTHOR_CALENDAR_LINK,
+                                      SurveyOutroAction.AUTHOR_CALENDAR_LINK
                                   );
                                 }
                                 setSurvey({
@@ -588,7 +588,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   </div>
                 </div>
               </div>
-              <div className="basis-1/4 border-l border-zinc-100">
+              <div className="basis-1/3 border-l border-zinc-100">
                 <div className="flex flex-row justify-between w-full h-14 items-center px-4 border-b border-zinc-100">
                   <p className="font-medium text-sm">
                     <span className="bg-zinc-100 px-2 py-1 rounded-lg mr-1">
