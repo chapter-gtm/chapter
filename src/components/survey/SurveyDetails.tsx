@@ -37,7 +37,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(
-        "http://localhost:3001/surveys/" + surveyId,
+        `${process.env.SURVEY_APP_URL!}/surveys/${surveyId}`,
       );
       toast.success("Survey link copied!");
     } catch (error: any) {
