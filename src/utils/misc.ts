@@ -21,7 +21,6 @@ export function humanDate(date: Date, showTime: boolean = false): string {
     options["timeZoneName"] = "short";
   }
 
-  console.log(date);
   if (date === null) {
     return "";
   }
