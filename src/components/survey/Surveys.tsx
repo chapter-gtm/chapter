@@ -18,7 +18,7 @@ export function Surveys() {
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
-        setSurveys(await getSurveys(userToken));
+        setSurveys(await getSurveys(userToken, 1000, 1));
       } catch (error) {
         // TODO: Show a toast with error
       }

@@ -7,13 +7,25 @@ import {
 
 const NECTAR_API_BASE = "https://api.nectar.run/api";
 
-export async function getSurveys(token: string) {
-  const response = await fetch(NECTAR_API_BASE + "/surveys", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
+export async function getSurveys(
+  token: string,
+  pageSize: number,
+  currentPage: number,
+) {
+  const response = await fetch(
+    NECTAR_API_BASE +
+      "/surveys?" +
+      new URLSearchParams({
+        pageSize: pageSize.toString(),
+        currentPage: currentPage.toString(),
+      }),
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   if (!response.ok) {
     const msg = await response.json();
     throw new Error(msg?.detail);
@@ -66,9 +78,21 @@ export async function getImprovedQuestion(
   return data["question"];
 }
 
-export async function getSurveyResponses(token: string, id: string) {
+export async function getSurveyResponses(
+  token: string,
+  id: string,
+  pageSize: number,
+  currentPage: number,
+) {
   const response = await fetch(
-    NECTAR_API_BASE + "/surveys/" + id + "/responses",
+    NECTAR_API_BASE +
+      "/surveys/" +
+      id +
+      "/responses?" +
+      new URLSearchParams({
+        pageSize: pageSize.toString(),
+        currentPage: currentPage.toString(),
+      }),
     {
       method: "GET",
       headers: {

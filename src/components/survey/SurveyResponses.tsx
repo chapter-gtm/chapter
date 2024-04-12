@@ -82,7 +82,12 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
-        const surveyResponses = await getSurveyResponses(userToken, survey.id);
+        const surveyResponses = await getSurveyResponses(
+          userToken,
+          survey.id,
+          1000,
+          1,
+        );
 
         const responseMap = new Map<string, SurveyResponse>();
         surveyResponses.forEach((resp) => responseMap.set(resp.id, resp));
