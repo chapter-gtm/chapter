@@ -23,6 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className={inter.className}>
         <div className="bg-zinc-100 h-screen flex w-full">
           <div className="flex flex-1 overflow-hidden">
