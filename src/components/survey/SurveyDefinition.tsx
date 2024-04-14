@@ -435,6 +435,11 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                                       onClick={() =>
                                         handleImproveQuestion(index)
                                       }
+                                      disabled={
+                                        survey.components[index].question === ""
+                                          ? true
+                                          : false
+                                      }
                                     >
                                       <SparklesIcon className="mr-2 h-4 w-4" />
                                       Improve
