@@ -27,6 +27,12 @@ import { Switch } from "@/components/ui/switch";
 import { humanDate } from "@/utils/misc";
 import { Textarea } from "@/components/ui/textarea";
 import { Tag as TagType, TagInput } from "@/components/tag-input/tag-input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import {
   type Survey,
@@ -276,9 +282,23 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                       </div>
                       <Label htmlFor="scores">Topics to score</Label>
                       <div className="flex flex-row gap-x-2">
-                        <span className="border border-zinc-200 px-2 py-1 rounded-lg text-sm">
-                          Problem Severity
-                        </span>
+                        {survey.scoreDefinitions.map((scoreDef, index) => (
+                          <TooltipProvider key={index}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span
+                                  key={index}
+                                  className="border border-zinc-200 px-2 py-1 rounded-lg text-sm"
+                                >
+                                  {scoreDef.name}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{scoreDef.description}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        ))}
                       </div>
                     </div>
                   </CardContent>

@@ -95,6 +95,12 @@ export type Score = {
   description: string;
 };
 
+export type ScoreDefinition = {
+  name: string;
+  description: string;
+  scale: number[];
+};
+
 export const RatingLabel: { [key: number]: { label: string; color: string } } =
   {
     1: { label: "Very Low", color: "bg-teal-100" },
@@ -148,4 +154,5 @@ export type Survey = {
   closedAt: Date;
   expiredAt: Date;
   state: SurveyState;
+  scoreDefinitions: ScoreDefinition[];
 };
