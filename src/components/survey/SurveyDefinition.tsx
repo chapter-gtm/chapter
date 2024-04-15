@@ -214,7 +214,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
         <>
           <div className="bg-white border rounded-lg border-zinc-200 flex-1 overflow-hidden">
             <div className="flex flex-row h-full">
-              <div className="basis-1/3 border-r border-zinc-100">
+              <div className="basis-1/3 lg:max-w-[500px] border-r border-zinc-100">
                 <div className="flex flex-row justify-between w-full h-14 items-center px-4 bg-white border-b border-zinc-100">
                   <p className="font-medium text-sm">
                     <span className="bg-zinc-100 px-2 py-1 rounded-lg mr-1">
@@ -317,7 +317,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   <div className="flex-1 overflow-y-auto">
                     <ul
                       role="list"
-                      className="space-y-4 px-6 2xl:px-24 mx-auto py-4 mb-20 flex flex-col"
+                      className="space-y-4 px-6 xl:px-8 2xl:px-12 mx-auto py-4 mb-20 flex flex-col"
                     >
                       <li>
                         <div className="w-full flex flex-col bg-white rounded-lg border border-slate-200">
@@ -615,7 +615,7 @@ export function SurveyDefinition({ survey, setSurvey }: SurveyDefinitionProps) {
                   </div>
                 </div>
               </div>
-              <div className="basis-1/3 border-l border-zinc-100">
+              <div className="basis-1/3 lg:max-w-[500px] border-l border-zinc-100">
                 <div className="flex flex-row justify-between w-full h-14 items-center px-4 border-b border-zinc-100">
                   <p className="font-medium text-sm">
                     <span className="bg-zinc-100 px-2 py-1 rounded-lg mr-1">
