@@ -37,7 +37,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(
-        `${process.env.NEXT_PUBLIC_SURVEY_APP_URL!}/surveys/${surveyId}`
+        `${process.env.NEXT_PUBLIC_SURVEY_APP_URL!}/surveys/${surveyId}`,
       );
       toast.success("Survey link copied!");
     } catch (error: any) {
@@ -49,7 +49,7 @@ export function SurveyDetails({ surveyId }: SurveyDetailsProps) {
 
   return (
     <>
-      <Toaster richColors />
+      <Toaster theme="light" />
       {survey !== null ? (
         <Tabs defaultValue="definition" className="h-dvh flex flex-col ">
           <div className="flex flex-row items-center justify-between py-4 border-b border-slate-100 h-16 px-6">
