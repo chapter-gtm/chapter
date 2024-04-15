@@ -99,7 +99,7 @@ export function SurveyResponseDetailsFull({
             </div>
           </div> */}
           <div className="flex flex-row border border-zinc-200 rounded-lg h-full overflow-hidden mt-3">
-            <div className="basis-1/5 pt-2 space-y-5 border-r border-zinc-200 h-full bg-zinc-50">
+            <div className="basis-1/3 pt-2 space-y-5 border-r border-zinc-200 h-full bg-zinc-50">
               <SurveyResponseIdentity surveyResponse={response} />
               <Separator className="w-full bg-zinc-200 my-3" />
 
@@ -117,7 +117,7 @@ export function SurveyResponseDetailsFull({
                 </div>
               )}
             </div>
-            <div className="basis-4/5 bg-white">
+            <div className="basis-2/3 bg-white">
               <Tabs defaultValue="transcript" className="w-full">
                 <div className="w-full flex px-6 flex-row border-b border-slate-100 justify-between py-3 items-center">
                   <TabsList className="grid w-full grid-cols-2 w-[200px]">
@@ -137,7 +137,9 @@ export function SurveyResponseDetailsFull({
           </div>
         </div>
       ) : (
-        <ErrorMessage />
+        <div className="flex flex-col h-screen overflow-hidden px-7 pb-16">
+          <div className="flex flex-row border border-zinc-200 rounded-lg h-full overflow-hidden mt-3 bg-white/50"></div>
+        </div>
       )}
     </>
   );

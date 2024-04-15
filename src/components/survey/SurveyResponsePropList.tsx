@@ -48,7 +48,7 @@ export function SurveyResponsePropList({
                 "h-1.5 w-1.5 rounded-full"
               )}
             ></span>
-            {toTitleCase(surveyResponse.state.stage)}
+            {surveyResponse.state.stage}
           </div>
         </div>
       </li>
