@@ -45,10 +45,10 @@ export function SurveyResponsePropList({
             <span
               className={classNames(
                 stageColor[surveyResponse.state.stage],
-                "h-1.5 w-1.5 rounded-full"
+                "h-1.5 w-1.5 rounded-full",
               )}
             ></span>
-            {surveyResponse.state.stage}
+            {toTitleCase(surveyResponse.state.stage)}
           </div>
         </div>
       </li>
@@ -70,7 +70,7 @@ export function SurveyResponsePropList({
                   <div
                     className={classNames(
                       RatingLabel[score.value].color,
-                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg"
+                      "items-center gap-x-2 font-normal text-sm py-0.5 px-2 rounded-lg",
                     )}
                   >
                     {RatingLabel[score.value].label}

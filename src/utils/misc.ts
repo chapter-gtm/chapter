@@ -5,7 +5,10 @@ export function getNameInitials(name: string): string {
 }
 
 export function toTitleCase(input: string): string {
-  return input.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  return input
+    .toLowerCase()
+    .replace(/(?:^|_)\w/g, (char) => char.toUpperCase())
+    .replace(/_/g, " ");
 }
 
 export function humanDate(date: Date, showTime: boolean = false): string {
