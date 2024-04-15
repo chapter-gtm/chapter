@@ -1,68 +1,37 @@
 "use client";
 
-import React, { ReactComponentElement, useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { ZodTypeAny, z } from "zod";
-import { Separator } from "@/components/ui/separator";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 
+import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
+import { Toaster } from "@/components/ui/sonner";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-import { ChevronsRight, ExternalLink, Maximize2, LinkIcon } from "lucide-react";
+import { ChevronsRight, ExternalLink, LinkIcon } from "lucide-react";
 
-import { type Survey, type SurveyResponse } from "@/types/survey";
 import { DataTable } from "@/components/data-table/data-table";
+import { SurveyResponseDetails } from "@/components/survey/SurveyResponseDetails";
 import {
-  resultColumns,
   SurveyResponseRecord,
   SurveyResponseRecordSchema,
   filters,
+  getResponseColumns,
 } from "@/components/survey/result-columns";
-import { SurveyResponseDetails } from "@/components/survey/SurveyResponseDetails";
+import { type Survey, type SurveyResponse } from "@/types/survey";
 import { getSurveyResponses } from "@/utils/nectar/surveys";
 import { getUserAccessToken } from "@/utils/supabase/client";
+import { titleCaseToCamelCase } from "@/utils/misc";
 
 interface SurveyResponsesProps {
   survey: Survey;
-}
-
-function titleCaseToCamelCase(titleCaseString: string): string {
-  return titleCaseString
-    .replace(/\s(.)/g, ($1) => $1.toUpperCase())
-    .replace(/\s/g, "")
-    .replace(/^(.)/, ($1) => $1.toLowerCase());
 }
 
 export function SurveyResponses({ survey }: SurveyResponsesProps) {
@@ -169,7 +138,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
             <div className="flex flex-col flex-1 pb-12">
               <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
                 <DataTable
-                  columns={resultColumns}
+                  columns={getResponseColumns(survey.scoreDefinitions)}
                   data={responseRecords}
                   filters={filters}
                   filterColumnName="participant"

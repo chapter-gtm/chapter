@@ -12,8 +12,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 
-import { humanDate } from "@/utils/misc";
-import { SurveyResponseStage, RatingLabel } from "@/types/survey";
+import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
+import {
+  SurveyResponseStage,
+  RatingLabel,
+  ScoreDefinition,
+} from "@/types/survey";
 
 export const SurveyResponseRecord = z.record(z.any());
 export type SurveyResponseRecordSchema = z.infer<typeof SurveyResponseRecord>;
@@ -59,7 +63,7 @@ function toShortDate(currentDate: Date) {
 }
 
 // TODO: Add scores dynamically based on score definitions from the survey
-export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
+const fixedResponseColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -116,40 +120,35 @@ export const resultColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
       return value.includes(row.getValue(id));
     },
   },
-  {
-    accessorKey: "inputQuality",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Input Quality" />
-    ),
-    cell: ({ row }) => {
-      const score: number = row.getValue("inputQuality");
-      return (
-        <div className="flex">
-          <div
-            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
-          >
-            {RatingLabel[score]?.label}
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "problemSeverity",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Problem Severity" />
-    ),
-    cell: ({ row }) => {
-      const score: number = row.getValue("problemSeverity");
-      return (
-        <div className="flex">
-          <div
-            className={classNames(RatingLabel[score]?.color, "p-1 rounded-lg")}
-          >
-            {RatingLabel[score]?.label}
-          </div>
-        </div>
-      );
-    },
-  },
 ];
+
+export function getResponseColumns(scoreDefinitions: ScoreDefinition[]) {
+  const finalColumns: ColumnDef<SurveyResponseRecordSchema>[] = [
+    ...fixedResponseColumns,
+  ];
+  scoreDefinitions.forEach((scoreDef: ScoreDefinition) => {
+    const fieldName = titleCaseToCamelCase(scoreDef.name);
+    finalColumns.push({
+      accessorKey: fieldName,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={scoreDef.name} />
+      ),
+      cell: ({ row }) => {
+        const score: number = row.getValue(fieldName);
+        return (
+          <div className="flex">
+            <div
+              className={classNames(
+                RatingLabel[score]?.color,
+                "p-1 rounded-lg",
+              )}
+            >
+              {RatingLabel[score]?.label}
+            </div>
+          </div>
+        );
+      },
+    });
+  });
+  return finalColumns;
+}
