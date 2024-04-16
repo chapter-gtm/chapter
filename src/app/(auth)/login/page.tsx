@@ -10,6 +10,7 @@ export default function AuthenticationPage() {
   const [message, setMessage] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [messageType, setMessageType] = useState("");
 
   const handleLogin = async (formData: FormData) => {
     try {
@@ -19,6 +20,7 @@ export default function AuthenticationPage() {
       };
       await login(data.email, data.password);
     } catch (error: any) {
+      setMessageType("error");
       setMessage(error.toString());
       setLoading(false);
     }
@@ -33,6 +35,7 @@ export default function AuthenticationPage() {
       const redirectUrl = `https://${currentDomain}/reset-password`;
       await sendResetPasswordLink(data.email, redirectUrl);
       setMessage("Password reset link sent to email!");
+      setMessageType("reset");
     } catch (error: any) {
       setMessage(error.toString());
     }
@@ -89,7 +92,6 @@ export default function AuthenticationPage() {
                 </h1>
               </div>
               <div className="grid gap-6">
-                <p>{message}</p>
                 <form>
                   <div className="grid gap-2">
                     <div className="grid gap-1">
@@ -136,6 +138,20 @@ export default function AuthenticationPage() {
                     </Button>
                   </div>
                 </form>
+                {message && (
+                  <p
+                    className={`flex border  rounded-lg p-3 text-xs ${
+                      messageType === "error"
+                        ? "border-rose-200 bg-rose-50"
+                        : messageType === "reset"
+                        ? "border-indigo-200 bg-zinc-100"
+                        : "border-zinc-200 bg-white"
+                    }`}
+                  >
+                    {" "}
+                    {message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -148,7 +164,6 @@ export default function AuthenticationPage() {
                 </h1>
               </div>
               <div className="grid gap-6">
-                <p>{message}</p>
                 <form>
                   <div className="grid gap-2">
                     <div className="grid gap-1">
@@ -187,6 +202,21 @@ export default function AuthenticationPage() {
                     </Button>
                   </div>
                 </form>
+
+                {message && (
+                  <p
+                    className={`flex border  rounded-lg p-3 text-xs ${
+                      messageType === "error"
+                        ? "border-rose-200 bg-rose-50"
+                        : messageType === "reset"
+                        ? "border-indigo-200 bg-indigo-100"
+                        : "border-zinc-200 bg-white"
+                    }`}
+                  >
+                    {" "}
+                    {message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
