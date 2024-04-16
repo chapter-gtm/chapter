@@ -28,7 +28,6 @@ import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table/data-table";
 import {
-  resultColumns,
   SurveyResponseRecord,
   SurveyResponseRecordSchema,
   filters,
@@ -44,7 +43,7 @@ export default function Streams() {
   const [selectedRow, setSelectedRow] = useState<SurveyResponse | null>(null);
 
   const [responses, setResponses] = useState<Map<string, SurveyResponse>>(
-    new Map()
+    new Map(),
   );
 
   const handleRowClick = function <TData>(data: TData) {
@@ -62,17 +61,7 @@ export default function Streams() {
         <Sheet modal={false} open={sheetOpen}>
           <div className="flex flex-col flex-1 mt-2">
             <PageHeaderRow title="Insights" />
-            <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
-              <DataTable
-                columns={resultColumns}
-                data={responseRecords}
-                filters={filters}
-                filterColumnName=""
-                onRowClick={handleRowClick}
-                responseRecords={responseRecords}
-                canCreateInsight={true}
-              />
-            </div>
+            <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg"></div>
           </div>
 
           <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
