@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   filters: ToolbarFilter[];
   onRowClick: <TData>(data: TData) => void;
   records: TData[];
+  enableRowSelection: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -42,6 +43,7 @@ export function DataTable<TData, TValue>({
   filters,
   onRowClick,
   records,
+  enableRowSelection = false,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -61,7 +63,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    enableRowSelection: true,
+    enableRowSelection: enableRowSelection,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
