@@ -141,9 +141,8 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                   columns={getResponseColumns(survey.scoreDefinitions)}
                   data={responseRecords}
                   filters={filters}
-                  filterColumnName="participant"
                   onRowClick={handleOpenSheet}
-                  responseRecords={responseRecords}
+                  records={responseRecords}
                 />
               </div>
             </div>

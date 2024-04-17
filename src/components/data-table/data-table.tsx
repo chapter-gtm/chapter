@@ -32,9 +32,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filters: ToolbarFilter[];
-  filterColumnName: string;
   onRowClick: <TData>(data: TData) => void;
-  responseRecords: TData[];
+  records: TData[];
   canCreateInsight?: boolean;
 }
 
@@ -42,9 +41,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   filters,
-  filterColumnName,
   onRowClick,
-  responseRecords,
+  records,
   canCreateInsight,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -53,7 +51,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -98,8 +96,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar
         table={table}
         filters={filters}
-        filterColumnName={filterColumnName}
-        responseRecords={responseRecords}
+        records={records}
         canCreateInsight={canCreateInsight}
       />
 
@@ -115,7 +112,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -137,7 +134,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

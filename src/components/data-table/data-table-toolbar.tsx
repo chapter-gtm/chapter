@@ -36,16 +36,14 @@ export interface ToolbarFilter {
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filters: ToolbarFilter[];
-  filterColumnName: string;
-  responseRecords: TData[];
+  records: TData[];
   canCreateInsight?: boolean;
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
-  filterColumnName,
-  responseRecords,
+  records,
   canCreateInsight,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -53,8 +51,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
       <h2 className="flex text-sm font-medium">
-        {responseRecords.length}{" "}
-        {responseRecords.length === 1 ? "Response" : "Responses"}
+        {records.length} {records.length === 1 ? "Record" : "Records"}
       </h2>
       <div className="flex items-center space-x-2 relative">
         {filters.map((item, index) => (
