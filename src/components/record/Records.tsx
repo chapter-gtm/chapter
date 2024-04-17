@@ -130,6 +130,7 @@ export function Records({}: RecordsProps) {
                   filters={filters}
                   onRowClick={handleOpenSheet}
                   records={tableRecords}
+                  enableRowSelection={true}
                 />
               </div>
             </div>
