@@ -34,7 +34,6 @@ interface DataTableProps<TData, TValue> {
   filters: ToolbarFilter[];
   onRowClick: <TData>(data: TData) => void;
   records: TData[];
-  canCreateInsight?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,7 +42,6 @@ export function DataTable<TData, TValue>({
   filters,
   onRowClick,
   records,
-  canCreateInsight,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -80,10 +78,8 @@ export function DataTable<TData, TValue>({
     function handleKeyDown(event: { keyCode: number }) {
       if (event.keyCode === 38) {
         // Up arrow
-        console.log("pressed up");
       } else if (event.keyCode === 40) {
         // Down arrow
-        console.log("pressed down");
       }
     }
 
@@ -93,12 +89,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="relative space-y-1">
-      <DataTableToolbar
-        table={table}
-        filters={filters}
-        records={records}
-        canCreateInsight={canCreateInsight}
-      />
+      <DataTableToolbar table={table} filters={filters} records={records} />
 
       <div className="relative overflow-y-auto border-t border-b">
         <Table>

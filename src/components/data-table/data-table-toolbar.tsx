@@ -37,14 +37,12 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filters: ToolbarFilter[];
   records: TData[];
-  canCreateInsight?: boolean;
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
   records,
-  canCreateInsight,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -73,37 +71,6 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
         <DataTableViewOptions table={table} />
-        {canCreateInsight && (
-          <>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="h-8 px-2">Create Insight</Button>
-              </DialogTrigger>
-
-              <DialogContent className="sm:max-w-[625px]">
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-row gap-x-2 items-center">
-                    <div className="flex text-sm">Insight</div>
-                    <div className="flex">
-                      <ChevronRightIcon />
-                    </div>
-                    <div className="flex text-sm px-2 py-1 bg-zinc-100 rounded-lg">
-                      Creation
-                    </div>
-                  </div>
-                  <Input placeholder="Name" className="text-xl" />
-                  <Input placeholder="Goal" />
-                  <Label className="text-sm">Method template</Label>
-                  <div className="grid grid-rows-1 gap-4">
-                    <div className="col-span-1 h-12 bg-zinc-200"></div>
-                    <div className="col-span-1 h-12 bg-zinc-200"></div>
-                    <div className="col-span-1 h-12 bg-zinc-200"></div>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </>
-        )}
       </div>
     </div>
   );
