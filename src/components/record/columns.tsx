@@ -19,7 +19,7 @@ export type RecordSchema = z.infer<typeof TableRecord>;
 export const filters = [
   {
     tableColumnName: "type",
-    label: "Filter",
+    label: "Type",
     filterOptions: [
       {
         value: RecordType.SURVEY_RESPONSE,
@@ -90,7 +90,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
   {
     accessorKey: "dataSourceName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Data Source" />
+      <DataTableColumnHeader column={column} title="Source" />
     ),
     cell: ({ row }) => (
       <div className="flex">{row.getValue("dataSourceName")}</div>

@@ -22,7 +22,7 @@ export type SurveyResponseRecordSchema = z.infer<typeof SurveyResponseRecord>;
 export const filters = [
   {
     tableColumnName: "stage",
-    label: "Filter",
+    label: "Stage",
     filterOptions: [
       {
         value: SurveyResponseStage.NOT_STARTED,
