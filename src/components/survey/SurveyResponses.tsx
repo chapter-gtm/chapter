@@ -143,6 +143,7 @@ export function SurveyResponses({ survey }: SurveyResponsesProps) {
                   filters={filters}
                   onRowClick={handleOpenSheet}
                   records={responseRecords}
+                  enableRowSelection={false}
                 />
               </div>
             </div>
