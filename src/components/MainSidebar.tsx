@@ -34,7 +34,7 @@ export default function Sidebar({ className }: SideBarProps) {
                 label: "",
                 icon: ActivityIcon,
                 variant: "ghost",
-                route: "/streams",
+                route: "/records",
               },
               {
                 title: "Insights",

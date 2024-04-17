@@ -10,11 +10,12 @@ import {
 import { toTitleCase } from "@/utils/misc";
 
 import {
-  SurveyResponse,
+  type SurveyResponse,
   SurveyResponseStage,
-  Score,
   RatingLabel,
 } from "@/types/survey";
+
+import { type Score } from "@/types/score";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

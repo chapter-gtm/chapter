@@ -1,23 +1,19 @@
 "use client";
-import React from "react";
 
-import { z } from "zod";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import {
-  CircleIcon,
   CheckCircledIcon,
+  CircleIcon,
   CrossCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { z } from "zod";
 
+import { RatingLabel, SurveyResponseStage } from "@/types/survey";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
-import {
-  SurveyResponseStage,
-  RatingLabel,
-  ScoreDefinition,
-} from "@/types/survey";
+
+import { type ScoreDefinition } from "@/types/score";
 
 export const SurveyResponseRecord = z.record(z.any());
 export type SurveyResponseRecordSchema = z.infer<typeof SurveyResponseRecord>;

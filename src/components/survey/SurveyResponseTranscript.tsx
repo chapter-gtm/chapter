@@ -1,19 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SurveyResponse } from "@/types/survey";
 
-function getSurveyResponse(surveyId: string, surveyResponseId: string) {
-  // TODO: Fetch survey responses
-  const response = {
-    id: "1234",
-    date: "Feb 12, 2024",
-    email: "bob@example.com",
-    stage: "Completed",
-    sentiment: "Positive",
-  };
-
-  return response;
-}
-
 interface SurveyResponseTranscriptProps {
   surveyResponse: SurveyResponse;
 }

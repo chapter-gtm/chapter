@@ -1,3 +1,5 @@
+import { type Score, type ScoreDefinition } from "@/types/score";
+
 export enum QuestionFormat {
   OPEN_ENDED = "OPEN_ENDED",
 }
@@ -87,18 +89,6 @@ export type QAPair = {
 export type QuestionThread = {
   question: string;
   qa_pairs: QAPair[];
-};
-
-export type Score = {
-  name: string;
-  value: number;
-  description: string;
-};
-
-export type ScoreDefinition = {
-  name: string;
-  description: string;
-  scale: number[];
 };
 
 export const RatingLabel: { [key: number]: { label: string; color: string } } =
