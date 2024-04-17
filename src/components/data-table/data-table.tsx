@@ -63,7 +63,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    enableRowSelection: false,
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -126,12 +126,19 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={(event: React.MouseEvent<HTMLTableRowElement>) => {
-                    onRowClick(row.original);
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      onClick={(
+                        event: React.MouseEvent<HTMLTableCellElement>,
+                      ) => {
+                        // Don't call row click handler when checkbox field(must has id="select") is clicked.
+                        if (cell.column.id !== "select") {
+                          onRowClick(row.original);
+                        }
+                      }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
