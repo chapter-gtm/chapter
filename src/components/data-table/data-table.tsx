@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick: <TData>(data: TData) => void;
   records: TData[];
   enableRowSelection: boolean;
+  onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
   onRowClick,
   records,
   enableRowSelection = false,
+  onSelectedRowsChange,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -88,6 +90,16 @@ export function DataTable<TData, TValue>({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [table.getRowModel().rows?.length]);
+
+  React.useEffect(() => {
+    if (onSelectedRowsChange === undefined) {
+      return;
+    }
+
+    onSelectedRowsChange(
+      table.getSelectedRowModel().flatRows.map((row) => row.original),
+    );
+  }, [rowSelection]);
 
   return (
     <div className="relative space-y-1">
