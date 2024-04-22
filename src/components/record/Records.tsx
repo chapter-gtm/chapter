@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
+import { SparklesIcon } from "lucide-react";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -27,6 +28,7 @@ import {
 } from "@/components/record/columns";
 import { type DataRecord } from "@/types/record";
 import { getRecords } from "@/utils/nectar/records";
+import { generateInsights } from "@/utils/nectar/insights";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { titleCaseToCamelCase } from "@/utils/misc";
 
@@ -37,6 +39,7 @@ export function Records({}: RecordsProps) {
   const [records, setRecords] = useState<Map<string, DataRecord>>(new Map());
   const [tableRecords, setTableRecords] = useState<RecordSchema[]>([]);
   const [selectedRow, setSelectedRow] = useState<DataRecord | null>(null);
+  const [selectedRows, setSelectedRows] = useState<DataRecord[]>([]);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -81,9 +84,23 @@ export function Records({}: RecordsProps) {
   const handleRowClick = function <TData>(data: TData) {
     const record: RecordSchema = data as RecordSchema;
     const resp: DataRecord | undefined = records.get(record.id);
-    if (resp !== undefined) {
-      setSelectedRow(resp);
+    if (resp === undefined) {
+      return;
     }
+    setSelectedRow(resp);
+  };
+
+  const handleRowSelection = function <TData>(selectedTableRows: TData[]) {
+    const rows: RecordSchema[] = selectedTableRows as RecordSchema[];
+    const dataRecords: DataRecord[] = [];
+    for (let i = 0; i < rows.length; i++) {
+      const item: DataRecord | undefined = records.get(rows[0].id);
+      if (item === undefined) {
+        continue;
+      }
+      dataRecords.push(item);
+    }
+    setSelectedRows(dataRecords);
   };
 
   const handleCopyRecordLink = async (recordId: string | undefined) => {
@@ -115,9 +132,30 @@ export function Records({}: RecordsProps) {
     setSheetOpen(false);
   };
 
+  const handleGenerateInsights = async () => {
+    try {
+      const userToken = await getUserAccessToken();
+      if (userToken === undefined) {
+        throw Error("User needs to login!");
+      }
+      toast.success("Insight generation started.");
+      const recordIds: string[] = selectedRows.map((record) => record.id);
+      const insights = await generateInsights(userToken, recordIds);
+      toast.success("Insight generation completed.");
+    } catch (error: any) {
+      toast.error("Failed to generate insight.", {
+        description: error.toString(),
+      });
+    }
+  };
+
   return (
     <>
       <Toaster theme="light" />
+      <Button onClick={handleGenerateInsights}>
+        <SparklesIcon className="mr-2 h-4 w-4" />
+        Generate insights
+      </Button>
       <div className="flex flex-row h-full">
         {isPopulated ? (
           <Sheet modal={false} open={sheetOpen}>
@@ -130,6 +168,7 @@ export function Records({}: RecordsProps) {
                   onRowClick={handleOpenSheet}
                   records={tableRecords}
                   enableRowSelection={true}
+                  onSelectedRowsChange={handleRowSelection}
                 />
               </div>
             </div>
