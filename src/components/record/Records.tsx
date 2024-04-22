@@ -58,8 +58,7 @@ export function Records({}: RecordsProps) {
               dataSourceName: rec.dataSource.name,
               utm: rec.utm.toString(),
               name: rec.externalName,
-              contact:
-                rec.contact?.name !== undefined ? rec.contact.name : "Unknown",
+              contacts: rec.contacts,
               type: rec.type,
             };
             rec.scores.forEach((item) => {

@@ -32,7 +32,7 @@ export type DataRecord = {
   dataSourceId: string;
   dataSource: DataSource;
   contactId: string;
-  contact: Contact;
+  contacts: Contact[];
   externalId: string;
   externalName: string;
   type: RecordType;

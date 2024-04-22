@@ -10,6 +10,7 @@ import { RecordType } from "@/types/record";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
 
 import { type ScoreDefinition } from "@/types/score";
+import { type Contact } from "@/types/contact";
 import { RatingLabel } from "@/types/survey";
 
 export const TableRecord = z.record(z.any());
@@ -104,11 +105,22 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     cell: ({ row }) => <div className="flex">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "contact",
+    accessorKey: "contacts",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Contact" />
     ),
-    cell: ({ row }) => <div className="flex">{row.getValue("contact")}</div>,
+    cell: ({ row }) => {
+      const contacts: Contact[] = row.getValue("contacts");
+      return (
+        <div className="flex">
+          {contacts.length > 0
+            ? contacts.length > 1
+              ? contacts[0].name + ", ..."
+              : contacts[0].name
+            : "Unknown"}
+        </div>
+      );
+    },
     enableSorting: false,
     enableHiding: false,
   },
