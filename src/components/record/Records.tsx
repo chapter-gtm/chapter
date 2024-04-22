@@ -140,6 +140,12 @@ export function Records({}: RecordsProps) {
       }
       toast.success("Insight generation started.");
       const recordIds: string[] = selectedRows.map((record) => record.id);
+      if (recordIds.length <= 0) {
+        toast.error("Failed to generate insight.", {
+          description: "Please select one or more records to generate insights",
+        });
+        return;
+      }
       const insights = await generateInsights(userToken, recordIds);
       toast.success("Insight generation completed.");
     } catch (error: any) {
@@ -152,7 +158,10 @@ export function Records({}: RecordsProps) {
   return (
     <>
       <Toaster theme="light" />
-      <Button onClick={handleGenerateInsights}>
+      <Button
+        onClick={handleGenerateInsights}
+        disabled={selectedRows.length <= 0}
+      >
         <SparklesIcon className="mr-2 h-4 w-4" />
         Generate insights
       </Button>
