@@ -94,7 +94,7 @@ export function Records({}: RecordsProps) {
     const rows: RecordSchema[] = selectedTableRows as RecordSchema[];
     const dataRecords: DataRecord[] = [];
     for (let i = 0; i < rows.length; i++) {
-      const item: DataRecord | undefined = records.get(rows[0].id);
+      const item: DataRecord | undefined = records.get(rows[i].id);
       if (item === undefined) {
         continue;
       }
