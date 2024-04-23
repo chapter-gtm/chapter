@@ -31,7 +31,6 @@ export type RecordPart = {
 export type DataRecord = {
   dataSourceId: string;
   dataSource: DataSource;
-  contactId: string;
   contacts: Contact[];
   externalId: string;
   externalName: string;

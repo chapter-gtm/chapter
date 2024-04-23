@@ -26,6 +26,7 @@ import {
   filters,
   getRecordColumns,
 } from "@/components/record/columns";
+import { type Contact, type Company } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
 import { getRecords } from "@/utils/nectar/records";
 import { generateInsights } from "@/utils/nectar/insights";
@@ -55,15 +56,40 @@ export function Records({}: RecordsProps) {
 
         const tableRecs = z.array(TableRecord).parse(
           recs.map((rec: DataRecord) => {
+            // TODO: Handle more than one contacts per record
+            const contact: Contact | null =
+              rec.contacts.length > 0 ? rec.contacts[0] : null;
+            const company: Company | null =
+              rec.contacts.length > 0 && rec.contacts[0].companies.length > 0
+                ? rec.contacts[0].companies[0]
+                : null;
             const record: Record<string, any> = {
               id: rec.id,
               date: new Date(rec.startedAt),
               dataSourceName: rec.dataSource.name,
               utm: rec.utm.toString(),
               name: rec.externalName,
-              contacts: rec.contacts,
               type: rec.type,
+              contactName: "Unknown",
+              companyName: "Unknown",
+              contactLocation: "Unknown",
+              companyLocation: "Unknown",
+              plan: "Unknown",
+              arr: 0,
             };
+
+            if (contact !== null) {
+              record["contactName"] = contact.name;
+              record["contactLocation"] = contact.location.country;
+              record["plan"] = contact.plan?.name;
+            }
+            if (company !== null) {
+              record["companyName"] = company.name;
+              record["companyLocation"] = company?.location.country;
+              record["plan"] = company.plan?.name;
+              record["arr"] = company.monthly_spend * 12;
+            }
+
             rec.scores.forEach((item) => {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
