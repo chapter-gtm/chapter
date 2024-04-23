@@ -39,6 +39,80 @@ export const filters = [
       },
     ],
   },
+  {
+    tableColumnName: "contactLocation",
+    label: "Contact Location",
+    filterOptions: [
+      {
+        value: "Brazil",
+        label: "Brazil",
+        icon: undefined,
+      },
+      {
+        value: "UK",
+        label: "UK",
+        icon: undefined,
+      },
+      {
+        value: "US",
+        label: "US",
+        icon: undefined,
+      },
+    ],
+  },
+  {
+    tableColumnName: "companyName",
+    label: "Company Name",
+    filterOptions: [
+      {
+        value: "Spotify",
+        label: "Spotify",
+        icon: undefined,
+      },
+      {
+        value: "Stripe",
+        label: "Stripe",
+        icon: undefined,
+      },
+    ],
+  },
+  {
+    tableColumnName: "companyLocation",
+    label: "Company Location",
+    filterOptions: [
+      {
+        value: "Sweden",
+        label: "Sweden",
+        icon: undefined,
+      },
+      {
+        value: "US",
+        label: "US",
+        icon: undefined,
+      },
+    ],
+  },
+  {
+    tableColumnName: "plan",
+    label: "Plan",
+    filterOptions: [
+      {
+        value: "Free",
+        label: "Free",
+        icon: undefined,
+      },
+      {
+        value: "Team",
+        label: "Team",
+        icon: undefined,
+      },
+      {
+        value: "Enterprise",
+        label: "Enterprise",
+        icon: undefined,
+      },
+    ],
+  },
 ];
 
 function classNames(...classes: string[]) {
@@ -105,24 +179,69 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     cell: ({ row }) => <div className="flex">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "contacts",
+    accessorKey: "contactName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Contact" />
+      <DataTableColumnHeader column={column} title="Contact Name" />
     ),
-    cell: ({ row }) => {
-      const contacts: Contact[] = row.getValue("contacts");
-      return (
-        <div className="flex">
-          {contacts.length > 0
-            ? contacts.length > 1
-              ? contacts[0].name + ", ..."
-              : contacts[0].name
-            : "Unknown"}
-        </div>
-      );
+    cell: ({ row }) => (
+      <div className="flex">{row.getValue("contactName")}</div>
+    ),
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "contactLocation",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Contact Location" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex">{row.getValue("contactLocation")}</div>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
-    enableSorting: false,
-    enableHiding: false,
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "companyName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Company Name" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex">{row.getValue("companyName")}</div>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "companyLocation",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Company Location" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex">{row.getValue("companyLocation")}</div>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "plan",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Plan" />
+    ),
+    cell: ({ row }) => <div className="flex">{row.getValue("plan")}</div>,
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: "type",
