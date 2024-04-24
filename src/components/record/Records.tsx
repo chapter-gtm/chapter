@@ -87,7 +87,7 @@ export function Records({}: RecordsProps) {
               record["companyName"] = company.name;
               record["companyLocation"] = company?.location.country;
               record["plan"] = company.plan?.name;
-              record["arr"] = company.monthly_spend * 12;
+              record["arr"] = company.monthlySpend * 12;
             }
 
             rec.scores.forEach((item) => {
