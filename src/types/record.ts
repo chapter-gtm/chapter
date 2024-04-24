@@ -21,7 +21,7 @@ export enum RecordState {
 export type RecordPart = {
   author: string;
   type: RecordPartType;
-  text: string;
+  body: string;
   contactId: string;
   userId: string;
   createdAt: Date;
