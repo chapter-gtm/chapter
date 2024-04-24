@@ -56,13 +56,25 @@ export const fixedCompanyColumns: ColumnDef<CompanySchema>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ARR" />
     ),
-    cell: ({ row }) => <div className="flex">{row.getValue("arr")}</div>,
+    cell: ({ row }) => {
+      const arr: number = row.getValue("arr");
+      const currencySymbol = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD", // Specify the currency code (e.g., USD for US Dollar, EUR for Euro)
+      }).formatToParts()[0].value;
+      return (
+        <div className="flex">{currencySymbol + arr.toLocaleString()}</div>
+      );
+    },
   },
   {
     accessorKey: "userCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="User Count" />
     ),
-    cell: ({ row }) => <div className="flex">{row.getValue("userCount")}</div>,
+    cell: ({ row }) => {
+      const count: number = row.getValue("userCount");
+      return <div className="flex">{count.toLocaleString()}</div>;
+    },
   },
 ];
