@@ -244,6 +244,22 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     enableHiding: true,
   },
   {
+    accessorKey: "arr",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ARR" />
+    ),
+    cell: ({ row }) => {
+      const arr: number = row.getValue("arr");
+      const currencySymbol = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD", // Specify the currency code (e.g., USD for US Dollar, EUR for Euro)
+      }).formatToParts()[0].value;
+      return (
+        <div className="flex">{currencySymbol + arr.toLocaleString()}</div>
+      );
+    },
+  },
+  {
     accessorKey: "type",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
