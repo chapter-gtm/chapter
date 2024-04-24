@@ -38,15 +38,28 @@ import { getUserAccessToken } from "@/utils/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { type DataRecord } from "@/types/record";
+import { type Company, type Contact } from "@/types/contact";
 import { humanDate, getNameInitials, titleCaseToCamelCase } from "@/utils/misc";
 import { DataTable } from "@/components/data-table/data-table";
 import { RecordDetails } from "@/components/record/RecordDetails";
 import {
   TableRecord,
-  RecordSchema,
-  filters,
+  type RecordSchema,
+  recordFilters,
   getRecordColumns,
 } from "@/components/insight/record-columns";
+import {
+  CompanyRecord,
+  type CompanySchema,
+  companyFilters,
+  fixedCompanyColumns,
+} from "@/components/insight/company-columns";
+import {
+  ContactRecord,
+  type ContactSchema,
+  contactFilters,
+  fixedContactColumns,
+} from "@/components/insight/contact-columns";
 
 interface InsightDetailsProps {
   insightId: string;
@@ -60,8 +73,8 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
     null,
   );
-  //const [companies, setCompanies] = useState<CompanySchema[]>([]);
-  //const [contacts, setContacts] = useState<ContactSchema[]>([]);
+  const [companyRecords, setCompanyRecords] = useState<CompanySchema[]>([]);
+  const [contactRecords, setContactRecords] = useState<ContactSchema[]>([]);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -98,8 +111,36 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
         setRecords(recordMap);
 
         // Set companies
+        const companyRecs = z.array(CompanyRecord).parse(
+          ins.companies.map((comp: Company) => {
+            const company: Record<string, any> = {
+              id: comp.id,
+              name: comp.name,
+              size: comp.size,
+              industry: comp.industry,
+              country: comp.location !== null ? comp.location.country : "-",
+              plan: comp.plan !== null ? comp.plan.name : "-",
+              arr: comp.monthlySpend * 12,
+              userCount: comp.userCount,
+            };
+            return company;
+          }),
+        );
+        setCompanyRecords(companyRecs);
 
         // Set contacts
+        const contactRecs = z.array(ContactRecord).parse(
+          ins.contacts.map((cont: Contact) => {
+            const contact: Record<string, any> = {
+              id: cont.id,
+              name: cont.name,
+              country: cont.location !== null ? cont.location.country : "-",
+              company: cont.companies.length > 0 ? cont.companies[0].name : "-",
+            };
+            return contact;
+          }),
+        );
+        setContactRecords(contactRecs);
       } catch (error) {
         console.log(error);
       }
@@ -254,7 +295,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                 Records{" "}
                 <Badge variant="outline">{insight.records.length}</Badge>
               </TabsTrigger>
-              <TabsTrigger value="accounts">
+              <TabsTrigger value="companies">
                 Accounts{" "}
                 <Badge variant="outline">{insight.companies.length}</Badge>
               </TabsTrigger>
@@ -270,7 +311,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                     <DataTable
                       columns={getRecordColumns()}
                       data={tableRecords}
-                      filters={filters}
+                      filters={recordFilters}
                       onRowClick={handleRecordOpenSheet}
                       records={tableRecords}
                       enableRowSelection={false}
@@ -331,8 +372,34 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                 </SheetContent>
               </Sheet>
             </TabsContent>
-            <TabsContent value="companies" className="space-y-4"></TabsContent>
-            <TabsContent value="contacts" className="space-y-4"></TabsContent>
+            <TabsContent value="companies" className="space-y-4">
+              <div className="flex flex-col flex-1 pb-12">
+                <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
+                  <DataTable
+                    columns={fixedCompanyColumns}
+                    data={companyRecords}
+                    filters={companyFilters}
+                    onRowClick={() => {}}
+                    records={companyRecords}
+                    enableRowSelection={false}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="contacts" className="space-y-4">
+              <div className="flex flex-col flex-1 pb-12">
+                <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
+                  <DataTable
+                    columns={fixedContactColumns}
+                    data={contactRecords}
+                    filters={contactFilters}
+                    onRowClick={() => {}}
+                    records={contactRecords}
+                    enableRowSelection={false}
+                  />
+                </div>
+              </div>
+            </TabsContent>
           </Tabs>
         </div>
       ) : (

@@ -1,6 +1,5 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
@@ -9,15 +8,13 @@ import { z } from "zod";
 import { RecordType } from "@/types/record";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
 
-import { type ScoreDefinition } from "@/types/score";
-import { type Contact } from "@/types/contact";
 import { RatingLabel } from "@/types/survey";
 
 export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
 
 // TODO: Add score filters dynamically based on score definitions from the survey
-export const filters = [
+export const recordFilters = [
   {
     tableColumnName: "type",
     label: "Type",
@@ -43,12 +40,6 @@ export const filters = [
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
-}
-
-function toShortDate(currentDate: Date) {
-  const options = { month: "short", day: "2-digit" } as const;
-  const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  return formattedDate;
 }
 
 // TODO: Add scores dynamically based on score definitions from the survey
@@ -86,7 +77,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       <DataTableColumnHeader column={column} title="Type" />
     ),
     cell: ({ row }) => {
-      const type = filters[0].filterOptions.find(
+      const type = recordFilters[0].filterOptions.find(
         (type) => type.value === row.getValue("type"),
       );
 
