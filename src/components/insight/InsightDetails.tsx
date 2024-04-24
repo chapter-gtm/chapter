@@ -68,7 +68,7 @@ interface InsightDetailsProps {
 export function InsightDetails({ insightId }: InsightDetailsProps) {
   const [insight, setInsight] = useState<Insight | null>(null);
   const [records, setRecords] = useState<Map<string, DataRecord>>(new Map());
-  const [tableRecords, setTableRecords] = useState<RecordSchema[]>([]);
+  const [dataRecords, setDataRecords] = useState<RecordSchema[]>([]);
   const [recordSheetOpen, setRecordSheetOpen] = useState(false);
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
     null,
@@ -104,7 +104,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
             return record;
           }),
         );
-        setTableRecords(tableRecs);
+        setDataRecords(tableRecs);
 
         const recordMap = new Map<string, DataRecord>();
         ins.records.forEach((r: DataRecord) => recordMap.set(r.id, r));
@@ -291,7 +291,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
           </div>
           <Tabs defaultValue="records" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="tableRecords">
+              <TabsTrigger value="dataRecords">
                 Records{" "}
                 <Badge variant="outline">{insight.records.length}</Badge>
               </TabsTrigger>
@@ -304,16 +304,16 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                 <Badge variant="outline">{insight.contacts.length}</Badge>
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="tableRecords" className="space-y-4">
+            <TabsContent value="dataRecords" className="space-y-4">
               <Sheet modal={false} open={recordSheetOpen}>
                 <div className="flex flex-col flex-1 pb-12">
                   <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
                     <DataTable
                       columns={getRecordColumns()}
-                      data={tableRecords}
+                      data={dataRecords}
                       filters={recordFilters}
                       onRowClick={handleRecordOpenSheet}
-                      records={tableRecords}
+                      records={dataRecords}
                       enableRowSelection={false}
                     />
                   </div>

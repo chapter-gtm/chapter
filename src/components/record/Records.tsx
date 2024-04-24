@@ -38,7 +38,7 @@ interface RecordsProps {}
 export function Records({}: RecordsProps) {
   const [isPopulated, setIsPopulated] = useState(false);
   const [records, setRecords] = useState<Map<string, DataRecord>>(new Map());
-  const [tableRecords, setTableRecords] = useState<RecordSchema[]>([]);
+  const [dataRecords, setDataRecords] = useState<RecordSchema[]>([]);
   const [selectedRow, setSelectedRow] = useState<DataRecord | null>(null);
   const [selectedRows, setSelectedRows] = useState<DataRecord[]>([]);
 
@@ -98,7 +98,7 @@ export function Records({}: RecordsProps) {
         );
 
         setRecords(recordMap);
-        setTableRecords(tableRecs);
+        setDataRecords(tableRecs);
         setIsPopulated(true);
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
@@ -198,10 +198,10 @@ export function Records({}: RecordsProps) {
               <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
                 <DataTable
                   columns={getRecordColumns()}
-                  data={tableRecords}
+                  data={dataRecords}
                   filters={filters}
                   onRowClick={handleOpenSheet}
-                  records={tableRecords}
+                  records={dataRecords}
                   enableRowSelection={true}
                   onSelectedRowsChange={handleRowSelection}
                 />
