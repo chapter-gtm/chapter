@@ -17,9 +17,9 @@ export type Company = {
   size: number;
   website: string;
   industry: string;
-  monthly_spend: number;
-  user_count: number;
-  custom_attributes: object;
+  monthlySpend: number;
+  userCount: number;
+  customAttributes: object;
 };
 
 export type Contact = {
