@@ -1,5 +1,5 @@
 import { type User } from "@/types/user";
-import { type Contact } from "@/types/contact";
+import { type Contact, type Company } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
 
 export enum InsightType {
