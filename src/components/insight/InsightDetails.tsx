@@ -289,7 +289,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               </CardContent>
             </Card>
           </div>
-          <Tabs defaultValue="records" className="space-y-4">
+          <Tabs defaultValue="dataRecords" className="space-y-4">
             <TabsList>
               <TabsTrigger value="dataRecords">
                 Records{" "}
