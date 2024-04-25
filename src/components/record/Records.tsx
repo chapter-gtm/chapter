@@ -42,6 +42,7 @@ export function Records({}: RecordsProps) {
   const [dataRecords, setDataRecords] = useState<RecordSchema[]>([]);
   const [selectedRow, setSelectedRow] = useState<DataRecord | null>(null);
   const [selectedRows, setSelectedRows] = useState<DataRecord[]>([]);
+  const [draftingInsights, setDraftingInsights] = useState(false);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -167,6 +168,7 @@ export function Records({}: RecordsProps) {
 
   const handleGenerateInsights = async () => {
     try {
+      setDraftingInsights(true);
       const userToken = await getUserAccessToken();
       if (userToken === undefined) {
         throw Error("User needs to login!");
@@ -192,6 +194,8 @@ export function Records({}: RecordsProps) {
       toast.error("Failed to generate insight.", {
         description: error.toString(),
       });
+    } finally {
+      setDraftingInsights(false);
     }
   };
 
@@ -203,7 +207,7 @@ export function Records({}: RecordsProps) {
         disabled={selectedRows.length <= 0}
       >
         <SparklesIcon className="mr-2 h-4 w-4" />
-        Generate insights
+        {draftingInsights ? "Drafting insights..." : "Draft insights"}
       </Button>
       <div className="flex flex-row h-full">
         {isPopulated ? (
