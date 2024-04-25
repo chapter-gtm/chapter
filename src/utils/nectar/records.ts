@@ -6,6 +6,8 @@ export async function getRecords(
   token: string,
   pageSize: number,
   currentPage: number,
+  orderBy: string = "started_at",
+  sortOrder: string = "desc",
 ) {
   const response = await fetch(
     NECTAR_API_BASE +
@@ -13,6 +15,8 @@ export async function getRecords(
       new URLSearchParams({
         pageSize: pageSize.toString(),
         currentPage: currentPage.toString(),
+        orderBy: orderBy,
+        sortOrder: sortOrder,
       }),
     {
       method: "GET",
