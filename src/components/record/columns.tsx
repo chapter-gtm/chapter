@@ -1,17 +1,21 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
+import { PhoneCall, StarHalf, StickyNote } from "lucide-react";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 
 import { RecordType } from "@/types/record";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
 
-import { type ScoreDefinition } from "@/types/score";
+import { type ScoreDefinition, type Tag } from "@/types/score";
 import { type Contact } from "@/types/contact";
 import { RatingLabel } from "@/types/survey";
+import { toTitleCase } from "@/utils/misc";
 
 export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
@@ -34,35 +38,86 @@ export const filters = [
       },
       {
         value: RecordType.CHAT_TRANSCRIPT,
-        label: "Chat Transcript",
+        label: "Chat",
         icon: ChatBubbleIcon,
+      },
+      {
+        value: RecordType.CALL_TRANSCRIPT,
+        label: "Call",
+        icon: PhoneCall,
+      },
+      {
+        value: RecordType.REVIEW,
+        label: "Review",
+        icon: StarHalf,
+      },
+      {
+        value: RecordType.POST,
+        label: "Post",
+        icon: StickyNote,
       },
     ],
   },
   {
-    tableColumnName: "contactLocation",
-    label: "Contact Location",
+    tableColumnName: "dataSourceName",
+    label: "Source",
     filterOptions: [
       {
-        value: "Brazil",
-        label: "Brazil",
+        value: "Nectar",
+        label: "Survey",
         icon: undefined,
       },
       {
-        value: "UK",
-        label: "UK",
+        value: "intercom",
+        label: "Intercom",
         icon: undefined,
       },
       {
-        value: "US",
-        label: "US",
+        value: "gong",
+        label: "Gong",
+        icon: undefined,
+      },
+      {
+        value: "notion",
+        label: "Notion",
+        icon: undefined,
+      },
+      {
+        value: "g2",
+        label: "G2",
+        icon: undefined,
+      },
+      {
+        value: "x",
+        label: "X",
+        icon: undefined,
+      },
+    ],
+  },
+  {
+    tableColumnName: "tags",
+    label: "Tags",
+    filterOptions: [
+      {
+        value: "onboarding",
+        label: "Onboarding",
+        icon: undefined,
+      },
+      {
+        value: "checkout",
+        label: "Checkout",
+        icon: undefined,
+      },
+      {
+        value: "pricing",
+        label: "Pricing",
         icon: undefined,
       },
     ],
   },
   {
     tableColumnName: "companyName",
-    label: "Company Name",
+    label: "Account",
     filterOptions: [
       {
         value: "Spotify",
@@ -78,7 +133,7 @@ export const filters = [
   },
   {
     tableColumnName: "companyLocation",
-    label: "Company Location",
+    label: "Location",
     filterOptions: [
       {
         value: "Sweden",
@@ -97,13 +152,13 @@ export const filters = [
     label: "Plan",
     filterOptions: [
       {
-        value: "Free",
-        label: "Free",
+        value: "starter",
+        label: "Starter",
         icon: undefined,
       },
       {
-        value: "Team",
-        label: "Team",
+        value: "growth",
+        label: "Growth",
         icon: undefined,
       },
       {
@@ -163,25 +218,16 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
   },
   {
-    accessorKey: "dataSourceName",
+    accessorKey: "topic",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Source" />
+      <DataTableColumnHeader column={column} title="Topic" />
     ),
-    cell: ({ row }) => (
-      <div className="flex">{row.getValue("dataSourceName")}</div>
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => <div className="flex">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div className="flex">{row.getValue("topic")}</div>,
   },
   {
     accessorKey: "contactName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Contact Name" />
+      <DataTableColumnHeader column={column} title="Contact" />
     ),
     cell: ({ row }) => (
       <div className="flex">{row.getValue("contactName")}</div>
@@ -190,23 +236,9 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "contactLocation",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Contact Location" />
-    ),
-    cell: ({ row }) => (
-      <div className="flex">{row.getValue("contactLocation")}</div>
-    ),
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
     accessorKey: "companyName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Company Name" />
+      <DataTableColumnHeader column={column} title="Account" />
     ),
     cell: ({ row }) => (
       <div className="flex">{row.getValue("companyName")}</div>
@@ -220,7 +252,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
   {
     accessorKey: "companyLocation",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Company Location" />
+      <DataTableColumnHeader column={column} title="Location" />
     ),
     cell: ({ row }) => (
       <div className="flex">{row.getValue("companyLocation")}</div>
@@ -284,6 +316,55 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "dataSourceName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Source" />
+    ),
+    cell: ({ row }) => {
+      const type = filters[1].filterOptions.find(
+        (type) => type.value === row.getValue("dataSourceName"),
+      );
+
+      if (!type) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {type.hasOwnProperty("icon") && type.icon && (
+            <type.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{type.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "tags",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Tags" />
+    ),
+    cell: ({ row }) => {
+      const tags: string[] = row.getValue("tags");
+      return (
+        <div className="flex items-center">
+          {tags.map((item, index) => (
+            <Badge key={index} variant="outline">
+              {toTitleCase(item)}
+            </Badge>
+          ))}
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      const tags: string[] = row.getValue(id);
+      return value.some((item: string) => tags.includes(item));
     },
   },
 ];

@@ -28,6 +28,7 @@ import {
 } from "@/components/record/columns";
 import { type Contact, type Company } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
+import { type Tag } from "@/types/score";
 import { getRecords } from "@/utils/nectar/records";
 import { generateInsights } from "@/utils/nectar/insights";
 import { getUserAccessToken } from "@/utils/supabase/client";
@@ -68,8 +69,9 @@ export function Records({}: RecordsProps) {
               date: new Date(rec.startedAt),
               dataSourceName: rec.dataSource.name,
               utm: rec.utm.toString(),
-              name: rec.externalName,
+              topic: rec.externalName,
               type: rec.type,
+              tags: rec.tags.map((tag: Tag) => tag.value),
               contactName: "Unknown",
               companyName: "Unknown",
               contactLocation: "Unknown",

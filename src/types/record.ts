@@ -1,4 +1,4 @@
-import { type Score } from "@/types/score";
+import { type Score, type Tag } from "@/types/score";
 import { type DataSource } from "@/types/data-source";
 import { type Contact } from "@/types/contact";
 
@@ -11,6 +11,9 @@ export enum RecordType {
   SURVEY_RESPONSE = "SURVEY_RESPONSE",
   NOTES = "NOTES",
   CHAT_TRANSCRIPT = "CHAT_TRANSCRIPT",
+  CALL_TRANSCRIPT = "CALL_TRANSCRIPT",
+  REVIEW = "REVIEW",
+  POST = "POST",
 }
 
 export enum RecordState {
@@ -43,7 +46,7 @@ export type DataRecord = {
   endedAt: Date;
   parts: RecordPart[];
   scores: Score[];
-  tags: string[];
+  tags: Tag[];
   createdAt: Date;
   updatedAt: Date;
 };
