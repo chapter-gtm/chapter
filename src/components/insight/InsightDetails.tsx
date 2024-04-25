@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 
 import { z } from "zod";
@@ -13,6 +13,10 @@ import {
   ShieldQuestion,
   Quote,
   Layers,
+  UserIcon,
+  CircleUserRound,
+  LightbulbIcon,
+  ChevronDown,
 } from "lucide-react";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -71,7 +75,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
   const [dataRecords, setDataRecords] = useState<RecordSchema[]>([]);
   const [recordSheetOpen, setRecordSheetOpen] = useState(false);
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
-    null,
+    null
   );
   const [companyRecords, setCompanyRecords] = useState<CompanySchema[]>([]);
   const [contactRecords, setContactRecords] = useState<ContactSchema[]>([]);
@@ -102,7 +106,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
             });
 
             return record;
-          }),
+          })
         );
         setDataRecords(tableRecs);
 
@@ -124,7 +128,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               userCount: comp.userCount,
             };
             return company;
-          }),
+          })
         );
         setCompanyRecords(companyRecs);
 
@@ -138,7 +142,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               company: cont.companies.length > 0 ? cont.companies[0].name : "-",
             };
             return contact;
-          }),
+          })
         );
         setContactRecords(contactRecs);
       } catch (error) {
@@ -166,7 +170,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`,
+        `https://${currentDomain}/records/${recordId}`
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -176,231 +180,355 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     }
   };
 
+  const timeline = [
+    {
+      id: 1,
+      content: "created selection",
+      target: "Robin",
+      href: "#",
+      date: "Apr 26",
+      datetime: "2020-09-20",
+    },
+    {
+      id: 2,
+      content: "drafted insight",
+      target: "Nectar",
+      href: "#",
+      date: "Apr 26",
+      datetime: "2020-09-22",
+    },
+  ];
+
+  const paragraphRef = useRef(null);
+
+  // Function to select the text of the <p> element
+  const selectText = () => {
+    if (paragraphRef.current) {
+      paragraphRef.current.select();
+    }
+  };
+
+  useEffect(() => {
+    selectText();
+  }, []);
+
+  const colors = [
+    "bg-indigo-200",
+    "bg-rose-100",
+    "bg-yellow-100",
+    "bg-yellow-200",
+    "bg-purple-300",
+  ];
+
   return (
     <>
       {insight !== null ? (
         <div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
-            <div className="flex-1 space-y-4 p-8 pt-6">
-              <div className="flex items-center justify-between space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">
-                  {insight.insight.statement}
-                </h2>
-              </div>
-              <p>
-                Drafted by Nectar, commissioned by
-                <Avatar className="mr-2 h-5 w-5 rounded-lg">
-                  <AvatarImage
-                    src={insight.author.avatarUrl}
-                    alt={insight.author.name}
-                  />
-                  <AvatarFallback className="text-xs bg-slate-200">
-                    {getNameInitials(insight.author.name)}
-                  </AvatarFallback>
-                </Avatar>
-                {insight.author.name}
-                {" at "}
-                {humanDate(new Date(insight.createdAt), true)}
-              </p>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Who</CardTitle>
-                    <Users />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-l font-bold">
+          <div className="bg-white rounded-lg mt-3 mx-4">
+            <div className="flex flex-row h-14 px-10 items-center mt-2 border-zinc-200 border-b justify-between">
+              <p className="text-base text-medium">Name</p>
+              <Button variant="outline" size="sm" disabled={true}>
+                Link
+              </Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+              <div className="flex-1 space-y-4 px-10">
+                <div className="flex flex-col w-full pb-6 justify-start space-y-2 mt-12">
+                  <div className="flex flex-row items-center gap-x-1 text-xs">
+                    <Button variant="outline" size="sm" disabled={false}>
+                      4w's
+                      <span>
+                        <ChevronDown size={"15"}></ChevronDown>
+                      </span>
+                    </Button>
+
+                    <Button variant="outline" size="sm" disabled={false}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        className="lucide lucide-ellipsis-vertical"
+                      >
+                        <circle cx="12" cy="12" r="1" />
+                        <circle cx="12" cy="5" r="1" />
+                        <circle cx="12" cy="19" r="1" />
+                      </svg>
+                    </Button>
+                  </div>
+                  <h2 className="text-2xl font-medium tracking-tight text-zinc-600 w-3/4 py-2">
+                    {insight.insight.statement}
+                  </h2>
+                  <div className="flex flex-row items-center gap-x-1 text-xs">
+                    <p className="text-zinc-700">Nectar</p>
+                    <p className="text-zinc-400">drafted insight</p>
+                    <p className="text-zinc-400">·</p>
+                    <p className="text-zinc-400">
+                      {humanDate(new Date(insight.createdAt), false)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 space-y-0">
+                  <div className="flex px-2.5 rounded-lg bg-zinc-100 items-center gap-x-1">
+                    <CircleUserRound size={"15"} className="text-zinc-600" />
+                    <p className="text-sm text-zinc-600">Who</p>
+                    <span className="w-0.5 h-10 bg-zinc-200 mx-2"></span>
+                    <p className="text-sm text-zinc-600">
                       {insight.insight.who.trim() !== ""
                         ? insight.insight.who
                         : "-"}
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      User type, including segment or specification
                     </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Where</CardTitle>
-                    <MapPin />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-l font-bold">
-                      {insight.insight.where.trim() !== ""
-                        ? insight.insight.where
-                        : "-"}
+                  </div>
+
+                  <div className="flex flex-row items-center justify-between space-y-0">
+                    <div className="flex px-2.5 rounded-lg bg-zinc-100 items-center gap-x-1">
+                      <MapPin size={"15"} className="text-zinc-600" />
+                      <p className="text-sm text-zinc-600">Where</p>
+                      <span className="w-0.5 h-10 bg-zinc-200 mx-2"></span>
+                      <p className="text-sm text-zinc-600">
+                        {insight.insight.who.trim() !== ""
+                          ? insight.insight.where
+                          : "-"}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Cities, countries, regions, that insight is based on
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">What</CardTitle>
-                    <Target />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-l font-bold">
-                      {insight.insight.what.trim() !== ""
-                        ? insight.insight.what
-                        : "-"}
+                  </div>
+
+                  <div className="flex flex-row items-center justify-between space-y-0">
+                    <div className="flex px-2.5 rounded-lg bg-zinc-100 items-center gap-x-1">
+                      <Target size={"15"} className="text-zinc-600" />
+                      <p className="text-sm text-zinc-600">What</p>
+                      <span className="w-0.5 h-10 bg-zinc-200 mx-2"></span>
+                      <p className="text-sm text-zinc-600">
+                        {insight.insight.who.trim() !== ""
+                          ? insight.insight.what
+                          : "-"}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      A notable behavior, occurrence, or situation
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Why</CardTitle>
-                    <ShieldQuestion />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-l font-bold">
-                      {insight.insight.why.trim() !== ""
-                        ? insight.insight.why
-                        : "-"}
+                  </div>
+
+                  <div className="flex flex-row items-center justify-between space-y-0">
+                    <div className="flex px-2.5 rounded-lg bg-zinc-100 items-center gap-x-1">
+                      <LightbulbIcon size={"15"} className="text-zinc-600" />
+                      <p className="text-sm text-zinc-600">Why</p>
+                      <span className="w-0.5 h-10 bg-zinc-200 mx-2"></span>
+                      <p className="text-sm text-zinc-600">
+                        {insight.insight.who.trim() !== ""
+                          ? insight.insight.why
+                          : "-"}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      An explanation of the behavior or occurrence
-                    </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
-            </div>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Facts</CardTitle>
-                <Quote />
-              </CardHeader>
-              <CardContent>
-                <div className="text-l">
-                  <ul style={{ listStyleType: "disc" }}>
+              <div className="justify-center items-center mt-12 pe-10">
+                <p className="text-sm text-zinc-500 py-3">Hightlights</p>
+                <div className="text-small text-zinc-600">
+                  <ul
+                    style={{ listStyleType: "inherit" }}
+                    role="list"
+                    className="grid grid-cols-2 gap-3"
+                  >
                     {insight.insight.facts.map((item, index) => (
-                      <li key={index}>{item}</li>
+                      <li key={index} className="flex">
+                        <p
+                          ref={paragraphRef}
+                          className="p-3 rounded-lg text-white bg-indigo-500"
+                        >
+                          {" "}
+                          {item}
+                        </p>
+                      </li>
                     ))}
                   </ul>
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Data points, user quotes, anecdotes, observations that support
-                  the insight
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          <Tabs defaultValue="dataRecords" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="dataRecords">
-                Records{" "}
-                <Badge variant="outline">{insight.records.length}</Badge>
-              </TabsTrigger>
-              <TabsTrigger value="companies">
-                Accounts{" "}
-                <Badge variant="outline">{insight.companies.length}</Badge>
-              </TabsTrigger>
-              <TabsTrigger value="contacts">
-                Contacts{" "}
-                <Badge variant="outline">{insight.contacts.length}</Badge>
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="dataRecords" className="space-y-4">
-              <Sheet modal={false} open={recordSheetOpen}>
-                <div className="flex flex-col flex-1 pb-12">
-                  <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
-                    <DataTable
-                      columns={getRecordColumns()}
-                      data={dataRecords}
-                      filters={recordFilters}
-                      onRowClick={handleRecordOpenSheet}
-                      records={dataRecords}
-                      enableRowSelection={false}
-                    />
+              </div>
+            </div>
+            <Tabs
+              defaultValue="dataRecords"
+              className="space-y-0 rounded-none mt-10 flex flex-col"
+            >
+              <TabsList className="py-3 h-14 bg-white w-full justify-start border-b border-zinc-200 rounded-none px-8">
+                <TabsTrigger
+                  value="dataRecords"
+                  className="bg-white data-[state=active]:bg-zinc-100 py-2"
+                >
+                  Records{" "}
+                  <Badge variant="outline" className="bg-zinc-200/70 ms-1">
+                    {insight.records.length}
+                  </Badge>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="companies"
+                  className="bg-white data-[state=active]:bg-zinc-100"
+                >
+                  Accounts{" "}
+                  <Badge variant="outline">{insight.companies.length}</Badge>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="contacts"
+                  className="bg-white data-[state=active]:bg-zinc-100"
+                >
+                  Contacts{" "}
+                  <Badge variant="outline">{insight.contacts.length}</Badge>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="activity"
+                  className="bg-white data-[state=active]:bg-zinc-100"
+                >
+                  Activity
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="dataRecords" className="">
+                <Sheet modal={false} open={recordSheetOpen}>
+                  <div className="flex flex-col flex-1 pb-12">
+                    <div className="flex flex-col px-6">
+                      <DataTable
+                        columns={getRecordColumns()}
+                        data={dataRecords}
+                        filters={recordFilters}
+                        onRowClick={handleRecordOpenSheet}
+                        records={dataRecords}
+                        enableRowSelection={false}
+                      />
+                    </div>
                   </div>
-                </div>
-                <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
-                  <TooltipProvider delayDuration={0}>
-                    <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
-                      <SheetClose
-                        onClick={handleRecordCloseSheet}
-                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
-                      >
-                        <ChevronsRight className="h-4 w-4 mx-auto" />
-                        <span className="sr-only">Close</span>
-                      </SheetClose>
+                  <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
+                    <TooltipProvider delayDuration={0}>
+                      <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
+                        <SheetClose
+                          onClick={handleRecordCloseSheet}
+                          className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+                        >
+                          <ChevronsRight className="h-4 w-4 mx-auto" />
+                          <span className="sr-only">Close</span>
+                        </SheetClose>
 
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link
-                            target="blank"
-                            href={`/records/${selectedRecordRow?.id}`}
-                          >
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link
+                              target="blank"
+                              href={`/records/${selectedRecordRow?.id}`}
+                            >
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                disabled={false}
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>View fullscreen</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
                             <Button
                               variant="ghost"
                               size="icon"
                               disabled={false}
+                              onClick={() =>
+                                handleCopyRecordLink(selectedRecordRow?.id)
+                              }
                             >
-                              <ExternalLink className="h-4 w-4" />
+                              <LinkIcon className="h-4 w-4" />
                             </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>View fullscreen</TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={false}
-                            onClick={() =>
-                              handleCopyRecordLink(selectedRecordRow?.id)
-                            }
-                          >
-                            <LinkIcon className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Share link</TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TooltipProvider>
+                          </TooltipTrigger>
+                          <TooltipContent>Share link</TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </TooltipProvider>
 
-                  <div className="flex-1 overflow-y-auto">
-                    {selectedRecordRow !== null && (
-                      <RecordDetails record={selectedRecordRow} />
-                    )}
+                    <div className="flex-1 overflow-y-auto">
+                      {selectedRecordRow !== null && (
+                        <RecordDetails record={selectedRecordRow} />
+                      )}
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </TabsContent>
+              <TabsContent value="companies" className="space-y-4">
+                <div className="flex flex-col flex-1 pb-12">
+                  <div className="flex flex-col px-6">
+                    <DataTable
+                      columns={fixedCompanyColumns}
+                      data={companyRecords}
+                      filters={companyFilters}
+                      onRowClick={() => {}}
+                      records={companyRecords}
+                      enableRowSelection={false}
+                    />
                   </div>
-                </SheetContent>
-              </Sheet>
-            </TabsContent>
-            <TabsContent value="companies" className="space-y-4">
-              <div className="flex flex-col flex-1 pb-12">
-                <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
-                  <DataTable
-                    columns={fixedCompanyColumns}
-                    data={companyRecords}
-                    filters={companyFilters}
-                    onRowClick={() => {}}
-                    records={companyRecords}
-                    enableRowSelection={false}
-                  />
                 </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="contacts" className="space-y-4">
-              <div className="flex flex-col flex-1 pb-12">
-                <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
-                  <DataTable
-                    columns={fixedContactColumns}
-                    data={contactRecords}
-                    filters={contactFilters}
-                    onRowClick={() => {}}
-                    records={contactRecords}
-                    enableRowSelection={false}
-                  />
+              </TabsContent>
+              <TabsContent value="contacts" className="space-y-4">
+                <div className="flex flex-col flex-1 pb-12">
+                  <div className="flex flex-col px-6">
+                    <DataTable
+                      columns={fixedContactColumns}
+                      data={contactRecords}
+                      filters={contactFilters}
+                      onRowClick={() => {}}
+                      records={contactRecords}
+                      enableRowSelection={false}
+                    />
+                  </div>
                 </div>
-              </div>
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+              <TabsContent value="activity">
+                <div className="flow-root">
+                  <ul role="list" className="px-8 mb-8 mt-6">
+                    {timeline.map((event, eventIdx) => (
+                      <li key={event.id}>
+                        <div className="relative pb-8">
+                          {eventIdx !== timeline.length - 1 ? (
+                            <span
+                              className="absolute left-3 top-4 -ml-px h-full w-0.5 bg-gray-200"
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                          <div className="relative flex space-x-2">
+                            <div>
+                              <span className="h-6 w-6 rounded-full flex items-center justify-center ring-8 ring-white">
+                                <Avatar className="h-6 w-6 rounded-lg">
+                                  <AvatarImage
+                                    src={insight.author.avatarUrl}
+                                    alt={insight.author.name}
+                                  />
+                                  <AvatarFallback className="text-sm bg-slate-200">
+                                    {getNameInitials(insight.author.name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              </span>
+                            </div>
+                            <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1">
+                              <div className="text-sm flex gap-x-1">
+                                <p className="text-zinc-900">{event.target}</p>
+                                <p className="text-zinc-500">
+                                  {event.content}{" "}
+                                </p>
+                                <time
+                                  dateTime={event.datetime}
+                                  className="text-zinc-900"
+                                >
+                                  {event.date}
+                                </time>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col h-full pb-32 animate-pulse">
