@@ -175,7 +175,14 @@ export function Records({}: RecordsProps) {
         return;
       }
       const insights = await generateInsights(userToken, recordIds);
-      toast.success("Insight generation completed.");
+      toast.success("Insight generation completed.", {
+        action: {
+          label: "Open",
+          onClick: () => {
+            window.open(`/insights/${insights[0].id}`, "_blank");
+          },
+        },
+      });
     } catch (error: any) {
       toast.error("Failed to generate insight.", {
         description: error.toString(),
