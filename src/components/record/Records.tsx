@@ -175,7 +175,7 @@ export function Records({}: RecordsProps) {
         return;
       }
       const insights = await generateInsights(userToken, recordIds);
-      toast.success("Insight generation completed.", {
+      toast.success("Insight generated.", {
         action: {
           label: "Open",
           onClick: () => {
