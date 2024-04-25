@@ -60,6 +60,6 @@ export async function generateInsights(token: string, recordIds: string[]) {
     throw new Error(msg?.detail);
   }
   const data = await response.json();
-  const insight = data as Insight;
-  return insight;
+  const insights = data.items as Insight[];
+  return insights;
 }
