@@ -72,6 +72,7 @@ export function Records({}: RecordsProps) {
               topic: rec.externalName,
               type: rec.type,
               tags: rec.tags.map((tag: Tag) => tag.value),
+              signedUpAt: null,
               contactName: "Unknown",
               companyName: "Unknown",
               contactLocation: "Unknown",
@@ -84,6 +85,10 @@ export function Records({}: RecordsProps) {
               record["contactName"] = contact.name;
               record["contactLocation"] = contact.location.country;
               record["plan"] = contact.plan?.name;
+              record["signedUpAt"] =
+                contact.signedUpAt !== null
+                  ? new Date(contact.signedUpAt)
+                  : null;
             }
             if (company !== null) {
               record["companyName"] = company.name;

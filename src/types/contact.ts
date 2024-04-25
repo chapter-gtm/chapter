@@ -29,4 +29,5 @@ export type Contact = {
   plan: Plan;
   location: Location;
   companies: Company[];
+  signedUpAt: Date;
 };

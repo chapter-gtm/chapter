@@ -116,6 +116,32 @@ export const filters = [
     ],
   },
   {
+    tableColumnName: "signedUpAt",
+    label: "Tenure",
+    filterOptions: [
+      {
+        value: ">12 months",
+        label: ">12 months",
+        icon: undefined,
+      },
+      {
+        value: "6-12 months",
+        label: "6-12 months",
+        icon: undefined,
+      },
+      {
+        value: "3-6 months",
+        label: "3-6 months",
+        icon: undefined,
+      },
+      {
+        value: "<3 months",
+        label: "<3 months",
+        icon: undefined,
+      },
+    ],
+  },
+  {
     tableColumnName: "companyName",
     label: "Account",
     filterOptions: [
@@ -174,10 +200,27 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-function toShortDate(currentDate: Date) {
-  const options = { month: "short", day: "2-digit" } as const;
-  const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  return formattedDate;
+function getTenureFromDate(date: Date) {
+  const currentDate = new Date();
+  const diffInMonths =
+    (currentDate.getFullYear() - date.getFullYear()) * 12 +
+    (currentDate.getMonth() - date.getMonth());
+
+  let tenureLabel = "";
+  if (diffInMonths > 12) {
+    tenureLabel = ">12 months";
+  } else if (diffInMonths >= 6) {
+    tenureLabel = "6-12 months";
+  } else if (diffInMonths >= 3) {
+    tenureLabel = "3-6 months";
+  } else {
+    tenureLabel = "<3 months";
+  }
+  const tenure = filters[3].filterOptions.find(
+    (tenure) => tenure.value === tenureLabel,
+  );
+
+  return tenure;
 }
 
 // TODO: Add scores dynamically based on score definitions from the survey
@@ -289,6 +332,45 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       return (
         <div className="flex">{currencySymbol + arr.toLocaleString()}</div>
       );
+    },
+  },
+  {
+    accessorKey: "signedUpAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Tenure" />
+    ),
+    cell: ({ row }) => {
+      const signedUpAt: Date = row.getValue("signedUpAt");
+      if (!signedUpAt) {
+        return null;
+      }
+
+      const tenure = getTenureFromDate(signedUpAt);
+      if (!tenure) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {tenure.hasOwnProperty("icon") && tenure.icon && (
+            <tenure.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{tenure.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      const signedUpAt: Date = row.getValue(id);
+      if (!signedUpAt) {
+        return false;
+      }
+
+      const tenure = getTenureFromDate(signedUpAt);
+      if (!tenure) {
+        return false;
+      }
+
+      return value.includes(tenure.value);
     },
   },
   {
