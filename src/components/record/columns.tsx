@@ -276,6 +276,33 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
   },
   {
+    accessorKey: "dataSourceName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Source" />
+    ),
+    cell: ({ row }) => {
+      const type = filters[1].filterOptions.find(
+        (type) => type.value === row.getValue("dataSourceName"),
+      );
+
+      if (!type) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {type.hasOwnProperty("icon") && type.icon && (
+            <type.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{type.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
     accessorKey: "topic",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Topic" />
@@ -396,33 +423,6 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     cell: ({ row }) => {
       const type = filters[0].filterOptions.find(
         (type) => type.value === row.getValue("type"),
-      );
-
-      if (!type) {
-        return null;
-      }
-
-      return (
-        <div className="flex items-center">
-          {type.hasOwnProperty("icon") && type.icon && (
-            <type.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{type.label}</span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    accessorKey: "dataSourceName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Source" />
-    ),
-    cell: ({ row }) => {
-      const type = filters[1].filterOptions.find(
-        (type) => type.value === row.getValue("dataSourceName"),
       );
 
       if (!type) {
