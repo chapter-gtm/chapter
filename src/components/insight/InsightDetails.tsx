@@ -75,7 +75,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
   const [dataRecords, setDataRecords] = useState<RecordSchema[]>([]);
   const [recordSheetOpen, setRecordSheetOpen] = useState(false);
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
-    null
+    null,
   );
   const [companyRecords, setCompanyRecords] = useState<CompanySchema[]>([]);
   const [contactRecords, setContactRecords] = useState<ContactSchema[]>([]);
@@ -106,7 +106,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
             });
 
             return record;
-          })
+          }),
         );
         setDataRecords(tableRecs);
 
@@ -128,7 +128,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               userCount: comp.userCount,
             };
             return company;
-          })
+          }),
         );
         setCompanyRecords(companyRecs);
 
@@ -142,7 +142,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               company: cont.companies.length > 0 ? cont.companies[0].name : "-",
             };
             return contact;
-          })
+          }),
         );
         setContactRecords(contactRecs);
       } catch (error) {
@@ -170,7 +170,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`
+        `https://${currentDomain}/records/${recordId}`,
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -207,7 +207,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
         <div>
           <div className="bg-white rounded-lg mt-3 mx-4">
             <div className="flex flex-row h-14 px-10 items-center mt-2 border-zinc-200 border-b justify-between">
-              <p className="text-base text-medium">Name</p>
+              <p className="text-base text-medium">{insight.insight.title}</p>
               <Button variant="outline" size="sm" disabled={true}>
                 Link
               </Button>

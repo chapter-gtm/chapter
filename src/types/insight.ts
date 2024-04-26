@@ -7,6 +7,7 @@ export enum InsightType {
 }
 
 export type BaseInsight = {
+  title: string;
   statement: string;
   facts: string[];
   who: string;
