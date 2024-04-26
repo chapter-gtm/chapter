@@ -1,5 +1,6 @@
 "use client";
 
+import { PhoneCall, StarHalf, StickyNote } from "lucide-react";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
@@ -33,6 +34,21 @@ export const recordFilters = [
         value: RecordType.CHAT_TRANSCRIPT,
         label: "Chat Transcript",
         icon: ChatBubbleIcon,
+      },
+      {
+        value: RecordType.CALL_TRANSCRIPT,
+        label: "Call",
+        icon: PhoneCall,
+      },
+      {
+        value: RecordType.REVIEW,
+        label: "Review",
+        icon: StarHalf,
+      },
+      {
+        value: RecordType.POST,
+        label: "Post",
+        icon: StickyNote,
       },
     ],
   },
