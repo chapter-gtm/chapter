@@ -236,7 +236,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                 <div className="flex flex-col w-full pb-6 justify-start space-y-2 mt-12">
                   <div className="flex flex-row items-center gap-x-1 text-xs">
                     <Button variant="outline" size="sm" disabled={false}>
-                      4w's
+                      4w&apos;s
                       <span>
                         <ChevronDown size={"15"}></ChevronDown>
                       </span>
