@@ -199,26 +199,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     },
   ];
 
-  const paragraphRef = useRef(null);
-
   // Function to select the text of the <p> element
-  const selectText = () => {
-    if (paragraphRef.current) {
-      paragraphRef.current.select();
-    }
-  };
-
-  useEffect(() => {
-    selectText();
-  }, []);
-
-  const colors = [
-    "bg-indigo-200",
-    "bg-rose-100",
-    "bg-yellow-100",
-    "bg-yellow-200",
-    "bg-purple-300",
-  ];
 
   return (
     <>
@@ -336,10 +317,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                   >
                     {insight.insight.facts.map((item, index) => (
                       <li key={index} className="flex">
-                        <p
-                          ref={paragraphRef}
-                          className="p-3 rounded-lg text-white bg-indigo-500"
-                        >
+                        <p className="p-3 rounded-lg text-white bg-indigo-500">
                           {" "}
                           {item}
                         </p>
