@@ -102,7 +102,7 @@ export function Records({}: RecordsProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          }),
+          })
         );
 
         setRecords(recordMap);
@@ -141,7 +141,7 @@ export function Records({}: RecordsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`,
+        `https://${currentDomain}/records/${recordId}`
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -202,18 +202,24 @@ export function Records({}: RecordsProps) {
   return (
     <>
       <Toaster theme="light" />
-      <Button
-        onClick={handleGenerateInsights}
-        disabled={selectedRows.length <= 0}
-      >
-        <SparklesIcon className="mr-2 h-4 w-4" />
-        {draftingInsights ? "Drafting insights..." : "Draft insights"}
-      </Button>
+      <div className="flex flex-row justify-between space-y-1 center h-[60px] items-center px-4 border-b border-zinc-100">
+        <h2 className="text-base font-medium tracking-normal text-slate-700">
+          Records
+        </h2>
+        <Button
+          onClick={handleGenerateInsights}
+          disabled={selectedRows.length <= 0}
+        >
+          <SparklesIcon className="mr-2 h-4 w-4" />
+          {draftingInsights ? "Drafting insights..." : "Draft insights"}
+        </Button>
+      </div>
+
       <div className="flex flex-row h-full">
         {isPopulated ? (
           <Sheet modal={false} open={sheetOpen}>
             <div className="flex flex-col flex-1 pb-12">
-              <div className="flex flex-col pb-4 bg-white border border-zinc-200 rounded-lg">
+              <div className="flex flex-col pb-4 bg-white ">
                 <DataTable
                   columns={getRecordColumns()}
                   data={dataRecords}
