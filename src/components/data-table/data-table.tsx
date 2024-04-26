@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
     <div className="relative space-y-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
-      <div className="relative overflow-y-auto border-t border-b">
+      <div className="relative overflow-y-auto border-t border-b w-[1600px]">
         <Table>
           <TableHeader className="sticky top-0 border-b border-zinc-600">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -125,6 +125,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
