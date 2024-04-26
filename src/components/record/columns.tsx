@@ -68,27 +68,27 @@ export const filters = [
         icon: undefined,
       },
       {
-        value: "intercom",
+        value: "Intercom",
         label: "Intercom",
         icon: undefined,
       },
       {
-        value: "gong",
+        value: "Gong",
         label: "Gong",
         icon: undefined,
       },
       {
-        value: "notion",
+        value: "Notion",
         label: "Notion",
         icon: undefined,
       },
       {
-        value: "g2",
+        value: "G2",
         label: "G2",
         icon: undefined,
       },
       {
-        value: "x",
+        value: "X",
         label: "X",
         icon: undefined,
       },
@@ -146,6 +146,16 @@ export const filters = [
     label: "Account",
     filterOptions: [
       {
+        value: "Klarna",
+        label: "Klarna",
+        icon: undefined,
+      },
+      {
+        value: "Mojang",
+        label: "Mojang",
+        icon: undefined,
+      },
+      {
         value: "Spotify",
         label: "Spotify",
         icon: undefined,
@@ -153,6 +163,11 @@ export const filters = [
       {
         value: "Stripe",
         label: "Stripe",
+        icon: undefined,
+      },
+      {
+        value: "Truecaller",
+        label: "Truecaller",
         icon: undefined,
       },
     ],
@@ -453,7 +468,11 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
 
 export function getRecordColumns() {
   const finalColumns: ColumnDef<RecordSchema>[] = [...fixedRecordColumns];
-  const scoreDefinitions = ["Input Quality"];
+  const scoreDefinitions = [
+    "Input Quality",
+    "Problem Severity",
+    "Willingness to Pay",
+  ];
   scoreDefinitions.forEach((name: string) => {
     const fieldName = titleCaseToCamelCase(name);
     finalColumns.push({
