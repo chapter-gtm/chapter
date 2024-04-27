@@ -232,7 +232,7 @@ function getTenureFromDate(date: Date) {
     tenureLabel = "<3 months";
   }
   const tenure = filters[3].filterOptions.find(
-    (tenure) => tenure.value === tenureLabel,
+    (tenure) => tenure.value === tenureLabel
   );
 
   return tenure;
@@ -282,7 +282,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const type = filters[1].filterOptions.find(
-        (type) => type.value === row.getValue("dataSourceName"),
+        (type) => type.value === row.getValue("dataSourceName")
       );
 
       if (!type) {
@@ -422,7 +422,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const type = filters[0].filterOptions.find(
-        (type) => type.value === row.getValue("type"),
+        (type) => type.value === row.getValue("type")
       );
 
       if (!type) {
@@ -450,9 +450,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     cell: ({ row }) => {
       const tags: string[] = row.getValue("tags");
       return (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           {tags.map((item, index) => (
-            <Badge key={index} variant="outline">
+            <Badge
+              key={index}
+              variant="outline"
+              className="font-normal text-sm p-1"
+            >
               {toTitleCase(item)}
             </Badge>
           ))}
@@ -487,7 +491,7 @@ export function getRecordColumns() {
             <div
               className={classNames(
                 RatingLabel[score]?.color,
-                "p-1 rounded-lg",
+                "p-1 rounded-lg"
               )}
             >
               {RatingLabel[score]?.label}

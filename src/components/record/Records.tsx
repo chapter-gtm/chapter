@@ -208,9 +208,10 @@ export function Records({}: RecordsProps) {
         </h2>
         <Button
           onClick={handleGenerateInsights}
+          className="py-0 px-3 font-medium rounded-md"
           disabled={selectedRows.length <= 0}
         >
-          <SparklesIcon className="mr-2 h-4 w-4" />
+          <SparklesIcon className="mr-1 h-4 w-4" />
           {draftingInsights ? "Drafting insights..." : "Draft insights"}
         </Button>
       </div>
