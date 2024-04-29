@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function RecordsPage() {
   return (
     <>
-      <div className="flex flex-col mt-3 px-4">
+      <div className="flex flex-col mt-3 px-4 overflow-hidden">
         <div className="bg-white rounded-lg flex-col">
           <Records />
         </div>

@@ -49,9 +49,10 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
       <h2 className="flex text-sm font-medium">
-        {records.length} {records.length === 1 ? "Record" : "Records"}
+        {records.length} {records.length === 1 ? "Item" : "Items"}
       </h2>
       <div className="flex items-center space-x-2 relative">
+        <h2 className="font-medium text-sm text-zinc-500 me-2">Filters</h2>
         {filters.map((item, index) => (
           <DataTableFacetedFilter
             key={index}

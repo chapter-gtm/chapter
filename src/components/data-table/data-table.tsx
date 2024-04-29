@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
     }
 
     onSelectedRowsChange(
-      table.getSelectedRowModel().flatRows.map((row) => row.original),
+      table.getSelectedRowModel().flatRows.map((row) => row.original)
     );
   }, [rowSelection]);
 
@@ -110,9 +110,9 @@ export function DataTable<TData, TValue>({
     <div className="relative space-y-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
-      <div className="relative overflow-y-auto border-t border-b">
+      <div className="relative w-full overflow-auto border-t border-b">
         <Table>
-          <TableHeader className="sticky top-0 border-b border-zinc-600">
+          <TableHeader className="sticky top-0 border-b border-zinc-600 w-full">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -140,10 +140,11 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="truncate"
+                      className="truncate "
+                      // This is where the cell should have a shade of color
                       key={cell.id}
                       onClick={(
-                        event: React.MouseEvent<HTMLTableCellElement>,
+                        event: React.MouseEvent<HTMLTableCellElement>
                       ) => {
                         // Don't call row click handler when checkbox field(must has id="select") is clicked.
                         if (cell.column.id !== "select") {
@@ -153,7 +154,7 @@ export function DataTable<TData, TValue>({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -172,7 +173,6 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
       <DataTablePagination table={table} />
     </div>
   );
