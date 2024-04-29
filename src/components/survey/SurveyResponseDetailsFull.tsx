@@ -53,7 +53,7 @@ export function SurveyResponseDetailsFull({
           const resp = await getSurveyResponse(
             userToken,
             surveyId,
-            surveyResponseId
+            surveyResponseId,
           );
           setResponse(resp);
         }
@@ -66,38 +66,6 @@ export function SurveyResponseDetailsFull({
     <>
       {response !== null ? (
         <div className="flex flex-col h-screen overflow-hidden px-7 pb-16">
-          {/* <div className="flex flex-row justify-between w-full py-3">
-            <div className="flex gap-4 items-center">
-              <ToggleGroup type="single">
-                <ToggleGroupItem
-                  value="a"
-                  className="border-zinc-200 border hover:bg-white"
-                >
-                  <Cross1Icon className="w-3 h-3" />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="a"
-                  className="border-zinc-200 border hover:bg-white"
-                >
-                  <ChevronDownIcon className="w-3 h-3" />
-                </ToggleGroupItem>
-                <ToggleGroupItem
-                  value="b"
-                  className="border-zinc-200 border hover:bg-white"
-                >
-                  <ChevronUpIcon className="w-3 h-3" />
-                </ToggleGroupItem>
-              </ToggleGroup>
-              <p className="text-sm font-medium text-slate-600">
-                {response !== null && <>{response?.contactPseudoName}</>}
-              </p>
-            </div>
-            <div className="flex gap-4 items-center">
-              <button className="border-slate-200 border p-2 rounded-lg hover:bg-white">
-                <Link2Icon className="w-4 h-4" />
-              </button>
-            </div>
-          </div> */}
           <div className="flex flex-row border border-zinc-200 rounded-lg h-full overflow-hidden mt-3">
             <div className="basis-1/3 pt-2 space-y-5 border-r border-zinc-200 h-full bg-zinc-50">
               <SurveyResponseIdentity surveyResponse={response} />
@@ -110,19 +78,15 @@ export function SurveyResponseDetailsFull({
                 </div>
               )}
               <Separator className="w-full bg-zinc-200 my-3" />
-
-              {response !== null && (
-                <div className="px-7">
-                  <p className="font-medium my-3 text-sm">Insights</p>
-                </div>
-              )}
             </div>
             <div className="basis-2/3 bg-white">
               <Tabs defaultValue="transcript" className="w-full">
                 <div className="w-full flex px-6 flex-row border-b border-slate-100 justify-between py-3 items-center">
                   <TabsList className="grid w-full grid-cols-2 w-[200px]">
                     <TabsTrigger value="transcript">Transcript</TabsTrigger>
-                    <TabsTrigger value="password">Activity</TabsTrigger>
+                    <TabsTrigger value="activity" disabled>
+                      Activity
+                    </TabsTrigger>
                   </TabsList>
                 </div>
                 <TabsContent value="transcript">
