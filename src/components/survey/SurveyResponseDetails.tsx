@@ -14,7 +14,7 @@ import { SurveyResponse } from "@/types/survey";
 import { SurveyResponseIdentity } from "@/components/survey/SurveyResponseIdentity";
 import { SurveyResponsePropList } from "@/components/survey/SurveyResponsePropList";
 
-import { EmptySelectionCard } from "./EmptySelectionCard";
+import { EmptySelectionCard } from "@/components/EmptySelectionCard";
 import { Separator } from "@/components/ui/separator";
 
 interface SurveyResponseDetailsProps {
