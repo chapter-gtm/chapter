@@ -203,6 +203,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
 
   return (
     <>
+      <Toaster theme="light" />
       {insight !== null ? (
         <div>
           <div className="bg-white rounded-lg mt-3 mx-4">
