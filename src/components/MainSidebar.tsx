@@ -30,18 +30,11 @@ export default function Sidebar({ className }: SideBarProps) {
                 route: "/surveys",
               },
               {
-                title: "Records",
-                label: "",
-                icon: ActivityIcon,
-                variant: "ghost",
-                route: "/records",
-              },
-              {
                 title: "Insights",
                 label: "",
                 icon: PieChart,
                 variant: "ghost",
-                route: "/dashboard",
+                route: "/insights",
               },
             ]}
           />
