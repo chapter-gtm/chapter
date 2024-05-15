@@ -20,8 +20,11 @@ export default function AuthenticationPage() {
       };
       await login(data.email, data.password);
     } catch (error: any) {
-      setMessageType("error");
-      setMessage(error.toString());
+      setMessage(
+        error?.message
+          ? error.message
+          : "Login failed! Please check your credentials and try again.",
+      );
       setLoading(false);
     }
   };
@@ -144,8 +147,8 @@ export default function AuthenticationPage() {
                       messageType === "error"
                         ? "border-rose-200 bg-rose-50"
                         : messageType === "reset"
-                        ? "border-indigo-200 bg-zinc-100"
-                        : "border-zinc-200 bg-white"
+                          ? "border-indigo-200 bg-zinc-100"
+                          : "border-zinc-200 bg-white"
                     }`}
                   >
                     {" "}
@@ -209,8 +212,8 @@ export default function AuthenticationPage() {
                       messageType === "error"
                         ? "border-rose-200 bg-rose-50"
                         : messageType === "reset"
-                        ? "border-indigo-200 bg-indigo-100"
-                        : "border-zinc-200 bg-white"
+                          ? "border-indigo-200 bg-indigo-100"
+                          : "border-zinc-200 bg-white"
                     }`}
                   >
                     {" "}
