@@ -20,11 +20,9 @@ export default function AuthenticationPage() {
       };
       await login(data.email, data.password);
     } catch (error: any) {
-      setMessage(
-        error?.message
-          ? error.message
-          : "Login failed! Please check your credentials and try again.",
-      );
+      // TODO: Better error handling in serverside component
+      setMessageType("error");
+      setMessage("Login failed! Please check your credentials and try again.");
       setLoading(false);
     }
   };
