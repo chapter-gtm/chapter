@@ -1,5 +1,5 @@
 import { type Score, type Tag } from "@/types/score";
-import { type DataSource } from "@/types/data-source";
+import { type DataSource } from "@/types/integrations";
 import { type Contact } from "@/types/contact";
 
 export enum RecordPartType {
