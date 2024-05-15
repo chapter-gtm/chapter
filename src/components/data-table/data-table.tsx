@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
     }
 
     onSelectedRowsChange(
-      table.getSelectedRowModel().flatRows.map((row) => row.original)
+      table.getSelectedRowModel().flatRows.map((row) => row.original),
     );
   }, [rowSelection]);
 
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
     <div className="relative space-y-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
-      <div className="relative overflow-y-auto border-t border-b w-[1600px]">
+      <div className="relative overflow-y-auto border-t border-b">
         <Table>
           <TableHeader className="sticky top-0 border-b border-zinc-600">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -117,7 +117,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -138,7 +138,7 @@ export function DataTable<TData, TValue>({
                       className="truncate"
                       key={cell.id}
                       onClick={(
-                        event: React.MouseEvent<HTMLTableCellElement>
+                        event: React.MouseEvent<HTMLTableCellElement>,
                       ) => {
                         // Don't call row click handler when checkbox field(must has id="select") is clicked.
                         if (cell.column.id !== "select") {
@@ -148,7 +148,7 @@ export function DataTable<TData, TValue>({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
