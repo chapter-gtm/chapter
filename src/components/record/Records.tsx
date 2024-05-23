@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ColumnFiltersState } from "@tanstack/react-table";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { SparklesIcon } from "lucide-react";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -14,6 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { SparklesIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { ChevronsRight, ExternalLink, LinkIcon } from "lucide-react";
@@ -21,18 +23,18 @@ import { ChevronsRight, ExternalLink, LinkIcon } from "lucide-react";
 import { DataTable } from "@/components/data-table/data-table";
 import { RecordDetails } from "@/components/record/RecordDetails";
 import {
-  TableRecord,
   RecordSchema,
+  TableRecord,
   filters,
   getRecordColumns,
 } from "@/components/record/columns";
-import { type Contact, type Company } from "@/types/contact";
+import { type Company, type Contact } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
 import { type Tag } from "@/types/score";
-import { getRecords } from "@/utils/nectar/records";
-import { generateInsights } from "@/utils/nectar/insights";
-import { getUserAccessToken } from "@/utils/supabase/client";
 import { titleCaseToCamelCase } from "@/utils/misc";
+import { generateInsights } from "@/utils/nectar/insights";
+import { getRecords } from "@/utils/nectar/records";
+import { getUserAccessToken } from "@/utils/supabase/client";
 
 interface RecordsProps {}
 
@@ -43,6 +45,8 @@ export function Records({}: RecordsProps) {
   const [selectedRow, setSelectedRow] = useState<DataRecord | null>(null);
   const [selectedRows, setSelectedRows] = useState<DataRecord[]>([]);
   const [draftingInsights, setDraftingInsights] = useState(false);
+  const [preSelectedFilters, setPreSelectedFilters] =
+    useState<ColumnFiltersState>([]);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -102,7 +106,7 @@ export function Records({}: RecordsProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setRecords(recordMap);
@@ -141,7 +145,7 @@ export function Records({}: RecordsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`
+        `https://${currentDomain}/records/${recordId}`,
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -199,6 +203,17 @@ export function Records({}: RecordsProps) {
     }
   };
 
+  const handleViewChange = async (value: string) => {
+    console.log(value);
+    if (value === "all") {
+      setPreSelectedFilters([]);
+    } else if (value === "sentimentNegative") {
+    } else if (value === "highValueCustomers") {
+      setPreSelectedFilters([{ id: "companyName", value: ["Stripe"] }]);
+    }
+    setIsPopulated(true);
+  };
+
   return (
     <>
       <Toaster theme="light" />
@@ -218,63 +233,98 @@ export function Records({}: RecordsProps) {
 
       <div className="flex flex-row h-full">
         {isPopulated ? (
-          <Sheet modal={false} open={sheetOpen}>
-            <div className="flex flex-col flex-1 pb-12">
-              <div className="flex flex-col pb-4 bg-white ">
-                <DataTable
-                  columns={getRecordColumns()}
-                  data={dataRecords}
-                  filters={filters}
-                  onRowClick={handleOpenSheet}
-                  records={dataRecords}
-                  enableRowSelection={true}
-                  onSelectedRowsChange={handleRowSelection}
-                />
-              </div>
+          <div>
+            <div>
+              <ToggleGroup
+                type="single"
+                onValueChange={handleViewChange}
+                defaultValue="all"
+              >
+                <ToggleGroupItem
+                  value="all"
+                  aria-label="All conversations"
+                  defaultChecked
+                >
+                  All
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="sentimentNegative"
+                  aria-label="Conversations with negative sentiment"
+                >
+                  Sentiment: Negative
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="highValueCustomers"
+                  aria-label="Conversations with High value customers"
+                >
+                  High Value Customers
+                </ToggleGroupItem>
+              </ToggleGroup>
             </div>
-
-            <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
-              <TooltipProvider delayDuration={0}>
-                <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
-                  <SheetClose
-                    onClick={handleCloseSheet}
-                    className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
-                  >
-                    <ChevronsRight className="h-4 w-4 mx-auto" />
-                    <span className="sr-only">Close</span>
-                  </SheetClose>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link target="blank" href={`/records/${selectedRow?.id}`}>
-                        <Button variant="ghost" size="icon" disabled={false}>
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>View fullscreen</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={false}
-                        onClick={() => handleCopyRecordLink(selectedRow?.id)}
-                      >
-                        <LinkIcon className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Share link</TooltipContent>
-                  </Tooltip>
+            <Sheet modal={false} open={sheetOpen}>
+              <div className="flex flex-col flex-1 pb-12">
+                <div className="flex flex-col pb-4 bg-white ">
+                  <DataTable
+                    columns={getRecordColumns()}
+                    data={dataRecords}
+                    filters={filters}
+                    preSelectedFilters={preSelectedFilters}
+                    onRowClick={handleOpenSheet}
+                    records={dataRecords}
+                    enableRowSelection={true}
+                    onSelectedRowsChange={handleRowSelection}
+                  />
                 </div>
-              </TooltipProvider>
-
-              <div className="flex-1 overflow-y-auto">
-                {selectedRow !== null && <RecordDetails record={selectedRow} />}
               </div>
-            </SheetContent>
-          </Sheet>
+
+              <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
+                <TooltipProvider delayDuration={0}>
+                  <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
+                    <SheetClose
+                      onClick={handleCloseSheet}
+                      className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+                    >
+                      <ChevronsRight className="h-4 w-4 mx-auto" />
+                      <span className="sr-only">Close</span>
+                    </SheetClose>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          target="blank"
+                          href={`/records/${selectedRow?.id}`}
+                        >
+                          <Button variant="ghost" size="icon" disabled={false}>
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>View fullscreen</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          disabled={false}
+                          onClick={() => handleCopyRecordLink(selectedRow?.id)}
+                        >
+                          <LinkIcon className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Share link</TooltipContent>
+                    </Tooltip>
+                  </div>
+                </TooltipProvider>
+
+                <div className="flex-1 overflow-y-auto">
+                  {selectedRow !== null && (
+                    <RecordDetails record={selectedRow} />
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         ) : (
           <div className="flex flex-col flex-1 pb-12 border-e border-slate-200 bg-white"></div>
         )}
