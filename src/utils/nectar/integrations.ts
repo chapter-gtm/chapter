@@ -43,7 +43,7 @@ export async function getNangoHMACDigest(
   const response = await fetch(
     NECTAR_API_BASE +
       "/integrations/" +
-      system +
+      system.toLowerCase() +
       "/data-sources/" +
       dataSourceId +
       "/digest",
