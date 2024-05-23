@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filters: ToolbarFilter[];
+  preSelectedFilters?: ColumnFiltersState;
   onRowClick: <TData>(data: TData) => void;
   records: TData[];
   enableRowSelection: boolean;
@@ -42,6 +43,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   filters,
+  preSelectedFilters = [],
   onRowClick,
   records,
   enableRowSelection = false,
@@ -52,9 +54,8 @@ export function DataTable<TData, TValue>({
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const [columnFilters, setColumnFilters] =
+    React.useState<ColumnFiltersState>(preSelectedFilters);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const table = useReactTable({
     data,
@@ -100,6 +101,10 @@ export function DataTable<TData, TValue>({
       table.getSelectedRowModel().flatRows.map((row) => row.original),
     );
   }, [rowSelection]);
+
+  React.useEffect(() => {
+    setColumnFilters(preSelectedFilters);
+  }, [preSelectedFilters]);
 
   return (
     <div className="relative space-y-1">
