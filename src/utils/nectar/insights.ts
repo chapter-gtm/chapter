@@ -1,5 +1,5 @@
 import { parseISO } from "date-fns";
-import { type Insight, type InsightMetadata } from "@/types/insight";
+import { type Insight } from "@/types/insight";
 
 const NECTAR_API_BASE = "https://api.nectar.run/api";
 
@@ -27,7 +27,7 @@ export async function getInsights(
     throw new Error(msg?.detail);
   }
   const data = await response.json();
-  const insights = "items" in data ? (data["items"] as InsightMetadata[]) : [];
+  const insights = "items" in data ? (data["items"] as Insight[]) : [];
   return insights;
 }
 

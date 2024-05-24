@@ -34,10 +34,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
-import { type InsightMetadata } from "@/types/insight";
+import { type Insight } from "@/types/insight";
 
 interface InsightCardProps {
-  insight: InsightMetadata;
+  insight: Insight;
 }
 
 export function InsightCard({ insight }: InsightCardProps) {
@@ -67,8 +67,15 @@ export function InsightCard({ insight }: InsightCardProps) {
               <AvatarFallback>{insight.author.name}</AvatarFallback>
             </Avatar>
             <p className="text-xs font-medium text-slate-400">
-              {insight.recordCount}{" "}
-              {insight.recordCount === 1 ? " Conversation" : " Conversations"}
+              {insight.records.length}{" "}
+              {insight.records.length === 1
+                ? " Conversation"
+                : " Conversations"}
+            </p>
+            {" spanning "}
+            <p className="text-xs font-medium text-slate-400">
+              {insight.companies.length}{" "}
+              {insight.companies.length === 1 ? " Accounts" : " Accounts"}
             </p>
           </div>
         </div>

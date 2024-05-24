@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { EmptySelectionCard } from "@/components/EmptySelectionCard";
 import { InsightCard } from "@/components/insight/InsightCard";
-import { type InsightMetadata } from "@/types/insight";
+import { type Insight } from "@/types/insight";
 import { getInsights } from "@/utils/nectar/insights";
 import { getUserAccessToken } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 export function Insights() {
   const router = useRouter();
-  const [insights, setInsights] = useState<InsightMetadata[]>([]);
+  const [insights, setInsights] = useState<Insight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

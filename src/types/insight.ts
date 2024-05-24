@@ -27,13 +27,3 @@ export type Insight = {
   createdAt: Date;
   updatedAt: Date;
 };
-
-export type InsightMetadata = {
-  id: string;
-  type: InsightType;
-  author: User;
-  insight: BaseInsight;
-  recordCount: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
