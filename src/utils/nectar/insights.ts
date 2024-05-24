@@ -7,6 +7,8 @@ export async function getInsights(
   token: string,
   pageSize: number,
   currentPage: number,
+  orderBy: string = "created_at",
+  sortOrder: string = "desc",
 ) {
   const response = await fetch(
     NECTAR_API_BASE +
@@ -14,6 +16,8 @@ export async function getInsights(
       new URLSearchParams({
         pageSize: pageSize.toString(),
         currentPage: currentPage.toString(),
+        orderBy: orderBy,
+        sortOrder: sortOrder,
       }),
     {
       method: "GET",
