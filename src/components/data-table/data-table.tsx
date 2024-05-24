@@ -13,6 +13,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
+
 import {
   Table,
   TableBody,
@@ -102,22 +104,48 @@ export function DataTable<TData, TValue>({
     );
   }, [rowSelection]);
 
+<<<<<<< HEAD
   React.useEffect(() => {
     setColumnFilters(preSelectedFilters);
   }, [preSelectedFilters]);
+=======
+  const assessmentColumns = [
+    "inputQuality",
+    "problemSeverity",
+    "willingnessToPay",
+    "tags",
+  ];
+
+  const accountColumns = [
+    "arr",
+    "companyName",
+    "companyLocation",
+    "plan",
+    "signedUpAt",
+  ];
+>>>>>>> ea01d84 (small UI adjustments for the demo)
 
   return (
-    <div className="relative space-y-1">
+    <div className="relative space-y-1 flex-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
       <div className="relative w-full overflow-auto border-t border-b">
-        <Table>
+        <Table className="text-sm">
           <TableHeader className="sticky top-0 border-b border-zinc-600 w-full">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-zinc-100/20">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className={cn(
+                        "border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
+                        header.column.id === "select"
+                          ? "bg-white sticky left-0"
+                          : ""
+                      )}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -137,10 +165,22 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-zinc-100"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="truncate "
+                      className={cn(
+                        "truncate border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-2",
+                        assessmentColumns.includes(cell.column.id)
+                          ? "bg-zinc-100/60"
+                          : "",
+                        accountColumns.includes(cell.column.id)
+                          ? "bg-rose-100/40"
+                          : "",
+                        cell.column.id === "select"
+                          ? "bg-white sticky left-0"
+                          : ""
+                      )}
                       // This is where the cell should have a shade of color
                       key={cell.id}
                       onClick={(

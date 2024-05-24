@@ -353,8 +353,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Plan" />
     ),
+
     cell: ({ row }) => (
-      <div className="flex bg-orange-200">{row.getValue("plan")}</div>
+      <div className="flex">
+        <Badge variant="outline" className="font-normal text-sm p-1 bg-white">
+          {row.getValue("plan")}
+        </Badge>
+      </div>
     ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -451,14 +456,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const tags: string[] = row.getValue("tags");
-      const plans: string[] = row.getValue("plan");
       return (
         <div className="flex items-center gap-2">
           {tags.map((item, index) => (
             <Badge
               key={index}
               variant="outline"
-              className="font-normal text-sm p-1"
+              className="font-normal text-sm p-1 bg-white"
             >
               {toTitleCase(item)}
             </Badge>
@@ -490,7 +494,7 @@ export function getRecordColumns() {
       cell: ({ row }) => {
         const score: number = row.getValue(fieldName);
         return (
-          <div className="flex bg-green-300">
+          <div className="flex">
             <div
               className={classNames(
                 RatingLabel[score]?.color,

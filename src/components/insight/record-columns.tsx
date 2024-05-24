@@ -94,7 +94,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const type = recordFilters[0].filterOptions.find(
-        (type) => type.value === row.getValue("type"),
+        (type) => type.value === row.getValue("type")
       );
 
       if (!type) {
@@ -133,7 +133,7 @@ export function getRecordColumns() {
             <div
               className={classNames(
                 RatingLabel[score]?.color,
-                "p-1 rounded-lg",
+                "p-1 rounded-lg"
               )}
             >
               {RatingLabel[score]?.label}

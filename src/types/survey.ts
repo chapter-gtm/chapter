@@ -100,6 +100,8 @@ export const RatingLabel: { [key: number]: { label: string; color: string } } =
     5: { label: "Very High", color: "bg-red-100" },
   };
 
+
+
 export type SurveyResponse = {
   org_id: string;
   surveyId: string;

@@ -234,6 +234,7 @@ export function Records({}: RecordsProps) {
       <div className="flex flex-row h-full">
         {isPopulated ? (
           <div>
+<<<<<<< HEAD
             <div>
               <ToggleGroup
                 type="single"
@@ -244,6 +245,27 @@ export function Records({}: RecordsProps) {
                   value="all"
                   aria-label="All conversations"
                   defaultChecked
+=======
+            <div className="h-full flex-1 flex-col flex w-[1280px]">
+              <DataTable
+                columns={getRecordColumns()}
+                data={dataRecords}
+                filters={filters}
+                onRowClick={handleOpenSheet}
+                records={dataRecords}
+                enableRowSelection={true}
+                onSelectedRowsChange={handleRowSelection}
+              />
+            </div>
+          </div>
+
+          <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
+            <TooltipProvider delayDuration={0}>
+              <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
+                <SheetClose
+                  onClick={handleCloseSheet}
+                  className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+>>>>>>> ea01d84 (small UI adjustments for the demo)
                 >
                   All
                 </ToggleGroupItem>
