@@ -204,7 +204,6 @@ export function Records({}: RecordsProps) {
   };
 
   const handleViewChange = async (value: string) => {
-    console.log(value);
     if (value === "all") {
       setPreSelectedFilters([]);
     } else if (value === "sentimentNegative") {

@@ -41,7 +41,6 @@ interface InsightCardProps {
 }
 
 export function InsightCard({ insight }: InsightCardProps) {
-  console.log(insight);
   return (
     <Link href={`/insights/${insight.id}`}>
       <div className="w-full h-44 items-center border-slate-200 bg-white border p-3 rounded-lg hover:bg-slate-100/30">
