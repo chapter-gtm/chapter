@@ -229,7 +229,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                 {insight.insight.title}
               </p>
             </div>
-            <Button variant="outline" size="sm" disabled={true}>
+            <Button variant="outline" size="sm" disabled={false}>
               Link
             </Button>
           </div>

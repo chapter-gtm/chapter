@@ -104,11 +104,10 @@ export function DataTable<TData, TValue>({
     );
   }, [rowSelection]);
 
-<<<<<<< HEAD
   React.useEffect(() => {
     setColumnFilters(preSelectedFilters);
   }, [preSelectedFilters]);
-=======
+
   const assessmentColumns = [
     "inputQuality",
     "problemSeverity",
@@ -123,8 +122,6 @@ export function DataTable<TData, TValue>({
     "plan",
     "signedUpAt",
   ];
->>>>>>> ea01d84 (small UI adjustments for the demo)
-
   return (
     <div className="relative space-y-1 flex-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
