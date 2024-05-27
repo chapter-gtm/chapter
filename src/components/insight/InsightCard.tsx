@@ -43,7 +43,7 @@ interface InsightCardProps {
 export function InsightCard({ insight }: InsightCardProps) {
   return (
     <Link href={`/insights/${insight.id}`}>
-      <div className="w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-slate-100/30">
+      <div className="flex w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-slate-100/30">
         <div className="flex flex-col justify-between h-full ">
           <div className="flex-1 group">
             <div className="w-12 h-12 rounded-lg bg-slate-100 flex justify-center items-center text-md mb-2 group-hover:border border-slate-200">

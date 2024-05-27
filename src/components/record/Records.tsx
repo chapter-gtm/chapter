@@ -218,7 +218,7 @@ export function Records({}: RecordsProps) {
       <div className="bg-white rounded-md">
         <Toaster theme="light" />
         <div className="flex flex-row justify-between space-y-1 center h-[60px] items-center px-4 ">
-          <h2 className="text-base font-medium tracking-normal text-slate-700">
+          <h2 className="text-base font-medium tracking-normal text-zinc-700">
             Records
           </h2>
           <Button

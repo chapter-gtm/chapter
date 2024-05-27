@@ -48,9 +48,6 @@ export function DataTableToolbar<TData>({
 
   return (
     <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
-      <h2 className="flex text-sm font-medium text-zinc-600">
-        {records.length} {records.length === 1 ? "Item" : "Items"}
-      </h2>
       <div className="flex items-center space-x-2 relative">
         <h2 className="font-medium text-sm text-zinc-600 me-2">Filters</h2>
         {filters.map((item, index) => (
@@ -71,8 +68,8 @@ export function DataTableToolbar<TData>({
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
-        <DataTableViewOptions table={table} />
       </div>
+      <DataTableViewOptions table={table} />
     </div>
   );
 }
