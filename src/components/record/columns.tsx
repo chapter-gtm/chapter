@@ -422,33 +422,33 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       return value.includes(tenure.value);
     },
   },
-  {
-    accessorKey: "type",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
-    cell: ({ row }) => {
-      const type = filters[0].filterOptions.find(
-        (type) => type.value === row.getValue("type")
-      );
+  // {
+  //   accessorKey: "type",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Type" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const type = filters[0].filterOptions.find(
+  //       (type) => type.value === row.getValue("type")
+  //     );
 
-      if (!type) {
-        return null;
-      }
+  //     if (!type) {
+  //       return null;
+  //     }
 
-      return (
-        <div className="flex items-center">
-          {type.hasOwnProperty("icon") && type.icon && (
-            <type.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{type.label}</span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
+  //     return (
+  //       <div className="flex items-center">
+  //         {type.hasOwnProperty("icon") && type.icon && (
+  //           <type.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+  //         )}
+  //         <span>{type.label}</span>
+  //       </div>
+  //     );
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  // },
   {
     accessorKey: "tags",
     header: ({ column }) => (
