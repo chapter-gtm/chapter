@@ -222,7 +222,9 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
         <div className="h-screen pb-12 overflow-hidden flex flex-col">
           <div className="flex flex-row justify-between items-center h-16 py-4 px-6">
             <div className="flex items-center gap-2">
-              <ChevronLeftIcon size={"16"} />
+              <Link href={"/insights?tab=insights"}>
+                <ChevronLeftIcon size={"16"} />
+              </Link>
               <p className="text-sm font-medium text-zinc-600">
                 {insight.insight.title}
               </p>
