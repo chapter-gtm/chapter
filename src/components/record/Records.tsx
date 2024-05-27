@@ -256,7 +256,7 @@ export function Records({}: RecordsProps) {
                   value="highValueCustomers"
                   aria-label="Conversations with High value customers"
                 >
-                  High Value Customers
+                  Customer Value: High
                 </ToggleGroupItem>
               </ToggleGroup>
             </div>
