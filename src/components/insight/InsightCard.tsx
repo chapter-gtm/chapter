@@ -43,40 +43,42 @@ interface InsightCardProps {
 export function InsightCard({ insight }: InsightCardProps) {
   return (
     <Link href={`/insights/${insight.id}`}>
-      <div className="w-full h-44 items-center border-slate-200 bg-white border p-3 rounded-lg hover:bg-slate-100/30">
+      <div className="w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-slate-100/30">
         <div className="flex flex-col justify-between h-full ">
           <div className="flex-1 group">
-            <div className="w-16 h-16 rounded-lg bg-slate-100 flex justify-center items-center text-2xl mb-2 group-hover:border border-slate-200">
-              {insight.type}
+            <div className="w-12 h-12 rounded-lg bg-slate-100 flex justify-center items-center text-md mb-2 group-hover:border border-slate-200">
+              4w
+              {/* {insight.type} */}
             </div>
             <div className="text-base font-medium line-clamp-1">
               {insight.insight.title}
             </div>
-            <div className="text-base font-small line-clamp-1">
+            {/* <div className="text-base font-small line-clamp-1">
               {insight.insight.statement}
-            </div>
+            </div> */}
           </div>
-          <div className="flex flex-row justify-between items-center">
-            <Avatar className="w-7 h-7">
-              <AvatarImage
-                className=""
-                src={insight.author.avatarUrl}
-                alt={insight.author.name}
-              />
-              <AvatarFallback>{insight.author.name}</AvatarFallback>
-            </Avatar>
+          <div className="flex flex-col justify-start gap-y-1 my-2 text-left">
             <p className="text-xs font-medium text-slate-400">
-              {insight.records.length}{" "}
               {insight.records.length === 1
-                ? " Conversation"
-                : " Conversations"}
+                ? " Conversation:"
+                : " Conversations:"}{" "}
+              {insight.records.length}
             </p>
-            {" spanning "}
+
             <p className="text-xs font-medium text-slate-400">
-              {insight.companies.length}{" "}
-              {insight.companies.length === 1 ? " Accounts" : " Accounts"}
+              {insight.companies.length === 1 ? " Accounts:" : " Accounts:"}{" "}
+              {insight.companies.length}
             </p>
+            <p className="text-xs font-medium text-slate-400">ARR: $50,000</p>
           </div>
+          <Avatar className="w-7 h-7">
+            <AvatarImage
+              className=""
+              src={insight.author.avatarUrl}
+              alt={insight.author.name}
+            />
+            <AvatarFallback>{insight.author.name}</AvatarFallback>
+          </Avatar>
         </div>
       </div>
     </Link>

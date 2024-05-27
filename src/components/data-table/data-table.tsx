@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({
     <div className="relative space-y-1 flex-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
-      <div className="relative w-full overflow-auto border-t border-b">
+      <div className="relative w-[1620px] overflow-auto border-t border-b">
         <Table className="text-sm">
           <TableHeader className="sticky top-0 border-b border-zinc-600 w-full">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -211,6 +211,16 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
+      <div className="flex flex-row flex-1 px-3 gap-x-8 pt-12">
+        <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
+          <div className="w-2 h-2 bg-red-200 rounded-full"></div>
+          Account properties from CRM
+        </div>
+        <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
+          <div className="w-2 h-2 bg-zinc-300 rounded-full"></div>
+          Product experience properties
+        </div>
+      </div>
     </div>
   );
 }

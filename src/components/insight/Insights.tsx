@@ -39,7 +39,7 @@ export function Insights() {
     <>
       <Toaster theme="light" />
       <div className="flex flex-1 flex-col overflow-auto">
-        <div className="w-2/3 mx-auto pt-4">
+        <div className=" mx-auto pt-4">
           <div className="flex flex-row justify-between space-y-1 items-center h-[44px] pb-5">
             <h2 className="text-lg font-semibold tracking-tight text-slate-700">
               Insights

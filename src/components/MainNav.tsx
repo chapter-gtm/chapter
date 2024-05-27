@@ -74,18 +74,11 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                 pathname === link.route
                   ? "bg-zinc-200 hover:bg-zinc-300"
                   : "hover:bg-zinc-200/60",
-                "justify-start items-start pt-2 h-auto px-3"
+                "justify-start items-start h-auto px-3 items-center"
               )}
             >
-              <link.icon className="mr-2 h-4 w-4 mt-1" />
-              <span className="flex flex-col items-start">
-                {link.title}
-                {link.title == "Insights" ? (
-                  <span className="text-muted-foreground text-xs font-normal">
-                    Coming soon
-                  </span>
-                ) : null}
-              </span>
+              <link.icon className="mr-2 h-4 w-4" />
+              <span className="flex flex-col items-start">{link.title}</span>
             </Link>
           )
         )}
