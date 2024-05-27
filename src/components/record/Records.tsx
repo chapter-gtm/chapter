@@ -106,7 +106,7 @@ export function Records({}: RecordsProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setRecords(recordMap);
@@ -145,7 +145,7 @@ export function Records({}: RecordsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`
+        `https://${currentDomain}/records/${recordId}`,
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -219,7 +219,7 @@ export function Records({}: RecordsProps) {
         <Toaster theme="light" />
         <div className="flex flex-row justify-between space-y-1 center h-[60px] items-center px-4 ">
           <h2 className="text-base font-medium tracking-normal text-zinc-700">
-            Records
+            Conversations
           </h2>
           <Button
             onClick={handleGenerateInsights}
