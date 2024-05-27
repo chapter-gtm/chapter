@@ -21,16 +21,18 @@ export default function InsightsPage() {
       <div className="w-full space-y-2 px-6 mt-2">
         <Tabs defaultValue={tabName} className="h-dvh flex flex-col ">
           <div className="space-between basis-1/3 ">
-            <div className="flex items-center justify-center">
-              <TabsList className="bg-zinc-200 font-normal">
-                <TabsTrigger value="conversations" className="relative">
-                  Conversations
-                </TabsTrigger>
-                <TabsTrigger value="insights">Custom Insights</TabsTrigger>
-              </TabsList>
+            <div className="flex flex-col justify-start">
+              <div className="flex flex-row items-center justify-start px-6 mt-1">
+                <TabsList className="bg-zinc-200 font-normal flex">
+                  <TabsTrigger value="conversations" className="relative">
+                    Conversations
+                  </TabsTrigger>
+                  <TabsTrigger value="insights">Custom Insights</TabsTrigger>
+                </TabsList>
+              </div>
               <TabsContent
                 value="conversations"
-                className="mt-0 data-[state=active]:flex flex-col h-full pb-32 px-6"
+                className="mt-0 data-[state=active]:flex flex-col h-full pb-32 px-6 pt-4"
               >
                 <Records />
               </TabsContent>
