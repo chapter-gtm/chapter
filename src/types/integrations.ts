@@ -3,6 +3,9 @@ export enum ThirdPartySystem {
   INTERCOM = "INTERCOM",
   GONG = "GONG",
   HUBSPOT = "HUBSPOT",
+  G2 = "G2",
+  APPLE_APP_STORE = "APPLE_APP_STORE",
+  GOOGLE_APP_STORE = "GOOGLE_APP_STORE",
 }
 
 export enum ThirdPartySystemType {
@@ -11,6 +14,7 @@ export enum ThirdPartySystemType {
   SALES = "SALES",
   CRM = "CRM",
   SOCIAL = "SOCIAL",
+  APP_STORE = "APP_STORE",
 }
 
 export enum IntegrationProvider {

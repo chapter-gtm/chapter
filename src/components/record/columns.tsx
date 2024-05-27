@@ -5,6 +5,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
 import { PhoneCall, StarHalf, StickyNote } from "lucide-react";
+import SvgAppleLogo from "@/components/icons/AppleLogo";
+import SvgGongLogo from "@/components/icons/GongLogo";
+import SvgIntercomLogo from "@/components/icons/IntercomLogo";
+import SvgNotionLogo from "@/components/icons/NotionLogo";
+import SvgGooglePlayLogo from "@/components/icons/GooglePlayLogo";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
@@ -70,27 +75,32 @@ export const filters = [
       {
         value: "Intercom",
         label: "Intercom",
-        icon: undefined,
+        icon: SvgIntercomLogo,
       },
       {
         value: "Gong",
         label: "Gong",
-        icon: undefined,
+        icon: SvgGongLogo,
       },
       {
         value: "Notion",
         label: "Notion",
-        icon: undefined,
+        icon: SvgNotionLogo,
       },
       {
         value: "G2",
         label: "G2",
-        icon: undefined,
+        icon: SvgGongLogo,
       },
       {
-        value: "X",
-        label: "X",
-        icon: undefined,
+        value: "Apple App Store",
+        label: "App Store",
+        icon: SvgAppleLogo,
+      },
+      {
+        value: "Google Play Store",
+        label: "Play Store",
+        icon: SvgGooglePlayLogo,
       },
     ],
   },
@@ -232,7 +242,7 @@ function getTenureFromDate(date: Date) {
     tenureLabel = "<3 months";
   }
   const tenure = filters[3].filterOptions.find(
-    (tenure) => tenure.value === tenureLabel
+    (tenure) => tenure.value === tenureLabel,
   );
 
   return tenure;
@@ -282,7 +292,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const type = filters[1].filterOptions.find(
-        (type) => type.value === row.getValue("dataSourceName")
+        (type) => type.value === row.getValue("dataSourceName"),
       );
 
       if (!type) {
@@ -479,11 +489,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
 
 export function getRecordColumns() {
   const finalColumns: ColumnDef<RecordSchema>[] = [...fixedRecordColumns];
-  const scoreDefinitions = [
-    "Input Quality",
-    "Problem Severity",
-    "Willingness to Pay",
-  ];
+  const scoreDefinitions = ["Input Quality", "Sentiment"];
   scoreDefinitions.forEach((name: string) => {
     const fieldName = titleCaseToCamelCase(name);
     finalColumns.push({
@@ -498,7 +504,7 @@ export function getRecordColumns() {
             <div
               className={classNames(
                 RatingLabel[score]?.color,
-                "p-1 rounded-lg"
+                "p-1 rounded-lg",
               )}
             >
               {RatingLabel[score]?.label}
