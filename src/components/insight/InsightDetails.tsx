@@ -194,24 +194,26 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     }
   };
 
-  const timeline = [
-    {
-      id: 1,
-      content: "created selection",
-      target: "Robin",
-      href: "#",
-      date: "Apr 26",
-      datetime: "2020-09-20",
-    },
-    {
-      id: 2,
-      content: "drafted insight",
-      target: "Nectar",
-      href: "#",
-      date: "Apr 26",
-      datetime: "2020-09-22",
-    },
-  ];
+  const getTimeline = (insight: Insight) => {
+    return [
+      {
+        id: 1,
+        content: "created selection",
+        target: insight.author.name,
+        avatarSrc: insight.author.avatarUrl,
+        href: "#",
+        datetime: humanDate(new Date(insight.createdAt), false),
+      },
+      {
+        id: 2,
+        content: "drafted insight",
+        target: "Nectar",
+        avatarSrc: "/images/logos/logo-icon.svg",
+        href: "#",
+        datetime: humanDate(new Date(insight.createdAt), false),
+      },
+    ];
+  };
 
   // Function to select the text of the <p> element
 
@@ -387,10 +389,10 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                   </div>
                   <div className="flow-root">
                     <ul role="list" className="px-6 mb-3">
-                      {timeline.map((event, eventIdx) => (
+                      {getTimeline(insight).map((event, eventIdx) => (
                         <li key={event.id}>
                           <div className="relative pb-8">
-                            {eventIdx !== timeline.length - 1 ? (
+                            {eventIdx !== getTimeline(insight).length - 1 ? (
                               <span
                                 className="absolute left-3 top-4 -ml-px h-full w-0.5 bg-gray-200"
                                 aria-hidden="true"
@@ -401,7 +403,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                                 <span className="h-6 w-6 rounded-full flex items-center justify-center ring-8 ring-white">
                                   <Avatar className="h-6 w-6 rounded-lg">
                                     <AvatarImage
-                                      src={insight.author.avatarUrl}
+                                      src={event.avatarSrc}
                                       alt={insight.author.name}
                                     />
                                     <AvatarFallback className="text-sm bg-slate-200">
@@ -422,7 +424,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                                     dateTime={event.datetime}
                                     className="text-zinc-900"
                                   >
-                                    {event.date}
+                                    {event.datetime}
                                   </time>
                                 </div>
                               </div>
