@@ -107,7 +107,6 @@ export default function AuthenticationPage() {
                         autoCapitalize="none"
                         autoComplete="email"
                         autoCorrect="off"
-                        value="demo@nectar.run"
                         required
                       />
                     </div>
@@ -119,7 +118,6 @@ export default function AuthenticationPage() {
                       name="password"
                       type="password"
                       placeholder="Your Password"
-                      value="password"
                       required
                     />
                     <Button
