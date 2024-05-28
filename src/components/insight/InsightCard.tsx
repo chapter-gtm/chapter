@@ -35,12 +35,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 import { type Insight } from "@/types/insight";
+import { type Company } from "@/types/contact";
 
 interface InsightCardProps {
   insight: Insight;
 }
 
 export function InsightCard({ insight }: InsightCardProps) {
+  const currencySymbol = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD", // Specify the currency code (e.g., USD for US Dollar, EUR for Euro)
+  }).formatToParts()[0].value;
+
+  const getTotalRevenue = (insight: Insight) => {
+    let total = 0;
+    insight.companies.forEach((comp: Company) => {
+      total += comp.monthlySpend * 12;
+    });
+    return total.toLocaleString();
+  };
+
   return (
     <Link href={`/insights/${insight.id}`}>
       <div className="flex w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-slate-100/30">
@@ -69,7 +83,9 @@ export function InsightCard({ insight }: InsightCardProps) {
               {insight.companies.length === 1 ? " Accounts:" : " Accounts:"}{" "}
               {insight.companies.length}
             </p>
-            <p className="text-xs font-medium text-slate-400">ARR: $50,000</p>
+            <p className="text-xs font-medium text-slate-400">
+              {"ARR: " + currencySymbol + getTotalRevenue(insight)}
+            </p>
           </div>
           <Avatar className="w-7 h-7">
             <AvatarImage
