@@ -277,6 +277,16 @@ export function Records({}: RecordsProps) {
                       enableRowSelection={true}
                       onSelectedRowsChange={handleRowSelection}
                     />
+                    <div className="flex flex-row flex-1 px-3 gap-x-8 pt-12">
+                      <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
+                        <div className="w-2 h-2 bg-red-200 rounded-full"></div>
+                        Account properties from CRM
+                      </div>
+                      <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
+                        <div className="w-2 h-2 bg-zinc-300 rounded-full"></div>
+                        Product experience properties
+                      </div>
+                    </div>
                   </div>
                 </div>
 

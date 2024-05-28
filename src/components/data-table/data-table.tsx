@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
     }
 
     onSelectedRowsChange(
-      table.getSelectedRowModel().flatRows.map((row) => row.original)
+      table.getSelectedRowModel().flatRows.map((row) => row.original),
     );
   }, [rowSelection]);
 
@@ -140,14 +140,14 @@ export function DataTable<TData, TValue>({
                         "border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
                         header.column.id === "select"
                           ? "bg-white sticky left-0"
-                          : ""
+                          : "",
                       )}
                     >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -176,12 +176,12 @@ export function DataTable<TData, TValue>({
                           : "",
                         cell.column.id === "select"
                           ? "bg-white sticky left-0"
-                          : ""
+                          : "",
                       )}
                       // This is where the cell should have a shade of color
                       key={cell.id}
                       onClick={(
-                        event: React.MouseEvent<HTMLTableCellElement>
+                        event: React.MouseEvent<HTMLTableCellElement>,
                       ) => {
                         // Don't call row click handler when checkbox field(must has id="select") is clicked.
                         if (cell.column.id !== "select") {
@@ -191,7 +191,7 @@ export function DataTable<TData, TValue>({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -211,16 +211,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-      <div className="flex flex-row flex-1 px-3 gap-x-8 pt-12">
-        <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
-          <div className="w-2 h-2 bg-red-200 rounded-full"></div>
-          Account properties from CRM
-        </div>
-        <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
-          <div className="w-2 h-2 bg-zinc-300 rounded-full"></div>
-          Product experience properties
-        </div>
-      </div>
     </div>
   );
 }
