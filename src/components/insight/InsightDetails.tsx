@@ -287,21 +287,6 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                       <p className="text-sm text-zinc-400 ">Total seats</p>
                     </div>
                   </div>
-
-                  <div className="flex flex-row items-center gap-x-1 px-6 mt-4">
-                    <div className="w-28 flex items-center gap-1 text-zinc-400">
-                      <div className="w-5">
-                        <Gem size={"15"} />
-                      </div>
-                      <p className="text-sm">Potential</p>
-                    </div>
-                    <div className="flex flex-1 flex-row justify-between items-center gap-x-1 text-xs">
-                      <p className="text-sm text-zinc-800">$50,000</p>
-                      <p className="text-sm text-zinc-400 ">
-                        Acccounts total seats
-                      </p>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="flex flex-col border-t border-zinc-200 pt-3 pb-5">
