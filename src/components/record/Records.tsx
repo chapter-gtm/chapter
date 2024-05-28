@@ -207,6 +207,7 @@ export function Records({}: RecordsProps) {
     if (value === "all") {
       setPreSelectedFilters([]);
     } else if (value === "sentimentNegative") {
+      setPreSelectedFilters([{ id: "sentiment", value: [1, 2] }]);
     } else if (value === "highValueCustomers") {
       setPreSelectedFilters([{ id: "plan", value: ["Enterprise"] }]);
     }
