@@ -58,7 +58,7 @@ export function Insights() {
               <div className="w-full space-y-2 px-6 mt-2">
                 <EmptySelectionCard
                   title="It's a clean slate"
-                  description="Be the first to create a new survey!"
+                  description="Be the first to draft a new insight!"
                 />
               </div>
             )
