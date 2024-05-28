@@ -489,6 +489,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                             columns={getRecordColumns()}
                             data={dataRecords}
                             filters={recordFilters}
+                            preSelectedFilters={[]}
                             onRowClick={handleRecordOpenSheet}
                             records={dataRecords}
                             enableRowSelection={false}
@@ -556,6 +557,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                           columns={fixedCompanyColumns}
                           data={companyRecords}
                           filters={companyFilters}
+                          preSelectedFilters={[]}
                           onRowClick={() => {}}
                           records={companyRecords}
                           enableRowSelection={false}
@@ -570,6 +572,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                           columns={fixedContactColumns}
                           data={contactRecords}
                           filters={contactFilters}
+                          preSelectedFilters={[]}
                           onRowClick={() => {}}
                           records={contactRecords}
                           enableRowSelection={false}
