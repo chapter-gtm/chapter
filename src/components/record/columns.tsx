@@ -10,6 +10,7 @@ import SvgGongLogo from "@/components/icons/GongLogo";
 import SvgIntercomLogo from "@/components/icons/IntercomLogo";
 import SvgNotionLogo from "@/components/icons/NotionLogo";
 import SvgGooglePlayLogo from "@/components/icons/GooglePlayLogo";
+import SvgG2Logo from "@/components/icons/G2Logo";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
@@ -90,7 +91,7 @@ export const filters = [
       {
         value: "G2",
         label: "G2",
-        icon: SvgGongLogo,
+        icon: SvgG2Logo,
       },
       {
         value: "Apple App Store",

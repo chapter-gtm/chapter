@@ -15,6 +15,7 @@ import SvgGongLogo from "@/components/icons/GongLogo";
 import SvgIntercomLogo from "@/components/icons/IntercomLogo";
 import SvgNotionLogo from "@/components/icons/NotionLogo";
 import SvgGooglePlayLogo from "@/components/icons/GooglePlayLogo";
+import SvgG2Logo from "@/components/icons/G2Logo";
 
 export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
@@ -84,7 +85,7 @@ export const recordFilters = [
       {
         value: "G2",
         label: "G2",
-        icon: SvgGongLogo,
+        icon: SvgG2Logo,
       },
       {
         value: "Apple App Store",
