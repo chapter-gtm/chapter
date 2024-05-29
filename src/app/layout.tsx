@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { PHProvider } from "./providers";
+import dynamic from "next/dynamic";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const PostHogPageView = dynamic(() => import("./PostHogPageView"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: "Nectar Console",
@@ -19,7 +25,12 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <PHProvider>
+        <body className={inter.className}>
+          <PostHogPageView />
+          {children}
+        </body>
+      </PHProvider>
     </html>
   );
 }
