@@ -123,11 +123,11 @@ export function DataTable<TData, TValue>({
     "signedUpAt",
   ];
   return (
-    <div className="relative space-y-1 flex-1">
+    <div className="space-y-1">
       <DataTableToolbar table={table} filters={filters} records={records} />
 
-      <div className="relative w-[1450px] overflow-auto border-t border-b">
-        <Table className="text-sm">
+      <div className="flex overflow-x-auto border-t border-b">
+        <Table className="min-w-full text-sm">
           <TableHeader className="sticky top-0 border-b border-zinc-600 w-full">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-zinc-100/20">

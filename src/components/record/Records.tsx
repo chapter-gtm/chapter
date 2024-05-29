@@ -232,7 +232,7 @@ export function Records({}: RecordsProps) {
           </Button>
         </div>
 
-        <div className="flex flex-row h-full">
+        <div className="h-full">
           {isPopulated ? (
             <div>
               <div className="flex px-3">
@@ -266,8 +266,8 @@ export function Records({}: RecordsProps) {
                 </ToggleGroup>
               </div>
               <Sheet modal={false} open={sheetOpen}>
-                <div className="flex flex-col flex-1">
-                  <div className="flex flex-col pb-4">
+                <div>
+                  <div className="pb-4">
                     <DataTable
                       columns={getRecordColumns()}
                       data={dataRecords}

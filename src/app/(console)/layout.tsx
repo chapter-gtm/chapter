@@ -27,10 +27,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
-        <div className="bg-zinc-100 h-screen flex w-full">
-          <div className="flex flex-1 overflow-hidden">
-            <Sidebar className="w-44 justify-between" />
-            <main className="flex flex-1 flex-col">{children}</main>
+        <div className="bg-zinc-100 h-screen">
+          <div className="grid grid-cols-10 h-screen">
+            <Sidebar className="col-span-1" />
+            <main className="col-span-9">{children}</main>
           </div>
         </div>
       </body>
