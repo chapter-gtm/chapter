@@ -23,7 +23,7 @@ export function Insights() {
         if (userToken === undefined) {
           throw Error("User needs to login!");
         }
-        setInsights(await getInsights(userToken, 1000, 1));
+        setInsights(await getInsights(userToken, 10, 1));
       } catch (error: any) {
         toast.error("Failed to load insights.", {
           description: error.toString(),
