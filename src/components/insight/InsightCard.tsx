@@ -15,6 +15,7 @@ import {
   UserCircleIcon,
   MessageCircleIcon,
   LandmarkIcon,
+  LightbulbIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,6 +74,10 @@ export function InsightCard({ insight }: InsightCardProps) {
           </div>
 
           <div className="flex flex-row justify-start gap-x-3 my-2 text-left">
+            <p className="flex text-xs font-normal text-zinc-600 py-1.5 px-2 bg-zinc-100 rounded-md">
+              <LightbulbIcon className="w-4 h-4 mr-1" />
+              4w&apos;s
+            </p>
             <p className="flex text-xs font-normal text-zinc-600 py-1.5 px-2 bg-zinc-100 rounded-md">
               <MessageCircleIcon className="w-4 h-4 mr-1" />
               {/* {insight.records.length === 1
