@@ -6,6 +6,7 @@ import { ColumnFiltersState } from "@tanstack/react-table";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import Image from "next/image";
 
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
@@ -260,9 +261,18 @@ export function Records({}: RecordsProps) {
                   >
                     Customer Value: High
                   </ToggleGroupItem>
-                  <ToggleGroupItem value="add">
-                    <PlusIcon className="h-4 w-4" />
-                  </ToggleGroupItem>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <ToggleGroupItem value="add">
+                          <PlusIcon className="h-4 w-4" />
+                        </ToggleGroupItem>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Create new segment (for paying users){" "}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </ToggleGroup>
               </div>
               <Sheet modal={false} open={sheetOpen}>
@@ -280,8 +290,19 @@ export function Records({}: RecordsProps) {
                     />
                     <div className="flex flex-row flex-1 px-3 gap-x-8 pt-12">
                       <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
-                        <div className="w-2 h-2 bg-red-200 rounded-full"></div>
-                        Account properties from CRM
+                        <div className="flex flex-row items-center gap-x-2">
+                          <div className="w-2 h-2 bg-red-200 rounded-full"></div>
+                          Account properties
+                          <div className="flex border border-zinc-200 px-2 py-1 rounded-md">
+                            <Image
+                              src="/images/logos/hubspot.svg"
+                              width={60}
+                              height={16}
+                              alt="Hubspot"
+                              className="block dark:hidden"
+                            />
+                          </div>
+                        </div>
                       </div>
                       <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
                         <div className="w-2 h-2 bg-zinc-300 rounded-full"></div>

@@ -60,8 +60,8 @@ export default function AuthenticationPage() {
           className="hidden dark:block"
         />
       </div>
-      <div className="container relative hidden h-dvh flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <div className="relative hidden h-full flex-col justify-between bg-muted p-10 text-white lg:flex dark:border-r ">
+      <div className="md:container relative h-dvh bg-zinx-100 flex flex-col justify-between py-5">
+        {/* <div className="relative hidden h-full flex-col justify-between bg-muted p-10 text-white lg:flex dark:border-r ">
           <div className="absolute inset-0 bg-slate-900" />
           <div className="relative z-20 flex items-center text-lg font-medium space-x-3">
             <Image
@@ -82,148 +82,188 @@ export default function AuthenticationPage() {
               </footer>
             </blockquote>
           </div>
+        </div> */}
+        <div className="flex items-center justify-center">
+          <Image
+            src="/images/logos/logo-icon.svg"
+            width={44}
+            height={44}
+            alt="Nectar"
+            className="rounded-md"
+          />
         </div>
+        <div className="flex flex-1 h-full items-center justify-center">
+          {showLogin ? (
+            <div className="flex">
+              <div className="grid grid-cols-4 gap-x-24 border-zinc-200 border rounded-3xl p-6">
+                <div className="col-span-2">
+                  {" "}
+                  <div className="lg:p-8">
+                    <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                      <div className="flex flex-col space-y-2 text-center">
+                        <p className="text-sm text-center text-zinc-500 bg-zinc-100/60 p-3 rounded-md">
+                          To enter the interactive demo, use pre-entered
+                          credentials, and click &quot;Sign in&quot;.
+                        </p>
+                      </div>
 
-        {showLogin ? (
-          <div className="lg:p-8">
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-              <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Sign in
-                </h1>
-              </div>
-              <div className="grid gap-6">
-                <form>
-                  <div className="grid gap-2">
-                    <div className="grid gap-1">
-                      <Label className="sr-only" htmlFor="email">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        autoCapitalize="none"
-                        autoComplete="email"
-                        autoCorrect="off"
-                        defaultValue="demo@nectar.run"
-                        required
-                      />
+                      <div className="grid gap-6">
+                        <form>
+                          <div className="grid gap-2">
+                            <div className="grid gap-1">
+                              <Label className="sr-only" htmlFor="email">
+                                Email
+                              </Label>
+                              <Input
+                                id="email"
+                                name="email"
+                                placeholder="name@example.com"
+                                type="email"
+                                autoCapitalize="none"
+                                autoComplete="email"
+                                autoCorrect="off"
+                                defaultValue="demo@nectar.run"
+                                required
+                              />
+                            </div>
+                            <Label className="sr-only" htmlFor="password">
+                              Password
+                            </Label>
+                            <Input
+                              id="password"
+                              name="password"
+                              type="password"
+                              placeholder="Your Password"
+                              defaultValue="password"
+                              required
+                            />
+                            <Button
+                              onClick={() => {
+                                setLoading(true);
+                              }}
+                              formAction={handleLogin}
+                            >
+                              {loading ? "Signing in..." : "Sign in"}
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setShowLogin(false);
+                                setMessage("");
+                              }}
+                              variant="link"
+                            >
+                              Reset password
+                            </Button>
+                          </div>
+                        </form>
+                        {message && (
+                          <p
+                            className={`flex border  rounded-lg p-3 text-xs ${
+                              messageType === "error"
+                                ? "border-rose-200 bg-rose-50"
+                                : messageType === "reset"
+                                ? "border-indigo-200 bg-zinc-100"
+                                : "border-zinc-200 bg-white"
+                            }`}
+                          >
+                            {" "}
+                            {message}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <Label className="sr-only" htmlFor="password">
-                      Password
-                    </Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="Your Password"
-                      defaultValue="password"
-                      required
-                    />
-                    <Button
-                      onClick={() => {
-                        setLoading(true);
-                      }}
-                      formAction={handleLogin}
-                    >
-                      {loading ? "Signing in..." : "Sign in"}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setShowLogin(false);
-                        setMessage("");
-                      }}
-                      variant="link"
-                    >
-                      Reset password
-                    </Button>
                   </div>
-                </form>
-                {message && (
-                  <p
-                    className={`flex border  rounded-lg p-3 text-xs ${
-                      messageType === "error"
-                        ? "border-rose-200 bg-rose-50"
-                        : messageType === "reset"
-                          ? "border-indigo-200 bg-zinc-100"
-                          : "border-zinc-200 bg-white"
-                    }`}
-                  >
-                    {" "}
-                    {message}
+                </div>
+                <div className="col-span-2 py-8 space-y-3 sm:w-[350px]">
+                  <h2 className="font-semibold text-xl pb-6">
+                    Welcome to Nectar
+                  </h2>
+                  <p className="text-base text-zinc-500">
+                    Nectar is a radically new type of research tool. Built on an
+                    entirely new type of data architecture, you&apos;ll have
+                    profiles and records of every interaction within your user
+                    base in minutes, always updated in real-time.
                   </p>
-                )}
+                  <p className="text-base text-zinc-500">
+                    You&apos;ll be able to surface insights on your custom
+                    segment, the kind that matter.
+                  </p>
+                  <p className="text-base text-zinc-500">Let&apos;s begin.</p>
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="lg:p-8">
-            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-              <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
-                  Reset Password
-                </h1>
-              </div>
-              <div className="grid gap-6">
-                <form>
-                  <div className="grid gap-2">
-                    <div className="grid gap-1">
-                      <Label className="sr-only" htmlFor="email">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        autoCapitalize="none"
-                        autoComplete="email"
-                        autoCorrect="off"
-                        required
-                      />
+          ) : (
+            <div className="lg:p-8">
+              <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                <div className="flex flex-col space-y-2 text-center">
+                  <h1 className="text-2xl font-semibold tracking-tight">
+                    Reset Password
+                  </h1>
+                </div>
+                <div className="grid gap-6">
+                  <form>
+                    <div className="grid gap-2">
+                      <div className="grid gap-1">
+                        <Label className="sr-only" htmlFor="email">
+                          Email
+                        </Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          placeholder="name@example.com"
+                          type="email"
+                          autoCapitalize="none"
+                          autoComplete="email"
+                          autoCorrect="off"
+                          required
+                        />
+                      </div>
+                      <Button
+                        onClick={() => {
+                          setLoading(true);
+                        }}
+                        formAction={handleResetPassword}
+                      >
+                        {loading
+                          ? "Sending email..."
+                          : "Send reset link to email"}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setShowLogin(true);
+                          setMessage("");
+                        }}
+                        variant="link"
+                      >
+                        Sign in
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => {
-                        setLoading(true);
-                      }}
-                      formAction={handleResetPassword}
-                    >
-                      {loading
-                        ? "Sending email..."
-                        : "Send reset link to email"}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setShowLogin(true);
-                        setMessage("");
-                      }}
-                      variant="link"
-                    >
-                      Sign in
-                    </Button>
-                  </div>
-                </form>
+                  </form>
 
-                {message && (
-                  <p
-                    className={`flex border  rounded-lg p-3 text-xs ${
-                      messageType === "error"
-                        ? "border-rose-200 bg-rose-50"
-                        : messageType === "reset"
+                  {message && (
+                    <p
+                      className={`flex border  rounded-lg p-3 text-xs ${
+                        messageType === "error"
+                          ? "border-rose-200 bg-rose-50"
+                          : messageType === "reset"
                           ? "border-indigo-200 bg-indigo-100"
                           : "border-zinc-200 bg-white"
-                    }`}
-                  >
-                    {" "}
-                    {message}
-                  </p>
-                )}
+                      }`}
+                    >
+                      {" "}
+                      {message}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          <p className="text-xs font-medium">
+            @ 2024 Nectar Labs UG. All rights reserved.
+          </p>
+        </div>
       </div>
     </>
   );
