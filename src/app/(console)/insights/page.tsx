@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import posthog from "posthog-js";
+
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { EmptySelectionCard } from "@/components/EmptySelectionCard";
@@ -16,6 +18,10 @@ export default function InsightsPage() {
     if (!["conversations", "insights"].includes(tabName)) {
       tabName = "conversations";
     }
+
+    const handleContactClick = async () => {
+      posthog.capture("console:insights/contact.click");
+    };
 
     return (
       <div className="w-full space-y-2 px-6 mt-2.5">
@@ -37,6 +43,7 @@ export default function InsightsPage() {
                 href="https://cal.com/robing/nectar-trial"
                 target="_blank"
                 className="font-medium py-1.5 p-2.5 bg-white rounded-md border border-zinc-200"
+                onClick={handleContactClick}
               >
                 Contact
               </a>
