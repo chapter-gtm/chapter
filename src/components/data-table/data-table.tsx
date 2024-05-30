@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   filters: ToolbarFilter[];
   preSelectedFilters?: ColumnFiltersState;
+  defaultColumnVisibility?: VisibilityState;
   onRowClick: <TData>(data: TData) => void;
   records: TData[];
   enableRowSelection: boolean;
@@ -46,6 +47,7 @@ export function DataTable<TData, TValue>({
   data,
   filters,
   preSelectedFilters = [],
+  defaultColumnVisibility = {},
   onRowClick,
   records,
   enableRowSelection = false,
@@ -55,7 +57,7 @@ export function DataTable<TData, TValue>({
   const [selectedRow, setSelectedRow] = React.useState(0);
 
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>(defaultColumnVisibility);
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(preSelectedFilters);
   const [sorting, setSorting] = React.useState<SortingState>([]);

@@ -79,7 +79,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
 
   const [recordSheetOpen, setRecordSheetOpen] = useState(false);
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
-    null
+    null,
   );
   const [companyRecords, setCompanyRecords] = useState<CompanySchema[]>([]);
   const [contactRecords, setContactRecords] = useState<ContactSchema[]>([]);
@@ -115,7 +115,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
             });
 
             return record;
-          })
+          }),
         );
 
         let revenue = 0;
@@ -144,7 +144,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               userCount: comp.userCount,
             };
             return company;
-          })
+          }),
         );
         setCompanyRecords(companyRecs);
 
@@ -158,7 +158,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               company: cont.companies.length > 0 ? cont.companies[0].name : "-",
             };
             return contact;
-          })
+          }),
         );
         setContactRecords(contactRecs);
       } catch (error) {}
@@ -184,7 +184,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`
+        `https://${currentDomain}/records/${recordId}`,
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -477,6 +477,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                             data={dataRecords}
                             filters={recordFilters}
                             preSelectedFilters={[]}
+                            defaultColumnVisibility={{}}
                             onRowClick={handleRecordOpenSheet}
                             records={dataRecords}
                             enableRowSelection={false}
@@ -545,6 +546,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                           data={companyRecords}
                           filters={companyFilters}
                           preSelectedFilters={[]}
+                          defaultColumnVisibility={{}}
                           onRowClick={() => {}}
                           records={companyRecords}
                           enableRowSelection={false}
@@ -560,6 +562,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
                           data={contactRecords}
                           filters={contactFilters}
                           preSelectedFilters={[]}
+                          defaultColumnVisibility={{}}
                           onRowClick={() => {}}
                           records={contactRecords}
                           enableRowSelection={false}

@@ -12,7 +12,7 @@ import SvgNotionLogo from "@/components/icons/NotionLogo";
 import SvgGooglePlayLogo from "@/components/icons/GooglePlayLogo";
 import SvgG2Logo from "@/components/icons/G2Logo";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
 
 import { RecordType } from "@/types/record";
@@ -248,6 +248,19 @@ function getTenureFromDate(date: Date) {
 
   return tenure;
 }
+
+export const defaultColumnVisibility: VisibilityState = {
+  date: true,
+  dataSourceName: true,
+  topic: false,
+  contactName: true,
+  companyName: true,
+  companyLocation: true,
+  plan: true,
+  arr: true,
+  signedUpAt: true,
+  type: false,
+};
 
 // TODO: Add scores dynamically based on score definitions from the survey
 const fixedRecordColumns: ColumnDef<RecordSchema>[] = [

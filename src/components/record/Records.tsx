@@ -28,6 +28,7 @@ import {
   TableRecord,
   filters,
   getRecordColumns,
+  defaultColumnVisibility,
 } from "@/components/record/columns";
 import { type Company, type Contact } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
@@ -107,7 +108,7 @@ export function Records({}: RecordsProps) {
               record[titleCaseToCamelCase(item.name)] = item.value;
             });
             return record;
-          })
+          }),
         );
 
         setRecords(recordMap);
@@ -146,7 +147,7 @@ export function Records({}: RecordsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`
+        `https://${currentDomain}/records/${recordId}`,
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -283,6 +284,7 @@ export function Records({}: RecordsProps) {
                       data={dataRecords}
                       filters={filters}
                       preSelectedFilters={preSelectedFilters}
+                      defaultColumnVisibility={defaultColumnVisibility}
                       onRowClick={handleOpenSheet}
                       records={dataRecords}
                       enableRowSelection={true}
