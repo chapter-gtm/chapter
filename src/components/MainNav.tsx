@@ -13,15 +13,17 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 
+export interface NavPropsLink {
+  title: string;
+  route: string;
+  icon: LucideIcon;
+  variant: "default" | "secondary" | "ghost";
+  label?: string;
+}
+
 interface NavProps {
   isCollapsed: boolean;
-  links: {
-    title: string;
-    route: string;
-    icon: LucideIcon;
-    variant: "default" | "secondary" | "ghost";
-    label?: string;
-  }[];
+  links: NavPropsLink[];
 }
 
 export function MainNav({ links, isCollapsed }: NavProps) {
@@ -44,7 +46,7 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                       "h-9 w-9",
                       pathname === link.route
                         ? "bg-muted hover:bg-muted"
-                        : "hover:bg-transparent hover:underline"
+                        : "hover:bg-transparent hover:underline",
                     )}
                   >
                     <link.icon className="h-4 w-4" />
@@ -74,13 +76,13 @@ export function MainNav({ links, isCollapsed }: NavProps) {
                 pathname === link.route
                   ? "bg-zinc-200 hover:bg-zinc-300"
                   : "hover:bg-zinc-200/60",
-                "justify-start items-start h-auto px-3 items-center"
+                "justify-start items-start h-auto px-3 items-center",
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
               <span className="flex flex-col items-start">{link.title}</span>
             </Link>
-          )
+          ),
         )}
       </nav>
     </div>
