@@ -35,7 +35,7 @@ export default function InsightsPage() {
             </TabsList>
             <div className="flex gap-3 bg-yellow-100/50 border border-yellow-300 h-12 items-center px-3 rounded-lg text-sm">
               <p>
-                This is an interactive demo. Contact us, if you want to create
+                This demo uses dummy data. Contact us, if you want to create
                 insights from your own data.{" "}
               </p>
 

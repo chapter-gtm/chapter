@@ -3,7 +3,7 @@ import { type Contact, type Company } from "@/types/contact";
 import { type DataRecord } from "@/types/record";
 
 export enum InsightType {
-  FOUR_WS = "4w's",
+  FOUR_WS = "4ws",
 }
 
 export type BaseInsight = {

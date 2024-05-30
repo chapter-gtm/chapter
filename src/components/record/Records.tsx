@@ -292,13 +292,13 @@ export function Records({}: RecordsProps) {
                     />
                     <div className="flex flex-row flex-1 px-3 gap-x-8 pt-12">
                       <div className="flex flex-row gap-x-2 items-center text-sm font-medium text-zinc-500">
-                        <div className="flex flex-row items-center gap-x-2">
+                        <div className="flex flex-row items-center gap-x-2 ">
                           <div className="w-2 h-2 bg-red-200 rounded-full"></div>
-                          Account properties
-                          <div className="flex border border-zinc-200 px-2 py-1 rounded-md">
+                          Properties from
+                          <div className="flex">
                             <Image
                               src="/images/logos/hubspot.svg"
-                              width={60}
+                              width={52}
                               height={16}
                               alt="Hubspot"
                               className="block dark:hidden"

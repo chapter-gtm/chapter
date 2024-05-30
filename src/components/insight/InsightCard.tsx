@@ -12,6 +12,9 @@ import {
   LucideIcon,
   CheckCircleIcon,
   Car,
+  UserCircleIcon,
+  MessageCircleIcon,
+  LandmarkIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,44 +60,52 @@ export function InsightCard({ insight }: InsightCardProps) {
 
   return (
     <Link href={`/insights/${insight.id}`}>
-      <div className="flex w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-slate-100/30">
-        <div className="flex flex-col justify-between h-full ">
-          <div className="flex-1 group">
-            <div className="w-12 h-12 rounded-lg bg-slate-100 flex justify-center items-center text-md mb-2 group-hover:border border-slate-200">
-              4w
-              {/* {insight.type} */}
-            </div>
-            <div className="text-base font-medium line-clamp-1">
+      <div className="flex w-full items-center border-slate-200 bg-white border p-4 rounded-lg hover:bg-zinc-200/50">
+        <div className="flex flex-col justify-between py-4 gap-y-2">
+          <div className="group">
+            <div className="text-base font-medium line-clamp-1 text-zinc-800">
               {insight.insight.title}
             </div>
-            {/* <div className="text-base font-small line-clamp-1">
+
+            <div className="text-base font-normal text-zinc-500 line-clamp-1">
               {insight.insight.statement}
-            </div> */}
+            </div>
           </div>
-          <div className="flex flex-col justify-start gap-y-1 my-2 text-left">
-            <p className="text-xs font-medium text-slate-400">
-              {insight.records.length === 1
+
+          <div className="flex flex-row justify-start gap-x-3 my-2 text-left">
+            <p className="flex text-xs font-normal text-zinc-600 py-1.5 px-2 bg-zinc-100 rounded-md">
+              <MessageCircleIcon className="w-4 h-4 mr-1" />
+              {/* {insight.records.length === 1
                 ? " Conversation:"
-                : " Conversations:"}{" "}
+                : " Conversations:"}{" "} */}
               {insight.records.length}
             </p>
 
-            <p className="text-xs font-medium text-slate-400">
-              {insight.companies.length === 1 ? " Accounts:" : " Accounts:"}{" "}
+            <p className="text-xs flex font-normal text-zinc-600 py-1.5 px-2 bg-zinc-100 rounded-md">
+              <UserCircleIcon className="w-4 h-4 mr-1" />
+              {/* {insight.companies.length === 1
+                ? " Accounts:"
+                : " Accounts:"}{" "} */}
               {insight.companies.length}
             </p>
-            <p className="text-xs font-medium text-slate-400">
-              {"ARR: " + currencySymbol + getTotalRevenue(insight)}
+            <p className="flex text-xs font-normal text-zinc-600 py-1.5 px-2 bg-zinc-100 rounded-md">
+              <LandmarkIcon className="w-4 h-4 mr-1" />
+              {currencySymbol + getTotalRevenue(insight)}
             </p>
           </div>
-          <Avatar className="w-7 h-7">
-            <AvatarImage
-              className=""
-              src={insight.author.avatarUrl}
-              alt={insight.author.name}
-            />
-            <AvatarFallback>{insight.author.name}</AvatarFallback>
-          </Avatar>
+          <div className="flex items-center">
+            <Avatar className="w-7 h-7">
+              <AvatarImage
+                className=""
+                src={insight.author.avatarUrl}
+                alt={insight.author.name}
+              />
+              <AvatarFallback>{insight.author.name}</AvatarFallback>
+            </Avatar>
+            <p className="text-sm font-normal text-zinc-600 ml-2">
+              {insight.author.name}
+            </p>
+          </div>
         </div>
       </div>
     </Link>
