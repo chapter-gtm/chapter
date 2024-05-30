@@ -107,7 +107,7 @@ export const filters = [
   },
   {
     tableColumnName: "tags",
-    label: "Tags",
+    label: "Mentions",
     filterOptions: [
       {
         value: "onboarding",
@@ -476,7 +476,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
   {
     accessorKey: "tags",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tags" />
+      <DataTableColumnHeader column={column} title="Mentions" />
     ),
     cell: ({ row }) => {
       const tags: string[] = row.getValue("tags");
