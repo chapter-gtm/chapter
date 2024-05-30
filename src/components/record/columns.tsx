@@ -115,13 +115,33 @@ export const filters = [
         icon: undefined,
       },
       {
-        value: "checkout",
-        label: "Checkout",
+        value: "integrations",
+        label: "Integrations",
         icon: undefined,
       },
       {
         value: "pricing",
         label: "Pricing",
+        icon: undefined,
+      },
+      {
+        value: "ui",
+        label: "UI",
+        icon: undefined,
+      },
+      {
+        value: "functionality",
+        label: "Functionality",
+        icon: undefined,
+      },
+      {
+        value: "scheduling",
+        label: "Scheduling",
+        icon: undefined,
+      },
+      {
+        value: "customer suppport",
+        label: "Customer support",
         icon: undefined,
       },
     ],
@@ -496,7 +516,9 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     },
     filterFn: (row, id, value) => {
       const tags: string[] = row.getValue(id);
-      return value.some((item: string) => tags.includes(item));
+      console.log(tags);
+      console.log(value);
+      return value.some((item: string) => tags.includes(item.toLowerCase()));
     },
   },
 ];
