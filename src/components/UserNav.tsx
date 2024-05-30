@@ -47,7 +47,7 @@ export function UserNav({ className }: UserNavProps) {
       {currentUser !== null && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className={cn("", className)}>
+            <Button variant="outline" className={cn("w-full", className)}>
               <Avatar className="mr-2 h-5 w-5 rounded-lg">
                 <AvatarImage
                   src={currentUser.avatarUrl}

@@ -79,7 +79,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
 
   const [recordSheetOpen, setRecordSheetOpen] = useState(false);
   const [selectedRecordRow, setSelectedRecordRow] = useState<DataRecord | null>(
-    null,
+    null
   );
   const [companyRecords, setCompanyRecords] = useState<CompanySchema[]>([]);
   const [contactRecords, setContactRecords] = useState<ContactSchema[]>([]);
@@ -115,7 +115,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
             });
 
             return record;
-          }),
+          })
         );
 
         let revenue = 0;
@@ -144,7 +144,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               userCount: comp.userCount,
             };
             return company;
-          }),
+          })
         );
         setCompanyRecords(companyRecs);
 
@@ -158,7 +158,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               company: cont.companies.length > 0 ? cont.companies[0].name : "-",
             };
             return contact;
-          }),
+          })
         );
         setContactRecords(contactRecs);
       } catch (error) {}
@@ -184,7 +184,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
     try {
       const currentDomain = window.location.host;
       await navigator.clipboard.writeText(
-        `https://${currentDomain}/records/${recordId}`,
+        `https://${currentDomain}/records/${recordId}`
       );
       toast.success("Record link copied!");
     } catch (error: any) {
@@ -232,7 +232,7 @@ export function InsightDetails({ insightId }: InsightDetailsProps) {
               </p>
             </div>
             <Button variant="outline" size="sm" disabled={false}>
-              Link
+              Share
             </Button>
           </div>
           <div className="relative px-6 flex-1 overflow-y-scroll">

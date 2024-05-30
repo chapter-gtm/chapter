@@ -57,7 +57,7 @@ export default function Sidebar({ className }: SideBarProps) {
   }, [links]);
 
   return (
-    <div className="flex flex-col justify-between w-52">
+    <div className="flex flex-col justify-between w-full">
       <div className="space-y-4 px-3 pt-3">
         <div className="items-center justify-start">
           <UserNav className={className} />
