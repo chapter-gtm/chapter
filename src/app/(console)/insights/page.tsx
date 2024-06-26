@@ -31,7 +31,7 @@ export default function InsightsPage() {
               <TabsTrigger value="conversations" className="relative">
                 Conversations
               </TabsTrigger>
-              <TabsTrigger value="insights">Custom Insights</TabsTrigger>
+              <TabsTrigger value="insights">Drafted Insights</TabsTrigger>
             </TabsList>
             <div className="flex gap-3 bg-yellow-100/50 border border-yellow-300 h-12 items-center px-3 rounded-lg text-sm">
               <p>
