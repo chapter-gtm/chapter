@@ -8,6 +8,7 @@ from .team_roles import TeamRoles
 from .team_tag import team_tag
 from .user import User
 from .user_role import UserRole
+from .tenant import Tenant
 
 __all__ = (
     "User",
@@ -20,4 +21,5 @@ __all__ = (
     "TeamInvitation",
     "TeamMember",
     "TeamRoles",
+    "Tenant",
 )
