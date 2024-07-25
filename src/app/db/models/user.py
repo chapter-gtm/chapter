@@ -2,15 +2,17 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from typing import TYPE_CHECKING
+from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import UUIDAuditBase
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .oauth_account import UserOauthAccount
     from .team_member import TeamMember
     from .user_role import UserRole
+    from .tenant import Tenant
 
 
 class User(UUIDAuditBase):
@@ -28,10 +30,17 @@ class User(UUIDAuditBase):
     verified_at: Mapped[date] = mapped_column(nullable=True, default=None)
     joined_at: Mapped[date] = mapped_column(default=datetime.now)
     login_count: Mapped[int] = mapped_column(default=0)
+    tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False)
     # -----------
     # ORM Relationships
     # ------------
-
+    #
+    tenant: Mapped[Tenant] = relationship(
+        back_populates="users",
+        innerjoin=True,
+        uselist=False,
+        lazy="joined",
+    )
     roles: Mapped[list[UserRole]] = relationship(
         back_populates="user",
         lazy="selectin",

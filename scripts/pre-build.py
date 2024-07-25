@@ -22,8 +22,6 @@ DEFAULT_VENV_PATH = Path(PROJECT_ROOT / ".venv")
 def manage_resources(setup_kwargs: Any) -> Any:
     # look for this in the environment and skip this function if it exists, sometimes building here is not needed, eg. when using nixpacks
     no_nodeenv = os.environ.get("LITESTAR_SKIP_NODEENV_INSTALL") is not None or NODEENV_INSTALLED is False
-    build_assets = setup_kwargs.pop("build_assets", None)
-    install_packages = setup_kwargs.pop("install_packages", None)
     kwargs: dict[str, Any] = {}
     if no_nodeenv:
         logger.info("skipping nodeenv configuration")
@@ -36,12 +34,6 @@ def manage_resources(setup_kwargs: Any) -> Any:
 
     if platform.system() == "Windows":
         kwargs["shell"] = True
-    if install_packages is not None:
-        logger.info("Installing NPM packages.")
-        subprocess.run(["npm", "install"], **kwargs)  # noqa: S607, PLW1510
-    if build_assets is not None:
-        logger.info("Building NPM static assets.")
-        subprocess.run(["npm", "run", "build"], **kwargs)  # noqa: S607, PLW1510
     return setup_kwargs
 
 

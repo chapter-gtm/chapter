@@ -6,7 +6,6 @@ SHELL := /bin/bash
 .DEFAULT_GOAL:=help
 .ONESHELL:
 USING_PDM		          	=	$(shell grep "tool.pdm" pyproject.toml && echo "yes")
-USING_NPM             		= $(shell python3 -c "if __import__('pathlib').Path('package-lock.json').exists(): print('yes')")
 ENV_PREFIX		        	=.venv/bin/
 VENV_EXISTS           		=	$(shell python3 -c "if __import__('pathlib').Path('.venv/bin/activate').exists(): print('yes')")
 NODE_MODULES_EXISTS			=	$(shell python3 -c "if __import__('pathlib').Path('node_modules').exists(): print('yes')")
@@ -32,8 +31,6 @@ upgrade:       										## Upgrade all dependencies to the latest stable versio
 	@echo "=> Updating all dependencies"
 	@if [ "$(USING_PDM)" ]; then $(PDM) update; fi
 	@echo "=> Python Dependencies Updated"
-	@if [ "$(USING_NPM)" ]; then npm upgrade --latest; fi
-	@echo "=> Node Dependencies Updated"
 	@$(ENV_PREFIX)pre-commit autoupdate
 	@echo "=> Updated Pre-commit"
 
@@ -63,8 +60,6 @@ install:											## Install the project and
 	@if [ "$(VENV_EXISTS)" ]; then echo "=> Removing existing virtual environment"; fi
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) destroy-venv; fi
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) clean; fi
-	@if [ "$(NODE_MODULES_EXISTS)" ]; then echo "=> Removing existing node modules"; fi
-	if [ "$(NODE_MODULES_EXISTS)" ]; then $(MAKE) destroy-node_modules; fi
 	@if [ "$(USING_PDM)" ]; then $(PDM) config venv.in_project true && python3 -m venv --copies .venv && . $(ENV_PREFIX)/activate && $(ENV_PREFIX)/pip install --quiet -U wheel setuptools cython pip mypy nodeenv; fi
 	@if [ "$(USING_PDM)" ]; then $(PDM) install -G:all; fi
 	@echo "=> Install complete! Note: If you want to re-install re-run 'make install'"
