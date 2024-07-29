@@ -9,6 +9,8 @@ from .team_tag import team_tag
 from .user import User
 from .user_role import UserRole
 from .tenant import Tenant
+from .company import Company
+from .custom_types import Funding, Location
 
 __all__ = (
     "User",
@@ -22,4 +24,7 @@ __all__ = (
     "TeamMember",
     "TeamRoles",
     "Tenant",
+    "Company",
+    "Funding",
+    "Location",
 )
