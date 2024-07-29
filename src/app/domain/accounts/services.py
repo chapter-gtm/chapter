@@ -14,10 +14,10 @@ from advanced_alchemy.service import (
 from litestar.exceptions import PermissionDeniedException
 
 from app.config import constants
-from app.db.models import Role, User, UserRole
+from app.db.models import Role, User, UserRole, Tenant
 from app.lib import crypt
 
-from .repositories import RoleRepository, UserRepository, UserRoleRepository
+from .repositories import RoleRepository, UserRepository, UserRoleRepository, TenantRepository
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -179,3 +179,25 @@ class UserRoleService(SQLAlchemyAsyncRepositoryService[UserRole]):
     """Handles database operations for user roles."""
 
     repository_type = UserRoleRepository
+
+
+class TenantService(SQLAlchemyAsyncRepositoryService[Tenant]):
+    """Handles database operations for tenants."""
+
+    repository_type = TenantRepository
+    match_fields = ["name"]
+
+    def __init__(self, **repo_kwargs: Any) -> None:
+        self.repository: TenantRepository = self.repository_type(**repo_kwargs)
+        self.model_type = self.repository.model_type
+
+    async def to_model(self, data: ModelDictT[Role], operation: str | None = None) -> Tenant:
+        if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
+            data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
+        if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]
+            data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
+        if is_dict(data) and "slug" not in data and operation == "create":
+            data["slug"] = await self.repository.get_available_slug(data["name"])
+        if is_dict(data) and "slug" not in data and "name" in data and operation == "update":
+            data["slug"] = await self.repository.get_available_slug(data["name"])
+        return await super().to_model(data, operation)

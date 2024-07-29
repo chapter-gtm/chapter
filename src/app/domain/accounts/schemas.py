@@ -62,6 +62,7 @@ class User(CamelizedBaseStruct):
 
     id: UUID
     email: str
+    tenant_id: UUID
     name: str | None = None
     is_superuser: bool = False
     is_active: bool = False
@@ -75,6 +76,7 @@ class UserCreate(CamelizedBaseStruct):
     email: str
     password: str
     name: str | None = None
+    tenant_id: UUID | None = None
     is_superuser: bool = False
     is_active: bool = True
     is_verified: bool = False
@@ -110,3 +112,32 @@ class UserRoleRevoke(CamelizedBaseStruct):
     """User role revoke ."""
 
     user_name: str
+
+
+class Tenant(CamelizedBaseStruct):
+    """Tenant properties."""
+
+    id: UUID
+    name: str
+    description: str | None = None
+    url: str | None = None
+    is_active: bool = True
+    users: list[User] = []
+
+
+class TenantCreate(CamelizedBaseStruct):
+    """Tenant create properties."""
+
+    name: str
+    description: str | None = None
+    url: str | None = None
+    is_active: bool | None = True
+
+
+class TenantUpdate(CamelizedBaseStruct):
+    """Tenant update properties."""
+
+    name: str | None | msgspec.UnsetType = msgspec.UNSET
+    description: str | None | msgspec.UnsetType = msgspec.UNSET
+    url: str | None | msgspec.UnsetType = msgspec.UNSET
+    is_active: bool | None | msgspec.UnsetType = msgspec.UNSET
