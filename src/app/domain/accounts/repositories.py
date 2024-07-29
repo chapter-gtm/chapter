@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository, SQLAlchemyAsyncSlugRepository
 
-from app.db.models import Role, User, UserRole
+from app.db.models import Role, User, UserRole, Tenant
 
 
 class UserRepository(SQLAlchemyAsyncRepository[User]):
@@ -21,3 +21,9 @@ class UserRoleRepository(SQLAlchemyAsyncRepository[UserRole]):
     """User Role SQLAlchemy Repository."""
 
     model_type = UserRole
+
+
+class TenantRepository(SQLAlchemyAsyncSlugRepository[Tenant]):
+    """Tenant SQLAlchemy Repository."""
+
+    model_type = Tenant

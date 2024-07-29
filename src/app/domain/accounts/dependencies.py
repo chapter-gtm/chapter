@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload, load_only, selectinload
 
 from app.db.models import Role, Team, TeamMember, UserRole
 from app.db.models import User as UserModel
-from app.domain.accounts.services import RoleService, UserRoleService, UserService
+from app.domain.accounts.services import RoleService, UserRoleService, UserService, TenantService
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -72,5 +72,45 @@ async def provide_user_roles_service(db_session: AsyncSession | None = None) -> 
     """
     async with UserRoleService.new(
         session=db_session,
+    ) as service:
+        yield service
+
+
+async def provide_roles_service(db_session: AsyncSession | None = None) -> AsyncGenerator[RoleService, None]:
+    """Provide roles service.
+
+    Args:
+        db_session (AsyncSession | None, optional): current database session. Defaults to None.
+
+    Returns:
+        RoleService: A role service object
+    """
+    async with RoleService.new(
+        session=db_session,
+        load=selectinload(Role.users).options(joinedload(UserRole.user, innerjoin=True)),
+    ) as service:
+        yield service
+
+
+async def provide_user_roles_service(db_session: AsyncSession | None = None) -> AsyncGenerator[UserRoleService, None]:
+    """Provide user roles service.
+
+    Args:
+        db_session (AsyncSession | None, optional): current database session. Defaults to None.
+
+    Returns:
+        UserRoleService: A user role service object
+    """
+    async with UserRoleService.new(
+        session=db_session,
+    ) as service:
+        yield service
+
+
+async def provide_tenants_service(db_session: AsyncSession) -> AsyncGenerator[TenantService, None]:
+    """Construct repository and service objects for the request."""
+    async with TenantService.new(
+        session=db_session,
+        load=[],
     ) as service:
         yield service
