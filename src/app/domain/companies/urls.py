@@ -1,0 +1,6 @@
+COMPANY_LIST = "/api/companies"
+COMPANY_DELETE = "/api/companies/{company_id:uuid}"
+COMPANY_DETAIL = "/api/companies/{company_id:uuid}"
+COMPANY_UPDATE = "/api/companies/{company_id:uuid}"
+COMPANY_CREATE = "/api/companies"
+COMPANY_INDEX = "/api/companies/{company_id:uuid}"
