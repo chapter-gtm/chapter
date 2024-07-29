@@ -3,10 +3,12 @@ from __future__ import annotations
 import binascii
 import json
 import os
+import enum
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final
+from datetime import datetime, date
 
 from advanced_alchemy.utils.text import slugify
 from litestar.serialization import decode_json, encode_json
@@ -23,6 +25,23 @@ DEFAULT_MODULE_NAME = "app"
 BASE_DIR: Final[Path] = module_to_os_path(DEFAULT_MODULE_NAME)
 
 TRUE_VALUES = {"True", "true", "1", "yes", "Y", "T"}
+
+
+def custom_json_serializer(obj):
+    """Serialise python obj to json."""
+    if isinstance(obj, date):
+        return obj.isoformat()
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    if isinstance(obj, enum.Enum):
+        return obj.value
+    if isinstance(obj, dict):
+        return {k: custom_json_serializer(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [custom_json_serializer(i) for i in obj]
+    if hasattr(obj, "to_dict"):
+        return {k: custom_json_serializer(v) for k, v in obj.to_dict().items()}
+    return obj
 
 
 @dataclass
@@ -75,7 +94,7 @@ class DatabaseSettings:
             engine = create_async_engine(
                 url=self.URL,
                 future=True,
-                json_serializer=encode_json,
+                json_serializer=custom_json_serializer,
                 json_deserializer=decode_json,
                 echo=self.ECHO,
                 echo_pool=self.ECHO_POOL,
