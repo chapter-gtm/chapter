@@ -1,0 +1,6 @@
+JOBS_LIST = "/api/jobs"
+JOBS_DELETE = "/api/jobs/{job_post_id:uuid}"
+JOBS_DETAIL = "/api/jobs/{job_post_id:uuid}"
+JOBS_UPDATE = "/api/jobs/{job_post_id:uuid}"
+JOBS_CREATE = "/api/jobs"
+JOBS_INDEX = "/api/jobs/{job_post_id:uuid}"
