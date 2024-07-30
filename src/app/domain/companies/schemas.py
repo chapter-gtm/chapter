@@ -9,6 +9,7 @@ from app.lib.schema import CamelizedBaseStruct, Location, Funding
 
 
 class Company(CamelizedBaseStruct):
+    """A company."""
     id: UUID
     slug: str
     name: str
@@ -25,6 +26,7 @@ class Company(CamelizedBaseStruct):
 
 
 class CompanyCreate(CamelizedBaseStruct):
+    """A company create schema."""
     name: str
     description: str | None = None
     type: str | None = None
@@ -39,6 +41,8 @@ class CompanyCreate(CamelizedBaseStruct):
 
 
 class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
+    """A company update schema."""
+    id: UUID
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     description: str | None | msgspec.UnsetType = msgspec.UNSET
     type: str | None | msgspec.UnsetType = msgspec.UNSET
