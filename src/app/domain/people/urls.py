@@ -1,0 +1,6 @@
+PERSON_LIST = "/api/persons"
+PERSON_DELETE = "/api/persons/{company_id:uuid}"
+PERSON_DETAIL = "/api/persons/{company_id:uuid}"
+PERSON_UPDATE = "/api/persons/{company_id:uuid}"
+PERSON_CREATE = "/api/persons"
+PERSON_INDEX = "/api/persons/{company_id:uuid}"

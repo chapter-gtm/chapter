@@ -6,7 +6,7 @@ from dataclasses import dataclass, asdict
 from sqlalchemy.types import TypeDecorator, TEXT
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.lib.schema import Location, Funding
+from app.lib.schema import Location, Funding, WorkExperience, SocialActivity
 
 
 class JSONBType(TypeDecorator):
@@ -40,4 +40,19 @@ class FundingType(JSONBType):
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return Funding.from_dict(value)
+        return None
+
+
+class WorkExperienceType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return WorkExperience.from_dict(value)
+        return None
+
+class SocialActivityType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return SocialActivity.from_dict(value)
         return None

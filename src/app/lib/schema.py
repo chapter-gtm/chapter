@@ -44,3 +44,22 @@ class Funding(CamelizedBaseStruct):
     money_raised: int | None = None
     announced_date: date | None = None
     investors: list[Investor] = []
+
+
+class WorkExperience(CamelizedBaseStruct):
+    """Work experience data."""
+    starts_at: date
+    title: str
+    company_name: str
+    ends_at: date | None = None
+    linkedin_profile_url: str | None = None
+    description: str | None = None
+    location: Location | None = None
+    logo_url: str | None = None
+
+
+class SocialActivity(CamelizedBaseStruct):
+    """Social activity data."""
+    title: str
+    link: str | None = None
+    status: str | None = None
