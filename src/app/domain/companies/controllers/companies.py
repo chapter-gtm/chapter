@@ -8,7 +8,6 @@ from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 
 from app.config import constants
-from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies import urls
 from app.domain.companies.dependencies import provide_companies_service
@@ -32,7 +31,6 @@ class CompanyController(Controller):
     guards = [requires_active_user]
     signature_namespace = {
         "CompanyService": CompanyService,
-        "UserModel": UserModel,
     }
     dto = None
     return_dto = None
@@ -46,7 +44,6 @@ class CompanyController(Controller):
     async def list_companies(
         self,
         companies_service: CompanyService,
-        current_user: UserModel,
         filters: Annotated[list[FilterTypes], Dependency(skip_validation=True)],
     ) -> OffsetPagination[Company]:
         """List companies that your account can access.."""
@@ -62,7 +59,6 @@ class CompanyController(Controller):
     async def create_company(
         self,
         companies_service: CompanyService,
-        current_user: UserModel,
         data: CompanyCreate,
     ) -> CompanyCreate:
         """Create a new company."""
