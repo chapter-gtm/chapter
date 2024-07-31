@@ -1,13 +1,24 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from uuid import UUID
+from datetime import date
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.lib.schema import Location, Funding
 from .custom_types import LocationType, FundingType
+
+
+class CompanyOrg(UUIDAuditBase):
+    """A company people org."""
+
+    __tablename__ = "company_person_relation"
+    __pii_columns__ = {}
+    title: Mapped[str] = mapped_column(nullable=False, index=True)
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id", ondelete="CASCADE"), primary_key=True, index=True)
+    person_id: Mapped[UUID] = mapped_column(ForeignKey("person.id", ondelete="CASCADE"), primary_key=True)
 
 
 class Company(UUIDAuditBase, SlugKey):
@@ -29,3 +40,4 @@ class Company(UUIDAuditBase, SlugKey):
     # -----------
     # ORM Relationships
     # ------------
+    people: Mapped[list[CompanyOrg]] = relationship(cascade="all, delete")
