@@ -11,6 +11,7 @@ from .user_role import UserRole
 from .tenant import Tenant
 from .company import Company
 from .job_post import JobPost
+from .person import Person
 
 __all__ = (
     "User",
@@ -25,5 +26,6 @@ __all__ = (
     "TeamRoles",
     "Tenant",
     "Company",
-    "JobPost"
+    "JobPost",
+    "Person"
 )

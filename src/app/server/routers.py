@@ -9,6 +9,7 @@ from app.domain.tags.controllers import TagController
 from app.domain.teams.controllers import TeamController, TeamMemberController
 from app.domain.companies.controllers import CompanyController
 from app.domain.jobs.controllers import JobPostController
+from app.domain.people.controllers import PersonController
 
 if TYPE_CHECKING:
     from litestar.types import ControllerRouterHandler
@@ -25,5 +26,6 @@ route_handlers: list[ControllerRouterHandler] = [
     TenantController,
     CompanyController,
     JobPostController,
+    PersonController,
     SystemController,
 ]
