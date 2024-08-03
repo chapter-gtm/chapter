@@ -57,7 +57,7 @@ class OpportunityController(Controller):
         filters: Annotated[list[FilterTypes], Dependency(skip_validation=True)],
     ) -> OffsetPagination[Opportunity]:
         """List opportunities that your account can access.."""
-        results, total = await opportunities_service.list_and_count(*filters)
+        results, total = await opportunities_service.get_opportunities(*filters, tenant_id=current_user.tenant_id)
         return opportunities_service.to_schema(data=results, total=total, schema_type=Opportunity, filters=filters)
 
     @post(

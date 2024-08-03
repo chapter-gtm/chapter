@@ -81,13 +81,14 @@ class Opportunity(UUIDAuditBase, SlugKey):
         secondary=lambda: opportunity_person_relation,
         cascade="all, delete",
         passive_deletes=True,
+        lazy="selectin",
     )
     job_posts: Mapped[list[JobPost]] = relationship(
         secondary=lambda: opportunity_job_post_relation,
         cascade="all, delete",
         passive_deletes=True,
-        lazy="select",
+        lazy="selectin",
     )
     logs: Mapped[list[OpportunityAuditLog]] = relationship(
-        lazy="select",
+        lazy="selectin",
     )
