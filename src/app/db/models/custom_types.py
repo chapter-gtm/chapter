@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, asdict
 
-from sqlalchemy.types import TypeDecorator, TEXT
+from sqlalchemy.types import TypeDecorator, String
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.lib.schema import Location, Funding, WorkExperience, SocialActivity
+from app.lib.schema import Location, Funding, WorkExperience, SocialActivity, OpportunityStage
 
 
 class JSONBType(TypeDecorator):
@@ -56,3 +56,17 @@ class SocialActivityType(JSONBType):
         if value and isinstance(value, dict):
             return SocialActivity.from_dict(value)
         return None
+
+
+class OpportunityStageType(TypeDecorator):
+    impl = String
+
+    def process_bind_param(self, value, dialect):
+        if isinstance(value, OpportunityStage):
+            return value.value
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return OpportunityStage(value)
+        return value

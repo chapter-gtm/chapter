@@ -12,6 +12,7 @@ from .tenant import Tenant
 from .company import Company, CompanyOrg
 from .job_post import JobPost
 from .person import Person
+from .opportunity import Opportunity, OpportunityAuditLog, opportunity_person_relation, opportunity_job_post_relation
 
 __all__ = (
     "User",
@@ -28,5 +29,9 @@ __all__ = (
     "Company",
     "CompanyOrg",
     "JobPost",
-    "Person"
+    "Person",
+    "Opportunity",
+    "OpprtunityAuditLog",
+    "opportunity_person_relation",
+    "opportunity_job_post_relation",
 )

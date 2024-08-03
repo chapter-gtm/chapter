@@ -1,0 +1,6 @@
+OPPORTUNITY_LIST = "/api/opportunities"
+OPPORTUNITY_DELETE = "/api/opportunities/{opportunity_id:uuid}"
+OPPORTUNITY_DETAIL = "/api/opportunities/{opportunity_id:uuid}"
+OPPORTUNITY_UPDATE = "/api/opportunities/{opportunity_id:uuid}"
+OPPORTUNITY_CREATE = "/api/opportunities"
+OPPORTUNITY_INDEX = "/api/opportunities/{opportunity_id:uuid}"

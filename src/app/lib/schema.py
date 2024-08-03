@@ -1,5 +1,6 @@
 from typing import Any
 from datetime import date
+import enum
 
 import msgspec
 
@@ -63,3 +64,16 @@ class SocialActivity(CamelizedBaseStruct):
     title: str
     link: str | None = None
     status: str | None = None
+
+
+class OpportunityStage(enum.Enum):
+    """Opportunity stages."""
+    IDENTIFIED = "identified"
+    QUALIFIED = "qualified"
+    CONTACTED = "contacted"
+    ENGAGED = "engaged"
+    PROPOSED = "proposed"
+    NEGOTIATED = "negotiated"
+    DEFERRED = "deferred"
+    SUSPENDED = "suspended"
+    CUSTOMER = "customer"
