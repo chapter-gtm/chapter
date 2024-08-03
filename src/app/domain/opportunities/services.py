@@ -62,6 +62,17 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         """Get all opportunities for a tenant."""
         return await self.repository.get_opportunities(*filters, tenant_id=tenant_id, **kwargs)
 
+    async def get_opportunity(
+        self,
+        opportunity_id: UUID,
+        tenant_id: UUID,
+        **kwargs: Any,
+    ) -> tuple[list[Opportunity], int]:
+        """Get all opportunities for a tenant."""
+        return await self.repository.get_opportunity(
+            opportunity_id=opportunity_id, tenant_id=tenant_id, **kwargs
+        )
+
     async def update(
         self,
         data: ModelDictT[Opportunity],
