@@ -1,5 +1,5 @@
 [project]
-authors = [{ name = "Cody Fincher", email = "cody.fincher@gmail.com" }]
+authors = [{ name = "Shrirang Bhate", email = "shrirang.bhate@gmail.com" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Web Environment",
@@ -28,7 +28,7 @@ dependencies = [
 ]
 description = "Opinionated template for a Litestar application."
 keywords = ["litestar", "sqlalchemy", "alembic", "fullstack", "api", "asgi", "litestar", "vite", "spa"]
-license = { text = "MIT" }
+license = { text = "Propriatory" }
 name = "app"
 readme = "README.md"
 requires-python = ">=3.10"
