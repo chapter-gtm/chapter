@@ -1,4 +1,4 @@
-# Nectar Console App
+# Chapter Console App
 
 
 ## Getting Started
