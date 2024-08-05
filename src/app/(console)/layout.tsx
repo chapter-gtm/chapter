@@ -1,19 +1,14 @@
-import Sidebar from "@/components/MainSidebar";
+import "@/app/globals.css";
+import { TopNavbar } from "@/components/TopNavbar";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/app/globals.css";
-import { cookies } from "next/headers";
-import {
-  ResizableHandle,
-  ResizablePanelGroup,
-  ResizablePanel,
-} from "@/components/ui/resizable";
+import { UserNav } from "@/components/UserNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Nectar Console",
-  description: "Customer Stories. Opportunities.",
+  description: "GTM built for technical founders.",
 };
 
 export default function RootLayout({
@@ -27,9 +22,14 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
-        <div className="bg-zinc-100 h-screen overflow-hidden">
-          <div className="grid grid-cols-9 h-screen">
-            <Sidebar className="col-span-1" />
+        <div className="hidden flex-col md:flex">
+          <div className="border-b">
+            <div className="flex h-16 items-center px-4">
+              <TopNavbar />
+              <div className="ml-auto flex items-center space-x-4">
+                <UserNav className="mx-6" />
+              </div>
+            </div>
             <main className="col-span-8">{children}</main>
           </div>
         </div>
