@@ -17,23 +17,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
-      <body className={inter.className}>
-        <div className="hidden flex-col md:flex">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-              <TopNavbar />
-              <div className="ml-auto flex items-center space-x-4">
-                <UserNav className="mx-6" />
-              </div>
-            </div>
-            <main className="col-span-8">{children}</main>
+    <div className="hidden flex-col md:flex">
+      <div className="border-b">
+        <div className="flex h-16 items-center px-4">
+          <TopNavbar />
+          <div className="ml-auto flex items-center space-x-4">
+            <UserNav className="mx-6" />
           </div>
         </div>
-      </body>
-    </html>
+        <main className="col-span-8">{children}</main>
+      </div>
+    </div>
   );
 }

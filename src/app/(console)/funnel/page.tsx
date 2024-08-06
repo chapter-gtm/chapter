@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { OutboundSalesFunnel } from "@/components/OutboundSalesFunnel";
+import { OutboundSalesFunnel } from "@/components/funnel/OutboundSalesFunnel";
 
 export const metadata: Metadata = {
   title: "Funnel: Nectar Console",
