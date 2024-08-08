@@ -47,6 +47,12 @@ module "alb" {
   security_groups = [module.vpc.alb_security_group_id]
 }
 
+module "ecr" {
+  source                   = "./modules/ecr"
+  app_name                 = var.app_name
+  environment              = var.environment
+} 
+
 module "ecs" {
   source                   = "./modules/ecs"
   app_name                 = var.app_name
