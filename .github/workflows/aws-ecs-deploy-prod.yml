@@ -34,8 +34,8 @@ on:
 
 env:
   AWS_REGION: eu-central-1 # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: chapter # set this to your Amazon ECR repository name
-  ECS_SERVICE: chapter-app-cluster-app-service-prod # set this to your Amazon ECS service name
+  ECR_REPOSITORY: chapter-app-repository-prod # set this to your Amazon ECR repository name
+  ECS_SERVICE: chapter-app-service-prod # set this to your Amazon ECS service name
   ECS_CLUSTER: chapter-app-cluster-prod # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION:
     deploy/aws/ecs-task-definition-prod.json # set this to the path to your Amazon ECS task definition
