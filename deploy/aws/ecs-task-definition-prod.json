@@ -1,0 +1,277 @@
+{
+  "family": "chapter-app-family-prod",
+  "containerDefinitions": [
+    {
+      "name": "app",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-prod:latest",
+      "cpu": 256,
+      "memory": 512,
+      "essential": true,
+      "command": ["litestar", "run", "--host", "0.0.0.0"],
+      "dependsOn": [
+        {
+          "condition": "SUCCESS",
+          "containerName": "db-migrator"
+        },
+        {
+          "condition": "SUCCESS",
+          "containerName": "worker"
+        }
+      ],
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "LITESTAR_APP",
+          "value": "app.asgi:create_app"
+        },
+        {
+          "name": "APP_ENVIRONMENT",
+          "value": "docker"
+        },
+        {
+          "name": "OPENAPI_CONTACT_EMAIL",
+          "value": "dev@nectar.run"
+        },
+        {
+          "name": "OPENAPI_CONTACT_NAME",
+          "value": "Devs"
+        },
+        {
+          "name": "OPENAPI_TITLE",
+          "value": "Chapter API"
+        },
+        {
+          "name": "DB_MIGRATION_DDL_VERSION_TABLE",
+          "value": "ddl_version"
+        },
+        { "name": "SAQ_USE_SERVER_LIFESPAN", "value": "false" }
+      ],
+      "secrets": [
+        {
+          "name": "APP_SECRET_KEY",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+        },
+        {
+          "name": "SLACK_ALERTS_URL",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+        }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/chapter-app-app-prod",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "db-migrator",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/nectar:latest",
+      "cpu": 256,
+      "memory": 512,
+      "essential": false,
+      "command": ["litestar", "database", "upgrade", "--no-prompt"],
+      "environment": [
+        {
+          "name": "LITESTAR_APP",
+          "value": "app.asgi:create_app"
+        },
+        {
+          "name": "APP_ENVIRONMENT",
+          "value": "docker"
+        },
+        {
+          "name": "OPENAPI_CONTACT_EMAIL",
+          "value": "dev@nectar.run"
+        },
+        {
+          "name": "OPENAPI_CONTACT_NAME",
+          "value": "Devs"
+        },
+        {
+          "name": "OPENAPI_TITLE",
+          "value": "Nectar API"
+        },
+        {
+          "name": "DB_MIGRATION_DDL_VERSION_TABLE",
+          "value": "ddl_version"
+        },
+        { "name": "SAQ_USE_SERVER_LIFESPAN", "value": "false" }
+      ],
+      "secrets": [
+        {
+          "name": "APP_SECRET_KEY",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+        },
+        {
+          "name": "SLACK_ALERTS_URL",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+        }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "exit 0"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/chapter-app-db-migrator-prod",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "worker",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter:latest",
+      "cpu": 256,
+      "memory": 512,
+      "essential": false,
+      "command": ["litestar", "workers", "run"],
+      "environment": [
+        {
+          "name": "LITESTAR_APP",
+          "value": "app.asgi:create_app"
+        },
+        {
+          "name": "APP_ENVIRONMENT",
+          "value": "docker"
+        },
+        {
+          "name": "OPENAPI_CONTACT_EMAIL",
+          "value": "dev@nectar.run"
+        },
+        {
+          "name": "OPENAPI_CONTACT_NAME",
+          "value": "Devs"
+        },
+        {
+          "name": "OPENAPI_TITLE",
+          "value": "Nectar API"
+        },
+        {
+          "name": "DB_MIGRATION_DDL_VERSION_TABLE",
+          "value": "ddl_version"
+        },
+        { "name": "SAQ_USE_SERVER_LIFESPAN", "value": "false" }
+      ],
+      "secrets": [
+        {
+          "name": "APP_SECRET_KEY",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+        },
+        {
+          "name": "SLACK_ALERTS_URL",
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+        },
+        {
+          "name": "DB_USER",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+        },
+        {
+          "name": "DB_NAME",
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+        }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "exit 0"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/chapter-app-worker-prod",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "runtimePlatform": {
+    "operatingSystemFamily": "LINUX"
+  },
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": 1024,
+  "memory": 2048,
+  "executionRoleArn": "arn:aws:iam::050206582437:role/chapter-app-ecs-task-execution-role-prod",
+  "taskRoleArn": "arn:aws:iam::050206582437:role/chapter-app-ecs-task-role-prod"
+}
