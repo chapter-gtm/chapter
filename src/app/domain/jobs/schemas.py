@@ -11,6 +11,7 @@ from app.domain.companies.schemas import Company
 
 class JobPost(CamelizedBaseStruct):
     """A job post."""
+
     id: UUID
     title: str
     body: str | None = None
@@ -22,12 +23,12 @@ class JobPost(CamelizedBaseStruct):
     apply_url: str | None = None
     total_applicants: int | None = None
     external_id: str | None = None
-    comapny_id: str | None = None
     company: Company | None = None
 
 
 class JobPostCreate(CamelizedBaseStruct):
     """A job post create schema."""
+
     title: str
     body: str | None = None
     location: Location | None = None
@@ -43,6 +44,7 @@ class JobPostCreate(CamelizedBaseStruct):
 
 class JobPostUpdate(CamelizedBaseStruct, omit_defaults=True):
     """A job post update schema."""
+
     id: UUID
     title: str | None | msgspec.UnsetType = msgspec.UNSET
     body: str | None | msgspec.UnsetType = msgspec.UNSET
