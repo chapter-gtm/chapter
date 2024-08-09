@@ -4,8 +4,8 @@
     {
       "name": "app",
       "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-prod:latest",
-      "cpu": 256,
-      "memory": 512,
+      "cpu": "256",
+      "memory": "512",
       "essential": true,
       "command": ["litestar", "run", "--host", "0.0.0.0"],
       "dependsOn": [
@@ -105,8 +105,8 @@
     {
       "name": "db-migrator",
       "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/nectar:latest",
-      "cpu": 256,
-      "memory": 512,
+      "cpu": "256",
+      "memory": "512",
       "essential": false,
       "command": ["litestar", "database", "upgrade", "--no-prompt"],
       "environment": [
@@ -186,8 +186,8 @@
     {
       "name": "worker",
       "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter:latest",
-      "cpu": 256,
-      "memory": 512,
+      "cpu": "256",
+      "memory": "512",
       "essential": false,
       "command": ["litestar", "workers", "run"],
       "environment": [
@@ -270,8 +270,8 @@
   },
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "cpu": 1024,
-  "memory": 2048,
+  "cpu": "1024",
+  "memory": "2048",
   "executionRoleArn": "arn:aws:iam::050206582437:role/chapter-app-ecs-task-execution-role-prod",
   "taskRoleArn": "arn:aws:iam::050206582437:role/chapter-app-ecs-task-role-prod"
 }
