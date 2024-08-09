@@ -102,8 +102,12 @@ resource "aws_iam_role" "github_actions_role" {
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
-          StringEquals = {
-            "token.actions.githubusercontent.com:sub" : "repo:${var.github_repo}:ref:refs/heads/${var.github_branch}"
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" : "repo:${var.github_repo}:*"
+          },
+          "ForAllValues:StringEquals": {
+              "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+              "token.actions.githubusercontent.com:iss": "https://token.actions.githubusercontent.com"
           }
         }
       }
@@ -121,6 +125,7 @@ resource "aws_iam_policy" "github_actions_policy" {
       {
         Effect = "Allow",
         Action = [
+          "ecr:GetAuthorizationToken",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "ecr:CompleteLayerUpload",
