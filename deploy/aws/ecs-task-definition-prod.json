@@ -55,31 +55,31 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:password::"
         },
         {
           "name": "DB_HOST",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:host::"
         },
         {
           "name": "DB_PORT",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:port::"
         },
         {
           "name": "DB_USER",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:username::"
         },
         {
           "name": "DB_NAME",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:dbname::"
         }
       ],
       "healthCheck": {
@@ -139,11 +139,11 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
@@ -151,19 +151,19 @@
         },
         {
           "name": "DB_HOST",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:host::"
         },
         {
           "name": "DB_PORT",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:port::"
         },
         {
           "name": "DB_USER",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:username::"
         },
         {
           "name": "DB_NAME",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:dbname::"
         }
       ],
       "healthCheck": {
@@ -220,11 +220,11 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/prod/chapter/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
@@ -232,19 +232,19 @@
         },
         {
           "name": "DB_HOST",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:host::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:host::"
         },
         {
           "name": "DB_PORT",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:port::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:port::"
         },
         {
           "name": "DB_USER",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:username::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:username::"
         },
         {
           "name": "DB_NAME",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-YzLzXz:dbname::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:dbname::"
         }
       ],
       "healthCheck": {
