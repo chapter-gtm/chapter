@@ -62,14 +62,14 @@ resource "aws_db_instance" "app_db" {
 
   provisioner "local-exec" {
     command = <<EOT
-      PGPASSWORD="${jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password}" psql -h ${self.address} -U ${var.app_db_user} -c "CREATE DATABASE ${var.db_name};"
+      PGPASSWORD="${jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password}" psql -h ${self.address} -U ${var.app_db_user} -c "CREATE DATABASE ${var.app_db_name};"
     EOT
     environment = {
       PGPASSWORD = jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password
     }
   }
 
-  depends_on = [var.vpc_id, aws_secretsmanager_secret.app_db_password, aws_secretsmanager_secret_version.app_db_password_version_data]
+  depends_on = [var.vpc_id, aws_secretsmanager_secret.app_db_password]
 }
 
 # TODO: Append dbname to secretsmanager
