@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_DEPLOYER_ROLE_NAME }}
           aws-region: ${{ env.AWS_REGION }}
