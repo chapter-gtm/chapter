@@ -46,7 +46,7 @@ RUN apt-get install -y --no-install-recommends build-essential curl \
 
 ## -------------------------- install application ----------------------------------- ##
 WORKDIR /workspace/app
-COPY pyproject.toml pdm.lock README.md .pre-commit-config.yaml .pylintrc LICENSE.md Makefile \
+COPY pyproject.toml pdm.lock README.md .pre-commit-config.yaml LICENSE.md Makefile \
   ./
 COPY scripts ./scripts/
 RUN python -m venv --copies /workspace/app/.venv \
