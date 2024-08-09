@@ -139,6 +139,13 @@ resource "aws_iam_policy" "github_actions_policy" {
           "ecs:RegisterTaskDefinition"
         ],
         Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "iam:PassRole"
+        ],
+        Resource = "${aws_iam_role.ecs_task_execution_role.arn}"
       }
     ]
   })
