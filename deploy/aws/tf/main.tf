@@ -73,6 +73,8 @@ module "rds" {
   vpc_id             = module.vpc.vpc_id
   private_subnets    = module.vpc.private_subnets
   security_group_ids = [module.vpc.rds_security_group_id]
+  app_db_user        = "app_user"
+  app_db_name        = "${var.app_name}-db"
 }
 
 module "jumpbox" {

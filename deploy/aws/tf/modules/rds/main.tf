@@ -24,7 +24,12 @@ resource "aws_secretsmanager_secret" "app_db_password" {
 
 resource "aws_secretsmanager_secret_version" "app_db_password_version" {
   secret_id     = aws_secretsmanager_secret.app_db_password.id
-  secret_string = random_password.app_db_password.result
+  secret_string = jsonencode({
+    username = var.app_db_user
+    password = random_password.app_db_password.result
+    port     = 5432
+    dbname   = var.app_db_name
+  })
   depends_on = [aws_secretsmanager_secret.app_db_password, random_password.app_db_password]
 }
 
@@ -39,8 +44,8 @@ resource "aws_db_instance" "app_db" {
   instance_class          = "db.t4g.micro"
   allocated_storage       = 20
   storage_type            = "gp2"
-  username                = "app_user"
-  password                = data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string
+  username                = var.app_db_user
+  password                = jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password
   db_subnet_group_name    = aws_db_subnet_group.app_db_subnet_group.name
   vpc_security_group_ids  = var.security_group_ids
 
@@ -55,5 +60,16 @@ resource "aws_db_instance" "app_db" {
     Enviorment = var.environment
   }
 
-  depends_on = [var.vpc_id, aws_secretsmanager_secret.app_db_password]
+  provisioner "local-exec" {
+    command = <<EOT
+      PGPASSWORD="${jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password}" psql -h ${self.address} -U ${var.app_db_user} -c "CREATE DATABASE ${var.db_name};"
+    EOT
+    environment = {
+      PGPASSWORD = jsondecode(data.aws_secretsmanager_secret_version.app_db_password_version_data.secret_string).password
+    }
+  }
+
+  depends_on = [var.vpc_id, aws_secretsmanager_secret.app_db_password, aws_secretsmanager_secret_version.app_db_password_version_data]
 }
+
+# TODO: Append dbname to secretsmanager

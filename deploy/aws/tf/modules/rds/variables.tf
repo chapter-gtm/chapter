@@ -24,3 +24,13 @@ variable "security_group_ids" {
   description = "Security group IDs for RDS"
   type        = list(string)
 }
+
+variable "app_db_user" {
+  description = "App database user"
+  type        = string
+}
+
+variable "app_db_name" {
+  description = "App database name"
+  type        = string
+}
