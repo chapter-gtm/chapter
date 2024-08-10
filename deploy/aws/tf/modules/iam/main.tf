@@ -61,7 +61,7 @@ resource "aws_iam_role" "ecs_task_role" {
         {
           Effect   = "Allow",
           Action   = ["secretsmanager:GetSecretValue"],
-          Resource = "arn:aws:secretsmanager:${var.region}:${var.aws_account_id}:secret:${var.app_name}/${var.environment}/*"
+          Resource = var.rds_db_secret_arn
         },
         {
           Effect   = "Allow",

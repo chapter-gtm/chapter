@@ -30,6 +30,11 @@ variable "rds_db_id" {
   type        = string
 }
 
+variable "rds_db_secret_arn" {
+  description = "RDS database secret arn"
+  type        = string
+}
+
 variable "cloudwatch_log_group_name" {
   description = "Cloudwatch log group name"
   type        = string

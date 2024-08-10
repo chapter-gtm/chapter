@@ -116,6 +116,7 @@ module "iam" {
   aws_account_id            = data.aws_caller_identity.current.account_id
   app_bucket_name           = module.s3.app_bucket_name
   rds_db_id                 = module.rds.rds_db_id
+  rds_db_secret_arn         = module.rds.rds_db_secret_arn
   cloudwatch_log_group_name = module.cloudwatch.cloudwatch_log_group_name
   github_repo               = var.github_repo
   github_branch             = var.github_branch
