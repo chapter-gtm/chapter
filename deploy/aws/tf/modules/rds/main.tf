@@ -72,4 +72,4 @@ resource "aws_db_instance" "app_db" {
   depends_on = [var.vpc_id, aws_secretsmanager_secret.app_db_password]
 }
 
-# TODO: Append dbname to secretsmanager
+# TODO: Append rds host to secretsmanager
