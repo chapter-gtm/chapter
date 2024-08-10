@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "app",
-      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-prod:latest",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-repository-prod:latest",
       "cpu": "256",
       "memory": "512",
       "essential": true,
@@ -34,7 +34,6 @@
           "name": "APP_ENVIRONMENT",
           "value": "docker"
         },
-        {
           "name": "OPENAPI_CONTACT_EMAIL",
           "value": "dev@nectar.run"
         },
@@ -104,7 +103,7 @@
     },
     {
       "name": "db-migrator",
-      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/nectar:latest",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-repository-prod:latest",
       "cpu": "256",
       "memory": "512",
       "essential": false,
@@ -128,7 +127,7 @@
         },
         {
           "name": "OPENAPI_TITLE",
-          "value": "Nectar API"
+          "value": "Chapter API"
         },
         {
           "name": "DB_MIGRATION_DDL_VERSION_TABLE",
@@ -147,7 +146,7 @@
         },
         {
           "name": "DB_PASSWORD",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:password::"
         },
         {
           "name": "DB_HOST",
@@ -185,7 +184,7 @@
     },
     {
       "name": "worker",
-      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter:latest",
+      "image": "050206582437.dkr.ecr.eu-central-1.amazonaws.com/chapter-app-repository-prod:latest",
       "cpu": "256",
       "memory": "512",
       "essential": false,
@@ -209,7 +208,7 @@
         },
         {
           "name": "OPENAPI_TITLE",
-          "value": "Nectar API"
+          "value": "Chapter API"
         },
         {
           "name": "DB_MIGRATION_DDL_VERSION_TABLE",
@@ -228,7 +227,7 @@
         },
         {
           "name": "DB_PASSWORD",
-          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:prod/nectar/rds-Jig3q1:password::"
+          "valueFrom": "arn:aws:secretsmanager:eu-central-1:050206582437:secret:chapter-app-db-password-prod-IM9fy3:password::"
         },
         {
           "name": "DB_HOST",
