@@ -55,11 +55,11 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
@@ -139,11 +139,11 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
@@ -220,11 +220,11 @@
       "secrets": [
         {
           "name": "APP_SECRET_KEY",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/app-secret-key"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/app-secret-key"
         },
         {
           "name": "SLACK_ALERTS_URL",
-          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter/prod/app/slack-alerts-url"
+          "valueFrom": "arn:aws:ssm:eu-central-1:050206582437:parameter/chapter-app/prod/app/slack-alerts-url"
         },
         {
           "name": "DB_PASSWORD",
