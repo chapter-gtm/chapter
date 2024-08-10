@@ -34,6 +34,7 @@
           "name": "APP_ENVIRONMENT",
           "value": "docker"
         },
+        {
           "name": "OPENAPI_CONTACT_EMAIL",
           "value": "dev@nectar.run"
         },
