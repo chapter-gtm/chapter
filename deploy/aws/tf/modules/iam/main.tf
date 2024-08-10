@@ -28,6 +28,26 @@ resource "aws_iam_role" "ecs_task_execution_role" {
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
   ]
+
+  inline_policy {
+    name = "${var.app_name}-ecs-task-outbound-access-policy-${var.environment}"
+    policy = jsonencode({
+      Version = "2012-10-17",
+      Statement = [
+        {
+          Effect   = "Allow",
+          Action   = ["ssm:GetParameters", "ssm:GetParameter"],
+          Resource = "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter/${var.app_name}/${var.environment}/*"
+        },
+        {
+          Effect   = "Allow",
+          Action   = ["secretsmanager:GetSecretValue"],
+          Resource = var.rds_db_secret_arn
+        },
+      ]
+    })
+  }
+
 }
 
 resource "aws_iam_role" "ecs_task_role" {
@@ -53,16 +73,6 @@ resource "aws_iam_role" "ecs_task_role" {
     policy = jsonencode({
       Version = "2012-10-17",
       Statement = [
-        {
-          Effect   = "Allow",
-          Action   = ["ssm:GetParameters", "ssm:GetParameter"],
-          Resource = "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter/${var.app_name}/${var.environment}/*"
-        },
-        {
-          Effect   = "Allow",
-          Action   = ["secretsmanager:GetSecretValue"],
-          Resource = var.rds_db_secret_arn
-        },
         {
           Effect   = "Allow",
           Action   = ["s3:ListBucket", "s3:GetObject"],
