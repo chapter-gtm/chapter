@@ -34,28 +34,11 @@ readme = "README.md"
 requires-python = ">=3.10"
 version = "0.2.0"
 
-[project.urls]
-Discord = "https://discord.gg/litestar"
-Homepage = "https://github.com/litestar-org/litestar-fullstack"
-Issue = "https://github.com/litestar-org/litestar-fullstack/issues/"
-Source = "https://github.com/litestar-org/litestar-fullstack"
+[tool.pdm]
+distribution = true
 
 [project.scripts]
 app = "app.__main__:run_cli"
-
-[build-system]
-build-backend = "hatchling.build"
-requires = ["hatchling", "nodeenv"]
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build]
-dev-mode-dirs = ["src/"]
-include = ["CHANGELOG.md", "src/app/**/*.sql", "src/app/lib/db/**/*.ini"]
-packages = ["src/app"]
-
-[tool.hatch.build.targets.app]
 
 [tool.pdm.scripts]
 lint = "pdm run pre-commit run --all-files"
