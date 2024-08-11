@@ -27,7 +27,7 @@ dependencies = [
   "httptools",
 ]
 description = "Opinionated template for a Litestar application."
-keywords = ["litestar", "sqlalchemy", "alembic", "fullstack", "api", "asgi", "litestar", "vite", "spa"]
+keywords = ["litestar", "sqlalchemy", "alembic", "api", "asgi", "litestar", "spa"]
 license = { text = "Propriatory" }
 name = "app"
 readme = "README.md"
@@ -52,7 +52,7 @@ allow-direct-references = true
 
 [tool.hatch.build]
 dev-mode-dirs = ["src/"]
-include = ["CHANGELOG.md", "src/public/**/*", "src/app/**/*.sql", "src/app/lib/db/**/*.ini"]
+include = ["CHANGELOG.md", "src/app/**/*.sql", "src/app/lib/db/**/*.ini"]
 packages = ["src/app"]
 
 [tool.hatch.build.targets.app]
