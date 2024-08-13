@@ -1,12 +1,15 @@
+"use server";
+
+import { getUserToken } from "@/utils/auth";
 import { type Opportunity } from "@/types/opportunity";
 
 export async function getOpportunities(
-    token: string,
     pageSize: number = 20,
     currentPage: number = 1,
-    orderBy: string = "started_at",
+    orderBy: string = "created_at",
     sortOrder: string = "desc"
 ) {
+    const token = await getUserToken();
     const response = await fetch(
         process.env.NEXT_PUBLIC_CHAPTER_API_URL! +
             "/opportunities?" +
@@ -19,16 +22,18 @@ export async function getOpportunities(
         {
             method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token.value}`,
             },
         }
     );
     if (!response.ok) {
         const msg = await response.json();
-        throw new Error(msg?.detail);
+        console.log("Failed to get opportunities");
+        console.log(msg);
+        return [];
     }
     const data = await response.json();
     const opportunities =
-        "items" in data ? (data["items"] as DataRecord[]) : [];
+        "items" in data ? (data["items"] as Opportunity[]) : [];
     return opportunities;
 }
