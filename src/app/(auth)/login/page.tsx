@@ -1,40 +1,43 @@
 "use client";
+
+import { login } from "@/utils/chapter/access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login, sendResetPasswordLink } from "@/utils/supabase/auth";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AuthenticationPage() {
+  const router = useRouter();
+
   const [message, setMessage] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [messageType, setMessageType] = useState("");
 
-  const handleLogin = async (formData: FormData) => {
+  const onLogin = async (formData: FormData) => {
     try {
       const data = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
       };
       await login(data.email, data.password);
+      return router.push("/");
     } catch (error: any) {
-      // TODO: Better error handling in serverside component
       setMessageType("error");
       setMessage("Login failed! Please check your credentials and try again.");
       setLoading(false);
     }
   };
 
-  const handleResetPassword = async (formData: FormData) => {
+  const onResetPassword = async (formData: FormData) => {
     try {
       const data = {
         email: formData.get("email") as string,
       };
       const currentDomain = window.location.host;
-      const redirectUrl = `https://${currentDomain}/reset-password`;
-      await sendResetPasswordLink(data.email, redirectUrl);
       setMessage("Password reset link sent to email!");
       setMessageType("reset");
     } catch (error: any) {
@@ -141,7 +144,7 @@ export default function AuthenticationPage() {
                               onClick={() => {
                                 setLoading(true);
                               }}
-                              formAction={handleLogin}
+                              formAction={onLogin}
                             >
                               {loading ? "Signing in..." : "Sign in"}
                             </Button>
@@ -222,7 +225,7 @@ export default function AuthenticationPage() {
                         onClick={() => {
                           setLoading(true);
                         }}
-                        formAction={handleResetPassword}
+                        formAction={onResetPassword}
                       >
                         {loading
                           ? "Sending email..."

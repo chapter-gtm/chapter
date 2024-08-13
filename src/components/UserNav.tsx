@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/utils/chapter/access";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { User } from "@/types/user";
 import { getNameInitials } from "@/utils/misc";
-import { getUserProfile } from "@/utils/nectar/users";
-import { logout } from "@/utils/supabase/auth";
-import { getUserAccessToken } from "@/utils/supabase/client";
+import { getUserProfile } from "@/utils/chapter/users";
 import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -26,18 +25,15 @@ export function UserNav({ className }: UserNavProps) {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const userToken = await getUserAccessToken();
-        if (userToken === undefined) {
-          throw Error("User needs to login!");
-        }
-        const user = await getUserProfile(userToken);
+        console.log("fetch current user...");
+        const user = await getUserProfile();
         setCurrentUser(user);
       } catch (error) {}
     };
     fetchCurrentUser();
   }, []);
 
-  const handleLogout = async () => {
+  const onLogout = async () => {
     await logout();
   };
 
@@ -74,7 +70,7 @@ export function UserNav({ className }: UserNavProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={onLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}

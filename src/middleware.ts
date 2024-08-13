@@ -13,7 +13,8 @@ export async function middleware(request: NextRequest) {
   }
 
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
+  const token = request.cookies.get("token");
+  if (!token) {
     return NextResponse.rewrite(new URL("/login", request.url));
   }
 
