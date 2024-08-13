@@ -20,6 +20,8 @@ export type OpportunityAuditLog = {
     operation: string;
     user: User;
     diff: object;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export type Opportunity = {
@@ -31,6 +33,8 @@ export type Opportunity = {
     owner: User | null;
     company: Company | null;
     contacts: Person[] | null;
-    job_posts: JobPost[] | null;
+    jobPosts: JobPost[] | null;
     logs: OpportunityAuditLog[] | null;
+    createdAt: Date;
+    updatedAt: Date;
 };

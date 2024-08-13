@@ -14,4 +14,6 @@ export type JobPost = {
     total_applicants: number;
     external_id: string;
     company: Company;
+    createdAt: Date;
+    updatedAt: Date;
 };

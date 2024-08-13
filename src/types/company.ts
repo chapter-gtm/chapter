@@ -29,4 +29,6 @@ export type Company = {
     linkedin_profile_url: string | null;
     hq_location: Location | null;
     last_funding: Funding | null;
+    createdAt: Date;
+    updatedAt: Date;
 };
