@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from uuid import UUID  # noqa: TCH003
+from datetime import datetime
 
 import msgspec
 
@@ -10,6 +11,7 @@ from app.lib.schema import CamelizedBaseStruct, Location, Funding
 
 class Company(CamelizedBaseStruct):
     """A company."""
+
     id: UUID
     slug: str
     name: str
@@ -23,10 +25,13 @@ class Company(CamelizedBaseStruct):
     linkedin_profile_url: str | None = None
     hq_location: Location | None = None
     last_funding: Funding | None = None
+    creatd_at: datetime
+    updated_at: datetime
 
 
 class CompanyCreate(CamelizedBaseStruct):
     """A company create schema."""
+
     name: str
     description: str | None = None
     type: str | None = None
@@ -42,6 +47,7 @@ class CompanyCreate(CamelizedBaseStruct):
 
 class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
     """A company update schema."""
+
     id: UUID
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     description: str | None | msgspec.UnsetType = msgspec.UNSET

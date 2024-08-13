@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from uuid import UUID  # noqa: TCH003
 from typing import Any
+from datetime import datetime
 
 import msgspec
 
@@ -14,14 +15,18 @@ from app.lib.schema import CamelizedBaseStruct, OpportunityStage
 
 class OpportunityAuditLog(CamelizedBaseStruct):
     """An opportunity audit log."""
+
     id: UUID
     operation: str
     user: User
     diff: dict[str, Any] | None = None
+    creatd_at: datetime
+    updated_at: datetime
 
 
 class Opportunity(CamelizedBaseStruct):
     """An opportunity."""
+
     id: UUID
     slug: str
     name: str
@@ -32,10 +37,13 @@ class Opportunity(CamelizedBaseStruct):
     contacts: list[Person] | None = None
     job_posts: list[JobPost] | None = None
     logs: list[OpportunityAuditLog] | None = None
+    creatd_at: datetime
+    updated_at: datetime
 
 
 class OpportunityCreate(CamelizedBaseStruct):
     """An opportunity create schema."""
+
     name: str
     stage: OpportunityStage | None = None
     notes: str | None = None
@@ -47,6 +55,7 @@ class OpportunityCreate(CamelizedBaseStruct):
 
 class OpportunityUpdate(CamelizedBaseStruct):
     """An opportunity update schema."""
+
     id: UUID
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     stage: OpportunityStage | None | msgspec.UnsetType = msgspec.UNSET

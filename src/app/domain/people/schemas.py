@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from uuid import UUID  # noqa: TCH003
-from datetime import date
+from datetime import date, datetime
 
 import msgspec
 
@@ -11,6 +11,7 @@ from app.lib.schema import CamelizedBaseStruct, Location, WorkExperience, Social
 
 class Person(CamelizedBaseStruct):
     """A person."""
+
     id: UUID
     slug: str
     first_name: str | None = None
@@ -34,10 +35,13 @@ class Person(CamelizedBaseStruct):
     languages: list[str] | None = None
     work_experiences: list[WorkExperience] | None = None
     social_activities: list[SocialActivity] | None = None
+    creatd_at: datetime
+    updated_at: datetime
 
 
 class PersonCreate(CamelizedBaseStruct):
     """A person create schema."""
+
     first_name: str | None = None
     last_name: str | None = None
     full_name: str | None = None
@@ -63,6 +67,7 @@ class PersonCreate(CamelizedBaseStruct):
 
 class PersonUpdate(CamelizedBaseStruct, omit_defaults=True):
     """A person update schema."""
+
     id: UUID
     first_name: str | None | msgspec.UnsetType = msgspec.UNSET
     last_name: str | None | msgspec.UnsetType = msgspec.UNSET

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from uuid import UUID  # noqa: TCH003
+from datetime import datetime
 
 import msgspec
 
@@ -24,6 +25,8 @@ class JobPost(CamelizedBaseStruct):
     total_applicants: int | None = None
     external_id: str | None = None
     company: Company | None = None
+    creatd_at: datetime
+    updated_at: datetime
 
 
 class JobPostCreate(CamelizedBaseStruct):
