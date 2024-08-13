@@ -15,6 +15,8 @@ class JobPost(CamelizedBaseStruct):
 
     id: UUID
     title: str
+    created_at: datetime
+    updated_at: datetime
     body: str | None = None
     location: Location | None = None
     seniority_level: str | None = None
@@ -25,8 +27,6 @@ class JobPost(CamelizedBaseStruct):
     total_applicants: int | None = None
     external_id: str | None = None
     company: Company | None = None
-    creatd_at: datetime
-    updated_at: datetime
 
 
 class JobPostCreate(CamelizedBaseStruct):

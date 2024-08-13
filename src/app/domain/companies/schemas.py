@@ -15,6 +15,8 @@ class Company(CamelizedBaseStruct):
     id: UUID
     slug: str
     name: str
+    created_at: datetime
+    updated_at: datetime
     description: str | None = None
     type: str | None = None
     industry: str | None = None
@@ -25,8 +27,6 @@ class Company(CamelizedBaseStruct):
     linkedin_profile_url: str | None = None
     hq_location: Location | None = None
     last_funding: Funding | None = None
-    creatd_at: datetime
-    updated_at: datetime
 
 
 class CompanyCreate(CamelizedBaseStruct):

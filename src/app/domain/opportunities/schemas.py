@@ -19,9 +19,9 @@ class OpportunityAuditLog(CamelizedBaseStruct):
     id: UUID
     operation: str
     user: User
-    diff: dict[str, Any] | None = None
-    creatd_at: datetime
+    created_at: datetime
     updated_at: datetime
+    diff: dict[str, Any] | None = None
 
 
 class Opportunity(CamelizedBaseStruct):

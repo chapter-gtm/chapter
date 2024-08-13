@@ -14,6 +14,8 @@ class Person(CamelizedBaseStruct):
 
     id: UUID
     slug: str
+    created_at: datetime
+    updated_at: datetime
     first_name: str | None = None
     last_name: str | None = None
     full_name: str | None = None
@@ -35,8 +37,6 @@ class Person(CamelizedBaseStruct):
     languages: list[str] | None = None
     work_experiences: list[WorkExperience] | None = None
     social_activities: list[SocialActivity] | None = None
-    creatd_at: datetime
-    updated_at: datetime
 
 
 class PersonCreate(CamelizedBaseStruct):
