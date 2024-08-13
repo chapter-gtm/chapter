@@ -13,9 +13,5 @@ export async function getColumns() {
 }
 
 export async function getRecords() {
-    const userToken = await getUserAccessToken();
-    if (userToken === undefined) {
-        throw Error("User needs to login!");
-    }
-    return await getOpportunities(userToken);
+    return await getOpportunities();
 }

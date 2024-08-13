@@ -23,34 +23,17 @@ import { type Item, ItemCard } from "./ItemCard";
 import type { Column } from "./BoardColumn";
 import { hasDraggableData } from "./utils";
 import { coordinateGetter } from "./multipleContainersKeyboardPreset";
-import { OpportunityStage } from "@/types/opportunity";
+import { Opportunity, OpportunityStage } from "@/types/opportunity";
 import { getColumns, getRecords } from "./data";
 
 type ColumnId = (typeof OpportunityStage)[keyof typeof OpportunityStage];
 
-const initialItems: Item[] = [
-  {
-    id: "item1",
-    stage: OpportunityStage.CUSTOMER,
-    name: "Project initiation and planning",
-  },
-  {
-    id: "item4",
-    stage: OpportunityStage.CONTACTED,
-    name: "Develop homepage layout",
-  },
-  {
-    id: "item7",
-    stage: OpportunityStage.IDENTIFIED,
-    name: "Build contact us page",
-  },
-];
 export function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([]);
   const pickedUpItemColumn = useRef<ColumnId | null>(null);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  const [items, setItems] = useState<Item[]>(initialItems);
+  const [items, setItems] = useState<Opportunity[]>([]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -65,8 +48,10 @@ export function KanbanBoard() {
     const fetchData = async () => {
       try {
         setColumns(await getColumns());
-        //setItems(await getRecords());
+        const records = await getRecords();
+        setItems(records);
       } catch (error: any) {
+        console.log(error);
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };
