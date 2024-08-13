@@ -24,6 +24,7 @@ opportunity_person_relation: Final[Table] = Table(
     orm_registry.metadata,
     Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True),
     Column("person_id", ForeignKey("person.id", ondelete="CASCADE"), primary_key=True),
+    Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
 )
 
 opportunity_job_post_relation: Final[Table] = Table(
@@ -31,15 +32,15 @@ opportunity_job_post_relation: Final[Table] = Table(
     orm_registry.metadata,
     Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True),
     Column("job_post_id", ForeignKey("job_post.id", ondelete="CASCADE"), primary_key=True),
+    Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
 )
+
 
 class OpportunityAuditLog(UUIDAuditBase):
     """An audit log for opportunity."""
 
     __tablename__ = "opportunity_audit_log"
-    __table_args__ = (
-        Index('ix_opportunity_audit_log_opportunity_id_tenant_id', 'opportunity_id', 'tenant_id'),
-    )
+    __table_args__ = (Index("ix_opportunity_audit_log_opportunity_id_tenant_id", "opportunity_id", "tenant_id"),)
     operation: Mapped[str] = mapped_column(nullable=False)
     diff: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True, default=None)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=False)
@@ -59,11 +60,11 @@ class Opportunity(UUIDAuditBase, SlugKey):
 
     __tablename__ = "opportunity"
     __pii_columns__ = {}
-    __table_args__ = (
-        Index('ix_opportunity_id_tenant_id', 'id', 'tenant_id'),
-    )
+    __table_args__ = (Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),)
     name: Mapped[str] = mapped_column(nullable=False, index=True)
-    stage: Mapped[OpportunityStage] = mapped_column(OpportunityStageType, nullable=False, default="identified", index=True)
+    stage: Mapped[OpportunityStage] = mapped_column(
+        OpportunityStageType, nullable=False, default="identified", index=True
+    )
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
