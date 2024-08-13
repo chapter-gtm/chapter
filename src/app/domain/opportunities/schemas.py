@@ -30,6 +30,8 @@ class Opportunity(CamelizedBaseStruct):
     id: UUID
     slug: str
     name: str
+    created_at: datetime
+    updated_at: datetime
     stage: OpportunityStage
     notes: str | None = None
     owner: User | None = None
@@ -37,8 +39,6 @@ class Opportunity(CamelizedBaseStruct):
     contacts: list[Person] | None = None
     job_posts: list[JobPost] | None = None
     logs: list[OpportunityAuditLog] | None = None
-    creatd_at: datetime
-    updated_at: datetime
 
 
 class OpportunityCreate(CamelizedBaseStruct):
