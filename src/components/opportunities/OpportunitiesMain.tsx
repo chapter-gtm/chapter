@@ -47,12 +47,6 @@ export function OpportunitiesMain() {
         const opportunities = await getOpportunities();
         const tableRecords = z.array(TableRecord).parse(
           opportunities.map((rec: Opportunity) => {
-            let fundingRound: FundingRound | null = null;
-            if (rec.company?.lastFunding) {
-              fundingRound = rec.company?.lastFunding
-                ?.round_name as FundingRound;
-            }
-
             const record: Record<string, any> = {
               id: rec.id,
               date: new Date(rec.createdAt), // TODO: handle in getOpportunities method
