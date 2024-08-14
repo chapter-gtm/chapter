@@ -26,6 +26,7 @@ class Message(CamelizedBaseStruct):
 
 class Location(CamelizedBaseStruct):
     """A Location."""
+
     city: str | None = None
     region: str | None = None
     country: str | None = None
@@ -33,15 +34,32 @@ class Location(CamelizedBaseStruct):
 
 class Investor(CamelizedBaseStruct):
     """An investor."""
+
     name: str
     type: str | None = None
     url: str | None = None
     linkedin_profile_url: str | None = None
 
 
+class FundingRound(enum.Enum):
+    """Funding round."""
+
+    GRANT = "Grant"
+    PRE_SEED = "Pre-Seed"
+    SEED = "Seed"
+    SERIES_A = "Series A"
+    SERIES_B = "Series B"
+    SERIES_C = "Series C"
+    SERIES_D = "Series D"
+    SERIES_E = "Series E"
+    SERIES_UNKNOWN = "Series Unknown"
+    PUBLIC = "Public"
+
+
 class Funding(CamelizedBaseStruct):
     """Funding data."""
-    round_name: str = "Series Unknown"
+
+    round_name: FundingRound = FundingRound.SERIES_UNKNOWN
     money_raised: int | None = None
     announced_date: date | None = None
     investors: list[Investor] = []
@@ -49,6 +67,7 @@ class Funding(CamelizedBaseStruct):
 
 class WorkExperience(CamelizedBaseStruct):
     """Work experience data."""
+
     starts_at: date
     title: str
     company_name: str
@@ -61,6 +80,7 @@ class WorkExperience(CamelizedBaseStruct):
 
 class SocialActivity(CamelizedBaseStruct):
     """Social activity data."""
+
     title: str
     link: str | None = None
     status: str | None = None
@@ -68,12 +88,13 @@ class SocialActivity(CamelizedBaseStruct):
 
 class OpportunityStage(enum.Enum):
     """Opportunity stages."""
-    IDENTIFIED = "identified"
-    QUALIFIED = "qualified"
-    CONTACTED = "contacted"
-    ENGAGED = "engaged"
-    PROPOSED = "proposed"
-    NEGOTIATED = "negotiated"
-    DEFERRED = "deferred"
-    SUSPENDED = "suspended"
-    CUSTOMER = "customer"
+
+    IDENTIFIED = "Identified"
+    QUALIFIED = "Qualified"
+    CONTACTED = "Contacted"
+    ENGAGED = "Engaged"
+    PROPOSED = "Proposed"
+    NEGOTIATED = "Negotiated"
+    DEFERRED = "Deferred"
+    SUSPENDED = "Suspended"
+    CUSTOMER = "Customer"
