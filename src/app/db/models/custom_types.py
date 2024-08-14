@@ -41,6 +41,7 @@ class FundingType(JSONBType):
         if value and isinstance(value, dict):
             obj = Funding.from_dict(value)
             obj.round_name = FundingRound(obj.round_name) if obj.round_name else FundingRound.SERIES_UNKNOWN
+            return obj
         return None
 
 
