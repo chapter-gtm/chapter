@@ -37,3 +37,23 @@ export async function getOpportunities(
         "items" in data ? (data["items"] as Opportunity[]) : [];
     return opportunities;
 }
+
+export async function getOpportunity(id: string) {
+    const token = await getUserToken();
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_CHAPTER_API_URL! + "/opportunities/" + id,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+        }
+    );
+    if (!response.ok) {
+        const msg = await response.json();
+        throw new Error(msg?.detail);
+    }
+    const data = await response.json();
+    const opportunity = data as Opportunity;
+    return opportunity;
+}

@@ -20,5 +20,9 @@ interface OpportunityPropListProps {
 }
 
 export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
-  return <></>;
+  return (
+    <>
+      <b>{`${opportunity.name} <- Oppoerunity object, hurray!`}</b>
+    </>
+  );
 }

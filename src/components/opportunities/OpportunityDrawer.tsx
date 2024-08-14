@@ -23,7 +23,9 @@ export function OpportunityDrawer({ opportunity }: OpportunityDrawerProps) {
         <OpportunityPropList opportunity={opportunity} />
       </div>
 
-      <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-zinc-100/50"></div>
+      <div className="flex-1 overflow-y-auto rounded-xl m-5 border border-slate-200 bg-zinc-100/50">
+        <b>{`${opportunity.name} <- >Oppoerunity object, hurray!`}</b>
+      </div>
     </>
   );
 }
