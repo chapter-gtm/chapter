@@ -20,5 +20,5 @@ interface OpportunityPropListProps {
 }
 
 export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
-  return <ul className="space-y-4 list-none"></ul>;
+  return <></>;
 }

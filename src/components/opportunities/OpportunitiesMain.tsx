@@ -36,6 +36,9 @@ export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [records, setRecords] = useState<RecordSchema[]>([]);
+  const [opportunityMap, setOpportunityMap] = useState<
+    Map<string, Opportunity>
+  >(new Map());
   const [selectedRow, setSelectedRow] = useState<Opportunity | null>(null);
   const [selectedRows, setSelectedRows] = useState<Opportunity[]>([]);
   const [preSelectedFilters, setPreSelectedFilters] =
@@ -45,6 +48,10 @@ export function OpportunitiesMain() {
     const fetchOpportunities = async () => {
       try {
         const opportunities = await getOpportunities();
+
+        const oppMap = new Map<string, Opportunity>();
+        opportunities.forEach((r) => oppMap.set(r.id, r));
+
         const tableRecords = z.array(TableRecord).parse(
           opportunities.map((rec: Opportunity) => {
             const record: Record<string, any> = {
@@ -60,6 +67,7 @@ export function OpportunitiesMain() {
             return record;
           })
         );
+        setOpportunityMap(oppMap);
         setRecords(tableRecords);
         setIsPopulated(true);
       } catch (error: any) {
@@ -71,14 +79,24 @@ export function OpportunitiesMain() {
 
   const handleRowClick = function <TData>(data: TData) {
     const record: RecordSchema = data as RecordSchema;
-    setSelectedRow(record.opportunity);
+    const opportunity: Opportunity | undefined = opportunityMap.get(record.id);
+    if (opportunity === undefined) {
+      return;
+    }
+    setSelectedRow(opportunity);
   };
 
   const handleRowSelection = function <TData>(selectedTableRows: TData[]) {
     const rows: RecordSchema[] = selectedTableRows as RecordSchema[];
     const opportunities: Opportunity[] = [];
     for (let i = 0; i < rows.length; i++) {
-      opportunities.push(rows[i].opportunity);
+      const opportunity: Opportunity | undefined = opportunityMap.get(
+        rows[i].id
+      );
+      if (opportunity === undefined) {
+        continue;
+      }
+      opportunities.push(opportunity);
     }
     setSelectedRows(opportunities);
   };
@@ -98,11 +116,12 @@ export function OpportunitiesMain() {
   };
 
   const handleOpenSheet = function <TData>(data: TData) {
-    setSheetOpen(true);
     const record: RecordSchema = data as RecordSchema;
-    if (record.opportunity !== undefined) {
-      setSelectedRow(record.opportunity);
+    const opportunity: Opportunity | undefined = opportunityMap.get(record.id);
+    if (opportunity !== undefined) {
+      setSelectedRow(opportunity);
     }
+    setSheetOpen(true);
   };
 
   const handleCloseSheet = function () {
