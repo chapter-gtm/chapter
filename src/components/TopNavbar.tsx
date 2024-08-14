@@ -11,10 +11,10 @@ export function TopNavbar() {
       route: "/dashboard",
     },
     {
-      title: "Funnel",
+      title: "Opportunities",
       label: "",
       variant: "ghost",
-      route: "/funnel",
+      route: "/opportunities",
     },
   ];
 

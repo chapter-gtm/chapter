@@ -1,17 +1,29 @@
 import { type Location } from "@/types/location";
-import { type Funding } from "@/types/funding";
 
 export type Investor = {
     name: string;
     type: string | null;
     url: string | null;
-    linkedin_profile_url: string | null;
+    linkedinProfileUrl: string | null;
 };
 
+export enum FundingRound {
+    GRANT = "Grant",
+    PRE_SEED = "Pre-Seed",
+    SEED = "Seed",
+    SERIES_A = "Series A",
+    SERIES_B = "Series B",
+    SERIES_C = "Series C",
+    SERIES_D = "Series D",
+    SERIES_E = "Series E",
+    SERIES_UNKNOWN = "Series Unknown",
+    PUBLIC = "Public",
+}
+
 export type Funding = {
-    round_name: string;
-    money_raised: number | null;
-    announced_date: Date | null;
+    roundName: FundingRound;
+    moneyRaised: number | null;
+    announcedDate: Date | null;
     investors: Investor[];
 };
 
@@ -25,10 +37,10 @@ export type Company = {
     headcount: number | null;
     founded_year: number | null;
     url: string | null;
-    profile_pic_url: string | null;
-    linkedin_profile_url: string | null;
-    hq_location: Location | null;
-    last_funding: Funding | null;
+    profilePicUrl: string | null;
+    linkedinProfileUrl: string | null;
+    hqLocation: Location | null;
+    lastFunding: Funding | null;
     createdAt: Date;
     updatedAt: Date;
 };

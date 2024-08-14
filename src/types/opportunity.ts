@@ -4,15 +4,15 @@ import { type Person } from "@/types/person";
 import { type JobPost } from "@/types/job_post";
 
 export enum OpportunityStage {
-    IDENTIFIED = "identified",
-    QUALIFIED = "qualified",
-    CONTACTED = "contacted",
-    ENGAGED = "engaged",
-    PROPOSED = "proposed",
-    NEGOTIATED = "negotiated",
-    DEFERRED = "deferred",
-    SUSPENDED = "suspended",
-    CUSTOMER = "customer",
+    IDENTIFIED = "Identified",
+    QUALIFIED = "Qualified",
+    CONTACTED = "Contacted",
+    ENGAGED = "Engaged",
+    PROPOSED = "Proposed",
+    NEGOTIATED = "Negotiated",
+    DEFERRED = "Deferred",
+    SUSPENDED = "Suspended",
+    CUSTOMER = "Customer",
 }
 
 export type OpportunityAuditLog = {

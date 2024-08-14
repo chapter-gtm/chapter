@@ -1,7 +1,6 @@
 import { toTitleCase } from "@/utils/misc";
 import { OpportunityStage } from "@/types/opportunity";
 import { getOpportunities } from "@/utils/chapter/opportunity";
-import { getUserAccessToken } from "@/utils/supabase/client";
 
 export async function getColumns() {
     let stages: Column[] = [];

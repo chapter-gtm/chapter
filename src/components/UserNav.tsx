@@ -25,7 +25,6 @@ export function UserNav({ className }: UserNavProps) {
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        console.log("fetch current user...");
         const user = await getUserProfile();
         setCurrentUser(user);
       } catch (error) {}
