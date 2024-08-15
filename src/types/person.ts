@@ -1,14 +1,14 @@
 import { type Location } from "@/types/location";
 
 export type WorkExperience = {
-    starts_at: Date;
+    startsAt: Date;
     title: string;
-    company_name: string;
-    ends_at: Date | null;
-    linkedin_profile_url: string | null;
+    companyName: string;
+    endsAt: Date | null;
+    linkedinProfileUrl: string | null;
     description: string | null;
     location: Location | null;
-    logo_url: string | null;
+    logoUrl: string | null;
 };
 
 export type SocialActivity = {
@@ -20,27 +20,27 @@ export type SocialActivity = {
 export type Person = {
     id: string;
     slug: string;
-    first_name: string | null;
-    last_name: string | null;
-    full_name: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string | null;
     headline: string | null;
     summary: string | null;
     occupation: string | null;
     industry: string | null;
-    profile_pic_url: string | null;
+    profilePicUrl: string | null;
     url: string | null;
-    linkedin_profile_url: string | null;
-    twitter_profile_url: string | null;
-    github_profile_url: string | null;
+    linkedinProfileUrl: string | null;
+    twitterProfileUrl: string | null;
+    githubProfileUrl: string | null;
     location: Location | null;
-    personal_emails: string[] | null;
-    work_emails: string[] | null;
-    personal_numbers: string[] | null;
-    birth_date: Date | null;
+    personalEmails: string[] | null;
+    workEmails: string[] | null;
+    personalNumbers: string[] | null;
+    birthDate: Date | null;
     gender: string | null;
     languages: string[] | null;
-    work_experiences: WorkExperience[] | null;
-    social_activities: SocialActivity[] | null;
+    workExperiences: WorkExperience[] | null;
+    socialActivities: SocialActivity[] | null;
     createdAt: Date;
     updatedAt: Date;
 };

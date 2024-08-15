@@ -124,9 +124,7 @@ export function DataTable<TData, TValue>({
                       colSpan={header.colSpan}
                       className={cn(
                         "border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
-                        header.column.id === "select"
-                          ? "bg-white sticky left-0"
-                          : ""
+                        header.column.id === "select" ? "sticky left-0" : ""
                       )}
                     >
                       {header.isPlaceholder

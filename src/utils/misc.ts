@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 export function getNameInitials(name: string): string {
   const words = name.split(" ");
   const initials = words.map((word) => word.charAt(0));
@@ -40,26 +39,26 @@ export function humanDate(date: Date, showTime: boolean = false): string {
 }
 
 
-export const getTimeAgo = (timestamp: string | number | Date): string => {
+export function timeAgo(date: Date): string {
   const now = new Date();
-  const date = new Date(timestamp);
-  const timeDifference = now.getTime() - date.getTime();
-  const seconds = Math.floor(timeDifference / 1000);
+  const secondsAgo = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-  if (seconds < 60) return `${seconds} seconds ago`;
+  const units: { [key: string]: number } = {
+      year: 60 * 60 * 24 * 365,
+      month: 60 * 60 * 24 * 30,
+      week: 60 * 60 * 24 * 7,
+      day: 60 * 60 * 24,
+      hour: 60 * 60,
+      minute: 60,
+      second: 1,
+  };
 
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes} minutes ago`;
+  for (const unit in units) {
+      const timeInterval = Math.floor(secondsAgo / units[unit]);
+      if (timeInterval >= 1) {
+          return `${timeInterval} ${unit}${timeInterval > 1 ? 's' : ''} ago`;
+      }
+  }
 
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} hours ago`;
-
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days} days ago`;
-
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months} months ago`;
-
-  const years = Math.floor(months / 12);
-  return `${years} years ago`;
-};
+  return 'just now';
+}
