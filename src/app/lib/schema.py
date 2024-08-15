@@ -106,7 +106,7 @@ class OrgSize(CamelizedBaseStruct):
     engineering: int | None = None
 
 
-class Scale(CamelizedBaseStruct):
+class Scale(enum.Enum):
     """Scale data."""
 
     LOW = "Low"
