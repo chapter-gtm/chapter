@@ -7,7 +7,6 @@ export async function getUserToken() {
     const token = cookieStore.get("token");
     if (!token) {
         redirect("/login");
-        return null;
     }
 
     return token;
@@ -34,7 +33,7 @@ export async function handleLogout() {
     return null;
 }
 
-export async function handleLogin(token: string, user: User = null) {
+export async function handleLogin(token: string, user: User | null = null) {
     const cookieStore = cookies();
 
     if (user) {
@@ -44,7 +43,7 @@ export async function handleLogin(token: string, user: User = null) {
             path: "/",
             maxAge: 86400, // 24 hours
             httpOnly: true, // This prevents scripts from accessing
-            sameSite: "Strict",
+            sameSite: "strict",
         });
     }
 
@@ -54,6 +53,6 @@ export async function handleLogin(token: string, user: User = null) {
         path: "/", // Accessible site-wide
         maxAge: 86400, // 24-hours or whatever you like
         httpOnly: true, // This prevents scripts from accessing
-        sameSite: "Strict", // This does not allow other sites to access
+        sameSite: "strict", // This does not allow other sites to access
     });
 }
