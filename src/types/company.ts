@@ -27,6 +27,10 @@ export type Funding = {
     investors: Investor[];
 };
 
+export type OrgSize = {
+    engineering: number | null;
+};
+
 export type Company = {
     id: string;
     slug: string;
@@ -41,6 +45,7 @@ export type Company = {
     linkedinProfileUrl: string | null;
     hqLocation: Location | null;
     lastFunding: Funding | null;
+    orgSize: OrgSize | null;
     createdAt: Date;
     updatedAt: Date;
 };
