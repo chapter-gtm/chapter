@@ -33,7 +33,7 @@ export function KanbanBoard() {
   const pickedUpItemColumn = useRef<ColumnId | null>(null);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  const [items, setItems] = useState<Opportunity[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -49,7 +49,11 @@ export function KanbanBoard() {
       try {
         setColumns(await getColumns());
         const records = await getRecords();
-        setItems(records);
+        const cardItems: Item[] = records.map((record) => ({
+          ...record,
+          itemId: record.id,
+        }));
+        setItems(cardItems);
       } catch (error: any) {
         console.log(error);
         toast.error("Failed to load data.", { description: error.toString() });
