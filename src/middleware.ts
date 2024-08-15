@@ -3,10 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const publicUrls = ["/reset-password"];
 
-  if (publicUrls.includes(request.nextUrl.pathname)) {
-    return response;
-  }
-
   const token = request.cookies.get("token");
   if (!token) {
     return NextResponse.rewrite(new URL("/login", request.url));
@@ -16,8 +12,6 @@ export async function middleware(request: NextRequest) {
     // Redirect to /dashboard
     return NextResponse.rewrite(new URL("/dashboard", request.url));
   }
-
-  return response;
 }
 
 export const config = {
