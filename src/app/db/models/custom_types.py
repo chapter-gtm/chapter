@@ -100,4 +100,11 @@ class ToolType(JSONBType):
             obj = Tool.from_dict(value)
             obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
             return obj
+        elif value and isinstance(value, list):
+            objs = []
+            for item in value:
+                obj = Tool.from_dict(item)
+                obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
+                objs.append(obj)
+            return objs
         return None
