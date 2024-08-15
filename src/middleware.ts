@@ -1,16 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
-  const supabase = createClient();
-
   const publicUrls = ["/reset-password"];
 
   if (publicUrls.includes(request.nextUrl.pathname)) {
     return response;
   }
 
-  const { data, error } = await supabase.auth.getUser();
   const token = request.cookies.get("token");
   if (!token) {
     return NextResponse.rewrite(new URL("/login", request.url));
