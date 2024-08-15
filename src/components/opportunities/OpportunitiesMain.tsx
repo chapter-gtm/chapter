@@ -24,13 +24,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { ChevronsRight, ExternalLink, LinkIcon } from "lucide-react";
+import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
 
 import { ColumnFiltersState } from "@tanstack/react-table";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Icon } from "@radix-ui/react-select";
 
 export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
@@ -130,11 +131,12 @@ export function OpportunitiesMain() {
 
   return (
     <>
-      <div className="w-full space-y-2 px-6 mt-2">
+      <div className="w-full space-y-2 mt-2 bg-zinc-50 rounded-lg overflow-hidden border border-zinc-100/80">
         <Toaster theme="light" />
-        <div className="flex flex-row justify-between space-y-1 center h-[60px] items-center px-4 ">
-          <h2 className="text-base font-medium tracking-normal text-zinc-700">
-            List View
+        <div className="flex flex-row justify-start space-y-1 gap-x-2 center h-[60px] items-center px-6">
+          <Building2 width={18} />
+          <h2 className="text-sm font-medium tracking-normal text-zinc-700">
+            All opportunities ({records.length})
           </h2>
         </div>
 
@@ -157,34 +159,17 @@ export function OpportunitiesMain() {
                   </div>
                 </div>
 
-                <SheetContent className="sm:max-w-[500px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
+                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0">
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                       <SheetClose
                         onClick={handleCloseSheet}
-                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-slate-100 focus:outline-none"
+                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-zinc-100 focus:outline-none"
                       >
                         <ChevronsRight className="h-4 w-4 mx-auto" />
                         <span className="sr-only">Close</span>
                       </SheetClose>
 
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link
-                            target="blank"
-                            href={`/opportunities/${selectedRow?.id}`}
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              disabled={false}
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>View fullscreen</TooltipContent>
-                      </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button

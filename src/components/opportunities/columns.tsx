@@ -2,7 +2,15 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
-import { PhoneCall, StarHalf, StickyNote } from "lucide-react";
+import {
+  PhoneCall,
+  StarHalf,
+  StickyNote,
+  Building2,
+  DollarSign,
+  MapPin,
+  CircleUser,
+} from "lucide-react";
 
 import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
@@ -76,32 +84,32 @@ export const filters = [
       {
         value: "1-10",
         label: "1-10",
-        icon: undefined,
+        icon: CircleUser,
       },
       {
         value: "11-50",
         label: "11-50",
-        icon: undefined,
+        icon: CircleUser,
       },
       {
         value: "51-200",
         label: "51-200",
-        icon: undefined,
+        icon: CircleUser,
       },
       {
         value: "201-500",
         label: "201-500",
-        icon: undefined,
+        icon: CircleUser,
       },
       {
         value: "501-1000",
         label: "501-1000",
-        icon: undefined,
+        icon: CircleUser,
       },
       {
         value: "1000+",
         label: "1000+",
-        icon: undefined,
+        icon: CircleUser,
       },
     ],
   },
@@ -112,52 +120,52 @@ export const filters = [
       {
         value: FundingRound.GRANT,
         label: FundingRound.GRANT,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.PRE_SEED,
         label: FundingRound.PRE_SEED,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SEED,
         label: FundingRound.SEED,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_A,
         label: FundingRound.SERIES_A,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_B,
         label: FundingRound.SERIES_B,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_C,
         label: FundingRound.SERIES_C,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_D,
         label: FundingRound.SERIES_D,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_E,
         label: FundingRound.SERIES_E,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.SERIES_UNKNOWN,
         label: FundingRound.SERIES_UNKNOWN,
-        icon: StackIcon,
+        icon: DollarSign,
       },
       {
         value: FundingRound.PUBLIC,
         label: FundingRound.PUBLIC,
-        icon: StackIcon,
+        icon: DollarSign,
       },
     ],
   },
@@ -168,32 +176,32 @@ export const filters = [
       {
         value: "Canada",
         label: "Canada",
-        icon: undefined,
+        icon: MapPin,
       },
       {
         value: "France",
         label: "France",
-        icon: undefined,
+        icon: MapPin,
       },
       {
         value: "Germany",
         label: "Germany",
-        icon: undefined,
+        icon: MapPin,
       },
       {
         value: "UK",
         label: "UK",
-        icon: undefined,
+        icon: MapPin,
       },
       {
         value: "US",
         label: "US",
-        icon: undefined,
+        icon: MapPin,
       },
       {
         value: "Rest of the World",
         label: "Rest of the World",
-        icon: undefined,
+        icon: MapPin,
       },
     ],
   },

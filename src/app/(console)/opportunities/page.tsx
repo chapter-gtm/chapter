@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 export default function FunnelPage() {
   return (
     <>
-      <PageHeaderRow title="Opportunities" />
-      <OpportunitiesMain />
+      <div className="p-5">
+        <OpportunitiesMain />
+      </div>
     </>
   );
 }
