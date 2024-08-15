@@ -61,9 +61,11 @@ export function OpportunitiesMain() {
               stage: rec.stage,
               companyName: rec.company?.name,
               companySize: rec.company?.headcount,
+              orgSize: rec.company?.orgSize,
               fundingRound: rec.company?.lastFunding?.roundName,
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
+              tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
             };
             return record;
           })

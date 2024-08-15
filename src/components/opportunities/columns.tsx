@@ -16,8 +16,10 @@ import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
 
 import { type Opportunity, OpportunityStage } from "@/types/opportunity";
-import { type Company, FundingRound } from "@/types/company";
+import { type Company, FundingRound, OrgSize } from "@/types/company";
 import { type Location } from "@/types/location";
+import { type Tool } from "@/types/job_post";
+import { type Scale, ScaleLabel } from "@/types/scale";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
 
 import { toTitleCase } from "@/utils/misc";
@@ -398,6 +400,16 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     },
   },
   {
+    accessorKey: "orgSize",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Engineering Size" />
+    ),
+    cell: ({ row }) => {
+      const orgSize: OrgSize = row.getValue("orgSize");
+      return <div className="flex">{orgSize.engineering}</div>;
+    },
+  },
+  {
     accessorKey: "fundingRound",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Funding" />
@@ -461,6 +473,31 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       return <div className="flex">{row.getValue("industry")}</div>;
+    },
+  },
+  {
+    accessorKey: "tools",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Tool Stack" />
+    ),
+    cell: ({ row }) => {
+      const tools: Tool[] = row.getValue("tools");
+      return (
+        <div className="flex items-center gap-2">
+          {tools.map((tool, index) => (
+            <Badge
+              key={index}
+              variant="outline"
+              className={classNames(
+                ScaleLabel[tool.certainty]?.color,
+                "p-1 rounded-lg"
+              )}
+            >
+              {tool.name}
+            </Badge>
+          ))}
+        </div>
+      );
     },
   },
 ];
