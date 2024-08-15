@@ -98,3 +98,25 @@ class OpportunityStage(enum.Enum):
     DEFERRED = "Deferred"
     SUSPENDED = "Suspended"
     CUSTOMER = "Customer"
+
+
+class OrgSize(CamelizedBaseStruct):
+    """Org size data."""
+
+    engineering: int | None = None
+
+
+class Scale(CamelizedBaseStruct):
+    """Scale data."""
+
+    LOW = "Low"
+    MEDIUM = "Medium"
+    HIGH = "High"
+
+
+class Tool(CamelizedBaseStruct):
+    """Tool data."""
+
+    name: str
+    # Shouldn't be part of the tool but makes things easier for now
+    certainty: Scale = Scale.LOW

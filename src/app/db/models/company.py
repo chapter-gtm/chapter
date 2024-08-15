@@ -7,8 +7,8 @@ from advanced_alchemy.base import SlugKey, UUIDAuditBase
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.lib.schema import Location, Funding
-from .custom_types import LocationType, FundingType
+from app.lib.schema import Location, Funding, OrgSize
+from .custom_types import LocationType, FundingType, OrgSizeType
 
 
 class CompanyOrg(UUIDAuditBase):
@@ -37,6 +37,7 @@ class Company(UUIDAuditBase, SlugKey):
     linkedin_profile_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     hq_location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     last_funding: Mapped[Funding | None] = mapped_column(FundingType, nullable=True, default=None)
+    org_size: Mapped[OrgSize | None] = mapped_column(OrgSizeType, nullable=True, default=None)
     # -----------
     # ORM Relationships
     # ------------

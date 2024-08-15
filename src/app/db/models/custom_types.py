@@ -6,7 +6,17 @@ from dataclasses import dataclass, asdict
 from sqlalchemy.types import TypeDecorator, String
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.lib.schema import Location, FundingRound, Funding, WorkExperience, SocialActivity, OpportunityStage
+from app.lib.schema import (
+    Location,
+    FundingRound,
+    Funding,
+    WorkExperience,
+    SocialActivity,
+    OpportunityStage,
+    OrgSize,
+    Tool,
+    Scale,
+)
 
 
 class JSONBType(TypeDecorator):
@@ -73,3 +83,21 @@ class OpportunityStageType(TypeDecorator):
         if value is not None:
             return OpportunityStage(value)
         return value
+
+
+class OrgSizeType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return OrgSize.from_dict(value)
+        return None
+
+
+class ToolType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            obj = Tool.from_dict(value)
+            obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
+            return obj
+        return None

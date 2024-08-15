@@ -6,7 +6,7 @@ from datetime import datetime
 import msgspec
 
 from app.db.models.company import Company
-from app.lib.schema import CamelizedBaseStruct, Location, Funding
+from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 
 
 class Company(CamelizedBaseStruct):
@@ -27,6 +27,7 @@ class Company(CamelizedBaseStruct):
     linkedin_profile_url: str | None = None
     hq_location: Location | None = None
     last_funding: Funding | None = None
+    org_size: OrgSize | None = None
 
 
 class CompanyCreate(CamelizedBaseStruct):

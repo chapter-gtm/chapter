@@ -6,7 +6,7 @@ from datetime import datetime
 import msgspec
 
 from app.db.models.job_post import JobPost
-from app.lib.schema import CamelizedBaseStruct, Location
+from app.lib.schema import CamelizedBaseStruct, Location, Tool
 from app.domain.companies.schemas import Company
 
 
@@ -26,6 +26,7 @@ class JobPost(CamelizedBaseStruct):
     apply_url: str | None = None
     total_applicants: int | None = None
     external_id: str | None = None
+    tools: list[Tool] | None = None
     company: Company | None = None
 
 
