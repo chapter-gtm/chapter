@@ -1,5 +1,8 @@
+import React from "react";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import * as LucideIcons from "lucide-react";
 
 interface PageHeaderProps {
   title?: string;

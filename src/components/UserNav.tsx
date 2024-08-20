@@ -41,23 +41,30 @@ export function UserNav({ className }: UserNavProps) {
       {currentUser !== null && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className={cn("w-full", className)}>
+            <Button
+              variant="outline"
+              className={cn("w-full bg-zinc-200 dark:bg-zinc-800", className)}
+            >
               <Avatar className="mr-2 h-5 w-5 rounded-lg">
                 <AvatarImage
                   src={currentUser.avatarUrl}
                   alt={currentUser.name}
                 />
-                <AvatarFallback className="text-xs bg-slate-200">
+                <AvatarFallback className="text-xs bg-zinc-200">
                   {getNameInitials(currentUser.name)}
                 </AvatarFallback>
               </Avatar>
               <div className="text-ellipsis overflow-hidden">
                 {currentUser.name}
               </div>
-              <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+              <ChevronDown className="ms-2 ml-auto h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="start" forceMount>
+          <DropdownMenuContent
+            className="w-56 dark:bg-zinc-900"
+            align="start"
+            forceMount
+          >
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">

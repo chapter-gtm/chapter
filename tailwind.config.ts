@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss"
 
+const defaultTheme = require('tailwindcss/colors');
+
 const config = {
   darkMode: ["class"],
   content: [
@@ -17,12 +19,23 @@ const config = {
         "2xl": "1400px",
       },
     },
+    fontSize: {
+      sm: "0.8rem",
+      base: "0.9rem",
+      xl: "1.25rem",
+      "2xl": "1.563rem",
+      "3xl": "1.953rem",
+      "4xl": "2.441rem",
+      "5xl": "3.052rem"
+
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+       
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -37,11 +50,11 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT: "# 52525b",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#f4f4f5",
+          DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
@@ -74,7 +87,8 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate")],
 } satisfies Config
 
 export default config

@@ -4,10 +4,11 @@ import { MainNav, NavPropsLink } from "@/components/MainNav";
 
 export function TopNavbar() {
   const links: NavPropsLink[] = [
+    { title: "Overview", label: "", variant: "secondary", route: "/dashboard" },
     {
       title: "Opportunities",
       label: "",
-      variant: "ghost",
+      variant: "secondary",
       route: "/opportunities",
     },
   ];

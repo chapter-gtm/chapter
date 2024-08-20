@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { PHProvider } from "./providers";
+import { ThemeProvider } from "@/components/theme-provider";
+
 import dynamic from "next/dynamic";
 import "./globals.css";
 
@@ -27,8 +29,15 @@ export default function RootLayout({
       </head>
       <PHProvider>
         <body className={inter.className}>
-          <PostHogPageView />
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <PostHogPageView />
+            {children}
+          </ThemeProvider>
         </body>
       </PHProvider>
     </html>

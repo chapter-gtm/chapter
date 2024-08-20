@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
 
       <div className="flex overflow-x-auto border-t border-b">
         <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 border-b border-zinc-600 w-full">
+          <TableHeader className="sticky top-0 border-b border-border w-full">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-zinc-100/20">
                 {headerGroup.headers.map((header) => {
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
+                        "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
                         header.column.id === "select" ? "sticky left-0" : ""
                       )}
                     >
@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className={cn(
-                        "truncate border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-2"
+                        "truncate border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
                       )}
                       // This is where the cell should have a shade of color
                       key={cell.id}

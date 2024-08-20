@@ -4,10 +4,10 @@
  
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 240, 6%, 90%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 0, 0%, 98%;
     --card-foreground: 222.2 84% 4.9%;
  
     --popover: 0 0% 100%;
@@ -22,27 +22,28 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
  
-    --accent: 210 40% 96.1%;
+    --accent: 240, 5%, 96%;
+    --accent-hover: 40, 5%, 97%;
     
     --accent-foreground: 222.2 47.4% 11.2%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 240, 5%, 84%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
 
-    --button-background-color: #007bff
+    --button-background-color: #007bff;
   }
  
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 240, 6%, 10%;
     --foreground: 210 40% 98%;
  
-    --card: 222.2 84% 4.9%;
+    --card: 240, 4%, 16%;
     --card-foreground: 210 40% 98%;
  
     --popover: 222.2 84% 4.9%;
@@ -57,23 +58,20 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
  
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 240, 5%, 26%;
     --accent-foreground: 210 40% 98%;
  
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
  
-    --border: 217.2 32.6% 17.5%;
+    --border: 240, 4%, 16%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
 }
  
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-zinc-600;
+  .card {
+    background-color: var(--card);
   }
 }
