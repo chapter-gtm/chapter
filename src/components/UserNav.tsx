@@ -43,7 +43,7 @@ export function UserNav({ className }: UserNavProps) {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className={cn("w-full bg-zinc-200 dark:bg-zinc-800", className)}
+              className={cn("w-full bg-card", className)}
             >
               <Avatar className="mr-2 h-5 w-5 rounded-lg">
                 <AvatarImage
@@ -61,8 +61,8 @@ export function UserNav({ className }: UserNavProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-56 dark:bg-zinc-900"
-            align="start"
+            className="w-56 bg-card border-border"
+            align="end"
             forceMount
           >
             <DropdownMenuLabel className="font-normal">

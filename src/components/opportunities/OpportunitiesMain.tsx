@@ -137,12 +137,12 @@ export function OpportunitiesMain() {
         <Toaster theme="light" />
         <div className="flex flex-row justify-start space-y-1 gap-x-2 center h-[60px] items-center px-6">
           <Building2 width={18} />
-          <h2 className="text-sm font-medium tracking-normal text-zinc-700">
+          <h2 className="text-sm font-medium tracking-normal ">
             All opportunities ({records.length})
           </h2>
         </div>
 
-        <div className="h-full">
+        <div className="h-full mt-20">
           {isPopulated ? (
             <div>
               <Sheet modal={false} open={sheetOpen}>
@@ -161,12 +161,12 @@ export function OpportunitiesMain() {
                   </div>
                 </div>
 
-                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card">
+                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card border-border">
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                       <SheetClose
                         onClick={handleCloseSheet}
-                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-zinc-100 focus:outline-none"
+                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-accent focus:outline-none"
                       >
                         <ChevronsRight className="h-4 w-4 mx-auto" />
                         <span className="sr-only">Close</span>

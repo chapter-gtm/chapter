@@ -17,15 +17,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="background relative flex flex-col h-dvh ">
-      <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border background">
-        <TopNavbar />
-        <div className="ml-auto flex items-center space-x-4">
-          <UserNav />
+    <div className="background h-dvh relative ">
+      <div className="fixed top-0 w-full bg-background">
+        <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border">
+          <TopNavbar />
+          <div className="ml-auto flex items-center space-x-4">
+            <UserNav />
+          </div>
         </div>
       </div>
-      {/* Keep the following 'flex', 'flex-1', 'overflow' to extend the full height */}
-      <main className="flex flex-1 overflow-hidden">{children}</main>
+
+      <main className="flex flex-1 overflow-scroll bg-background pt-20 h-full">
+        {children}
+      </main>
     </div>
   );
 }

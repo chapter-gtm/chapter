@@ -39,8 +39,8 @@ export function Dashboard() {
   }, []);
 
   return (
-    <div className="w-full flex flex-col flex-1 space-y-2 px-6 mt-2">
-      <div className="mb-8">
+    <div className="w-full">
+      <div className=" flex flex-col space-y-2 px-6 mt-2 pb-24">
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">
@@ -48,10 +48,10 @@ export function Dashboard() {
           </p>
         </div>
 
-        <div className="flex w-full h-52 overflow-scroll">
-          <div className="flex flex-row gap-x-4">
+        <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
+          <div className="flex flex-row gap-x-4 mb-4">
             <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80">
-              <div className="flex flex-col h-full justify-center items-center text-center content-center relative">
+              <div className="flex flex-col h-full justify-center items-center text-center content-center ">
                 <Image
                   src="/images/customIcons/inbox.svg"
                   width={80}
@@ -59,14 +59,17 @@ export function Dashboard() {
                   alt="Inbox"
                   className="py-3"
                 />
-                <h3 className="font-semibold text-zinc-600">
-                  JP, you&apos;ve got leads!
-                </h3>
+                <h3 className="font-semibold">JP, you&apos;ve got leads!</h3>
                 <p className="text-sm text-zinc-500 bottom-2">
                   {/* Updated {timeAgo(new Date(opportunities[0].createdAt))} */}
                 </p>
               </div>
             </div>
+            <div className="flex h-52 w-96 bg-white rounded-lg"></div>
+            <div className="flex h-52 w-96 bg-white rounded-lg"></div>
+
+            <div className="flex h-52 w-96 bg-white rounded-lg"></div>
+
             {opportunities !== null &&
               opportunities.length > 0 &&
               opportunities.map((op: Opportunity, index) => (
@@ -104,31 +107,47 @@ export function Dashboard() {
               ))}
           </div>
         </div>
-      </div>
-      <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
-        <CheckSquareIcon className=" w-4 text-zinc-500" />
-        <p className="text-sm font-semibold tracking-normal">My tasks</p>
-      </div>
 
-      <div className="flex flex-row h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
-        <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
-          <Image
-            src="/images/customIcons/task.svg"
-            width={80}
-            height={80}
-            alt="Inbox"
-            className="py-3"
-          />
-
-          <p className="text-base text-zinc-400">
-            See all your tasks across your workspace in one place
-          </p>
+        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
+          <CheckSquareIcon className=" w-4 text-zinc-500" />
+          <p className="text-sm font-semibold tracking-normal">My tasks</p>
         </div>
-      </div>
 
-      <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
-        <LineChart className=" w-4 text-zinc-500" />
-        <p className="text-sm font-semibold tracking-normal">My progress</p>
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
+          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
+            <Image
+              src="/images/customIcons/task.svg"
+              width={80}
+              height={80}
+              alt="Inbox"
+              className="py-3"
+            />
+
+            <p className="text-base text-zinc-400">
+              See all your tasks across your workspace in one place
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
+          <LineChart className=" w-4 text-zinc-500" />
+          <p className="text-sm font-semibold tracking-normal">My progress</p>
+        </div>
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
+          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
+            <Image
+              src="/images/customIcons/task.svg"
+              width={80}
+              height={80}
+              alt="Inbox"
+              className="py-3"
+            />
+
+            <p className="text-base text-zinc-400">
+              See all your tasks across your workspace in one place
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

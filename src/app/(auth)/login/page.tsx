@@ -81,7 +81,7 @@ export default function AuthenticationPage() {
                   <div className="lg:p-8">
                     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                       <div className="flex flex-col space-y-2 text-center">
-                        <p className="text-sm text-center text-zinc-500 bg-zinc-100/60 p-3 rounded-md">
+                        <p className="text-sm text-center text-paragraph bg-card p-3 rounded-md">
                           Use pre-entered credentials to login, and click
                           &quot;Sign in&quot;.
                         </p>
@@ -138,7 +138,7 @@ export default function AuthenticationPage() {
                         </form>
                         {message && (
                           <p
-                            className={`flex border  rounded-lg p-3 text-xs ${
+                            className={`flex border rounded-lg p-3 text-xs ${
                               messageType === "error"
                                 ? "border-rose-200 bg-rose-50"
                                 : messageType === "reset"
@@ -158,16 +158,16 @@ export default function AuthenticationPage() {
                   <h2 className="font-semibold text-xl pb-6">
                     Welcome to Chapter
                   </h2>
-                  <p className="text-base text-zinc-500">
+                  <p className="text-base text-paragraph">
                     Chapter is a purpose built sales tool for technical
                     founders. Get weekly high quality leads based on your search
                     criteria without the need to search, enrich, and stitch
                     prospect data manually.
                   </p>
-                  <p className="text-base text-zinc-500">
+                  <p className="text-base text-paragraph">
                     Chapter just works, and get&apos;s out of your way.
                   </p>
-                  <p className="text-base text-zinc-500">Let&apos;s begin.</p>
+                  <p className="text-base text-paragraph">Let&apos;s begin.</p>
                 </div>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function AuthenticationPage() {
             <div className="lg:p-8">
               <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                 <div className="flex flex-col space-y-2 text-center">
-                  <h1 className="text-2xl font-semibold tracking-tight">
+                  <h1 className="text-2xl font-medium tracking-tight">
                     Reset Password
                   </h1>
                 </div>
@@ -239,7 +239,7 @@ export default function AuthenticationPage() {
           )}
         </div>
         <div className="flex flex-row items-center justify-center">
-          <p className="text-xs font-medium">
+          <p className="text-sm font-medium">
             @ 2024 Nectar Labs UG. All rights reserved.
           </p>
         </div>

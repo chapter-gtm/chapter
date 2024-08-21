@@ -1,7 +1,7 @@
 export const ScaleLabel: { [key: string]: { label: string; color: string } } = {
-    Low: { label: "Low", color: "bg-zinc-100" },
-    Medium: { label: "Medium", color: "bg-zinc-100" },
-    High: { label: "High", color: "bg-zinc-100" },
+    Low: { label: "Low", color: "bg-card" },
+    Medium: { label: "Medium", color: "bg-card" },
+    High: { label: "High", color: "bg-card" },
 };
 
 export enum Scale {

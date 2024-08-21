@@ -4,10 +4,10 @@
  
 @layer base {
   :root {
-    --background: 240, 6%, 90%;
+    --background: 240 6% 90%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0, 0%, 98%;
+    --card: 10 0% 98%;
     --card-foreground: 222.2 84% 4.9%;
  
     --popover: 0 0% 100%;
@@ -17,13 +17,13 @@
     --primary-foreground: 210 40% 98%;
  
     --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-foreground: 240 5% 65%;
  
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 240 5% 34%%;
  
-    --accent: 240, 5%, 96%;
-    --accent-hover: 40, 5%, 97%;
+    --accent: 240 5% 96%;
+    --accent-hover: 40 5% 97%;
     
     --accent-foreground: 222.2 47.4% 11.2%;
  
@@ -35,38 +35,40 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
-
-    --button-background-color: #007bff;
+    --paragraph: 240 4% 46%;
   }
  
   .dark {
-    --background: 240, 6%, 10%;
+    --background: 240 6% 10%;
     --foreground: 210 40% 98%;
  
-    --card: 240, 4%, 16%;
+    --card: 240 4% 16%;
     --card-foreground: 210 40% 98%;
  
-    --popover: 222.2 84% 4.9%;
+    --popover: 240 6% 10%;
     --popover-foreground: 210 40% 98%;
  
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
  
     --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary-foreground: 240 4% 46%;
  
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 240 5% 65%;
  
-    --accent: 240, 5%, 26%;
+    --accent: 240 5% 26%;
     --accent-foreground: 210 40% 98%;
  
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
  
-    --border: 240, 4%, 16%;
+    --border: 240, 5%, 26%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --paragraph: 240 4% 46%;
+    
   }
 }
  

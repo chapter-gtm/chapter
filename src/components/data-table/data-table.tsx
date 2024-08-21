@@ -112,7 +112,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-1">
       <DataTableToolbar table={table} filters={filters} />
 
-      <div className="flex overflow-x-auto border-t border-b">
+      <div className="flex overflow-x-auto border-t border-b border-border">
         <Table className="min-w-full text-sm">
           <TableHeader className="sticky top-0 border-b border-border w-full">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -146,12 +146,12 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-zinc-100"
+                  className="hover:bg-accent"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className={cn(
-                        "truncate border-e border-zinc-200 [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
+                        "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
                       )}
                       // This is where the cell should have a shade of color
                       key={cell.id}

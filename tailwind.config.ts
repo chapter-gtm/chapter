@@ -20,6 +20,7 @@ const config = {
       },
     },
     fontSize: {
+      xs: "0.75rem",
       sm: "0.8rem",
       base: "0.9rem",
       xl: "1.25rem",
