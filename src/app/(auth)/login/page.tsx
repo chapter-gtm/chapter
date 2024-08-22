@@ -158,16 +158,18 @@ export default function AuthenticationPage() {
                   <h2 className="font-semibold text-xl pb-6">
                     Welcome to Chapter
                   </h2>
-                  <p className="text-base text-paragraph">
+                  <p className="text-base text-color-paragraph">
                     Chapter is a purpose built sales tool for technical
                     founders. Get weekly high quality leads based on your search
                     criteria without the need to search, enrich, and stitch
                     prospect data manually.
                   </p>
-                  <p className="text-base text-paragraph">
+                  <p className="text-base text-color-paragraph">
                     Chapter just works, and get&apos;s out of your way.
                   </p>
-                  <p className="text-base text-paragraph">Let&apos;s begin.</p>
+                  <p className="text-base text-color-paragraph">
+                    Let&apos;s begin.
+                  </p>
                 </div>
               </div>
             </div>

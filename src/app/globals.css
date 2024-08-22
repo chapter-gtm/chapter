@@ -35,7 +35,9 @@
     --ring: 222.2 84% 4.9%;
  
     --radius: 0.5rem;
-    --paragraph: 240 4% 46%;
+    --color-paragraph: 240 4% 46%;
+    --color-header: 240 4% 16%;
+
   }
  
   .dark {
@@ -67,7 +69,9 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    --paragraph: 240 4% 46%;
+    --color-paragraph: 240 4% 46%;
+
+    --color-header: 240 6% 90%;
     
   }
 }
@@ -77,3 +81,4 @@
     background-color: var(--card);
   }
 }
+

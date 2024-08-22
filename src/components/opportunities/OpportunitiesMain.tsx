@@ -133,16 +133,16 @@ export function OpportunitiesMain() {
 
   return (
     <>
-      <div className="w-full space-y-2 mt-2 bg-white dark:bg-zinc-800/50 rounded-lg overflow-hidden border border-border">
+      <div className="w-full mt-2 ">
         <Toaster theme="light" />
-        <div className="flex flex-row justify-start space-y-1 gap-x-2 center h-[60px] items-center px-6">
+        <div className="flex flex-row justify-start space-y-1 gap-x-2 center h-[60px] items-center ps-2">
           <Building2 width={18} />
-          <h2 className="text-sm font-medium tracking-normal ">
+          <h2 className="text-base font-medium tracking-normal text-color-header">
             All opportunities ({records.length})
           </h2>
         </div>
 
-        <div className="h-full mt-20">
+        <div className="h-full bg-white dark:bg-zinc-800/50 rounded-lg overflow-hidden border border-border">
           {isPopulated ? (
             <div>
               <Sheet modal={false} open={sheetOpen}>

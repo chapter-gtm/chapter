@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "@radix-ui/react-select";
 import { Building2 } from "lucide-react";
 
+import TextEditor from "@/components/editor/editor";
 import { Opportunity } from "@/types/opportunity";
 import { getOpportunity } from "@/utils/chapter/opportunity";
 import { OpportunityPropList } from "./OpportunityPropList";
@@ -22,6 +23,7 @@ import {
 
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { Editor, FloatingMenu } from "@tiptap/react";
 
 interface OpportunityFullProps {
   opportunityId: string;
@@ -97,9 +99,9 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   </Badge>
                 </TabsTrigger>
               </TabsList>
-              <div className="flex flex-1 h-full justify-center items-center">
+              <div className="h-full w-full">
                 <TabsContent value="opTasks">
-                  <div className="flex flex-col text-center">
+                  <div className="flex flex-col">
                     <div className="text-xl font-semibold text-zinc-700 dark:text-white">
                       Tasks
                     </div>
@@ -109,14 +111,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   </div>
                 </TabsContent>
                 <TabsContent value="opNotes">
-                  <div className="flex flex-col text-center">
-                    <div className="text-xl font-semibold text-zinc-700 dark:text-white">
-                      Notes
-                    </div>
-                    <div className="text-secondary-foreground">
-                      Coming soon...
-                    </div>
-                  </div>
+                  <TextEditor description="" />
                 </TabsContent>
               </div>
             </Tabs>
