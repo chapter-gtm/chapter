@@ -75,7 +75,7 @@ export default function AuthenticationPage() {
         <div className="flex flex-1 h-full items-center justify-center">
           {showLogin ? (
             <div className="flex">
-              <div className="grid grid-cols-4 gap-x-24 border-border border rounded-3xl p-6">
+              <div className="grid grid-cols-4 gap-x-24 border-border-light border rounded-3xl p-6">
                 <div className="col-span-2">
                   {" "}
                   <div className="lg:p-8">

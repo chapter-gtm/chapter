@@ -61,7 +61,7 @@ export function UserNav({ className }: UserNavProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-56 bg-card border-border"
+            className="w-56 bg-card border-border-light"
             align="end"
             forceMount
           >

@@ -112,9 +112,9 @@ export function DataTable<TData, TValue>({
     <div className="space-y-1">
       <DataTableToolbar table={table} filters={filters} />
 
-      <div className="flex overflow-x-auto border-t border-b border-border">
+      <div className="flex overflow-x-auto border-t border-b border-border-light">
         <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 border-b border-border w-full">
+          <TableHeader className="sticky top-0 border-b border-border-light w-full">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-zinc-100/20">
                 {headerGroup.headers.map((header) => {
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
+                        "border-e border-border-light [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
                         header.column.id === "select" ? "sticky left-0" : ""
                       )}
                     >
@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className={cn(
-                        "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
+                        "truncate border-e border-border-light [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
                       )}
                       // This is where the cell should have a shade of color
                       key={cell.id}
