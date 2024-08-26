@@ -68,10 +68,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         tenant_id: UUID,
         **kwargs: Any,
     ) -> tuple[list[Opportunity], int]:
-        """Get all opportunities for a tenant."""
-        return await self.repository.get_opportunity(
-            opportunity_id=opportunity_id, tenant_id=tenant_id, **kwargs
-        )
+        """Get opportunity details."""
+        return await self.repository.get_opportunity(opportunity_id=opportunity_id, tenant_id=tenant_id, **kwargs)
 
     async def update(
         self,

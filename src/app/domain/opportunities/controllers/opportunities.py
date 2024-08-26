@@ -80,9 +80,7 @@ class OpportunityController(Controller):
         # Verify is the owner exists in this tenant
         owner_id = obj.get("owner_id")
         if owner_id:
-            db_obj = await users_service.get_one(
-                (UserModel.tenant_id == current_user.tenant_id) & (UserModel.id == owner_id)
-            )
+            db_obj = await users_service.get_user(owner_id, tenant_id=current_user.tenant_id)
             if not db_obj:
                 raise ValidationException("Owner does not exist")
 
@@ -120,7 +118,7 @@ class OpportunityController(Controller):
         ],
     ) -> Opportunity:
         """Get details about a comapny."""
-        db_obj = await opportunities_service.get(opportunity_id)
+        db_obj = await opportunities_service.get_opportunity(opportunity_id, tenant_id=current_user.tenant_id)
         return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
 
     @patch(
@@ -149,12 +147,12 @@ class OpportunityController(Controller):
         # Verify is the owner exists for in tenant
         owner_id = obj.get("owner_id")
         if owner_id:
-            db_obj = await users_service.get_one(owner_id, tenant_id=current_user.tenant_id)
+            db_obj = await users_service.get_user(owner_id, tenant_id=current_user.tenant_id)
             if not db_obj:
                 raise ValidationException("Owner does not exist")
 
         # Verify if the user is part of the same tenant as the opportunity
-        opportunity = await OpportunityService.get_one(opportunity_id)
+        opportunity = await opportunities_service.get_opportunity(opportunity_id, tenant_id=current_user.tenant_id)
         if not opportunity:
             raise ValidationException("Opportunity does not exist")
 

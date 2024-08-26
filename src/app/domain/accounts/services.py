@@ -36,6 +36,15 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         self.repository: UserRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
+    async def get_user(
+        self,
+        user_id: UUID,
+        tenant_id: UUID,
+        **kwargs: Any,
+    ) -> tuple[list[User], int]:
+        """Get user details."""
+        return await self.repository.get_user(user_id=user_id, tenant_id=tenant_id, **kwargs)
+
     async def create(
         self,
         data: ModelDictT[User],
