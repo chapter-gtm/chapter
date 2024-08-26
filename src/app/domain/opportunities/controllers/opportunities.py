@@ -80,20 +80,24 @@ class OpportunityController(Controller):
         # Verify is the owner exists in this tenant
         owner_id = obj.get("owner_id")
         if owner_id:
-            db_obj = await users_service.get_one((UserModel.tenant_id == current_user.tenant_id) & (UserModel.id == owner_id))
+            db_obj = await users_service.get_one(
+                (UserModel.tenant_id == current_user.tenant_id) & (UserModel.id == owner_id)
+            )
             if not db_obj:
                 raise ValidationException("Owner does not exist")
 
         obj["tenant_id"] = current_user.tenant_id
         db_obj = await opportunities_service.create(obj)
 
-        await opportunities_audit_log_service.create({
-            "operation": "create",
-            "diff": {"new": obj},
-            "user_id": current_user.id,
-            "tenant_id": current_user.tenant_id,
-            "opportunity_id": db_obj.id
-        })
+        await opportunities_audit_log_service.create(
+            {
+                "operation": "create",
+                "diff": {"new": obj},
+                "user_id": current_user.id,
+                "tenant_id": current_user.tenant_id,
+                "opportunity_id": db_obj.id,
+            }
+        )
 
         return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
 
@@ -143,33 +147,34 @@ class OpportunityController(Controller):
         obj = data.to_dict()
 
         # Verify is the owner exists for in tenant
-        owner_id = data.get("owner_id")
+        owner_id = obj.get("owner_id")
         if owner_id:
             db_obj = await users_service.get_one(owner_id, tenant_id=current_user.tenant_id)
             if not db_obj:
                 raise ValidationException("Owner does not exist")
 
         # Verify if the user is part of the same tenant as the opportunity
-        opportunity = OpportunityService.get_one(data.id)
+        opportunity = OpportunityService.get_one(opportunity_id)
         if not opportunity:
             raise ValidationException("Opportunity does not exist")
 
         if opportunity.tenant_id != current_user.tenant_id:
             raise ValidationException("Opportunity does not exist")
 
-        obj["tenant_id"] = current_user.tenant_id
         db_obj = await opportunities_service.update(
             item_id=opportunity_id,
             data=obj,
         )
 
-        await opportunities_audit_log_service.create({
-            "operation": "update",
-            "diff": {"new": obj},
-            "user_id": current_user.id,
-            "tenant_id": current_user.tenant_id,
-            "opportunity_id": db_obj.id
-        })
+        await opportunities_audit_log_service.create(
+            {
+                "operation": "update",
+                "diff": {"new": obj},
+                "user_id": current_user.id,
+                "tenant_id": current_user.tenant_id,
+                "opportunity_id": db_obj.id,
+            }
+        )
 
         return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
 
