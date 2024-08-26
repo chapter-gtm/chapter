@@ -103,7 +103,9 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
             <Users width={18} />
             <p>Eng size</p>
           </div>
-          <p className="font-medium">{opportunity.company?.headcount}</p>
+          <p className="font-medium">
+            {opportunity.company?.orgSize?.engineering}
+          </p>
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
