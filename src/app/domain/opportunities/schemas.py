@@ -56,9 +56,7 @@ class OpportunityCreate(CamelizedBaseStruct):
 class OpportunityUpdate(CamelizedBaseStruct):
     """An opportunity update schema."""
 
-    id: UUID
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     stage: OpportunityStage | None | msgspec.UnsetType = msgspec.UNSET
     notes: str | None | msgspec.UnsetType = msgspec.UNSET
     owner_id: UUID | None = None
-    company_id: UUID | None = None
