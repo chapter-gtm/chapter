@@ -40,15 +40,22 @@ import { Investor } from "@/types/company";
 
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
+  updateOpportunity: (updatedOpportunity: Opportunity) => void;
 }
 
-export function OpportunityDrawer({ opportunity }: OpportunityDrawerProps) {
+export function OpportunityDrawer({
+  opportunity,
+  updateOpportunity,
+}: OpportunityDrawerProps) {
   return (
     <>
       <div className="flex-1 overflow-y-auto rounded-xl m-5 ">
         <OpportunityBrand opportunity={opportunity} />
         <OpportunityJobPost opportunity={opportunity} />
-        <OpportunityPropList opportunity={opportunity} />
+        <OpportunityPropList
+          opportunity={opportunity}
+          updateOpportunity={updateOpportunity}
+        />
         <OpportunityContacts opportunity={opportunity} />
       </div>
     </>

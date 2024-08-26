@@ -1,7 +1,7 @@
 "use server";
 
 import { getUserToken } from "@/utils/auth";
-import { type Opportunity } from "@/types/opportunity";
+import { type Opportunity, OpportunityStage } from "@/types/opportunity";
 
 export async function getOpportunities(
     pageSize: number = 20,
@@ -50,6 +50,33 @@ export async function getOpportunity(id: string) {
         }
     );
     if (!response.ok) {
+        const msg = await response.json();
+        throw new Error(msg?.detail);
+    }
+    const data = await response.json();
+    const opportunity = data as Opportunity;
+    return opportunity;
+}
+
+export async function updateOpportunityStage(
+    id: string,
+    newStage: OpportunityStage
+) {
+    const token = await getUserToken();
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_CHAPTER_API_URL! + "/opportunities/" + id,
+        {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+            body: JSON.stringify({
+                stage: newStage,
+            }),
+        }
+    );
+    if (!response.ok) {
+        console.log(response);
         const msg = await response.json();
         throw new Error(msg?.detail);
     }

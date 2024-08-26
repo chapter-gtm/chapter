@@ -1,29 +1,3 @@
-import * as React from "react";
-
-import Link from "next/link";
-import { useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import { toTitleCase } from "@/utils/misc";
-import { Separator } from "@/components/ui/separator";
-import { Investor } from "@/types/company";
-
-import { OpportunityStage } from "@/types/opportunity";
-
 import {
   Loader,
   Factory,
@@ -34,24 +8,57 @@ import {
   CircleUserIcon,
 } from "lucide-react";
 
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { Opportunity } from "@/types/opportunity";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
+import { Investor } from "@/types/company";
+import { OpportunityStage } from "@/types/opportunity";
+import { updateOpportunityStage } from "@/utils/chapter/opportunity";
 
 interface OpportunityPropListProps {
   opportunity: Opportunity;
+  updateOpportunity: (updatedOpportunity: Opportunity) => void;
 }
 
-export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
-  const [stage, setStage] = React.useState("Lead");
-
+export function OpportunityPropList({
+  opportunity,
+  updateOpportunity,
+}: OpportunityPropListProps) {
+  const [currentStage, setCurrentStage] = useState<OpportunityStage>(
+    opportunity.stage
+  );
   const stages = Object.values(OpportunityStage);
-  console.log("Stages");
-  console.log(stages);
+
+  const handleStageChange = async (newStage: string) => {
+    try {
+      if (!stages.includes(newStage as OpportunityStage)) {
+        toast.error("Failed to set stage.");
+        return;
+      }
+
+      opportunity = await updateOpportunityStage(
+        opportunity.id,
+        newStage as OpportunityStage
+      );
+      setCurrentStage(opportunity.stage);
+      updateOpportunity(opportunity);
+    } catch (error: any) {
+      toast.error("Failed to update stage.");
+    }
+  };
 
   return (
     <>
@@ -67,13 +74,16 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
               asChild
               className="h-9 rounded-full border-b border-border-light bg-popover"
             >
-              <Button variant="outline">{stage}</Button>
+              <Button variant="outline">{currentStage}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-popover border-border-light">
-              <DropdownMenuLabel>Set status</DropdownMenuLabel>
+              <DropdownMenuLabel>Set stage</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-border" />
 
-              <DropdownMenuRadioGroup value={stage} onValueChange={setStage}>
+              <DropdownMenuRadioGroup
+                value={currentStage}
+                onValueChange={handleStageChange}
+              >
                 {stages.map((stage, index) => (
                   <DropdownMenuRadioItem key={index} value={stage}>
                     {stage}

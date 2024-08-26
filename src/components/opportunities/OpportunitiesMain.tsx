@@ -131,6 +131,16 @@ export function OpportunitiesMain() {
     setSheetOpen(false);
   };
 
+  const updateOpportunity = (updatedOpportunity: Opportunity) => {
+    setRecords((prevItems) =>
+      prevItems.map((item) =>
+        item.id === updatedOpportunity.id
+          ? { ...item, ...updatedOpportunity }
+          : item
+      )
+    );
+  };
+
   return (
     <>
       <div className="w-full mt-2 ">
@@ -192,7 +202,10 @@ export function OpportunitiesMain() {
 
                   <div className="flex-1 overflow-y-auto card">
                     {selectedRow !== null && (
-                      <OpportunityDrawer opportunity={selectedRow} />
+                      <OpportunityDrawer
+                        opportunity={selectedRow}
+                        updateOpportunity={updateOpportunity}
+                      />
                     )}
                   </div>
                 </SheetContent>
