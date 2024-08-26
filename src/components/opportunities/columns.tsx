@@ -207,6 +207,38 @@ export const filters = [
       },
     ],
   },
+  {
+    tableColumnName: "tools",
+    label: "Tool Stack",
+    // TODO: Build filters based on tenant ICP
+    filterOptions: [
+      {
+        value: "Github Actions",
+        label: "Github Actions",
+        icon: undefined,
+      },
+      {
+        value: "Cypress",
+        label: "Cypress",
+        icon: undefined,
+      },
+      {
+        value: "Playwright",
+        label: "Playwright",
+        icon: undefined,
+      },
+      {
+        value: "Docker",
+        label: "Docker",
+        icon: undefined,
+      },
+      {
+        value: "Rust",
+        label: "Rust",
+        icon: undefined,
+      },
+    ],
+  },
 ];
 
 function classNames(...classes: string[]) {
@@ -498,6 +530,10 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
           ))}
         </div>
       );
+    },
+    filterFn: (row, id, value) => {
+      const tools: Tool[] = row.getValue("tools");
+      return tools.some((tool: Tool) => value.includes(tool.name));
     },
   },
 ];
