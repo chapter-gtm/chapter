@@ -154,7 +154,7 @@ class OpportunityController(Controller):
                 raise ValidationException("Owner does not exist")
 
         # Verify if the user is part of the same tenant as the opportunity
-        opportunity = OpportunityService.get_one(opportunity_id)
+        opportunity = await OpportunityService.get_one(opportunity_id)
         if not opportunity:
             raise ValidationException("Opportunity does not exist")
 
