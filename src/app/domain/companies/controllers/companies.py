@@ -8,6 +8,7 @@ from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 
 from app.config import constants
+from app.lib.utils import get_logo_dev_link
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies import urls
 from app.domain.companies.dependencies import provide_companies_service
@@ -48,7 +49,13 @@ class CompanyController(Controller):
     ) -> OffsetPagination[Company]:
         """List companies that your account can access.."""
         results, total = await companies_service.list_and_count(*filters)
-        return companies_service.to_schema(data=results, total=total, schema_type=Company, filters=filters)
+        paginated_response = companies_service.to_schema(
+            data=results, total=total, schema_type=Company, filters=filters
+        )
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        for company in paginated_response.items:
+            company.profile_pic_url = get_logo_dev_link(company.url)
+        return paginated_response
 
     @post(
         operation_id="CreateCompany",
@@ -85,9 +92,10 @@ class CompanyController(Controller):
     ) -> Company:
         """Get details about a comapny."""
         db_obj = await companies_service.get(company_id)
-        # company = companies_service.to_schema(schema_type=Company, data=db_obj)
+        company = companies_service.to_schema(schema_type=Company, data=db_obj)
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
-        return Company.from_dict(db_obj.to_dict())
+        company.profile_pic_url = get_logo_dev_link(company.url)
+        return company
 
     @patch(
         operation_id="UpdateCompany",
