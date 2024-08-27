@@ -9,6 +9,7 @@ from litestar.di import Provide
 from litestar.exceptions import ValidationException
 
 from app.config import constants
+from app.lib.utils import get_logo_dev_link
 from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
 from app.domain.accounts.dependencies import provide_users_service
@@ -58,7 +59,16 @@ class OpportunityController(Controller):
     ) -> OffsetPagination[Opportunity]:
         """List opportunities that your account can access.."""
         results, total = await opportunities_service.get_opportunities(*filters, tenant_id=current_user.tenant_id)
-        return opportunities_service.to_schema(data=results, total=total, schema_type=Opportunity, filters=filters)
+        paginated_response = opportunities_service.to_schema(
+            data=results, total=total, schema_type=Opportunity, filters=filters
+        )
+
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        for opportunity in paginated_response.items:
+            if opportunity.company and opportunity.company.url:
+                opportunity.company.profile_pic_url = get_logo_dev_link(opportunity.company.url)
+
+        return paginated_response
 
     @post(
         operation_id="CreateOpportunity",
@@ -119,7 +129,13 @@ class OpportunityController(Controller):
     ) -> Opportunity:
         """Get details about a comapny."""
         db_obj = await opportunities_service.get_opportunity(opportunity_id, tenant_id=current_user.tenant_id)
-        return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
+        opportunity = opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
+
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        if opportunity.company and opportunity.company.url:
+            opportunity.company.profile_pic_url = get_logo_dev_link(opportunity.company.url)
+
+        return opportunity
 
     @patch(
         operation_id="UpdateOpportunity",

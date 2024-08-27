@@ -54,7 +54,9 @@ class CompanyController(Controller):
         )
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
         for company in paginated_response.items:
-            company.profile_pic_url = get_logo_dev_link(company.url)
+            if company.url:
+                company.profile_pic_url = get_logo_dev_link(company.url)
+
         return paginated_response
 
     @post(
@@ -93,8 +95,11 @@ class CompanyController(Controller):
         """Get details about a comapny."""
         db_obj = await companies_service.get(company_id)
         company = companies_service.to_schema(schema_type=Company, data=db_obj)
+
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
-        company.profile_pic_url = get_logo_dev_link(company.url)
+        if company.url:
+            company.profile_pic_url = get_logo_dev_link(company.url)
+
         return company
 
     @patch(
