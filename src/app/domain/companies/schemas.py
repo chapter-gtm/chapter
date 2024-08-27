@@ -30,16 +30,10 @@ class Company(CamelizedBaseStruct):
     last_funding: Funding | None = None
     org_size: OrgSize | None = None
 
-    @classmethod
-    def from_dict(cls, data):
-        """Create an instance from a dictionary."""
-        obj = cls(**data)
-
-        # Add company logo URL
-        if obj.url:
-            obj.profile_pic_url = get_logo_dev_link(obj.url)
-
-        return obj
+    def __post_init__(self):
+        """Build a profile pic url from company url."""
+        if self.url:
+            self.profile_pic_url = get_logo_dev_link(self.url)
 
 
 class CompanyCreate(CamelizedBaseStruct):

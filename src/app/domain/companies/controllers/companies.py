@@ -85,7 +85,9 @@ class CompanyController(Controller):
     ) -> Company:
         """Get details about a comapny."""
         db_obj = await companies_service.get(company_id)
-        return companies_service.to_schema(schema_type=Company, data=db_obj)
+        # company = companies_service.to_schema(schema_type=Company, data=db_obj)
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        return Company.from_dict(db_obj.to_dict())
 
     @patch(
         operation_id="UpdateCompany",

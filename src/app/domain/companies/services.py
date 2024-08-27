@@ -21,9 +21,7 @@ if TYPE_CHECKING:
     from msgspec import Struct
     from sqlalchemy.orm import InstrumentedAttribute
 
-__all__ = (
-    "CompanyService",
-)
+__all__ = ("CompanyService",)
 
 
 class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):

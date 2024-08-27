@@ -15,4 +15,4 @@ def get_logo_dev_link(url: str) -> str | None:
         logo_dev_token = os.environ["LOGO_DEV_TOKEN"]
         return f"https://img.logo.dev/{domain}?token={logo_dev_token}"
     except Exception:
-        pass
+        return None
