@@ -32,7 +32,7 @@ class Company(UUIDAuditBase, SlugKey):
     industry: Mapped[str | None] = mapped_column(nullable=True, default=None, index=True)
     headcount: Mapped[int | None] = mapped_column(nullable=True, default=None, index=True)
     founded_year: Mapped[int | None] = mapped_column(nullable=True, default=None)
-    url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     linkedin_profile_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     hq_location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     last_funding: Mapped[Funding | None] = mapped_column(FundingType, nullable=True, default=None)
