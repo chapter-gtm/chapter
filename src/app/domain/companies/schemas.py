@@ -7,6 +7,7 @@ import msgspec
 
 from app.db.models.company import Company
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
+from app.lib.utils import get_logo_dev_link
 
 
 class Company(CamelizedBaseStruct):
@@ -29,6 +30,17 @@ class Company(CamelizedBaseStruct):
     last_funding: Funding | None = None
     org_size: OrgSize | None = None
 
+    @classmethod
+    def from_dict(cls, data):
+        """Create an instance from a dictionary."""
+        obj = cls(**data)
+
+        # Add company logo URL
+        if obj.url:
+            obj.profile_pic_url = get_logo_dev_link(obj.url)
+
+        return obj
+
 
 class CompanyCreate(CamelizedBaseStruct):
     """A company create schema."""
@@ -40,7 +52,6 @@ class CompanyCreate(CamelizedBaseStruct):
     headcount: int | None = None
     founded_year: int | None = None
     url: str | None = None
-    profile_pic_url: str | None = None
     linkedin_profile_url: str | None = None
     hq_location: Location | None = None
     last_funding: Funding | None = None
@@ -57,7 +68,6 @@ class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
     headcount: int | None | msgspec.UnsetType = msgspec.UNSET
     founded_year: int | None | msgspec.UnsetType = msgspec.UNSET
     url: str | None | msgspec.UnsetType = msgspec.UNSET
-    profile_pic_url: str | None | msgspec.UnsetType = msgspec.UNSET
     linkedin_profile_url: str | None | msgspec.UnsetType = msgspec.UNSET
     hq_location: Location | None | msgspec.UnsetType = msgspec.UNSET
     last_funding: Funding | None | msgspec.UnsetType = msgspec.UNSET
