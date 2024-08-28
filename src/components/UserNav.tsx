@@ -17,6 +17,9 @@ import { getUserProfile } from "@/utils/chapter/users";
 import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
+import { LucideIcon, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+
 type UserNavProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>;
 
 export function UserNav({ className }: UserNavProps) {
@@ -34,6 +37,13 @@ export function UserNav({ className }: UserNavProps) {
 
   const onLogout = async () => {
     await logout();
+  };
+
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    const newTheme = resolvedTheme === "light" ? "dark" : "light";
+    setTheme(newTheme);
   };
 
   return (
@@ -61,7 +71,7 @@ export function UserNav({ className }: UserNavProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-56 bg-card border-border-light"
+            className="w-56 bg-card border-border"
             align="end"
             forceMount
           >
@@ -80,6 +90,16 @@ export function UserNav({ className }: UserNavProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleTheme}
+        className="dark:hover:bg-transparent "
+      >
+        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 " />
+        <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <span className="sr-only">Toggle theme</span>
+      </Button>
       {currentUser === null && (
         <Button
           variant="outline"

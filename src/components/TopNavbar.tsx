@@ -1,15 +1,28 @@
 "use client";
 import Link from "next/link";
 import { MainNav, NavPropsLink } from "@/components/MainNav";
+import { LucideIceCream, HomeIcon } from "lucide-react";
 
 export function TopNavbar() {
   const links: NavPropsLink[] = [
-    { title: "Overview", label: "", variant: "secondary", route: "/dashboard" },
+    {
+      title: "",
+      label: "Home",
+      variant: "secondary",
+      route: "/dashboard",
+      icon: HomeIcon,
+    },
     {
       title: "Opportunities",
       label: "",
       variant: "secondary",
       route: "/opportunities",
+    },
+    {
+      title: "Settings",
+      label: "",
+      variant: "secondary",
+      route: "/settings",
     },
   ];
 

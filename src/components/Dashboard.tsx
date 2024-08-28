@@ -50,7 +50,7 @@ export function Dashboard() {
 
         <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
           <div className="flex flex-row gap-x-4 mb-4">
-            <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border-light hover:border-zinc-300/80">
+            <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80">
               <div className="flex flex-col h-full justify-center items-center text-center content-center ">
                 <Image
                   src="/images/customIcons/inbox.svg"
@@ -76,7 +76,7 @@ export function Dashboard() {
                 >
                   <div
                     key={index}
-                    className="flex flex-col h-52 w-44 bg-white dark:bg-zinc-800/50 rounded-xl border border-border-light hover:border-zinc-300/80 cursor-pointer"
+                    className="flex flex-col h-52 w-44 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer"
                   >
                     <div className="flex flex-col h-full justify-center content-center p-3 relative">
                       <div className="space-y-1">
@@ -109,7 +109,7 @@ export function Dashboard() {
           <p className="text-sm font-semibold tracking-normal">My tasks</p>
         </div>
 
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border-light hover:border-zinc-300/80 cursor-pointer">
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
           <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
             <Image
               src="/images/customIcons/task.svg"
@@ -129,7 +129,7 @@ export function Dashboard() {
           <LineChart className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">My progress</p>
         </div>
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border-light hover:border-zinc-300/80 cursor-pointer">
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
           <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
             <Image
               src="/images/customIcons/task.svg"

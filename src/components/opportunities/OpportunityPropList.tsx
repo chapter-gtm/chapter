@@ -72,11 +72,11 @@ export function OpportunityPropList({
           <DropdownMenu>
             <DropdownMenuTrigger
               asChild
-              className="h-9 rounded-full border-b border-border-light bg-popover"
+              className="h-9 rounded-full border-b border-border bg-popover"
             >
               <Button variant="outline">{currentStage}</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-popover border-border-light">
+            <DropdownMenuContent className="w-56 bg-popover border-border">
               <DropdownMenuLabel>Set stage</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-border" />
 

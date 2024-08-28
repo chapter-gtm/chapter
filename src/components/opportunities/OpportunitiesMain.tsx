@@ -152,7 +152,7 @@ export function OpportunitiesMain() {
           </h2>
         </div>
 
-        <div className="h-full bg-white dark:bg-zinc-800/50 rounded-lg overflow-hidden border border-border-light">
+        <div className="h-full bg-white dark:bg-zinc-800/50 rounded-lg overflow-hidden border border-border">
           {isPopulated ? (
             <div>
               <Sheet modal={false} open={sheetOpen}>
@@ -171,7 +171,10 @@ export function OpportunitiesMain() {
                   </div>
                 </div>
 
-                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card border-border-light">
+                <SheetContent
+                  className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card border-border"
+                  onInteractOutside={handleCloseSheet}
+                >
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                       <SheetClose
@@ -212,7 +215,7 @@ export function OpportunitiesMain() {
               </Sheet>
             </div>
           ) : (
-            <div className="flex flex-col flex-1 pb-12 border-e border-border-light bg-card"></div>
+            <div className="flex flex-col flex-1 pb-12 border-e border-border bg-card"></div>
           )}
         </div>
       </div>

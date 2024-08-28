@@ -60,6 +60,10 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     }
   };
 
+  const updateOpportunity = (updatedOpportunity: Opportunity) => {
+    setOpportunity(updatedOpportunity);
+  };
+
   return (
     <>
       <Toaster theme="light" />
@@ -70,7 +74,10 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
               <div className="flex flex-col">
                 <OpportunityBrand opportunity={opportunity} />
                 <OpportunityJobPost opportunity={opportunity} />
-                <OpportunityPropList opportunity={opportunity} />
+                <OpportunityPropList
+                  opportunity={opportunity}
+                  updateOpportunity={updateOpportunity}
+                />
                 <OpportunityContacts opportunity={opportunity} />
               </div>
             </div>

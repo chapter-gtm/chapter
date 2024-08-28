@@ -20,6 +20,35 @@ export enum FundingRound {
     PUBLIC = "Public",
 }
 
+export enum EngineeringSize {
+    XSmall = "1-5",
+    Small = "5-25",
+    Medium = "25-50",
+    Large = "5-100",
+    XLarge = "100-200",
+    XXL = "200+",
+}
+
+export enum Industry {
+    SoftwareDevelopement = "Software Developement",
+    FinTech = "FinTech",
+    HealthTech = "HealthTech",
+    EdTech = "EdTech",
+    ECommerce = "ECommerce",
+    SaaS = "SaaS",
+}
+
+
+export enum ToolStack {
+    GithubActions = "Github Actions",
+    Cypress = "Cypress",
+    Kubernetes = "Kubernetes",
+    Docker = "Docker",
+    Playwright = "Playwright",
+    Rust = "Rust",
+}
+
+
 export type Funding = {
     roundName: FundingRound;
     moneyRaised: number | null;

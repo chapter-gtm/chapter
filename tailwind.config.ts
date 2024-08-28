@@ -32,11 +32,10 @@ const config = {
     },
     extend: {
       colors: {
-        // border: "hsl(var(--border-light))",
+        border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
-       
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -51,7 +50,7 @@ const config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "# 52525b",
+          DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
@@ -64,6 +63,14 @@ const config = {
         },
         card: {
           DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        badge: {
+          DEFAULT: "#9747FF",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        button: {
+          DEFAULT: "#9747FF",
           foreground: "hsl(var(--card-foreground))",
         },
       },

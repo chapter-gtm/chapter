@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <div className="background h-dvh relative ">
       <div className="fixed top-0 w-full bg-background">
-        <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border-light">
+        <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border">
           <TopNavbar />
           <div className="ml-auto flex items-center space-x-4">
             <UserNav />
