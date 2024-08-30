@@ -70,6 +70,9 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             logger.ainfo("Company already exists and is up-to-date", company=results[0])
             return results[0]
 
+        obj.url = obj.url.rstrip("/")
+        obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
+
         # TODO: Enrich company
 
         return await super().upsert(
