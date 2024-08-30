@@ -69,7 +69,7 @@ class CompanyController(Controller):
         self,
         companies_service: CompanyService,
         data: CompanyCreate,
-    ) -> CompanyCreate:
+    ) -> Company:
         """Create a new company."""
         obj = data.to_dict()
         db_obj = await companies_service.create(obj)
