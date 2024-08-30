@@ -7,7 +7,7 @@ import msgspec
 
 from app.db.models.job_post import JobPost
 from app.lib.schema import CamelizedBaseStruct, Location, Tool
-from app.domain.companies.schemas import Company
+from app.domain.companies.schemas import Company, CompanyCreate
 
 
 class JobPost(CamelizedBaseStruct):
@@ -43,7 +43,14 @@ class JobPostCreate(CamelizedBaseStruct):
     apply_url: str | None = None
     total_applicants: int | None = None
     external_id: str | None = None
+    tools: list[Tool] | None = None
     company_id: str | None = None
+
+
+class JobPostCreateFromURL(CamelizedBaseStruct):
+    """A job post create from URL schema."""
+
+    url: str
 
 
 class JobPostUpdate(CamelizedBaseStruct, omit_defaults=True):
