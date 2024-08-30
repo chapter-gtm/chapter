@@ -60,6 +60,11 @@ class WorkExperienceType(JSONBType):
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return WorkExperience.from_dict(value)
+        elif value and isinstance(value, list):
+            objs = []
+            for item in value:
+                objs.append(WorkExperience.from_dict(item))
+            return objs
         return None
 
 

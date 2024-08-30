@@ -4,6 +4,8 @@ import enum
 
 import msgspec
 
+from app.lib.utils import get_logo_dev_link
+
 
 class BaseStruct(msgspec.Struct):
     def to_dict(self) -> dict[str, Any]:
@@ -71,11 +73,17 @@ class WorkExperience(CamelizedBaseStruct):
     starts_at: date
     title: str
     company_name: str
+    company_url: str | None = None
+    company_linkedin_profile_url: str | None = None
+    company_profile_pic_url: str | None = None
     ends_at: date | None = None
-    linkedin_profile_url: str | None = None
     description: str | None = None
     location: Location | None = None
-    logo_url: str | None = None
+
+    def __post_init__(self):
+        """Build a profile pic url from company url."""
+        if self.company_url:
+            self.company_profile_pic_url = get_logo_dev_link(self.company_url)
 
 
 class SocialActivity(CamelizedBaseStruct):
