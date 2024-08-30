@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import structlog
 from typing import TYPE_CHECKING, Annotated
 
+from advanced_alchemy.filters import SearchFilter, LimitOffset
 from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 
@@ -28,6 +30,8 @@ if TYPE_CHECKING:
     from litestar.params import Dependency, Parameter
 
     from app.lib.dependencies import FilterTypes
+
+logger = structlog.get_logger()
 
 
 class JobPostController(Controller):
@@ -70,7 +74,7 @@ class JobPostController(Controller):
         self,
         job_posts_service: JobPostService,
         data: JobPostCreate,
-    ) -> JobPostCreate:
+    ) -> JobPost:
         """Create a new job post."""
         obj = data.to_dict()
         db_obj = await job_posts_service.create(obj)
@@ -87,12 +91,35 @@ class JobPostController(Controller):
         companies_service: CompanyService,
         job_posts_service: JobPostService,
         data: JobPostCreateFromURL,
-    ) -> JobPostCreate:
+    ) -> JobPost:
         """Create a new job post."""
+        # Check if job post already exists in the database
+        filters = [
+            SearchFilter(field_name="url", value=data.url.rstrip("/"), ignore_case=True),
+            LimitOffset(limit=1, offset=0),
+        ]
+        results, count = await job_posts_service.list_and_count(*filters)
+
+        if count > 0:
+            await logger.ainfo("Job post already exists", person=results[0])
+            return job_posts_service.to_schema(schema_type=JobPost, data=results[0])
+
+        # Extract job post from URL
         html_content = await extract_url_content(data.url)
         job_details = await extract_job_details_from_html(html_content)
+
+        # Add or update company
+        company = CompanyCreate(
+            name=job_details.get("company", {}).get("name"),
+            url=job_details.get("company", {}).get("url"),
+            linkedin_profile_url=job_details.get("company", {}).get("linkedin_url"),
+        )
+        company_db_obj = await companies_service.create(company.to_dict())
+
+        # Add job post
         job_post = JobPostCreate(
             title=job_details.get("title"),
+            url=data.url.rstrip("/"),
             location=Location(
                 country=job_details.get("location", {}).get("country"),
                 region=job_details.get("location", {}).get("region"),
@@ -103,15 +130,8 @@ class JobPostController(Controller):
                 for tool in job_details.get("tools", [])
                 if tool.get("name")
             ],
+            company_id=company_db_obj.id,
         )
-        company = CompanyCreate(
-            name=job_details.get("company", {}).get("name"),
-            url=job_details.get("company", {}).get("url"),
-            linkedin_profile_url=job_details.get("company", {}).get("linkedin_url"),
-        )
-        company_db_obj = await companies_service.create(company.to_dict())
-        job_post.company_id = company_db_obj.id
-
         db_obj = await job_posts_service.create(job_post.to_dict())
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)
 
