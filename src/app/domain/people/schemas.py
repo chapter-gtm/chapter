@@ -20,6 +20,7 @@ class Person(CamelizedBaseStruct):
     last_name: str | None = None
     full_name: str | None = None
     headline: str | None = None
+    title: str | None = None
     summary: str | None = None
     occupation: str | None = None
     industry: str | None = None
@@ -46,6 +47,7 @@ class PersonCreate(CamelizedBaseStruct):
     last_name: str | None = None
     full_name: str | None = None
     headline: str | None = None
+    title: str | None = None
     summary: str | None = None
     occupation: str | None = None
     industry: str | None = None
@@ -56,13 +58,20 @@ class PersonCreate(CamelizedBaseStruct):
     github_profile_url: str | None = None
     location: Location | None = None
     personal_emails: list[str] | None = None
-    work_emails: list[str] | None = None
+    work_email: str | None = None
     personal_numbers: list[str] | None = None
     birth_date: date | None = None
     gender: str | None = None
     languages: list[str] | None = None
     work_experiences: list[WorkExperience] | None = None
     social_activities: list[SocialActivity] | None = None
+    company_id: str | None = None
+
+
+class PersonCreateFromURL(CamelizedBaseStruct):
+    """A person create from URL schema."""
+
+    url: str
 
 
 class PersonUpdate(CamelizedBaseStruct, omit_defaults=True):
@@ -73,6 +82,7 @@ class PersonUpdate(CamelizedBaseStruct, omit_defaults=True):
     last_name: str | None | msgspec.UnsetType = msgspec.UNSET
     full_name: str | None | msgspec.UnsetType = msgspec.UNSET
     headline: str | None | msgspec.UnsetType = msgspec.UNSET
+    title: str | None | msgspec.UnsetType = msgspec.UNSET
     summary: str | None | msgspec.UnsetType = msgspec.UNSET
     occupation: str | None | msgspec.UnsetType = msgspec.UNSET
     industry: str | None | msgspec.UnsetType = msgspec.UNSET

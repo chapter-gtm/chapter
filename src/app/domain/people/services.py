@@ -21,9 +21,7 @@ if TYPE_CHECKING:
     from msgspec import Struct
     from sqlalchemy.orm import InstrumentedAttribute
 
-__all__ = (
-    "PersonService",
-)
+__all__ = ("PersonService",)
 
 
 class PersonService(SQLAlchemyAsyncRepositoryService[Person]):
@@ -41,8 +39,12 @@ class PersonService(SQLAlchemyAsyncRepositoryService[Person]):
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
+        if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "upsert" and data.slug is None:  # type: ignore[union-attr]
+            data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if is_dict(data) and "slug" not in data and operation == "create":
             data["slug"] = await self.repository.get_available_slug(data["full_name"])
-        if is_dict(data) and "slug" not in data and "name" in data and operation == "update":
+        if is_dict(data) and "slug" not in data and "full_name" in data and operation == "update":
+            data["slug"] = await self.repository.get_available_slug(data["full_name"])
+        if is_dict(data) and "slug" not in data and "full_name" in data and operation == "upsert":
             data["slug"] = await self.repository.get_available_slug(data["full_name"])
         return await super().to_model(data, operation)
