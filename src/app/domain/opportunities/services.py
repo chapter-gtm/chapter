@@ -114,7 +114,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
     ) -> Opportunity:
-        """Create a new team with an owner."""
+        """Create a new opportunity."""
         contact_ids: list[UUID] = []
         job_post_ids: list[UUID] = []
         if isinstance(data, dict):
