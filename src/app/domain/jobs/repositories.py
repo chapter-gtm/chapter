@@ -12,9 +12,7 @@ from app.db.models import JobPost
 if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
 
-__all__ = (
-    "JobPostRepository",
-)
+__all__ = ("JobPostRepository",)
 
 
 class JobPostRepository(SQLAlchemyAsyncRepository[JobPost]):
@@ -33,11 +31,7 @@ class JobPostRepository(SQLAlchemyAsyncRepository[JobPost]):
 
         return await self.list_and_count(
             *filters,
-            statement=select(JobPost)
-            .order_by(JobPost.created_at)
-            .options(
-                joinedload(JobPost.company, isouter=True),
-            ),
+            statement=select(JobPost).order_by(JobPost.created_at).options(),
             auto_expunge=auto_expunge,
             force_basic_query_mode=force_basic_query_mode,
             **kwargs,
