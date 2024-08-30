@@ -66,8 +66,8 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         now = datetime.now(timezone.utc)
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
 
-        if count > 0 and results[0].id != obj.id and results[0].updated_at > fiftytwo_weeks_ago:
-            logger.ainfo("Company already exists and is up-to-date", company=results[0])
+        if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
+            await logger.ainfo("Company already exists and is up-to-date", company=results[0])
             return results[0]
 
         obj.url = obj.url.rstrip("/")
@@ -77,7 +77,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
 
         return await super().upsert(
             data=data,
-            item_id=results[0] if count > 0 else None,
+            item_id=results[0].id if count > 0 else None,
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
