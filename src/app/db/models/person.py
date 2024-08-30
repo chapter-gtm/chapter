@@ -40,10 +40,16 @@ class Person(UUIDAuditBase, SlugKey):
     occupation: Mapped[str] = mapped_column(nullable=True, default=None)
     industry: Mapped[str | None] = mapped_column(nullable=True, default=None, index=True)
     profile_pic_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
-    url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
-    linkedin_profile_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
-    twitter_profile_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
-    github_profile_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
+    linkedin_profile_url: Mapped[str | None] = mapped_column(
+        String(length=2083), nullable=True, default=None, unique=True
+    )
+    twitter_profile_url: Mapped[str | None] = mapped_column(
+        String(length=2083), nullable=True, default=None, unique=True
+    )
+    github_profile_url: Mapped[str | None] = mapped_column(
+        String(length=2083), nullable=True, default=None, unique=True
+    )
     location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     personal_emails: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)
     work_email: Mapped[str | None] = mapped_column(nullable=True, default=None)
