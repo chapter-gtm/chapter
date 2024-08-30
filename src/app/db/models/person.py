@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+from uuid import UUID
 from typing import TYPE_CHECKING
 from datetime import date
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.lib.schema import Location, WorkExperience, SocialActivity
 from .custom_types import LocationType, WorkExperienceType, SocialActivityType
+
+if TYPE_CHECKING:
+    from .company import Company
 
 
 class Person(UUIDAuditBase, SlugKey):
@@ -30,7 +34,8 @@ class Person(UUIDAuditBase, SlugKey):
     first_name: Mapped[str] = mapped_column(nullable=True, default=None)
     last_name: Mapped[str] = mapped_column(nullable=True, default=None)
     full_name: Mapped[str] = mapped_column(nullable=True, default=None)
-    headline: Mapped[str | None] = mapped_column(String(length=500), nullable=True, default=None)
+    headline: Mapped[str | None] = mapped_column(String(length=500), nullable=True, default=None, index=True)
+    title: Mapped[str | None] = mapped_column(String(length=500), nullable=True, default=None, index=True)
     summary: Mapped[str | None] = mapped_column(String(length=2000), nullable=True, default=None)
     occupation: Mapped[str] = mapped_column(nullable=True, default=None)
     industry: Mapped[str | None] = mapped_column(nullable=True, default=None, index=True)
@@ -52,6 +57,13 @@ class Person(UUIDAuditBase, SlugKey):
     social_activities: Mapped[list[SocialActivity] | None] = mapped_column(
         SocialActivityType, nullable=True, default=None
     )
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, index=True)
     # -----------
     # ORM Relationships
     # ------------
+    company: Mapped[Company] = relationship(
+        back_populates="people",
+        innerjoin=True,
+        uselist=False,
+        lazy="joined",
+    )

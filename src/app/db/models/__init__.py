@@ -9,7 +9,7 @@ from .team_tag import team_tag
 from .user import User
 from .user_role import UserRole
 from .tenant import Tenant
-from .company import Company, CompanyOrg
+from .company import Company
 from .job_post import JobPost
 from .person import Person
 from .opportunity import Opportunity, OpportunityAuditLog, opportunity_person_relation, opportunity_job_post_relation
@@ -27,7 +27,6 @@ __all__ = (
     "TeamRoles",
     "Tenant",
     "Company",
-    "CompanyOrg",
     "JobPost",
     "Person",
     "Opportunity",
