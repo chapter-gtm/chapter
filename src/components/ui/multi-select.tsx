@@ -204,25 +204,23 @@ export const MultiSelect = React.forwardRef<
               {...props}
               onClick={handleTogglePopover}
               className={cn(
-                "flex w-full p-1 rounded-md border border-border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit bg-green-200 relative",
+                "flex w-full p-1 rounded-md border border-border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit relative",
                 className
               )}
             >
               {selectedValues.length > 0 ? (
-                <div className="absolute w-full -bottom-2">
-                  <div className="flex justify-between items-center w-full bg-orange-300 absolute">
-                    <div className="flex flex-wrap items-center bg-yellow-300">
+                <div className="absolute w-full top-11 left-0">
+                  <div className="flex justify-start items-center w-full">
+                    <div className="flex flex-wrap gap-2 items-center">
                       {selectedValues.slice(0, maxCount).map((value) => {
                         const option = options.find((o) => o.value === value);
                         const IconComponent = option?.icon;
                         return (
                           <Badge
                             key={value}
-                            className={cn(
-                              isAnimating ? "animate-bounce" : "",
-                              multiSelectVariants({ variant })
-                            )}
-                            style={{ animationDuration: `${animation}s` }}
+                            className={
+                              (cn(multiSelectVariants({ variant })), "px-2")
+                            }
                           >
                             {IconComponent && (
                               <IconComponent className="h-4 w-4 mr-2" />
@@ -261,14 +259,12 @@ export const MultiSelect = React.forwardRef<
                   </div>
                 </div>
               ) : (
-                <></>
-                // <div className="flex items-center justify-between w-full mx-auto">
-                //   <span className="text-sm text-muted-foreground mx-3">
-                //     {placeholder}
-                //   </span>
-                //   <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
-                // </div>
+                <> </>
               )}
+              <div className="flex items-center justify-between w-full mx-auto text-muted-foreground px-2">
+                Search tools
+                <ChevronDown className="h-4 cursor-pointer text-muted-foreground" />
+              </div>
             </Button>
           </PopoverTrigger>
           <PopoverContent

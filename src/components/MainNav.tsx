@@ -39,7 +39,7 @@ interface NavProps {
 export function MainNav({ links }: NavProps) {
   const pathname = usePathname();
   // const { setTheme } = useTheme();
-  console.log("pathname");
+  console.log("1.: pathname");
 
   return (
     <nav className="flex items-center space-x-2 lg:space-x-3">
@@ -50,7 +50,7 @@ export function MainNav({ links }: NavProps) {
           className={cn(
             buttonVariants({ variant: link.variant }),
             pathname === link.route
-              ? "bg-white hover:bg-zinc-100 dark:bg-red-800 dark:hover:bg-zinc-700/50 "
+              ? "bg-white hover:bg-zinc-100 dark:bg-card dark:hover:bg-zinc-700/50 "
               : "hover:bg-zinc-100/60 dark:bg-transparent dark:hover:bg-zinc-800",
             "justify-start items-start h-auto px-3 items-center justify-center text-zinc-800 dark:text-zinc-200 h-10"
           )}
