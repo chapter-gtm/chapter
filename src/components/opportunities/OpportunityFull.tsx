@@ -70,7 +70,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
       {opportunity !== null && (
         <div className="bg-background p-6 flex flex-1">
           <div className="flex flex-row flex-1 bg-card rounded-lg overflow">
-            <div className="basis-[520px] overflow-y-scroll p-6 border-e border-border-light">
+            <div className="basis-[520px] overflow-y-scroll p-6 border-e border-border">
               <div className="flex flex-col">
                 <OpportunityBrand opportunity={opportunity} />
                 <OpportunityJobPost opportunity={opportunity} />
@@ -83,7 +83,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
             </div>
 
             <Tabs defaultValue="opNotes" className="flex-1 overflow-hidden">
-              <TabsList className="h-14 bg-transparent w-full justify-start border-b border-border-light rounded-none px-3 space-x-3">
+              <TabsList className="h-14 bg-transparent w-full justify-start border-b border-border rounded-none px-3 space-x-3">
                 <TabsTrigger
                   value="opNotes"
                   className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"

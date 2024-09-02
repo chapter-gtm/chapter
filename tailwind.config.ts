@@ -1,3 +1,4 @@
+import { SelectContent } from "@radix-ui/react-select";
 import type { Config } from "tailwindcss"
 
 const defaultTheme = require('tailwindcss/colors');
@@ -73,6 +74,7 @@ const config = {
           DEFAULT: "#9747FF",
           foreground: "hsl(var(--card-foreground))",
         },
+    
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -97,6 +99,7 @@ const config = {
   },
   plugins: [
     require("tailwindcss-animate")],
+   
 } satisfies Config
 
 export default config

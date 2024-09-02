@@ -76,15 +76,20 @@
     --color-header: 240 6% 90%;
     
   }
-}
- 
-@layer base {
   .card {
     background-color: var(--card);
   }
+  
   .button {
     background-color: var(--destructive);
     color: var(--badge-text);
   }
+  .border {
+    border-color: var(--border);
+  }
 }
-
+@layer components { 
+  .select-content {
+    background-color:red;
+  }
+}

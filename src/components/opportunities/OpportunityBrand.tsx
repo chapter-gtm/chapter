@@ -44,6 +44,7 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
                 width={72}
                 height={72}
                 alt="Company Profile Picture"
+                className="rounded-lg border border-border"
               />
             ) : (
               <></>
