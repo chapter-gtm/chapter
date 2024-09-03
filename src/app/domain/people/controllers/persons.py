@@ -12,6 +12,7 @@ from litestar.di import Provide
 
 from app.config import constants
 from app.lib.schema import Location, WorkExperience, SocialActivity
+from app.lib.utils import get_domain, get_domain_from_email
 from app.lib.pdl import get_person_details
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies.dependencies import provide_companies_service
@@ -113,6 +114,7 @@ class PersonController(Controller):
         twitter_profile_url = None
         github_profile_url = None
         birth_date = None
+        work_email = None
 
         if person_details.get("linkedin_url"):
             linkedin_profile_url = "https://" + person_details.get("linkedin_url").rstrip("/")
@@ -130,6 +132,10 @@ class PersonController(Controller):
             linkedin_profile_url=person_details.get("job_company_linkedin_url"),
         )
         company_db_obj = await companies_service.create(company.to_dict())
+
+        if person_details.get("work_email"):
+            if get_domain_from_email(person_details.get("work_email", "")) == get_domain(company_db_obj.url):
+                work_email = person_details.get("work_email")
 
         # Add person
         # TODO: Move this code into a provider specific code
@@ -149,7 +155,7 @@ class PersonController(Controller):
                 city=person_details.get("location_locality"),
             ),
             personal_emails=person_details.get("personal_emails", []),
-            work_email=person_details.get("work_email"),
+            work_email=work_email,
             personal_numbers=person_details.get("personal_numbers", []),
             birth_date=birth_date,
             work_experiences=[
