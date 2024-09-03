@@ -189,7 +189,7 @@ class JobPostController(Controller):
 
             # Extract the file content and metadata
             file_content = file_object["Body"].read()
-            content_type = file_object["ContentType"] or "application/octet-stream"
+            content_type = "application/pdf"
 
             return Response(
                 media_type=content_type,
