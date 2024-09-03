@@ -11,12 +11,12 @@ from litestar.exceptions import ValidationException
 from app.config import constants
 from app.lib.utils import get_logo_dev_link
 from app.db.models import User as UserModel
-from app.domain.accounts.guards import requires_active_user
+from app.domain.accounts.guards import requires_active_user, requires_superuser
 from app.domain.accounts.dependencies import provide_users_service
 from app.domain.accounts.services import UserService
 from app.domain.opportunities import urls
 from app.domain.opportunities.dependencies import provide_opportunities_service, provide_opportunities_audit_log_service
-from app.domain.opportunities.schemas import Opportunity, OpportunityCreate, OpportunityUpdate
+from app.domain.opportunities.schemas import Opportunity, OpportunityCreate, OpportunityUpdate, OpportunityScanFor
 from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService
 
 if TYPE_CHECKING:
@@ -108,6 +108,24 @@ class OpportunityController(Controller):
         )
 
         return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
+
+    @post(
+        operation_id="ScanForOpportunity",
+        name="opportunities:scan-for",
+        guards=[requires_superuser],
+        summary="Scan for new opportunities.",
+        path=urls.OPPORTUNITY_SCAN_FOR,
+    )
+    async def scan_for_opportunities(
+        self,
+        opportunities_service: OpportunityService,
+        data: OpportunityScanFor,
+    ) -> None:
+        """Create a new opportunity."""
+        obj = data.to_dict()
+
+        # TODO: Run as a backgound job
+        return await opportunities_service.scan(data.tenant_ids)
 
     @get(
         operation_id="GetOpportunity",

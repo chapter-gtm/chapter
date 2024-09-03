@@ -53,6 +53,12 @@ class OpportunityCreate(CamelizedBaseStruct):
     job_post_ids: list[UUID] | None = None
 
 
+class OpportunityScanFor(CamelizedBaseStruct):
+    """An opportunity scan schema."""
+
+    tenant_ids: list[str] | None = None
+
+
 class OpportunityUpdate(CamelizedBaseStruct):
     """An opportunity update schema."""
 

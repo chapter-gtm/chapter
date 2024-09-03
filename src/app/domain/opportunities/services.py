@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import structlog
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import ColumnElement, insert
+from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func
+from advanced_alchemy.filters import SearchFilter, LimitOffset
 from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
 from uuid_utils.compat import uuid4
 
-from app.lib.schema import CamelizedBaseStruct
-from app.db.models import Opportunity, OpportunityAuditLog
-from app.domain.accounts.services import UserService
+from app.lib.schema import CamelizedBaseStruct, OpportunityStage
+from app.db.models import Opportunity, OpportunityAuditLog, JobPost, Person
+from app.domain.accounts.services import TenantService
 from .repositories import OpportunityRepository, OpportunityAuditLogRepository
 
 from app.db.models import Opportunity, OpportunityAuditLog, opportunity_person_relation, opportunity_job_post_relation
@@ -30,6 +32,7 @@ __all__ = (
     "OpportunityService",
     "OpportunityAuditLogService",
 )
+logger = structlog.get_logger()
 
 
 class OpportunityAuditLogService(SQLAlchemyAsyncRepositoryService[Opportunity]):
@@ -132,15 +135,138 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
         # Add associated contacts
         for contact_id in contact_ids:
-            stmt = insert(opportunity_person_relation).values(opportunity_id=obj.id, person_id=contact_id)
+            stmt = insert(opportunity_person_relation).values(
+                opportunity_id=obj.id, person_id=contact_id, tenant_id=obj.tenant_id
+            )
             await self.repository.session.execute(stmt)
 
         # Add associated job posts
         for job_post_id in job_post_ids:
-            stmt = insert(opportunity_job_post_relation).values(opportunity_id=obj.id, job_post_id=job_post_id)
+            stmt = insert(opportunity_job_post_relation).values(
+                opportunity_id=obj.id, job_post_id=job_post_id, tenant_id=obj.tenant_id
+            )
             await self.repository.session.execute(stmt)
 
         return data
+
+    async def scan(
+        self,
+        tenant_ids: list[str],
+        auto_commit: bool | None = None,
+        auto_expunge: bool | None = None,
+        auto_refresh: bool | None = None,
+    ) -> Opportunity:
+        """Generate opportunity from criteria."""
+        if not tenant_ids:
+            tenants_service = TenantService(session=self.repository.session)
+            tenants, _ = await tenants_service.list_and_count()
+            tenant_ids = [tenant.id for tenant in tenants]
+
+        opportunities_found = 0
+        for tenant_id in tenant_ids:
+            # TODO: Read criteria from tenant icp/criteria
+            tools = ["Github Actions", "Cypress", "Playwright"]
+            tools_to_avoid = ["Gitlab CI", "CircleCI"]
+            company_size_min = 11
+            company_size_max = 500
+            engineering_size_min = 10
+            engineering_size_max = 60
+            funding = ["Pre-Seed", "Seed", "Series A", "Series B", "Series C"]
+            countries = [
+                "United States",
+                "United Kingdom",
+                "Canada",
+                "Germany",
+                "France",
+                "Netherlands",
+                "Sweden",
+                "Australia",
+                "New Zealand",
+            ]
+            person_titles = [
+                "Head of Platform",
+                "Lead Platform Enginner",
+                "Staff Software Engineer",
+                "Tech Lead",
+                "Lead Software Engineer",
+                "Head of Platform",
+                "Head of Engineering",
+                "Director of Engineering",
+                "VP of Engineering",
+                "Vice President of Engineering",
+                "SVP of Engineering",
+                "CTO",
+                "Co-founder",
+            ]
+
+            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in tools]
+            tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in tools_to_avoid]))]
+
+            # TODO: Case-insensetive match and filter on tool certainty
+            job_posts_statement = (
+                select(JobPost)
+                .where(
+                    and_(
+                        or_(
+                            *tool_stack_or_conditions,
+                        ),
+                        *tool_stack_not_conditions,
+                    )
+                )
+                .execution_options(populate_existing=True)
+            )
+            job_post_results = await self.repository.session.execute(statement=job_posts_statement)
+            opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
+            for result in job_post_results:
+                job_post = result[0]
+                try:
+                    if job_post.company.headcount < company_size_min or job_post.company.headcount > company_size_max:
+                        continue
+                    if (
+                        job_post.company.org_size.engineering < engineering_size_min
+                        or job_post.company.org_size.engineering > engineering_size_max
+                    ):
+                        continue
+                    if job_post.company.last_funding.round_name.value not in funding:
+                        continue
+                    if job_post.company.hq_location.country not in countries:
+                        continue
+
+                    # TODO: Fetch the contact(s) with the right title from an external source
+                    person_statement = (
+                        select(Person.id)
+                        .where(func.lower(Person.title).in_([title.lower() for title in person_titles]))
+                        .execution_options(populate_existing=True)
+                    )
+                    person_results = await self.repository.session.execute(statement=person_statement)
+                    person_ids = [result[0] for result in person_results]
+
+                    opportunity = await self.create(
+                        {
+                            "name": job_post.company.name,
+                            "stage": OpportunityStage.IDENTIFIED.value,
+                            "company_id": job_post.company.id,
+                            "contact_ids": person_ids,
+                            "job_post_ids": [job_post.id],
+                            "tenant_id": tenant_id,
+                        }
+                    )
+
+                    await opportunities_audit_log_service.create(
+                        {
+                            "operation": "create",
+                            "diff": {"new": opportunity},
+                            "tenant_id": tenant_id,
+                            "opportunity_id": opportunity.id,
+                        }
+                    )
+                    opportunities_found += 1
+
+                except Exception as e:
+                    logger.error("Error fetching person from ICP", job_post=job_post, exc_info=e)
+                    await self.repository.session.rollback()
+
+        return opportunities_found
 
     async def to_model(self, data: Opportunity | dict[str, Any] | Struct, operation: str | None = None) -> Opportunity:
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
