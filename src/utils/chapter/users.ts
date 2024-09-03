@@ -22,3 +22,7 @@ export async function getUserProfile() {
     const user = data as User;
     return user;
 }
+
+export async function getUserJWTToken() {
+    return await getUserToken();
+}
