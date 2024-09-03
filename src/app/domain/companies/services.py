@@ -10,7 +10,8 @@ from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
 from uuid_utils.compat import uuid4
 
-from app.lib.schema import CamelizedBaseStruct, Location, Funding
+from app.lib.pdl import get_company_details
+from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 from app.db.models import Company
 
 from .repositories import CompanyRepository
@@ -70,13 +71,36 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             await logger.ainfo("Company already exists and is up-to-date", company=results[0])
             return results[0]
 
-        obj.url = obj.url.rstrip("/")
-        obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
+        if obj.url:
+            obj.url = obj.url.rstrip("/")
 
-        # TODO: Enrich company
+        if obj.linkedin_profile_url:
+            obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
+
+        # TODO: Move to provider specific code
+        company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
+        obj.description = company_details.get("summary") or obj.description
+        obj.type = company_details.get("type") or obj.type
+        obj.industry = company_details.get("industry") or obj.industry
+        obj.headcount = company_details.get("employee_count") or obj.headcount
+        obj.founded_year = company_details.get("founded") or obj.founded_year
+        obj.url = company_details.get("website") or obj.website
+        obj.linkedin_profile_url = company_details.get("linkedin_url") or obj.linkedin_profile_url
+        obj.hq_location = Location(
+            country=company_details.get("location", {}).get("country"),
+            region=company_details.get("location", {}).get("region"),
+            city=company_details.get("location", {}).get("locality"),
+        )
+        # TODO: Enable Premium field
+        # obj.org_size = OrgSize(**company_details.get("employee_count_by_role", {}))
+        if company_details.get("funding_stages"):
+            last_round_name = company_details.get("funding_stages")[0]
+            words = last_round_name.split("_")
+            words = [word.capitalize() for word in words]
+            obj.last_funding = Funding(round_name=" ".join(words))
 
         return await super().upsert(
-            data=data,
+            data=obj,
             item_id=results[0].id if count > 0 else None,
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
