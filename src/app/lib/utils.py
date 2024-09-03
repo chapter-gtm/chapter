@@ -14,6 +14,12 @@ def get_domain(url: str) -> str:
     return parsed_url.netloc
 
 
+def get_domain_from_email(email: str) -> str:
+    """Extract domain from email."""
+    parsed_url = urlparse("mailto://" + email)
+    return parsed_url.hostname
+
+
 def get_logo_dev_link(url: str) -> str | None:
     """Construct a logo.dev url."""
     try:
