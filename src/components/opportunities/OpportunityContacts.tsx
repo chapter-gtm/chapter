@@ -87,6 +87,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       className="dark:bg-zinc-700/50 dark:hover:bg-zinc-600/50"
                       variant={"secondary"}
                     >
+                      <ExternalLink className="mr-2 h-4 w-4" />
                       LinkedIn
                     </Button>
                   </a>
