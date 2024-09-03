@@ -43,14 +43,13 @@ class OpportunityAuditLog(UUIDAuditBase):
     __table_args__ = (Index("ix_opportunity_audit_log_opportunity_id_tenant_id", "opportunity_id", "tenant_id"),)
     operation: Mapped[str] = mapped_column(nullable=False)
     diff: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True, default=None)
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=False)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True)
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False)
     opportunity_id: Mapped[UUID] = mapped_column(ForeignKey("opportunity.id"), nullable=False, index=True)
     # -----------
     # ORM Relationships
     # ------------
     user: Mapped[User] = relationship(
-        innerjoin=True,
         lazy="joined",
     )
 
@@ -68,7 +67,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
-    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True)
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, unique=True)
     # -----------
     # ORM Relationships
     # ------------
