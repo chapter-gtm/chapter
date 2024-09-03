@@ -31,7 +31,7 @@ class Person(CamelizedBaseStruct):
     github_profile_url: str | None = None
     location: Location | None = None
     personal_emails: list[str] | None = None
-    work_emails: list[str] | None = None
+    work_email: str | None = None
     personal_numbers: list[str] | None = None
     birth_date: date | None = None
     gender: str | None = None
@@ -93,7 +93,7 @@ class PersonUpdate(CamelizedBaseStruct, omit_defaults=True):
     github_profile_url: str | None | msgspec.UnsetType = msgspec.UNSET
     location: Location | None | msgspec.UnsetType = msgspec.UNSET
     personal_emails: list[str] | None | msgspec.UnsetType = msgspec.UNSET
-    work_emails: list[str] | None | msgspec.UnsetType = msgspec.UNSET
+    work_email: str | None | msgspec.UnsetType = msgspec.UNSET
     personal_numbers: list[str] | None | msgspec.UnsetType = msgspec.UNSET
     birth_date: date | None | msgspec.UnsetType = msgspec.UNSET
     gender: str | None | msgspec.UnsetType = msgspec.UNSET
