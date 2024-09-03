@@ -93,10 +93,10 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                   </a>
                 </>
               )}
-              {contact.workEmails && (
+              {contact.workEmail && (
                 <>
                   <a
-                    href={contact.workEmails[0]}
+                    href={"mailto:" + contact.workEmail}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -105,7 +105,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       className="dark:bg-zinc-700/50 dark:hover:bg-zinc-600/50"
                     >
                       <Mail className="mr-2 h-4 w-4" />
-                      <p>Copy</p>
+                      <p>Compose</p>
                     </Button>
                   </a>
                 </>

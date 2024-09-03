@@ -34,7 +34,7 @@ export type Person = {
     githubProfileUrl: string | null;
     location: Location | null;
     personalEmails: string[] | null;
-    workEmails: string[] | null;
+    workEmail: string | null;
     personalNumbers: string[] | null;
     birthDate: Date | null;
     gender: string | null;
