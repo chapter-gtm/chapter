@@ -241,6 +241,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     person_results = await self.repository.session.execute(statement=person_statement)
                     person_ids = [result[0] for result in person_results]
 
+                    if not person_ids:
+                        continue
+
                     opportunity = await self.create(
                         {
                             "name": job_post.company.name,
