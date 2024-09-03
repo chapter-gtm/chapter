@@ -13,6 +13,8 @@ from litestar.enums import RequestEncodingType
 from litestar.params import Body
 from litestar import Controller, delete, get, patch, put, post, MediaType
 from litestar.di import Provide
+from litestar.response import Response
+from litestar.exceptions import NotFoundException
 
 from app.config import constants
 from app.lib.schema import Location, Tool
@@ -27,6 +29,7 @@ from app.domain.jobs.dependencies import provide_job_posts_service
 from app.domain.jobs.schemas import JobPost, JobPostCreate, JobPostCreateFromURL, JobPostUpdate
 from app.domain.jobs.services import JobPostService
 from app.domain.jobs.utils import extract_job_details_from_html
+
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -161,6 +164,40 @@ class JobPostController(Controller):
         """Get details about a job post."""
         db_obj = await job_posts_service.get(job_post_id)
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)
+
+    @get(
+        operation_id="GetJobPostPDF",
+        name="jobs:get-post-pdf",
+        summary="Retrieve the job post pdf.",
+        path=urls.JOBS_PDF,
+    )
+    async def get_job_post_pdf(
+        self,
+        job_post_id: Annotated[
+            UUID,
+            Parameter(
+                title="JobPost ID",
+                description="The job_post to retrieve.",
+            ),
+        ],
+    ) -> Response:
+        """Get job post pdf."""
+        try:
+            # Retrieve the file from S3
+            s3_client = boto3.client("s3")
+            file_object = s3_client.get_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{job_post_id}.pdf")
+
+            # Extract the file content and metadata
+            file_content = file_object["Body"].read()
+            content_type = file_object["ContentType"] or "application/octet-stream"
+
+            return Response(
+                media_type=content_type,
+                content=file_content,
+                headers={"Content-Disposition": f"attachment; filename={job_post_id}"},
+            )
+        except s3_client.exceptions.NoSuchKey:
+            raise NotFoundException(detail=f"Job post PDF not found.")
 
     @put(
         operation_id="UpdateJobPostAddPDF",
