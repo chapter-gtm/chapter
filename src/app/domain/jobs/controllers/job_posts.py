@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import os
 import structlog
 from typing import TYPE_CHECKING, Annotated
 
+import boto3
 from advanced_alchemy.filters import SearchFilter, LimitOffset
-from litestar import Controller, delete, get, patch, post
+from litestar.datastructures import UploadFile
+from litestar.enums import RequestEncodingType
+from litestar.params import Body
+from litestar import Controller, delete, get, patch, put, post, MediaType
 from litestar.di import Provide
 
 from app.config import constants
@@ -32,6 +37,7 @@ if TYPE_CHECKING:
     from app.lib.dependencies import FilterTypes
 
 logger = structlog.get_logger()
+app_s3_bucket_name = os.environ["APP_S3_BUCKET_NAME"]
 
 
 class JobPostController(Controller):
@@ -155,6 +161,36 @@ class JobPostController(Controller):
         """Get details about a job post."""
         db_obj = await job_posts_service.get(job_post_id)
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)
+
+    @put(
+        operation_id="UpdateJobPostAddPDF",
+        name="jobs:update-post-add-pdf",
+        summary="Add PDF to a job post.",
+        path=urls.JOBS_UPDATE_ADD_PDF,
+        media_type=MediaType.TEXT,
+    )
+    async def add_job_post_pdf(
+        self,
+        data: Annotated[UploadFile, Body(media_type=RequestEncodingType.MULTI_PART)],
+        job_posts_service: JobPostService,
+        job_post_id: Annotated[
+            UUID,
+            Parameter(
+                title="JobPost ID",
+                description="The job_post to update.",
+            ),
+        ],
+    ) -> None:
+        """Update job post with pdf."""
+        file_content = await data.read()
+
+        db_obj = await job_posts_service.get(job_post_id)
+
+        # Upload the file to S3
+        s3_client = boto3.client("s3")
+        s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{job_post_id}.pdf", Body=file_content)
+
+        return None
 
     @patch(
         operation_id="UpdateJobPost",
