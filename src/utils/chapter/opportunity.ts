@@ -7,18 +7,29 @@ export async function getOpportunities(
     pageSize: number = 20,
     currentPage: number = 1,
     orderBy: string = "created_at",
-    sortOrder: string = "desc"
+    sortOrder: string = "desc",
+    searchField: string = null,
+    searchString: string = null,
+    searchIgnoreCase: boolean = false
 ) {
     const token = await getUserToken();
+    const searchParams = {
+        pageSize: pageSize.toString(),
+        currentPage: currentPage.toString(),
+        orderBy: orderBy,
+        sortOrder: sortOrder,
+    };
+
+    if (searchField) {
+        searchParams["searchField"] = searchField;
+        searchParams["searchString"] = searchString;
+        searchParams["searchIgnoreCase"] = searchIgnoreCase ? "true" : "false";
+    }
+
     const response = await fetch(
         process.env.NEXT_PUBLIC_CHAPTER_API_URL! +
             "/opportunities?" +
-            new URLSearchParams({
-                pageSize: pageSize.toString(),
-                currentPage: currentPage.toString(),
-                orderBy: orderBy,
-                sortOrder: sortOrder,
-            }),
+            new URLSearchParams(searchParams),
         {
             method: "GET",
             headers: {
