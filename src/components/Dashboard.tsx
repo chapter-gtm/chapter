@@ -16,25 +16,46 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { timeAgo } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
+import { User } from "@/types/user";
 import { type Opportunity } from "@/types/opportunity";
 import { getOpportunities } from "@/utils/chapter/opportunity";
+import { getUserProfile } from "@/utils/chapter/users";
+
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export function Dashboard() {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const user = await getUserProfile();
+        setCurrentUser(user);
+      } catch (error) {}
+    };
+
     const fetchOpportunities = async () => {
       try {
-        const opportunities = await getOpportunities();
+        const opportunities = await getOpportunities(
+          5,
+          1,
+          "created_at",
+          "desc",
+          "stage",
+          "Identified",
+          true
+        );
         setOpportunities(opportunities);
         console.log(opportunities);
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };
+
+    fetchCurrentUser();
     fetchOpportunities();
   }, []);
 
@@ -50,21 +71,23 @@ export function Dashboard() {
 
         <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
           <div className="flex flex-row gap-x-4 mb-4">
-            <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80">
-              <div className="flex flex-col h-full justify-center items-center text-center content-center ">
-                <Image
-                  src="/images/customIcons/inbox.svg"
-                  width={80}
-                  height={80}
-                  alt="Inbox"
-                  className="py-3"
-                />
-                <h3 className="font-semibold">JP, you&apos;ve got leads!</h3>
-                <p className="text-sm text-zinc-500 bottom-2">
-                  {/* Updated {timeAgo(new Date(opportunities[0].createdAt))} */}
-                </p>
+            {currentUser !== null && (
+              <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80">
+                <div className="flex flex-col h-full justify-center items-center text-center content-center ">
+                  <Image
+                    src="/images/customIcons/inbox.svg"
+                    width={80}
+                    height={80}
+                    alt="Inbox"
+                    className="py-3"
+                  />
+
+                  <h3 className="font-semibold">
+                    {currentUser.name.split(/\s+/)[0]}, you&apos;ve got leads!
+                  </h3>
+                </div>
               </div>
-            </div>
+            )}
 
             {opportunities !== null &&
               opportunities.length > 0 &&
