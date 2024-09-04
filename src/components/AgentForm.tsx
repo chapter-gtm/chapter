@@ -22,9 +22,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 import { MultiSelect } from "@/components/ui/multi-select";
 
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -114,143 +116,187 @@ export function AgentForm() {
 
   return (
     <>
-      <h3 className="text-lg font-medium py-10">Meta data</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="industry"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex flex-row justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <FormLabel>Industry</FormLabel>
-                    <FormDescription>
-                      Describe the industry (if applicable) you are selling to.
-                    </FormDescription>
-                  </div>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl className="w-52">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Industry" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-w-52">
-                      {Object.entries(Industry).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Separator />
+          <div className="flex flex-col gap-y-8">
+            <div>
+              <h3 className="text-lg font-medium py-10">ICP meta data</h3>
+              <FormField
+                control={form.control}
+                name="industry"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-row justify-between">
+                      <div className="flex flex-col gap-y-2">
+                        <FormLabel>Industry</FormLabel>
+                        <FormDescription>
+                          Describe the industry (if applicable) you are selling
+                          to.
+                        </FormDescription>
+                      </div>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="w-52">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Industry" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="max-w-52">
+                          {Object.entries(Industry).map(([key, value]) => (
+                            <SelectItem key={key} value={key}>
+                              {value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Separator />
 
-          <FormField
-            control={form.control}
-            name="fundingRound"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex flex-row justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <FormLabel>Funding stage</FormLabel>
-                    <FormDescription>
-                      With the assumption that companies of this stage need your
-                      service, and can pay for it.
-                    </FormDescription>
-                  </div>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl className="w-52">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Funding Round" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-w-52">
-                      {Object.entries(FundingRound).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Separator />
+            <div>
+              <FormField
+                control={form.control}
+                name="fundingRound"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-row justify-between">
+                      <div className="flex flex-col gap-y-2">
+                        <FormLabel>Funding stage</FormLabel>
+                        <FormDescription>
+                          With the assumption that companies of this stage need
+                          your service, and can pay for it.
+                        </FormDescription>
+                      </div>
 
-          <FormField
-            control={form.control}
-            name="engineeringSize"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex flex-row justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <FormLabel>Engineering Size</FormLabel>
-                    <FormDescription>
-                      When teamsize is a proxy that they are experiencing the
-                      problem you are solving.
-                    </FormDescription>
-                  </div>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl className="w-52">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Team size" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-w-52">
-                      {Object.entries(EngineeringSize).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                      <div className="flex flex-col gap-y-2">
+                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                          <Label htmlFor="email">Min</Label>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl className="w-52">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Funding Round" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-w-52">
+                              {Object.entries(FundingRound).map(
+                                ([key, value]) => (
+                                  <SelectItem key={key} value={key}>
+                                    {value}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-          <h3 className="text-lg font-medium py-8">Search criteria</h3>
+                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                          <Label htmlFor="email">Max</Label>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl className="w-52">
+                              <SelectTrigger>
+                                <SelectValue placeholder="Funding Round" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="max-w-52">
+                              {Object.entries(FundingRound).map(
+                                ([key, value]) => (
+                                  <SelectItem key={key} value={key}>
+                                    {value}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Separator />
 
-          <FormField
-            control={form.control}
-            name="toolStack"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex flex-row justify-between w-full">
-                  <div className="flex flex-col gap-y-2">
-                    <FormLabel>Tool Stack</FormLabel>
-                    <FormDescription>
-                      If knowing the tool stack is a proxy that they care about
-                      your service.
-                    </FormDescription>
-                  </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="engineeringSize"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-row justify-between">
+                      <div className="flex flex-col gap-y-2">
+                        <FormLabel>Engineering Size</FormLabel>
+                        <FormDescription>
+                          When teamsize is a proxy that they are experiencing
+                          the problem you are solving.
+                        </FormDescription>
+                      </div>
 
-                  <div className="w-52">
-                    <MultiSelect
-                      options={frameworksList}
-                      onValueChange={setSelectedFrameworks}
-                      defaultValue={selectedFrameworks}
-                      placeholder="Select frameworks"
-                      variant="default"
-                    />
-                    {/* <Select onValueChange={field.onChange}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="w-52">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Team size" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="max-w-52">
+                          {Object.entries(EngineeringSize).map(
+                            ([key, value]) => (
+                              <SelectItem key={key} value={key}>
+                                {value}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium pt-8">Search criteria</h3>
+
+            <FormField
+              control={form.control}
+              name="toolStack"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col justify-between w-full">
+                    <div className="flex flex-col gap-y-2">
+                      <FormLabel>Tool Stack</FormLabel>
+                      <FormDescription>
+                        If knowing the tool stack is a proxy that they care
+                        about your service.
+                      </FormDescription>
+                    </div>
+
+                    <div className="w-full">
+                      <MultiSelect
+                        options={frameworksList}
+                        onValueChange={setSelectedFrameworks}
+                        defaultValue={selectedFrameworks}
+                        placeholder="Select frameworks"
+                        variant="default"
+                      />
+                      {/* <Select onValueChange={field.onChange}>
                     <FormControl className="w-52">
                       <SelectTrigger>
                         <SelectValue placeholder="Tool stack" />
@@ -264,14 +310,16 @@ export function AgentForm() {
                       ))}
                     </SelectContent>
                   </Select> */}
+                    </div>
                   </div>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button type="submit">Update agent</Button>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="py-12">
+            <Button type="submit">Save</Button>
+          </div>
         </form>
       </Form>
     </>

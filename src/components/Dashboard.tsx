@@ -25,9 +25,68 @@ import { getUserProfile } from "@/utils/chapter/users";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+import {
+  Chart,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  plugins,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+// import { Tooltip } from "@radix-ui/react-tooltip";
+import { intersects } from "react-resizable-panels";
+import { title } from "process";
+Chart.register(
+  BarElement,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  plugins
+);
+Chart.register();
+
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+
+  const chartOptions = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+
+      tooltip: {
+        intersect: false,
+        padding: 10,
+      },
+    },
+  };
+  const chartData = {
+    labels: ["Identified", "Sent", "Demo", "Sale"], // x-axis
+    datasets: [
+      {
+        label: "Opportunities",
+        data: [31, 12, 3, 1], // y-axis
+        backgoundColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(12, 100, 86, 1)",
+          "rgba(255, 206, 86, 1)",
+        ],
+        fill: true,
+        borderRadius: 10,
+        borderColor: "rgba(255, 255, 255, 0.4)",
+        borderWidth: 1,
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -39,15 +98,8 @@ export function Dashboard() {
 
     const fetchOpportunities = async () => {
       try {
-        const opportunities = await getOpportunities(
-          5,
-          1,
-          "created_at",
-          "desc",
-          "stage",
-          "Identified",
-          true
-        );
+        const opportunities = await getOpportunities();
+
         setOpportunities(opportunities);
         console.log(opportunities);
       } catch (error: any) {
@@ -71,24 +123,6 @@ export function Dashboard() {
 
         <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
           <div className="flex flex-row gap-x-4 mb-4">
-            {currentUser !== null && (
-              <div className="flex flex-col h-52 w-96 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80">
-                <div className="flex flex-col h-full justify-center items-center text-center content-center ">
-                  <Image
-                    src="/images/customIcons/inbox.svg"
-                    width={80}
-                    height={80}
-                    alt="Inbox"
-                    className="py-3"
-                  />
-
-                  <h3 className="font-semibold">
-                    {currentUser.name.split(/\s+/)[0]}, you&apos;ve got leads!
-                  </h3>
-                </div>
-              </div>
-            )}
-
             {opportunities !== null &&
               opportunities.length > 0 &&
               opportunities.map((op: Opportunity, index) => (
@@ -128,6 +162,15 @@ export function Dashboard() {
         </div>
 
         <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
+          <LineChart className=" w-4 text-zinc-500" />
+          <p className="text-sm font-semibold tracking-normal">My progress</p>
+        </div>
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
+          <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6">
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+        </div>
+        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
           <CheckSquareIcon className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">My tasks</p>
         </div>
@@ -141,28 +184,8 @@ export function Dashboard() {
               alt="Inbox"
               className="py-3"
             />
-
-            <p className="text-base text-zinc-400">
-              See all your tasks across your workspace in one place
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
-          <LineChart className=" w-4 text-zinc-500" />
-          <p className="text-sm font-semibold tracking-normal">My progress</p>
-        </div>
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
-          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
-            <Image
-              src="/images/customIcons/task.svg"
-              width={80}
-              height={80}
-              alt="Inbox"
-              className="py-3"
-            />
-
-            <p className="text-base text-zinc-400">
+            <p className="text-lg font-semibold">Coming soon.</p>
+            <p className="text-base text-muted">
               See all your tasks across your workspace in one place
             </p>
           </div>

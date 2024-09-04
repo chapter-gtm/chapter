@@ -28,7 +28,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
-      <div className="flex-row flex bg-red-400 w-full">
+      <div className="flex-row flex  w-full">
         <div className="flex flex-col px-6 fixed h-full w-52 space-y-3">
           <div className="flex flex-inline items-center space-x-2 pt-3">
             <ChevronLeftIcon></ChevronLeftIcon>
@@ -39,7 +39,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         </div>
 
         <div className="bg-background w-full h-full flex flex-col p-4">
-          <div className="ms-52 flex flex-col flex-1 space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 bg-card/50 p-20 pb-24 rounded-lg">
+          <div className="ms-52 flex flex-col flex-1 space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 bg-card/50 p-32 pb-24 rounded-lg">
             {children}
           </div>
         </div>
