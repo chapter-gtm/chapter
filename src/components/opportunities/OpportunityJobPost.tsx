@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { timeAgo } from "@/utils/misc";
 
 import { Opportunity } from "@/types/opportunity";
 import { getJobPostPdf } from "@/utils/chapter/job_post";
@@ -54,17 +55,19 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <Link href={""}>
+      <Link href={""} onClick={handleDownload}>
         <div className="mt-4 flex flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover hover:bg-accent-hover hover:border-violet-400/50">
           <div className="flex gap-x-4">
             <div className="w-9 items-center justify-center flex flex-col text-zinc-500">
               <StickyNote width={20} />
             </div>
-            <div
-              className="flex flex-col justify-center gap-y-1 text-base"
-              onClick={handleDownload}
-            >
-              <p className="font-medium dark:text-zinc-200">JobPost.pdf</p>
+            <div className="flex flex-col justify-center gap-y-1 text-base">
+              <p className="font-medium dark:text-zinc-200">JobPost.pdf</p>{" "}
+              <p className="font-light text-muted">
+                Added{" "}
+                {opportunity?.jobPosts?.[0]?.createdAt &&
+                  timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
+              </p>
             </div>
           </div>
           <div>

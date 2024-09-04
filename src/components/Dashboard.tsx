@@ -194,8 +194,18 @@ export function Dashboard() {
           <p className="text-sm font-semibold tracking-normal">My progress</p>
         </div>
         <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
-          <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6">
-            <Bar data={chartData} options={chartOptions} />
+          <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6 gap-y-3">
+            <Image
+              src="/images/customIcons/funnel.svg"
+              width={120}
+              height={120}
+              alt="Inbox"
+              className="py-3"
+            />
+            <div className="flex flex-col gap-y-1">
+              <p className="text-xl font-medium tracking-wide">Sales funnel</p>
+              <p className="text-base text-muted">Coming soon.</p>
+            </div>
           </div>
         </div>
         <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
@@ -203,8 +213,8 @@ export function Dashboard() {
           <p className="text-sm font-semibold tracking-normal">My tasks</p>
         </div>
 
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer">
-          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-2">
+        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border">
+          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-3">
             <Image
               src="/images/customIcons/task.svg"
               width={80}
@@ -212,10 +222,10 @@ export function Dashboard() {
               alt="Inbox"
               className="py-3"
             />
-            <p className="text-lg font-semibold">Coming soon.</p>
-            <p className="text-base text-muted">
-              See all your tasks across your workspace in one place
-            </p>
+            <div className="flex flex-col gap-y-1">
+              <p className="text-xl font-medium tracking-wide">Tasks</p>
+              <p className="text-base text-muted">Coming soon.</p>
+            </div>
           </div>
         </div>
       </div>
