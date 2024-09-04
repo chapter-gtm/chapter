@@ -151,41 +151,45 @@ export function Dashboard() {
 
         <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
           <div className="flex flex-row gap-x-4 mb-4">
-            {opportunities !== null &&
-              opportunities.length > 0 &&
-              opportunities.map((op: Opportunity, index) => (
-                <Link
-                  target="_blank"
-                  href={`/opportunities/${op?.id}`}
-                  key={index}
-                >
-                  <div
+            {opportunities && opportunities.length > 0 ? (
+              <>
+                {opportunities.map((op: Opportunity, index) => (
+                  <Link
+                    target="blank"
+                    href={`/opportunities/${op?.id}`}
                     key={index}
-                    className="flex flex-col h-52 w-44 bg-white dark:bg-zinc-800/50 rounded-xl border border-border hover:border-zinc-300/80 cursor-pointer"
                   >
-                    <div className="flex flex-col h-full justify-center content-center p-3 relative">
-                      <div className="space-y-1">
-                        {op.company?.profilePicUrl ? (
-                          <Image
-                            src={op.company?.profilePicUrl}
-                            width={24}
-                            height={72}
-                            alt="Company Profile Picture"
-                          />
-                        ) : (
-                          <></>
-                        )}
-                        <p className="text-xl font-semibold">
-                          {op.company?.name}
+                    <div
+                      key={index}
+                      className="flex flex-col h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer"
+                    >
+                      <div className="flex flex-col h-full justify-center content-center p-3 relative">
+                        <div className="space-y-1">
+                          {op.company?.profilePicUrl ? (
+                            <Image
+                              src={op.company?.profilePicUrl}
+                              width={24}
+                              height={72}
+                              alt="Company Profile Picture"
+                            />
+                          ) : (
+                            <div className="h-[72px] w-[24px] bg-white"></div>
+                          )}
+                          <p className="text-xl font-semibold">
+                            {op.company?.name}
+                          </p>
+                        </div>
+                        <p className="text-sm text-zinc-500 absolute bottom-2">
+                          Added {timeAgo(new Date(op.createdAt))}
                         </p>
                       </div>
-                      <p className="text-sm text-zinc-500 absolute bottom-2">
-                        Added {timeAgo(new Date(op.createdAt))}
-                      </p>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <div className="flex flex-col h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+            )}
           </div>
         </div>
 
