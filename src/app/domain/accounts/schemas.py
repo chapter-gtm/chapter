@@ -70,6 +70,11 @@ class User(CamelizedBaseStruct):
     teams: list[UserTeam] = []
     roles: list[UserRole] = []
     oauth_accounts: list[OauthAccount] = []
+    profile_pic_url: str | None = None
+
+    def __post_init__(self):
+        """Build a profile pic url from company url."""
+        self.profile_pic_url = f"https://api.chapter.show/users/{id}/profile_pic"
 
 
 class UserCreate(CamelizedBaseStruct):

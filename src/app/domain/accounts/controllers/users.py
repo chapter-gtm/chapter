@@ -2,15 +2,20 @@
 
 from __future__ import annotations
 
+import os
 from typing import TYPE_CHECKING, Annotated
 
+import boto3
 from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 from litestar.params import Dependency, Parameter
+from litestar.response import Response
+from litestar.exceptions import NotFoundException
 
+from app.db.models import User as UserModel
 from app.domain.accounts import urls
 from app.domain.accounts.dependencies import provide_users_service
-from app.domain.accounts.guards import requires_superuser
+from app.domain.accounts.guards import requires_superuser, requires_active_user
 from app.domain.accounts.schemas import User, UserCreate, UserUpdate
 from app.domain.accounts.services import UserService
 
@@ -20,6 +25,8 @@ if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.service import OffsetPagination
 
+app_s3_bucket_name = os.environ["APP_S3_BUCKET_NAME"]
+
 
 class UserController(Controller):
     """User Account Controller."""
@@ -27,7 +34,10 @@ class UserController(Controller):
     tags = ["User Accounts"]
     guards = [requires_superuser]
     dependencies = {"users_service": Provide(provide_users_service)}
-    signature_namespace = {"UserService": UserService}
+    signature_namespace = {
+        "UserService": UserService,
+        "UserModel": UserModel,
+    }
     dto = None
     return_dto = None
 
@@ -68,6 +78,46 @@ class UserController(Controller):
         """Get a user."""
         db_obj = await users_service.get(user_id)
         return users_service.to_schema(db_obj, schema_type=User)
+
+    @get(
+        operation_id="GetUserProfilePic",
+        guards=[requires_active_user],
+        name="users:get-profile-pic",
+        path=urls.ACCOUNT_PROFILE_PIC,
+        summary="Retrieve the profile pic of a user.",
+    )
+    async def get_user_profile_pic(
+        self,
+        users_service: UserService,
+        current_user: UserModel,
+        user_id: Annotated[
+            UUID,
+            Parameter(
+                title="User ID",
+                description="The user to retrieve.",
+            ),
+        ],
+    ) -> User:
+        """Get a user."""
+        db_obj = await users_service.get(user_id)
+        if current_user.tenant_id != db_obj.tenant_id:
+            raise Exception("User not found")
+
+        try:
+            # Retrieve the file from S3
+            s3_client = boto3.client("s3")
+            file_object = s3_client.get_object(Bucket=app_s3_bucket_name, Key="users/avatars/{user_id}.webp")
+
+            # Extract the file content
+            file_content = file_object["Body"].read()
+
+            return Response(
+                content=file_content,
+                media_type="image/webp",  # Ensure correct media type
+                headers={"Content-Disposition": "inline"},  # Optionally, force the browser to display the image inline
+            )
+        except s3_client.exceptions.NoSuchKey:
+            raise NotFoundException(detail=f"Profile pic for user {user_id} not found.")
 
     @post(
         operation_id="CreateUser",
