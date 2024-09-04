@@ -194,7 +194,10 @@ class JobPostController(Controller):
             return Response(
                 media_type=content_type,
                 content=file_content,
-                headers={"Content-Disposition": f"attachment; filename={job_post_id}"},
+                headers={
+                    "Content-Disposition": f"attachment; filename={job_post_id}.pdf",
+                    "Content-Type": content_type,
+                },
             )
         except s3_client.exceptions.NoSuchKey:
             raise NotFoundException(detail=f"Job post PDF not found.")
