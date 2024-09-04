@@ -49,12 +49,12 @@ class CompanyCreate(CamelizedBaseStruct):
     linkedin_profile_url: str | None = None
     hq_location: Location | None = None
     last_funding: Funding | None = None
+    org_size: OrgSize | None = None
 
 
 class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
     """A company update schema."""
 
-    id: UUID
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     description: str | None | msgspec.UnsetType = msgspec.UNSET
     type: str | None | msgspec.UnsetType = msgspec.UNSET
@@ -65,3 +65,4 @@ class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
     linkedin_profile_url: str | None | msgspec.UnsetType = msgspec.UNSET
     hq_location: Location | None | msgspec.UnsetType = msgspec.UNSET
     last_funding: Funding | None | msgspec.UnsetType = msgspec.UNSET
+    org_size: OrgSize | None = None
