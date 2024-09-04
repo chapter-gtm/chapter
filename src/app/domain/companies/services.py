@@ -68,7 +68,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
 
         if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
-            await logger.ainfo("Company already exists and is up-to-date", company=results[0])
+            await logger.ainfo("Company already exists and is up-to-date", id=results[0].id, url=results[0].url)
             return results[0]
 
         if obj.url:
