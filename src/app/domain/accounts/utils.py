@@ -13,7 +13,7 @@ def get_signed_user_profile_pic_url(user_id: UUID, extension: str = "webp", expi
         s3_client = boto3.client("s3")
         signed_url = s3_client.generate_presigned_url(
             ClientMethod="get_object",
-            Params={"Bucket": app_s3_bucket_name, "Key": "users/avatars/{user_id}.webp"},
+            Params={"Bucket": app_s3_bucket_name, "Key": f"tenants/users/avatars/{user_id}.webp"},
             ExpiresIn=expiration,
         )
         return signed_url
