@@ -188,7 +188,7 @@ export function OpportunitiesMain() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            target="blank"
+                            target="_blank"
                             href={`/opportunities/${selectedRow?.id}`}
                           >
                             <Button

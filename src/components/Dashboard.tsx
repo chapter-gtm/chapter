@@ -155,7 +155,7 @@ export function Dashboard() {
               opportunities.length > 0 &&
               opportunities.map((op: Opportunity, index) => (
                 <Link
-                  target="blank"
+                  target="_blank"
                   href={`/opportunities/${op?.id}`}
                   key={index}
                 >
