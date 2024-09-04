@@ -1,11 +1,3 @@
-import Image from "next/image";
-import { type Person } from "@/types/person";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import {
   Divide,
   ExternalLink,
@@ -23,15 +15,43 @@ import {
   Linkedin,
   Mail,
 } from "lucide-react";
-import Link from "next/link";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { Opportunity } from "@/types/opportunity";
+import { getJobPostPdf } from "@/utils/chapter/job_post";
+
+import Link from "next/link";
+import Image from "next/image";
 
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
 }
 
 export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
+  const handleDownload = async () => {
+    if (
+      opportunity === null ||
+      opportunity.jobPosts === null ||
+      opportunity.jobPosts.length <= 0
+    ) {
+      toast.error("Failed to find job post");
+    }
+    try {
+      await getJobPostPdf(opportunity.jobPosts[0].id);
+    } catch (error: any) {
+      toast.error("Failed to fetch job post pdf", {
+        description: error.toString(),
+      });
+    }
+  };
+
   return (
     <>
       <Link href={""}>
@@ -40,9 +60,11 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
             <div className="w-9 items-center justify-center flex flex-col text-zinc-500">
               <StickyNote width={20} />
             </div>
-            <div className="flex flex-col justify-center gap-y-1 text-base">
+            <div
+              className="flex flex-col justify-center gap-y-1 text-base"
+              onClick={handleDownload}
+            >
               <p className="font-medium dark:text-zinc-200">JobPost.pdf</p>
-              <p className="text-zinc-400">12 days ago</p>
             </div>
           </div>
           <div>

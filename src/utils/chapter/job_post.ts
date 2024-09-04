@@ -16,7 +16,8 @@ export async function getJobPostPdf(id: string) {
         throw new Error(msg?.detail);
     }
 
-    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", id);
