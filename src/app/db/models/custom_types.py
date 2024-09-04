@@ -50,7 +50,10 @@ class FundingType(JSONBType):
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             obj = Funding.from_dict(value)
-            obj.round_name = FundingRound(obj.round_name) if obj.round_name else FundingRound.SERIES_UNKNOWN
+            try:
+                obj.round_name = FundingRound(obj.round_name)
+            except ValueError:
+                obj.round_name = FundingRound.SERIES_UNKNOWN
             return obj
         return None
 

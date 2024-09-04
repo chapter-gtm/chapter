@@ -56,6 +56,7 @@ class FundingRound(enum.Enum):
     SERIES_E = "Series E"
     SERIES_UNKNOWN = "Series Unknown"
     PRIVATE_EQUITY = "Private Equity"
+    EQUITY_CROWDFUNDING = "Equity Crowdfunding"
     PUBLIC = "Public"
 
 
