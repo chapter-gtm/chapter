@@ -185,9 +185,11 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             ]
             person_titles = [
                 "Head of Platform",
+                "Platform Engineering Manager",
                 "Lead Platform Enginner",
                 "Senior Platform Enginner",
                 "Staff Software Engineer",
+                "Staff Platform Engineer",
                 "Tech Lead",
                 "Lead Software Engineer",
                 "Head of Engineering",
