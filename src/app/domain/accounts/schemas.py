@@ -7,6 +7,7 @@ import msgspec
 
 from app.db.models.team_roles import TeamRoles
 from app.lib.schema import CamelizedBaseStruct
+from app.domain.accounts.utils import get_signed_user_profile_pic_url
 
 __all__ = (
     "AccountLogin",
@@ -70,6 +71,11 @@ class User(CamelizedBaseStruct):
     teams: list[UserTeam] = []
     roles: list[UserRole] = []
     oauth_accounts: list[OauthAccount] = []
+    profile_pic_url: str | None = None
+
+    def __post_init__(self):
+        """Build a profile pic url from company url."""
+        self.profile_pic_url = get_signed_user_profile_pic_url(self.id)
 
 
 class UserCreate(CamelizedBaseStruct):
