@@ -164,7 +164,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
         opportunities_found = 0
         for tenant_id in tenant_ids:
-            # TODO: Read criteria from tenant icp/criteria
+            # TODO:
+            # 1. Read criteria from tenant icp/criteria
+            # 2. Add created_at after <timestamp> filter
             tools = ["Github Actions", "Cypress", "Playwright"]
             tools_to_avoid = ["Gitlab CI", "CircleCI"]
             company_size_min = 11
@@ -308,6 +310,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "opportunity_id": opportunity.id,
                         }
                     )
+                    await self.repository.session.commit()
                     opportunities_found += 1
 
                 except Exception as e:
