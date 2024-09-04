@@ -3,7 +3,7 @@ from __future__ import annotations
 import structlog
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func
+from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
 from advanced_alchemy.filters import SearchFilter, LimitOffset
 from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
@@ -184,21 +184,13 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 "New Zealand",
             ]
             person_titles = [
-                "Head of Platform",
-                "Platform Engineering Manager",
-                "Lead Platform Enginner",
-                "Senior Platform Enginner",
-                "Staff Software Engineer",
-                "Staff Platform Engineer",
+                "Platform",
+                "Platform Engineering",
                 "Tech Lead",
-                "Lead Software Engineer",
+                "Staff Engineer",
                 "Head of Engineering",
                 "Director of Engineering",
-                "Senior Director of Engineering",
-                "Sr. Director of Engineering",
                 "VP of Engineering",
-                "Vice President of Engineering",
-                "SVP of Engineering",
                 "CTO",
                 "Co-founder",
             ]
@@ -239,9 +231,10 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     # TODO: Fetch the contact(s) with the right title from an external source
                     person_statement = (
                         select(Person.id)
-                        .where(func.lower(Person.title).in_([title.lower() for title in person_titles]))
+                        .where(Person.title.op("%")(text("ANY(:titles)")).params(titles=person_titles))
                         .execution_options(populate_existing=True)
                     )
+                    await self.repository.session.execute(text("SET pg_trgm.similarity_threshold = 0.5;"))
                     person_results = await self.repository.session.execute(statement=person_statement)
                     person_ids = [result[0] for result in person_results]
 
