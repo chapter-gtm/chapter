@@ -10,6 +10,9 @@ logo_dev_token = os.environ["LOGO_DEV_TOKEN"]
 
 def get_domain(url: str) -> str:
     """Extract domain from url."""
+    if not url.startswith(("http://", "https://")):
+        url = "https://" + url
+
     parsed_url = urlparse(url)
     return parsed_url.netloc
 
