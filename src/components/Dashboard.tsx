@@ -37,7 +37,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-// import { Tooltip } from "@radix-ui/react-tooltip";
 import { intersects } from "react-resizable-panels";
 import { title } from "process";
 Chart.register(
@@ -50,7 +49,6 @@ Chart.register(
   Legend,
   plugins
 );
-Chart.register();
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -98,8 +96,15 @@ export function Dashboard() {
 
     const fetchOpportunities = async () => {
       try {
-        const opportunities = await getOpportunities();
-
+        const opportunities = await getOpportunities(
+          5,
+          1,
+          "created_at",
+          "desc",
+          "stage",
+          "Identified",
+          true
+        );
         setOpportunities(opportunities);
         console.log(opportunities);
       } catch (error: any) {
