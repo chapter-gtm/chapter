@@ -263,7 +263,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     opportunities_found += 1
 
                 except Exception as e:
-                    logger.error("Error fetching person from ICP", job_post=job_post, exc_info=e)
+                    logger.error("Error processing job post or person", job_post_id=job_post.id, exc_info=e)
                     await self.repository.session.rollback()
 
         return opportunities_found
