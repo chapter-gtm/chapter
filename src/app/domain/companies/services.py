@@ -79,7 +79,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
 
         # TODO: Move to provider specific code
         company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
-        obj.description = company_details.get("summary") or obj.description
+        obj.description = company_details.get("headline") or obj.description
         obj.type = company_details.get("type") or obj.type
         obj.industry = company_details.get("industry") or obj.industry
         obj.headcount = company_details.get("employee_count") or obj.headcount
