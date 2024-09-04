@@ -17,6 +17,7 @@ export enum FundingRound {
     SERIES_D = "Series D",
     SERIES_E = "Series E",
     SERIES_UNKNOWN = "Series Unknown",
+    PRIVATE_EQUITY = "Private Equity",
     PUBLIC = "Public",
 }
 
@@ -38,7 +39,6 @@ export enum Industry {
     SaaS = "SaaS",
 }
 
-
 export enum ToolStack {
     GithubActions = "Github Actions",
     Cypress = "Cypress",
@@ -47,7 +47,6 @@ export enum ToolStack {
     Playwright = "Playwright",
     Rust = "Rust",
 }
-
 
 export type Funding = {
     roundName: FundingRound;
