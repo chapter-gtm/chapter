@@ -83,12 +83,9 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button
-                      className="dark:bg-zinc-700/50 dark:hover:bg-zinc-600/50"
-                      variant={"secondary"}
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      LinkedIn
+                    <Button variant={"outline"}>
+                      <Linkedin className="mr-2 h-4 w-4" />
+                      Connect
                     </Button>
                   </a>
                 </>
@@ -100,10 +97,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button
-                      variant={"secondary"}
-                      className="dark:bg-zinc-700/50 dark:hover:bg-zinc-600/50"
-                    >
+                    <Button variant={"default"}>
                       <Mail className="mr-2 h-4 w-4" />
                       <p>Compose</p>
                     </Button>

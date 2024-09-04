@@ -187,6 +187,24 @@ export function OpportunitiesMain() {
 
                       <Tooltip>
                         <TooltipTrigger asChild>
+                          <Link
+                            target="blank"
+                            href={`/opportunities/${selectedRow?.id}`}
+                          >
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={false}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>View fullscreen</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                           <Button
                             variant="ghost"
                             size="icon"

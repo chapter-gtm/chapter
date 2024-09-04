@@ -55,7 +55,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
   return (
     <>
       <Link href={""}>
-        <div className="mt-4 flex flex-row justify-between rounded-lg h-24 p-4 items-center gap-x-3 border border-border bg-popover hover:bg-accent-hover">
+        <div className="mt-4 flex flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover hover:bg-accent-hover hover:border-violet-400/50">
           <div className="flex gap-x-4">
             <div className="w-9 items-center justify-center flex flex-col text-zinc-500">
               <StickyNote width={20} />

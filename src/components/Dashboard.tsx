@@ -54,12 +54,34 @@ export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
 
+  const topLine = {
+    id: "topLine",
+    afterDatasetsDraw(chart, args, plugins) {
+      const { ctx, data } = chart;
+      ctx.save();
+      console.log("here!!!!");
+      chart.getDataSetMeta(0).datapoint.forEach((datapoint, index) => {
+        ctx.beginPath();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "white";
+        ctx.moveTo(datapoint.x, datapoint.y);
+        ctx.lineTo(datapoint.x, datapoint.y - 10);
+        ctx.stroke();
+      });
+    },
+  };
   const chartOptions = {
     plugins: {
-      legend: {
-        display: false,
+      topLine,
+      customCanvasBackgroundColor: {
+        color: "lightGreen",
       },
-
+      legend: {
+        title: {
+          text: "something",
+        },
+        fillColor: "red",
+      },
       tooltip: {
         intersect: false,
         padding: 10,
@@ -70,13 +92,13 @@ export function Dashboard() {
     labels: ["Identified", "Sent", "Demo", "Sale"], // x-axis
     datasets: [
       {
-        label: "Opportunities",
+        label: "In progress",
         data: [31, 12, 3, 1], // y-axis
-        backgoundColor: [
+        backgroundColor: [
           "rgba(255, 99, 132, 1)",
           "rgba(54, 162, 235, 1)",
-          "rgba(12, 100, 86, 1)",
-          "rgba(255, 206, 86, 1)",
+          "rgba(255, 205, 86, 1)",
+          "rgba(255, 205, 86, 1)",
         ],
         fill: true,
         borderRadius: 10,
@@ -84,6 +106,7 @@ export function Dashboard() {
         borderWidth: 1,
       },
     ],
+    plugins: { topLine },
   };
 
   useEffect(() => {

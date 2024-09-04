@@ -6,6 +6,8 @@ import {
   Landmark,
   Target,
   CircleUserIcon,
+  Link,
+  LinkedinIcon,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -92,6 +94,23 @@ export function OpportunityPropList({
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+        <Separator />
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Link width={18} />
+            <p>Domain</p>
+          </div>
+          <p className="font-medium">{opportunity.company?.url}</p>
+        </div>
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <LinkedinIcon width={16} />
+            <p>LinkedIn</p>
+          </div>
+          <p className="flex-1 font-medium overflow-hidden truncate">
+            {opportunity.company?.linkedinProfileUrl}
+          </p>
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">

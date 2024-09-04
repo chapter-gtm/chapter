@@ -120,7 +120,7 @@ export function AgentForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col gap-y-8">
             <div>
-              <h3 className="text-lg font-medium py-10">ICP meta data</h3>
+              <h3 className="text-xl font-medium py-10">Meta data</h3>
               <FormField
                 control={form.control}
                 name="industry"
@@ -157,7 +157,6 @@ export function AgentForm() {
                 )}
               />
             </div>
-            <Separator />
 
             <div>
               <FormField
@@ -165,7 +164,7 @@ export function AgentForm() {
                 name="fundingRound"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex flex-row justify-between">
+                    <div className="flex flex-col gap-y-6 justify-between">
                       <div className="flex flex-col gap-y-2">
                         <FormLabel>Funding stage</FormLabel>
                         <FormDescription>
@@ -173,17 +172,16 @@ export function AgentForm() {
                           your service, and can pay for it.
                         </FormDescription>
                       </div>
-
-                      <div className="flex flex-col gap-y-2">
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="flex flex-row gap-x-4">
+                        <div className="grid w-44 max-w-sm items-center gap-1.5">
                           <Label htmlFor="email">Min</Label>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <FormControl className="w-52">
+                            <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Funding Round" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent className="max-w-52">
@@ -197,16 +195,16 @@ export function AgentForm() {
                             </SelectContent>
                           </Select>
                         </div>
-
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <div className="grid w-44 max-w-sm items-center gap-1.5">
                           <Label htmlFor="email">Max</Label>
+
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <FormControl className="w-52">
+                            <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Funding Round" />
+                                <SelectValue placeholder="Select" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent className="max-w-52">
@@ -228,58 +226,61 @@ export function AgentForm() {
               />
             </div>
             <Separator />
+            <div className="flex flex-col gap-y-4">
+              <h3 className="text-xl font-medium pt-8">Org structure</h3>
 
-            <div>
-              <FormField
-                control={form.control}
-                name="engineeringSize"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-row justify-between">
-                      <div className="flex flex-col gap-y-2">
-                        <FormLabel>Engineering Size</FormLabel>
-                        <FormDescription>
-                          When teamsize is a proxy that they are experiencing
-                          the problem you are solving.
-                        </FormDescription>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="engineeringSize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-6 justify-between">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel>Engineering Size</FormLabel>
+                          <FormDescription>
+                            Teamsize can work as a proxy for new roles,
+                            responsibilities and challenges. Both min and max
+                            are optional.
+                          </FormDescription>
+                        </div>
+                        <div className="flex flex-row gap-x-4">
+                          <div className="grid w-44 max-w-sm items-center gap-1.5">
+                            <Label htmlFor="email">Min</Label>
+                            <Input
+                              type="team-size"
+                              id="team-min"
+                              placeholder="Minimum size"
+                            />
+                          </div>
+                          <div className="grid w-44 max-w-sm items-center gap-1.5">
+                            <Label htmlFor="email">Max</Label>
+                            <Input
+                              type="team-size"
+                              id="team-max"
+                              placeholder="Maximum size"
+                            />
+                          </div>
+                        </div>
                       </div>
-
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl className="w-52">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Team size" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="max-w-52">
-                          {Object.entries(EngineeringSize).map(
-                            ([key, value]) => (
-                              <SelectItem key={key} value={key}>
-                                {value}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
+          <Separator />
 
-          <div>
-            <h3 className="text-lg font-medium pt-8">Search criteria</h3>
+          <div className="flex flex-col gap-y-4">
+            <h3 className="text-xl font-medium pt-8">Search criteria</h3>
 
             <FormField
               control={form.control}
               name="toolStack"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex flex-col justify-between w-full">
+                  <div className="flex flex-col gap-y-3 justify-between w-full">
                     <div className="flex flex-col gap-y-2">
                       <FormLabel>Tool Stack</FormLabel>
                       <FormDescription>
@@ -288,37 +289,23 @@ export function AgentForm() {
                       </FormDescription>
                     </div>
 
-                    <div className="w-full">
-                      <MultiSelect
-                        options={frameworksList}
-                        onValueChange={setSelectedFrameworks}
-                        defaultValue={selectedFrameworks}
-                        placeholder="Select frameworks"
-                        variant="default"
-                      />
-                      {/* <Select onValueChange={field.onChange}>
-                    <FormControl className="w-52">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Tool stack" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-w-52">
-                      {Object.entries(ToolStack).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select> */}
-                    </div>
+                    <MultiSelect
+                      options={frameworksList}
+                      onValueChange={setSelectedFrameworks}
+                      defaultValue={selectedFrameworks}
+                      placeholder="Select frameworks"
+                      variant="default"
+                    />
                   </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <div className="py-12">
-            <Button type="submit">Save</Button>
+          <div className="flex py-12">
+            <Button variant={"primary"} type="submit">
+              Save
+            </Button>
           </div>
         </form>
       </Form>
