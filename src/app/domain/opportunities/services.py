@@ -216,16 +216,60 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             for result in job_post_results:
                 job_post = result[0]
                 try:
-                    if job_post.company.headcount < company_size_min or job_post.company.headcount > company_size_max:
+                    if not job_post.company:
+                        logger.info(
+                            "Skipping job because no company associated with job post",
+                            job_post_id=job_post.id,
+                        )
                         continue
+
+                    # Filter for company size but skip if the information is missing
                     if (
-                        job_post.company.org_size.engineering < engineering_size_min
+                        not job_post.company.headcount
+                        or job_post.company.headcount < company_size_min
+                        or job_post.company.headcount > company_size_max
+                    ):
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            company_headcount=job_post.company.headcount,
+                        )
+                        continue
+
+                    # Filter for org size but skip if the information is missing
+                    if (
+                        not job_post.company.org_size
+                        or not job_post.company.org_size.engineering
+                        or job_post.company.org_size.engineering < engineering_size_min
                         or job_post.company.org_size.engineering > engineering_size_max
                     ):
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            org_size=job_post.company.org_size,
+                        )
                         continue
-                    if job_post.company.last_funding.round_name.value not in funding:
+
+                    # Filter for funding stage but don't skip if the information is missing
+                    if job_post.company.last_funding and job_post.company.last_funding.round_name.value not in funding:
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            funding_round=job_post.company.last_funding,
+                        )
                         continue
-                    if job_post.company.hq_location.country not in countries:
+
+                    # Filter for country but don't skip if the information is missing
+                    if (
+                        job_post.company.hq_location
+                        and job_post.company.hq_location.country
+                        and job_post.company.hq_location.country not in countries
+                    ):
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            company_location=job_post.company.hq_location,
+                        )
                         continue
 
                     # TODO: Fetch the contact(s) with the right title from an external source
