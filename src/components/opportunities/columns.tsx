@@ -21,6 +21,7 @@ import { type Location } from "@/types/location";
 import { type Tool } from "@/types/job_post";
 import { type Scale, ScaleLabel } from "@/types/scale";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
+import { getIcp } from "@/utils/chapter/icp_criteria";
 
 import { toTitleCase } from "@/utils/misc";
 
@@ -514,20 +515,25 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const tools: Tool[] = row.getValue("tools");
+      const icpTools: string[] = getIcp();
       return (
         <div className="flex items-center gap-2">
-          {tools.map((tool, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className={classNames(
-                ScaleLabel[tool.certainty]?.color,
-                "p-1 rounded-lg"
-              )}
-            >
-              {tool.name}
-            </Badge>
-          ))}
+          {tools
+            .filter((tool) => {
+              return icpTools.includes(tool.name);
+            })
+            .map((tool, index) => (
+              <Badge
+                key={index}
+                variant="outline"
+                className={classNames(
+                  ScaleLabel[tool.certainty]?.color,
+                  "p-1 rounded-lg"
+                )}
+              >
+                {tool.name}
+              </Badge>
+            ))}
         </div>
       );
     },
