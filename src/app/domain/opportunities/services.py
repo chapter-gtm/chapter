@@ -184,8 +184,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 "New Zealand",
             ]
             person_titles = [
-                "Platform",
-                "Platform Engineering",
+                "Platform Engineer",
                 "Tech Lead",
                 "Staff Engineer",
                 "Head of Engineering",
@@ -275,7 +274,12 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     # TODO: Fetch the contact(s) with the right title from an external source
                     person_statement = (
                         select(Person.id)
-                        .where(Person.title.op("%")(text("ANY(:titles)")).params(titles=person_titles))
+                        .where(
+                            and_(
+                                Person.title.op("%")(text("ANY(:titles)")).params(titles=person_titles),
+                                Person.company_id == job_post.company.id,
+                            )
+                        )
                         .execution_options(populate_existing=True)
                     )
                     await self.repository.session.execute(text("SET pg_trgm.similarity_threshold = 0.5;"))
