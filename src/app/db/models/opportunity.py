@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, Final, TYPE_CHECKING
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase, orm_registry
-from sqlalchemy import String, Text, ForeignKey, Index, Column, Table
+from sqlalchemy import String, Text, ForeignKey, Index, Column, Table, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -59,7 +59,10 @@ class Opportunity(UUIDAuditBase, SlugKey):
 
     __tablename__ = "opportunity"
     __pii_columns__ = {}
-    __table_args__ = (Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),)
+    __table_args__ = (
+        Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),
+        UniqueConstraint("tenant_id", "company_id"),
+    )
     name: Mapped[str] = mapped_column(nullable=False, index=True)
     stage: Mapped[OpportunityStage] = mapped_column(
         OpportunityStageType, nullable=False, default="identified", index=True
@@ -67,7 +70,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
-    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, unique=True)
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True)
     # -----------
     # ORM Relationships
     # ------------
