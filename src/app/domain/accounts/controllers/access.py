@@ -17,6 +17,7 @@ from app.domain.accounts.dependencies import provide_roles_service, provide_user
 from app.domain.accounts.guards import auth, requires_active_user
 from app.domain.accounts.schemas import AccountLogin, AccountRegister, User
 from app.domain.accounts.services import RoleService, UserService
+from app.domain.accounts.utils import get_signed_user_profile_pic_url
 
 
 class AccessController(Controller):
@@ -108,4 +109,9 @@ class AccessController(Controller):
     )
     async def profile(self, request: Request, current_user: UserModel, users_service: UserService) -> User:
         """User Profile."""
-        return users_service.to_schema(current_user, schema_type=User)
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        # advanced alchemy to_schema uses `cast` to convert dict to schema
+        # object, which does not call `__post_init__`
+        user = users_service.to_schema(current_user, schema_type=User)
+        user.avatar_url = get_signed_user_profile_pic_url(user.id)
+        return user

@@ -71,11 +71,11 @@ class User(CamelizedBaseStruct):
     teams: list[UserTeam] = []
     roles: list[UserRole] = []
     oauth_accounts: list[OauthAccount] = []
-    profile_pic_url: str | None = None
+    avatar_url: str | None = None
 
     def __post_init__(self):
         """Build a profile pic url from company url."""
-        self.profile_pic_url = get_signed_user_profile_pic_url(self.id)
+        self.avatar_url = get_signed_user_profile_pic_url(self.id)
 
 
 class UserCreate(CamelizedBaseStruct):
