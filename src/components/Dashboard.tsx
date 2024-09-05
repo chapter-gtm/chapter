@@ -145,7 +145,7 @@ export function Dashboard() {
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">
-            Recently added
+            Recently identified
           </p>
         </div>
 
