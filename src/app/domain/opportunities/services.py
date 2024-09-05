@@ -193,6 +193,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 "Director of Engineering",
                 "VP of Engineering",
                 "CTO",
+                "Chief Technology Officer",
                 "Co-founder",
             ]
 
@@ -218,7 +219,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 job_post = result[0]
                 try:
                     if not job_post.company:
-                        logger.info(
+                        logger.warn(
                             "Skipping job because no company associated with job post",
                             job_post_id=job_post.id,
                         )
@@ -233,6 +234,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         logger.info(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
                             company_headcount=job_post.company.headcount,
                         )
                         continue
@@ -247,6 +250,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         logger.info(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
                             org_size=job_post.company.org_size,
                         )
                         continue
@@ -254,11 +259,12 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     # Filter for funding stage but don't skip if the information is missing
                     if job_post.company.last_funding and job_post.company.last_funding.round_name.value not in funding:
                         logger.info(
-                            "Skipping job because criteria does not match",
+                            "Job because criteria does not match, but continuing further",
                             job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
                             funding_round=job_post.company.last_funding,
                         )
-                        continue
 
                     # Filter for country but don't skip if the information is missing
                     if (
@@ -267,11 +273,12 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         and job_post.company.hq_location.country not in countries
                     ):
                         logger.info(
-                            "Skipping job because criteria does not match",
+                            "Job because criteria does not match, but continuing further",
                             job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
                             company_location=job_post.company.hq_location,
                         )
-                        continue
 
                     # TODO: Fetch the contact(s) with the right title from an external source
                     person_statement = (
@@ -289,6 +296,27 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     person_ids = [result[0] for result in person_results]
 
                     if not person_ids:
+                        logger.warn(
+                            "Skipping new opportunity because no appropriate contact found",
+                            job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
+                        )
+                        continue
+
+                    # Check if opportunity with the same company already exists
+                    opportunity_statement = select(Opportunity.id).where(
+                        and_(Opportunity.company_id == job_post.company.id, Opportunity.tenant_id == tenant_id)
+                    )
+                    opportunity_results = await self.repository.session.execute(statement=opportunity_statement)
+                    opportunity_ids = [result[0] for result in opportunity_results]
+                    if opportunity_ids:
+                        logger.info(
+                            "Skipping new opportunity because one with the same company already exists",
+                            job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
+                        )
                         continue
 
                     opportunity = await self.create(
