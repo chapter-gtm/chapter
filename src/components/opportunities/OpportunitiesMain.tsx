@@ -172,7 +172,7 @@ export function OpportunitiesMain() {
                 </div>
 
                 <SheetContent
-                  className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card border-border"
+                  className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-background border-border"
                   onInteractOutside={handleCloseSheet}
                 >
                   <TooltipProvider delayDuration={0}>

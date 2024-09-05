@@ -38,14 +38,23 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
       <div className="flex-1 overflow-y-auto rounded-xl m-5 ">
         <div className="flex flex-col px-4 gap-y-4 py-4 ">
           <div className="flex items-center justify-center">
-            {opportunity.company?.profilePicUrl ? (
-              <Image
-                src={opportunity.company?.profilePicUrl}
-                width={72}
-                height={72}
-                alt="Company Profile Picture"
-                className="rounded-lg border border-border"
-              />
+            {opportunity.company?.profilePicUrl && opportunity.company?.url ? (
+              <a
+                href={`https://${opportunity.company.url.replace(
+                  /^https?:\/\//,
+                  ""
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={opportunity.company?.profilePicUrl}
+                  width={72}
+                  height={72}
+                  alt="Company Profile Picture"
+                  className="rounded-lg border border-border"
+                />
+              </a>
             ) : (
               <></>
             )}

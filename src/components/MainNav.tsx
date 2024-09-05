@@ -42,7 +42,7 @@ export function MainNav({ links }: NavProps) {
   console.log("1.: pathname");
 
   return (
-    <nav className="flex items-center space-x-2 lg:space-x-3">
+    <nav className="flex items-center space-x-2 lg:space-x-3 relative">
       {links.map((link, index) => (
         <Link
           key={index}

@@ -56,23 +56,17 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
               className="flex flex-row items-center justify-between text-sm text-zinc-700"
               key={index}
             >
-              <div className="flex flex-row p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-1 rounded-lg text-sm items-center cursor-pointer">
-                <CircleUserRoundIcon
-                  width={18}
-                  className="text-zinc-400 dark:text-zinc-300"
-                />
-                <p
-                  className="font-medium text-zinc-700 dark:text-zinc-200"
-                  key={index}
-                >
-                  {contact.fullName}
-                </p>
-                <p className="font-medium text-zinc-500 dark:text-zinc-300">
-                  ·
-                </p>
-                <p className="text-zinc-500 dark:text-zinc-400" key={index}>
-                  {contact.title}
-                </p>
+              <div className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start">
+                <CircleUserRoundIcon width={18} className="text-muted" />
+                <div className="flex flex-col justify-start gap-x-1">
+                  <p className="flex font-medium text-primary" key={index}>
+                    {contact.fullName}
+                  </p>
+
+                  <p className="flex text-sm text-muted" key={index}>
+                    {contact.title}
+                  </p>
+                </div>
               </div>
 
               <div

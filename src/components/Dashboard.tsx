@@ -62,7 +62,7 @@ export function Dashboard() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <div className=" flex flex-col space-y-2 px-6 mt-2 pb-24">
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
@@ -83,21 +83,24 @@ export function Dashboard() {
                   >
                     <div
                       key={index}
-                      className="flex flex-col h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer"
+                      className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
                     >
-                      <div className="flex flex-col h-full justify-center content-center p-3 relative">
-                        <div className="space-y-1">
+                      <div className="flex flex-col h-full justify-center content-center p-3  z-0">
+                        <div className="space-y-1 mt-8 relative">
                           {op.company?.profilePicUrl ? (
-                            <Image
-                              src={op.company?.profilePicUrl}
-                              width={24}
-                              height={72}
-                              alt="Company Profile Picture"
-                              className="rounded-md border border-border"
-                            />
+                            <div className="absolute bottom-10">
+                              <Image
+                                src={op.company?.profilePicUrl}
+                                width={24}
+                                height={72}
+                                alt="Company Profile Picture"
+                                className="rounded-md border border-border"
+                              />
+                            </div>
                           ) : (
-                            <div className="h-[72px] w-[24px] bg-white"></div>
+                            <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
                           )}
+
                           <p className="text-xl font-semibold">
                             {op.company?.name}
                           </p>

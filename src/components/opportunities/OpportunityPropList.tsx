@@ -105,7 +105,16 @@ export function OpportunityPropList({
             <Link width={18} />
             <p>Domain</p>
           </div>
-          <p className="font-medium">{opportunity.company?.url}</p>
+          <a
+            href={`https://${opportunity.company?.url.replace(
+              /^https?:\/\//,
+              ""
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {opportunity.company?.url}
+          </a>
         </div>
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -113,7 +122,16 @@ export function OpportunityPropList({
             <p>LinkedIn</p>
           </div>
           <p className="flex-1 font-medium overflow-hidden truncate">
-            {opportunity.company?.linkedinProfileUrl}
+            <a
+              href={`https://${opportunity.company?.linkedinProfileUrl.replace(
+                /^https?:\/\//,
+                ""
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {opportunity.company?.linkedinProfileUrl}
+            </a>
           </p>
         </div>
         <Separator />
