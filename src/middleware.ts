@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname === "/") {
     // Redirect to /opportunities
-    return NextResponse.rewrite(new URL("/opportunities", request.url));
+    return NextResponse.rewrite(new URL("/dashboard", request.url));
   }
 }
 
