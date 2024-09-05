@@ -120,7 +120,7 @@ export function Dashboard() {
     const fetchOpportunities = async () => {
       try {
         const opportunities = await getOpportunities(
-          5,
+          20,
           1,
           "created_at",
           "desc",
