@@ -296,9 +296,9 @@ function getLocationFromCountry(country: string) {
     locationLabel = "France";
   } else if (country == "Germany") {
     locationLabel = "Germany";
-  } else if (country == "UK") {
+  } else if (country == "UK" || country == "United Kingdom") {
     locationLabel = "UK";
-  } else if (country == "US") {
+  } else if (country == "US" || country == "United States") {
     locationLabel = "US";
   } else {
     locationLabel = "Rest of the World";
