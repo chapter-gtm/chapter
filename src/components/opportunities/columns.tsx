@@ -348,13 +348,12 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "date",
+    accessorKey: "companyName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
+      <DataTableColumnHeader column={column} title="Company" />
     ),
     cell: ({ row }) => {
-      const createdAt: Date = row.getValue("date");
-      return <div className="flex">{humanDate(createdAt)}</div>;
+      return <div className="flex">{row.getValue("companyName")}</div>;
     },
   },
   {
@@ -392,12 +391,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     },
   },
   {
-    accessorKey: "companyName",
+    accessorKey: "date",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Company" />
+      <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: ({ row }) => {
-      return <div className="flex">{row.getValue("companyName")}</div>;
+      const createdAt: Date = row.getValue("date");
+      return <div className="flex">{humanDate(createdAt)}</div>;
     },
   },
   {
@@ -479,9 +479,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const location: Location = row.getValue("companyLocation");
-      return (
-        <div className="flex">{` ${location?.city}, ${location?.region}, ${location?.country}`}</div>
-      );
+      return <div className="flex">{`${location?.country}`}</div>;
     },
     filterFn: (row, id, value) => {
       const location: Location = row.getValue(id);
