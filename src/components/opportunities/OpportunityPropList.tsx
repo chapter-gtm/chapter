@@ -105,16 +105,20 @@ export function OpportunityPropList({
             <Link width={18} />
             <p>Domain</p>
           </div>
-          <a
-            href={`https://${opportunity.company?.url.replace(
-              /^https?:\/\//,
-              ""
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {opportunity.company?.url}
-          </a>
+          {opportunity.company?.url ? (
+            <a
+              href={`https://${opportunity.company?.url.replace(
+                /^https?:\/\//,
+                ""
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {opportunity.company?.url}
+            </a>
+          ) : (
+            <p className="font-medium">{opportunity.company?.url}</p>
+          )}
         </div>
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -122,16 +126,18 @@ export function OpportunityPropList({
             <p>LinkedIn</p>
           </div>
           <p className="flex-1 font-medium overflow-hidden truncate">
-            <a
-              href={`https://${opportunity.company?.linkedinProfileUrl.replace(
-                /^https?:\/\//,
-                ""
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {opportunity.company?.linkedinProfileUrl}
-            </a>
+            {opportunity.company?.linkedinProfileUrl ? (
+              <a
+                href={`https://${opportunity.company?.linkedinProfileUrl.replace(
+                  /^https?:\/\//,
+                  ""
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {opportunity.company?.linkedinProfileUrl}
+              </a>
+            ) : null}
           </p>
         </div>
         <Separator />
