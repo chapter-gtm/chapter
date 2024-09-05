@@ -53,19 +53,21 @@ export function UserNav({ className }: UserNavProps) {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
-              className={cn("w-full bg-card", className)}
+              className={cn("w-full justify-between", className)}
             >
-              <Avatar className="mr-2 h-5 w-5 rounded-lg">
-                <AvatarImage
-                  src={currentUser.avatarUrl}
-                  alt={currentUser.name}
-                />
-                <AvatarFallback className="text-xs bg-zinc-200">
-                  {getNameInitials(currentUser.name)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-ellipsis overflow-hidden">
-                {currentUser.name}
+              <div className="flex flex-inline">
+                <Avatar className="mr-2 h-5 w-5 rounded-lg">
+                  <AvatarImage
+                    src={currentUser.avatarUrl}
+                    alt={currentUser.name}
+                  />
+                  <AvatarFallback className="text-xs bg-zinc-200">
+                    {getNameInitials(currentUser.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-ellipsis overflow-hidden">
+                  {currentUser.name}
+                </div>
               </div>
               <ChevronDown className="ms-2 ml-auto h-4 w-4 shrink-0 opacity-50" />
             </Button>

@@ -124,7 +124,11 @@ export function DataTable<TData, TValue>({
                       colSpan={header.colSpan}
                       className={cn(
                         "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
-                        header.column.id === "select" ? "sticky left-0" : ""
+                        header.column.id === "select"
+                          ? "sticky left-0 bg-background"
+                          : header.column.id === "companyName"
+                          ? "sticky left-[40px] bg-background "
+                          : ""
                       )}
                     >
                       {header.isPlaceholder
@@ -151,7 +155,13 @@ export function DataTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       className={cn(
-                        "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1"
+                        "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
+
+                        cell.column.id === "select"
+                          ? "sticky left-0 bg-background"
+                          : cell.column.id === "companyName"
+                          ? "sticky left-[40px] bg-background "
+                          : ""
                       )}
                       // This is where the cell should have a shade of color
                       key={cell.id}

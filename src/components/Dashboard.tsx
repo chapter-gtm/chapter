@@ -171,6 +171,7 @@ export function Dashboard() {
                               width={24}
                               height={72}
                               alt="Company Profile Picture"
+                              className="rounded-md border border-border"
                             />
                           ) : (
                             <div className="h-[72px] w-[24px] bg-white"></div>
@@ -188,7 +189,13 @@ export function Dashboard() {
                 ))}
               </>
             ) : (
-              <div className="flex flex-col h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+              <>
+                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+              </>
             )}
           </div>
         </div>

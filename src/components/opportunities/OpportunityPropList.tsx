@@ -10,6 +10,8 @@ import {
   LinkedinIcon,
 } from "lucide-react";
 
+import { getIcp } from "@/utils/chapter/icp_criteria";
+
 import { useState } from "react";
 import {
   DropdownMenu,
@@ -43,6 +45,8 @@ export function OpportunityPropList({
     opportunity.stage
   );
   const stages = Object.values(OpportunityStage);
+
+  const icpTools: string[] = getIcp();
 
   const handleStageChange = async (newStage: string) => {
     try {
@@ -158,22 +162,40 @@ export function OpportunityPropList({
             )}
         </div>
         <Separator />
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 ">
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Target width={18} />
-            <p>Tool stack</p>
+            <p>Search criteria</p>
           </div>
           <div className="flex flex-row gap-x-2">
             {opportunity.jobPosts
               ?.flatMap((jobPost) => jobPost.tools)
+              .filter((tool) => tool && icpTools.includes(tool.name))
               .map((tool, index) => (
                 <>
                   {tool && (
-                    <Badge
-                      key={index}
-                      variant={"outline"}
-                      className="font-normal"
-                    >
+                    <Badge key={index} variant={"default"}>
+                      {tool.name}
+                    </Badge>
+                  )}
+                </>
+              ))}
+          </div>
+        </div>
+        <Separator />
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
+            <Target width={18} />
+            <p>Additional stack</p>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-2">
+            {opportunity.jobPosts
+              ?.flatMap((jobPost) => jobPost.tools)
+              .filter((tool) => tool && !icpTools.includes(tool.name))
+              .map((tool, index) => (
+                <>
+                  {tool && (
+                    <Badge key={index} variant={"outline"}>
                       {tool.name}
                     </Badge>
                   )}

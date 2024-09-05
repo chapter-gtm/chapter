@@ -348,6 +348,7 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     enableHiding: false,
   },
   {
+    id: "companyName",
     accessorKey: "companyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Company" />
@@ -523,10 +524,10 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
             .map((tool, index) => (
               <Badge
                 key={index}
-                variant="outline"
+                variant="default"
                 className={classNames(
                   ScaleLabel[tool.certainty]?.color,
-                  "p-1 rounded-lg"
+                  "bg-primary text-primary-foreground"
                 )}
               >
                 {tool.name}

@@ -50,15 +50,17 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
               <></>
             )}
           </div>
-          <div className="flex flex-col items-center justify-center text-base">
+          <div className="flex flex-col items-center justify-center text-base text-center">
             <h2 className="font-semibold text-3xl text-zinc-700 dark:text-zinc-200 mt-3">
               {opportunity.company?.name}
             </h2>
-            <p className="text-center text-zinc-600 dark:text-zinc-300 mt-3">
-              {opportunity.company?.description}
-            </p>
-            <div className="flex items-center justify-between my-6 text-zinc-400 font-light text-sm">
-              Added about {timeAgo(new Date(opportunity.createdAt))}
+            <div className="flex flex-col">
+              <p className=" text-zinc-600 dark:text-zinc-300 mt-3">
+                {opportunity.company?.description}
+              </p>
+              <div className="my-1 text-zinc-400 font-light text-sm">
+                Added about {timeAgo(new Date(opportunity.createdAt))}
+              </div>
             </div>
           </div>
         </div>

@@ -79,20 +79,6 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 className="flex flex-row justify-end gap-x-2 items-center"
                 key={index}
               >
-                {contact.linkedinProfileUrl && (
-                  <>
-                    <a
-                      href={contact.linkedinProfileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button variant={"outline"}>
-                        <Linkedin className="mr-2 h-4 w-4" />
-                        Connect
-                      </Button>
-                    </a>
-                  </>
-                )}
                 {contact.workEmail && (
                   <>
                     <a
@@ -103,6 +89,20 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       <Button variant={"default"}>
                         <Mail className="mr-2 h-4 w-4" />
                         <p>Compose</p>
+                      </Button>
+                    </a>
+                  </>
+                )}
+                {contact.linkedinProfileUrl && (
+                  <>
+                    <a
+                      href={contact.linkedinProfileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant={"outline"}>
+                        <Linkedin className="mr-2 h-4 w-4" />
+                        Connect
                       </Button>
                     </a>
                   </>
