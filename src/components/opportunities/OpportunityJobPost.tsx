@@ -43,6 +43,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
       opportunity.jobPosts.length <= 0
     ) {
       toast.error("Failed to find job post");
+      return;
     }
     try {
       await getJobPostPdf(opportunity.jobPosts[0].id);

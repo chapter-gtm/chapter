@@ -38,27 +38,35 @@ export function humanDate(date: Date, showTime: boolean = false): string {
   return date.toLocaleDateString(undefined, options);
 }
 
-
 export function timeAgo(date: Date): string {
   const now = new Date();
   const secondsAgo = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   const units: { [key: string]: number } = {
-      year: 60 * 60 * 24 * 365,
-      month: 60 * 60 * 24 * 30,
-      week: 60 * 60 * 24 * 7,
-      day: 60 * 60 * 24,
-      hour: 60 * 60,
-      minute: 60,
-      second: 1,
+    year: 60 * 60 * 24 * 365,
+    month: 60 * 60 * 24 * 30,
+    week: 60 * 60 * 24 * 7,
+    day: 60 * 60 * 24,
+    hour: 60 * 60,
+    minute: 60,
+    second: 1,
   };
 
   for (const unit in units) {
-      const timeInterval = Math.floor(secondsAgo / units[unit]);
-      if (timeInterval >= 1) {
-          return `${timeInterval} ${unit}${timeInterval > 1 ? 's' : ''} ago`;
-      }
+    const timeInterval = Math.floor(secondsAgo / units[unit]);
+    if (timeInterval >= 1) {
+      return `${timeInterval} ${unit}${timeInterval > 1 ? "s" : ""} ago`;
+    }
   }
 
-  return 'just now';
+  return "just now";
+}
+
+export function getURL(input: string): string {
+  try {
+    const url = new URL(input);
+    return url.href;
+  } catch (error) {
+    return `https://${input}`;
+  }
 }

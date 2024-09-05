@@ -8,7 +8,7 @@ export type Tool = {
 };
 
 export type JobPost = {
-    id: number;
+    id: string;
     title: number | null;
     body: string | null;
     location: Location | null;

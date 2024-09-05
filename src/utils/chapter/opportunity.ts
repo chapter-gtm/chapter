@@ -8,19 +8,19 @@ export async function getOpportunities(
     currentPage: number = 1,
     orderBy: string = "created_at",
     sortOrder: string = "desc",
-    searchField: string = null,
-    searchString: string = null,
+    searchField: string = "",
+    searchString: string = "",
     searchIgnoreCase: boolean = false
 ) {
     const token = await getUserToken();
-    const searchParams = {
+    const searchParams: { [key: string]: any } = {
         pageSize: pageSize.toString(),
         currentPage: currentPage.toString(),
         orderBy: orderBy,
         sortOrder: sortOrder,
     };
 
-    if (searchField) {
+    if (!!searchField && searchField.trim().length > 0) {
         searchParams["searchField"] = searchField;
         searchParams["searchString"] = searchString;
         searchParams["searchIgnoreCase"] = searchIgnoreCase ? "true" : "false";
