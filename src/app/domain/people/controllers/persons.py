@@ -137,6 +137,24 @@ class PersonController(Controller):
             if get_domain_from_email(person_details.get("work_email", "")) == get_domain(company_db_obj.url):
                 work_email = person_details.get("work_email")
 
+        work_experiences = []
+        for work_ex in person_details.get("experience", []):
+            try:
+                work_experiences.append(
+                    WorkExperience(
+                        starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
+                        title=work_ex.get("title", {}).get("name", "Unknown"),
+                        company_name=work_ex.get("company", {}).get("name", "Unknown"),
+                        company_url=work_ex.get("company", {}).get("website"),
+                        company_linkedin_profile_url=work_ex.get("linkedin_url"),
+                        ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
+                        if work_ex.get("end_date")
+                        else None,
+                    )
+                )
+            except Exception:
+                pass
+
         # Add person
         # TODO: Move this code into a provider specific code
         obj = PersonCreate(
@@ -158,20 +176,7 @@ class PersonController(Controller):
             work_email=work_email,
             personal_numbers=person_details.get("personal_numbers", []),
             birth_date=birth_date,
-            work_experiences=[
-                WorkExperience(
-                    starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
-                    title=work_ex.get("title", {}).get("name", "Unknown"),
-                    company_name=work_ex.get("company", {}).get("name", "Unknown"),
-                    company_url=work_ex.get("company", {}).get("website"),
-                    company_linkedin_profile_url=work_ex.get("linkedin_url"),
-                    ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
-                    if work_ex.get("end_date")
-                    else None,
-                )
-                for work_ex in person_details.get("experience", [])
-                if work_ex.get("start_date") and work_ex.get("company", {})
-            ],
+            work_experiences=work_experiences,
             company_id=company_db_obj.id,
         )
         db_obj = await persons_service.upsert(obj.to_dict(), item_id=results[0].id if count > 0 else None)
