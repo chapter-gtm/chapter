@@ -153,8 +153,8 @@ export function OpportunityPropList({
           </div>
 
           {opportunity.company?.lastFunding !== null &&
-            opportunity.company?.lastFunding.investors.map(
-              (investor: Investor, index) => <p key={index}>{investor.name}</p>
+            opportunity.company?.lastFunding?.investors.map(
+              (investor: string, index) => <p key={index}>{investor}</p>
             )}
         </div>
         <Separator />
