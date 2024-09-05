@@ -25,6 +25,7 @@ export type Person = {
     fullName: string | null;
     headline: string | null;
     summary: string | null;
+    title: string | null;
     occupation: string | null;
     industry: string | null;
     profilePicUrl: string | null;

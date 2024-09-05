@@ -71,7 +71,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                   ·
                 </p>
                 <p className="text-zinc-500 dark:text-zinc-400" key={index}>
-                  {contact.occupation}
+                  {contact.title}
                 </p>
               </div>
 
