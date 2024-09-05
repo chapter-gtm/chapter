@@ -25,19 +25,6 @@ import { getUserProfile } from "@/utils/chapter/users";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import {
-  Chart,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-  plugins,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-
-import { intersects } from "react-resizable-panels";
 import { title } from "process";
 
 export function Dashboard() {
