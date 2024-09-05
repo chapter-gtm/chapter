@@ -10,7 +10,8 @@ logger = structlog.get_logger()
 model = os.environ["OPENAI_MODEL_NAME"]
 client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
 prompt = """
-    Extract the following information from the given job post in the form of HTML/JS code:
+    Only extract the following information directly from the given job post(which is in the form of HTML/JS code)
+    without adding any outside knowledge or assumptions:
     - Company Name
     - Company URL
     - Company LinkedIn URL
@@ -36,7 +37,7 @@ prompt = """
         tools: [ {{"name": "tool name 1", "certainty": "High"}}, {{"name": "tool name 2", "certainty": "Medium"}} ]
     }}
 
-    Note: Use null if you're unable to extract any information.
+    Note: Do NOT include anything that's not part of the post and use null if you're unable to extract any information.
 
     Here is the code:
     {html_content}
@@ -54,6 +55,7 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
     chat_response = await client.chat.completions.create(
         model=model,
         messages=messages,
+        temperature=0,
         response_format={
             "type": "json_object",
         },
