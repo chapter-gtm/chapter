@@ -87,8 +87,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       rel="noopener noreferrer"
                     >
                       <Button variant={"default"}>
-                        <Mail className="mr-2 h-4 w-4" />
-                        <p>Compose</p>
+                        <Mail className="h-4 w-4" />
                       </Button>
                     </a>
                   </>
@@ -101,8 +100,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       rel="noopener noreferrer"
                     >
                       <Button variant={"outline"}>
-                        <Linkedin className="mr-2 h-4 w-4" />
-                        Connect
+                        <Linkedin className="h-4 w-4" />
                       </Button>
                     </a>
                   </>
