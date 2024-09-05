@@ -39,75 +39,10 @@ import { Bar } from "react-chartjs-2";
 
 import { intersects } from "react-resizable-panels";
 import { title } from "process";
-Chart.register(
-  BarElement,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend,
-  plugins
-);
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-
-  const topLine = {
-    id: "topLine",
-    afterDatasetsDraw(chart, args, plugins) {
-      const { ctx, data } = chart;
-      ctx.save();
-      console.log("here!!!!");
-      chart.getDataSetMeta(0).datapoint.forEach((datapoint, index) => {
-        ctx.beginPath();
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "white";
-        ctx.moveTo(datapoint.x, datapoint.y);
-        ctx.lineTo(datapoint.x, datapoint.y - 10);
-        ctx.stroke();
-      });
-    },
-  };
-  const chartOptions = {
-    plugins: {
-      topLine,
-      customCanvasBackgroundColor: {
-        color: "lightGreen",
-      },
-      legend: {
-        title: {
-          text: "something",
-        },
-        fillColor: "red",
-      },
-      tooltip: {
-        intersect: false,
-        padding: 10,
-      },
-    },
-  };
-  const chartData = {
-    labels: ["Identified", "Sent", "Demo", "Sale"], // x-axis
-    datasets: [
-      {
-        label: "In progress",
-        data: [31, 12, 3, 1], // y-axis
-        backgroundColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 205, 86, 1)",
-          "rgba(255, 205, 86, 1)",
-        ],
-        fill: true,
-        borderRadius: 10,
-        borderColor: "rgba(255, 255, 255, 0.4)",
-        borderWidth: 1,
-      },
-    ],
-    plugins: { topLine },
-  };
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
