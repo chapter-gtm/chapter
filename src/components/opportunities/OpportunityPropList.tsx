@@ -155,11 +155,12 @@ export function OpportunityPropList({
             <Banknote width={18} />
             <p>Investors</p>
           </div>
-
-          {opportunity.company?.lastFunding !== null &&
-            opportunity.company?.lastFunding?.investors.map(
-              (investor: string, index) => <p key={index}>{investor}</p>
-            )}
+          <div className="flex flex-1 flex-wrap gap-x-2">
+            {opportunity.company?.lastFunding?.investors &&
+              opportunity.company?.lastFunding.investors.length > 0 && (
+                <p>{opportunity.company.lastFunding.investors.join(" · ")}</p>
+              )}
+          </div>
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
