@@ -222,6 +222,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         logger.warn(
                             "Skipping job because no company associated with job post",
                             job_post_id=job_post.id,
+                            tenant_id=tenant_id,
                         )
                         continue
 
@@ -237,6 +238,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             company_headcount=job_post.company.headcount,
+                            tenant_id=tenant_id,
                         )
                         continue
 
@@ -253,6 +255,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             org_size=job_post.company.org_size,
+                            tenant_id=tenant_id,
                         )
                         continue
 
@@ -264,6 +267,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             funding_round=job_post.company.last_funding,
+                            tenant_id=tenant_id,
                         )
 
                     # Filter for country but don't skip if the information is missing
@@ -278,6 +282,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             company_location=job_post.company.hq_location,
+                            tenant_id=tenant_id,
                         )
 
                     # TODO: Fetch the contact(s) with the right title from an external source
@@ -301,6 +306,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
+                            tenant_id=tenant_id,
                         )
                         continue
 
@@ -316,6 +322,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
+                            tenant_id=tenant_id,
                         )
                         continue
 
