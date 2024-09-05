@@ -161,8 +161,8 @@ class PersonController(Controller):
             work_experiences=[
                 WorkExperience(
                     starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
-                    title=work_ex.get("title", {}).get("name"),
-                    company_name=work_ex.get("company", {}).get("name"),
+                    title=work_ex.get("title", {}).get("name", "Unknown"),
+                    company_name=work_ex.get("company", {}).get("name", "Unknown"),
                     company_url=work_ex.get("company", {}).get("website"),
                     company_linkedin_profile_url=work_ex.get("linkedin_url"),
                     ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
@@ -170,6 +170,7 @@ class PersonController(Controller):
                     else None,
                 )
                 for work_ex in person_details.get("experience", [])
+                if work_ex.get("start_date") and work_ex.get("company", {})
             ],
             company_id=company_db_obj.id,
         )
