@@ -8,6 +8,7 @@ import {
   CircleUserIcon,
   Link,
   LinkedinIcon,
+  Dot,
 } from "lucide-react";
 
 import { getIcp } from "@/utils/chapter/icp_criteria";
@@ -28,13 +29,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
+import { cn } from "@/lib/utils";
+
 import { Investor } from "@/types/company";
 import { OpportunityStage } from "@/types/opportunity";
 import { updateOpportunityStage } from "@/utils/chapter/opportunity";
 
+import { stageColors } from "@/types/opportunity";
+
 interface OpportunityPropListProps {
   opportunity: Opportunity;
   updateOpportunity: (updatedOpportunity: Opportunity) => void;
+}
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
 }
 
 export function OpportunityPropList({
@@ -45,7 +54,6 @@ export function OpportunityPropList({
     opportunity.stage
   );
   const stages = Object.values(OpportunityStage);
-
   const icpTools: string[] = getIcp();
 
   const handleStageChange = async (newStage: string) => {
@@ -82,9 +90,17 @@ export function OpportunityPropList({
           <DropdownMenu>
             <DropdownMenuTrigger
               asChild
-              className="h-9 rounded-full border-b border-border bg-popover"
+              className="h-8 rounded-full border-b border-border bg-popover"
             >
-              <Button variant="outline">{currentStage}</Button>
+              <Button
+                className={classNames(
+                  stageColors[opportunity.stage]?.color,
+                  "py-1 rounded-full hover:none focus-visible:ring-0 ps-1"
+                )}
+              >
+                <Dot />
+                {currentStage}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-popover border-border">
               <DropdownMenuLabel>Set stage</DropdownMenuLabel>

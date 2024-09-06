@@ -89,36 +89,27 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
                 >
                   Notes{" "}
-                  <Badge variant="outline" className="dark:bg-zinc-600/20">
-                    8
-                  </Badge>
                 </TabsTrigger>
                 <TabsTrigger
                   value="opTasks"
                   className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20 py-2"
                 >
                   Tasks{" "}
-                  <Badge
-                    variant="outline"
-                    className="bg-zinc-200/70 dark:bg-zinc-600/20"
-                  >
-                    12
-                  </Badge>
                 </TabsTrigger>
               </TabsList>
               <div className="h-full w-full">
                 <TabsContent value="opTasks">
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col w-full bg-yellow-300 h-full">
                     <div className="text-xl font-semibold text-zinc-700 dark:text-white">
                       Tasks
                     </div>
                     <div className="text-secondary-foreground">
                       Coming soon...
                     </div>
-                  </div>
+                  </div> */}
                 </TabsContent>
                 <TabsContent value="opNotes">
-                  <TextEditor description="" />
+                  {/* <TextEditor description="" /> */}
                 </TabsContent>
               </div>
             </Tabs>

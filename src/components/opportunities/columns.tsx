@@ -10,10 +10,13 @@ import {
   DollarSign,
   MapPin,
   CircleUser,
+  Dot,
 } from "lucide-react";
 
 import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
+
+import { cn } from "@/lib/utils";
 
 import { type Opportunity, OpportunityStage } from "@/types/opportunity";
 import { type Company, FundingRound, OrgSize } from "@/types/company";
@@ -28,6 +31,8 @@ import { toTitleCase } from "@/utils/misc";
 export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
 
+import { stageColors } from "@/types/opportunity";
+
 export const filters = [
   {
     tableColumnName: "stage",
@@ -36,47 +41,47 @@ export const filters = [
       {
         value: OpportunityStage.IDENTIFIED,
         label: OpportunityStage.IDENTIFIED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.QUALIFIED,
         label: OpportunityStage.QUALIFIED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.CONTACTED,
         label: OpportunityStage.CONTACTED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.ENGAGED,
         label: OpportunityStage.ENGAGED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.PROPOSED,
         label: OpportunityStage.PROPOSED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.NEGOTIATED,
         label: OpportunityStage.NEGOTIATED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.DEFERRED,
         label: OpportunityStage.DEFERRED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.SUSPENDED,
         label: OpportunityStage.SUSPENDED,
-        icon: StackIcon,
+        icon: Dot,
       },
       {
         value: OpportunityStage.CUSTOMER,
         label: OpportunityStage.CUSTOMER,
-        icon: StackIcon,
+        icon: Dot,
       },
     ],
   },
@@ -370,10 +375,15 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
 
       return (
         <div className="flex items-center">
-          {opportunityStage.hasOwnProperty("icon") && opportunityStage.icon && (
-            <opportunityStage.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{opportunityStage.label}</span>
+          <div
+            className={classNames(
+              stageColors[opportunityStage]?.color,
+              "py-1 rounded-full hover:none focus-visible:ring-0 ps-1"
+            )}
+          >
+            <Dot />
+            {opportunityStage.label}
+          </div>
         </div>
       );
     },

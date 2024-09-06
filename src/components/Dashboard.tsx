@@ -63,32 +63,33 @@ export function Dashboard() {
 
   return (
     <div className="w-full relative">
-      <div className=" flex flex-col space-y-2 px-6 mt-2 pb-24">
+      <div className="flex flex-col space-y-2 px-6 mt-2 pb-24">
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">
             Recently identified
           </p>
         </div>
+        <div className="flex relative">
+          <div className="h-52 min-w-52 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
 
-        <div className="flex w-full min-h-52 h-52 overflow-x-scroll ">
-          <div className="flex flex-row gap-x-4 mb-4">
-            {opportunities && opportunities.length > 0 ? (
-              <>
-                {opportunities.map((op: Opportunity, index) => (
-                  <Link
-                    target="blank"
-                    href={`/opportunities/${op?.id}`}
-                    key={index}
-                  >
-                    <div
+          <div className="flex w-full min-h-52 h-52 overflow-x-scroll relative ">
+            <div className="flex flex-row gap-x-4 mb-4 relative">
+              {opportunities && opportunities.length > 0 ? (
+                <>
+                  {opportunities.map((op: Opportunity, index) => (
+                    <Link
+                      target="blank"
+                      href={`/opportunities/${op?.id}`}
                       key={index}
-                      className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
                     >
-                      <div className="flex flex-col h-full justify-center content-center p-3  z-0">
-                        <div className="space-y-1 mt-8 relative">
-                          {op.company?.profilePicUrl ? (
-                            <div className="absolute bottom-10">
+                      <div
+                        key={index}
+                        className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
+                      >
+                        <div className="flex flex-col h-full justify-start content-center p-3  z-0">
+                          <div className="space-y-3 mt-2 relative justify-start">
+                            {op.company?.profilePicUrl ? (
                               <Image
                                 src={op.company?.profilePicUrl}
                                 width={24}
@@ -96,32 +97,35 @@ export function Dashboard() {
                                 alt="Company Profile Picture"
                                 className="rounded-md border border-border"
                               />
-                            </div>
-                          ) : (
-                            <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
-                          )}
-
-                          <p className="text-xl font-semibold">
-                            {op.company?.name}
+                            ) : (
+                              <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
+                            )}
+                            {op.company?.name ? (
+                              <p className="text-xl font-semibold">
+                                {op.company?.name}
+                              </p>
+                            ) : (
+                              <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
+                            )}
+                          </div>
+                          <p className="text-sm text-zinc-500 absolute bottom-2">
+                            Added {timeAgo(new Date(op.createdAt))}
                           </p>
                         </div>
-                        <p className="text-sm text-zinc-500 absolute bottom-2">
-                          Added {timeAgo(new Date(op.createdAt))}
-                        </p>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </>
-            ) : (
-              <>
-                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-              </>
-            )}
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
