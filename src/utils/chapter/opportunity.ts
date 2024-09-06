@@ -39,8 +39,6 @@ export async function getOpportunities(
     );
     if (!response.ok) {
         const msg = await response.json();
-        console.log("Failed to get opportunities");
-        console.log(msg);
         return [];
     }
     const data = await response.json();
@@ -87,7 +85,6 @@ export async function updateOpportunityStage(
         }
     );
     if (!response.ok) {
-        console.log(response);
         const msg = await response.json();
         throw new Error(msg?.detail);
     }

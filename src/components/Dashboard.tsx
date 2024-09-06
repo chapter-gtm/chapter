@@ -51,7 +51,6 @@ export function Dashboard() {
           true
         );
         setOpportunities(opportunities);
-        console.log(opportunities);
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
       }

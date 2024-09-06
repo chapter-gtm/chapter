@@ -55,7 +55,6 @@ export function KanbanBoard() {
         }));
         setItems(cardItems);
       } catch (error: any) {
-        console.log(error);
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };

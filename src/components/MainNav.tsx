@@ -38,8 +38,6 @@ interface NavProps {
 
 export function MainNav({ links }: NavProps) {
   const pathname = usePathname();
-  // const { setTheme } = useTheme();
-  console.log("1.: pathname");
 
   return (
     <nav className="flex items-center space-x-2 lg:space-x-3 relative">

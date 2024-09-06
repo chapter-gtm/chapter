@@ -15,7 +15,6 @@ export async function getUserProfile() {
         }
     );
     if (!response.ok) {
-        console.log("Failed to get user profile");
         throw new Error("Failed to fetch data");
     }
     const data = await response.json();
