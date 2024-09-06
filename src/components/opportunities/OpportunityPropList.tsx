@@ -12,7 +12,7 @@ import {
 
 import { getIcp } from "@/utils/chapter/icp_criteria";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,6 +65,10 @@ export function OpportunityPropList({
       toast.error("Failed to update stage.");
     }
   };
+
+  useEffect(() => {
+    setCurrentStage(opportunity.stage);
+  }, [opportunity]);
 
   return (
     <>

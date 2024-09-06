@@ -132,6 +132,7 @@ export function OpportunitiesMain() {
   };
 
   const updateOpportunity = (updatedOpportunity: Opportunity) => {
+    // Update records
     setRecords((prevItems) =>
       prevItems.map((item) =>
         item.id === updatedOpportunity.id
@@ -139,6 +140,12 @@ export function OpportunitiesMain() {
           : item
       )
     );
+
+    // Update selected row
+    setSelectedRow(updatedOpportunity);
+
+    // Update map (which will be used to set selectedRow on the next row click)
+    opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
   };
 
   return (
