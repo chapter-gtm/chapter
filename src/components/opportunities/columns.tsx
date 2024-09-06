@@ -368,17 +368,19 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       <DataTableColumnHeader column={column} title="Stage" />
     ),
     cell: ({ row }) => {
-      const opportunityStage = getStageFromStage(row.getValue("stage"));
+      const stage: OpportunityStage = row.getValue("stage") as OpportunityStage;
+      const opportunityStage = getStageFromStage(stage);
+
       if (!opportunityStage) {
         return null;
       }
 
       return (
-        <div className="flex items-center">
+        <div className="">
           <div
             className={classNames(
-              stageColors[opportunityStage]?.color,
-              "py-1 rounded-full hover:none focus-visible:ring-0 ps-1"
+              stageColors[stage]?.color,
+              "flex  py-0.5 rounded-full hover:none focus-visible:ring-0 pr-3 items-center"
             )}
           >
             <Dot />

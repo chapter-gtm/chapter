@@ -18,12 +18,6 @@ export function TopNavbar() {
       variant: "secondary",
       route: "/opportunities",
     },
-    {
-      title: "Settings",
-      label: "",
-      variant: "secondary",
-      route: "/settings",
-    },
   ];
 
   return (
