@@ -7,8 +7,8 @@ import { UserNav } from "@/components/UserNav";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Nectar Console",
-  description: "GTM built for technical founders.",
+  title: "Chapter App",
+  description: "Lead gen for founders",
 };
 
 export default function RootLayout({

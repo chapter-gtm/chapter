@@ -3,8 +3,8 @@ import { PageHeaderRow } from "@/components/PageHeaderRow";
 import { OpportunitiesMain } from "@/components/opportunities/OpportunitiesMain";
 
 export const metadata: Metadata = {
-  title: "Funnel: Nectar Console",
-  description: "Outbound Sales",
+  title: "Funnel: Chapter App",
+  description: "Lead gen for founders",
 };
 
 export default function FunnelPage() {

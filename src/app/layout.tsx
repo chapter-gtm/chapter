@@ -13,8 +13,8 @@ const PostHogPageView = dynamic(() => import("./PostHogPageView"), {
 });
 
 export const metadata: Metadata = {
-  title: "Nectar Console",
-  description: "Customer Stories. Opportunities.",
+  title: "Chapter",
+  description: "Lead gen for founders.",
 };
 
 export default function RootLayout({

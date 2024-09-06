@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { Dashboard } from "@/components/Dashboard";
 
 export const metadata: Metadata = {
-  title: "Dashboatd: Nectar Console",
-  description: "GTM built for technical founders",
+  title: "Dashboard: Chapter App",
+  description: "Lead gen for founders",
 };
 
 export default function DashboardPage() {
