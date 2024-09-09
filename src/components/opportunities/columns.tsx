@@ -454,6 +454,8 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       const orgSize: OrgSize = row.getValue("orgSize");
       return <div className="flex">{orgSize.engineering}</div>;
     },
+    enableSorting: true,
+    enableHiding: true,
   },
   {
     accessorKey: "fundingRound",
