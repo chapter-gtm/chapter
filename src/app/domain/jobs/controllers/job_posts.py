@@ -117,11 +117,15 @@ class JobPostController(Controller):
         html_content = await extract_url_content(data.url)
         job_details = await extract_job_details_from_html(html_content)
 
+        company_url = job_details.get("company", {}).get("url")
+        company_linkedin_url = job_details.get("company", {}).get("linkedin_url")
+
+        if not company_url and not company_linkedin_url:
+            raise Exception("Cannot determine company url or company linkedin url from job post")
+
         # Add or update company
         company = CompanyCreate(
-            name=job_details.get("company", {}).get("name"),
-            url=job_details.get("company", {}).get("url"),
-            linkedin_profile_url=job_details.get("company", {}).get("linkedin_url"),
+            name=job_details.get("company", {}).get("name"), url=company_url, linkedin_profile_url=company_linkedin_url
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
