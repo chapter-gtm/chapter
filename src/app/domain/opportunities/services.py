@@ -167,12 +167,12 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             # TODO:
             # 1. Read criteria from tenant icp/criteria
             # 2. Add created_at after <timestamp> filter
-            tools = ["Github Actions", "Cypress", "Playwright"]
+            tools = ["Github Actions", "Cypress", "Playwright", "Docker", "Rust"]
             tools_to_avoid = ["Gitlab CI", "CircleCI"]
             company_size_min = 11
             company_size_max = 500
             engineering_size_min = 10
-            engineering_size_max = 60
+            engineering_size_max = 100
             funding = ["Pre-Seed", "Seed", "Series A", "Series B", "Series C"]
             countries = [
                 "United States",
