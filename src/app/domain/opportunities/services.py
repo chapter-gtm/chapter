@@ -315,7 +315,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
                     # Check if opportunity with the same company already exists
                     opportunity_statement = select(Opportunity.id).where(
-                        and_(Opportunity.company_id == job_post.company.id, Opportunity.tenant_id == tenant_id)
+                        and_(Opportunity.company_id == job_post.company.id, Opportunity.tenant_id == icp.tenant_id)
                     )
                     opportunity_results = await self.repository.session.execute(statement=opportunity_statement)
                     opportunity_ids = [result[0] for result in opportunity_results]
