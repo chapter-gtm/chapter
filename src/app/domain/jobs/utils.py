@@ -20,8 +20,8 @@ prompt = """
     - Tech stack such as tools, programming languages, frameworks, and technologies, along with the certainty(Low, Medium or High) that the company is likely using the tool
 
    Tips:
-   - If a company url is not found directly, try to determine company name from the description and match with
-   and email address present as part of the contact information.
+   - If a company url is not found directly, try to determine company name from the post and match against
+   an email address found in the post get the company url.
 
     Rules for assigning certainty to tools:
     - If the candidate experience with a tool is preferred or considered a bonus, the certainty should be High.
