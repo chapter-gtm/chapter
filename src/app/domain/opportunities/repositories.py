@@ -3,17 +3,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 from uuid import UUID  # noqa: TCH003
 
-from advanced_alchemy.repository import SQLAlchemyAsyncSlugRepository
+from advanced_alchemy.repository import SQLAlchemyAsyncSlugRepository, SQLAlchemyAsyncRepository
 from sqlalchemy import ColumnElement, select
 from sqlalchemy.orm import joinedload, InstrumentedAttribute
 
-from app.db.models import Opportunity, OpportunityAuditLog
+from app.db.models import Opportunity, OpportunityAuditLog, ICP
 
 if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.repository._util import LoadSpec
 
-__all__ = ("OpportunityRepository", "OpportunityAuditLogRepository")
+__all__ = ("OpportunityRepository", "OpportunityAuditLogRepository", "ICPRepository")
 
 
 class OpportunityRepository(SQLAlchemyAsyncSlugRepository[Opportunity]):
@@ -66,3 +66,10 @@ class OpportunityAuditLogRepository(SQLAlchemyAsyncSlugRepository[OpportunityAud
     """OpportunityAuditLog Repository."""
 
     model_type = OpportunityAuditLog
+
+
+class ICPRepository(SQLAlchemyAsyncRepository[ICP]):
+    """JobPost Repository."""
+
+    model_type = ICP
+    match_fields = ["id"]

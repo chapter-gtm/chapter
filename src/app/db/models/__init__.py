@@ -13,6 +13,7 @@ from .company import Company
 from .job_post import JobPost
 from .person import Person
 from .opportunity import Opportunity, OpportunityAuditLog, opportunity_person_relation, opportunity_job_post_relation
+from .icp import ICP
 
 __all__ = (
     "User",
@@ -33,4 +34,5 @@ __all__ = (
     "OpprtunityAuditLog",
     "opportunity_person_relation",
     "opportunity_job_post_relation",
+    "ICP",
 )

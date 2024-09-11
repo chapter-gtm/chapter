@@ -16,6 +16,10 @@ from app.lib.schema import (
     OrgSize,
     Tool,
     Scale,
+    OrgSizeCriteria,
+    CompanyCriteria,
+    ToolCriteria,
+    PersonCriteria,
 )
 
 
@@ -115,4 +119,45 @@ class ToolType(JSONBType):
                 obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
                 objs.append(obj)
             return objs
+        return None
+
+
+class OrgSizeCriteriaType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return OrgSizeCriteria.from_dict(value)
+        return None
+
+
+class PersonCriteriaType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return PersonCriteria.from_dict(value)
+        return None
+
+
+class ToolCriteriaType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return ToolCriteria.from_dict(value)
+        return None
+
+
+class CompanyCriteriaType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            obj = CompanyCriteria.from_dict(value)
+            funding_rounds = []
+            for funding_round in obj.funding:
+                try:
+                    funding_rounds.append(FundingRound(funding_round))
+                except ValueError:
+                    pass
+            obj.funding = funding_rounds
+            obj.org_size = OrgSizeCriteria.from_dict(obj.org_size)
+            return obj
         return None

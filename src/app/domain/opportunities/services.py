@@ -7,14 +7,20 @@ from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, tex
 from advanced_alchemy.filters import SearchFilter, LimitOffset
 from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
+from advanced_alchemy.filters import CollectionFilter
 from uuid_utils.compat import uuid4
 
 from app.lib.schema import CamelizedBaseStruct, OpportunityStage
 from app.db.models import Opportunity, OpportunityAuditLog, JobPost, Person
-from app.domain.accounts.services import TenantService
-from .repositories import OpportunityRepository, OpportunityAuditLogRepository
+from .repositories import OpportunityRepository, OpportunityAuditLogRepository, ICPRepository
 
-from app.db.models import Opportunity, OpportunityAuditLog, opportunity_person_relation, opportunity_job_post_relation
+from app.db.models import (
+    Opportunity,
+    OpportunityAuditLog,
+    opportunity_person_relation,
+    opportunity_job_post_relation,
+    ICP,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -28,10 +34,7 @@ if TYPE_CHECKING:
     from msgspec import Struct
     from sqlalchemy.orm import InstrumentedAttribute
 
-__all__ = (
-    "OpportunityService",
-    "OpportunityAuditLogService",
-)
+__all__ = ("OpportunityService", "OpportunityAuditLogService", "ICPService")
 logger = structlog.get_logger()
 
 
@@ -151,56 +154,26 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
     async def scan(
         self,
-        tenant_ids: list[str],
+        tenant_ids: list[str] | None = None,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
     ) -> Opportunity:
         """Generate opportunity from criteria."""
-        if not tenant_ids:
-            tenants_service = TenantService(session=self.repository.session)
-            tenants, _ = await tenants_service.list_and_count()
-            tenant_ids = [tenant.id for tenant in tenants]
+        icp_service = ICPService(session=self.repository.session)
+
+        if tenant_ids:
+            icps = await icp_service.list(CollectionFilter(field_name="tenant_id", values=tenant_ids))
+        else:
+            icps = await icp_service.list()
 
         opportunities_found = 0
-        for tenant_id in tenant_ids:
+        for icp in icps:
             # TODO:
             # 1. Read criteria from tenant icp/criteria
             # 2. Add created_at after <timestamp> filter
-            tools = ["Github Actions", "Cypress", "Playwright", "Docker", "Rust"]
-            tools_to_avoid = ["Gitlab CI", "CircleCI"]
-            company_size_min = 11
-            company_size_max = 500
-            engineering_size_min = 10
-            engineering_size_max = 100
-            funding = ["Pre-Seed", "Seed", "Series A", "Series B", "Series C"]
-            countries = [
-                "United States",
-                "United Kingdom",
-                "Canada",
-                "Germany",
-                "France",
-                "Netherlands",
-                "Sweden",
-                "Australia",
-                "New Zealand",
-            ]
-            person_titles = [
-                "Platform Engineer",
-                "Infrastructure Engineer",
-                "DevOps Engineer",
-                "Tech Lead",
-                "Staff Engineer",
-                "Head of Engineering",
-                "Director of Engineering",
-                "VP of Engineering",
-                "CTO",
-                "Chief Technology Officer",
-                "Co-founder",
-            ]
-
-            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in tools]
-            tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in tools_to_avoid]))]
+            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
+            tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
 
             # TODO: Case-insensetive match and filter on tool certainty
             job_posts_statement = (
@@ -224,15 +197,13 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         logger.warn(
                             "Skipping job because no company associated with job post",
                             job_post_id=job_post.id,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
                         )
                         continue
 
                     # Filter for company size but skip if the information is missing
-                    if (
-                        not job_post.company.headcount
-                        or job_post.company.headcount < company_size_min
-                        or job_post.company.headcount > company_size_max
+                    if icp.company.headcount_min and (
+                        not job_post.company.headcount or job_post.company.headcount < icp.company.headcount_min
                     ):
                         logger.info(
                             "Skipping job because criteria does not match",
@@ -240,16 +211,28 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             company_headcount=job_post.company.headcount,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
+                        )
+                        continue
+
+                    if icp.company.headcount_max and (
+                        not job_post.company.headcount or job_post.company.headcount > icp.company.headcount_max
+                    ):
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
+                            company_headcount=job_post.company.headcount,
+                            tenant_id=icp.tenant_id,
                         )
                         continue
 
                     # Filter for org size but skip if the information is missing
-                    if (
+                    if icp.company.org_size.engineering_min and (
                         not job_post.company.org_size
                         or not job_post.company.org_size.engineering
-                        or job_post.company.org_size.engineering < engineering_size_min
-                        or job_post.company.org_size.engineering > engineering_size_max
+                        or job_post.company.org_size.engineering < icp.company.org_size.engineering_min
                     ):
                         logger.info(
                             "Skipping job because criteria does not match",
@@ -257,26 +240,44 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             org_size=job_post.company.org_size,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
+                        )
+                        continue
+
+                    if icp.company.org_size.engineering_max and (
+                        not job_post.company.org_size
+                        or not job_post.company.org_size.engineering
+                        or job_post.company.org_size.engineering > icp.company.org_size.engineering_max
+                    ):
+                        logger.info(
+                            "Skipping job because criteria does not match",
+                            job_post_id=job_post.id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
+                            org_size=job_post.company.org_size,
+                            tenant_id=icp.tenant_id,
                         )
                         continue
 
                     # Filter for funding stage but don't skip if the information is missing
-                    if job_post.company.last_funding and job_post.company.last_funding.round_name.value not in funding:
+                    if icp.company.funding and (
+                        job_post.company.last_funding
+                        and job_post.company.last_funding.round_name.value not in icp.company.funding
+                    ):
                         logger.info(
                             "Job because criteria does not match, but continuing further",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             funding_round=job_post.company.last_funding,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
                         )
 
                     # Filter for country but don't skip if the information is missing
-                    if (
+                    if icp.company.countries and (
                         job_post.company.hq_location
                         and job_post.company.hq_location.country
-                        and job_post.company.hq_location.country not in countries
+                        and job_post.company.hq_location.country not in icp.company.countries
                     ):
                         logger.info(
                             "Job because criteria does not match, but continuing further",
@@ -284,7 +285,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             company_location=job_post.company.hq_location,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
                         )
 
                     # TODO: Fetch the contact(s) with the right title from an external source
@@ -292,7 +293,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         select(Person.id)
                         .where(
                             and_(
-                                Person.title.op("%")(text("ANY(:titles)")).params(titles=person_titles),
+                                Person.title.op("%")(text("ANY(:titles)")).params(titles=icp.person.titles),
                                 Person.company_id == job_post.company.id,
                             )
                         )
@@ -308,7 +309,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
                         )
                         continue
 
@@ -324,7 +325,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
-                            tenant_id=tenant_id,
+                            tenant_id=icp.tenant_id,
                         )
                         continue
 
@@ -335,7 +336,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "company_id": job_post.company.id,
                             "contact_ids": person_ids,
                             "job_post_ids": [job_post.id],
-                            "tenant_id": tenant_id,
+                            "tenant_id": icp.tenant_id,
                         }
                     )
 
@@ -343,7 +344,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         {
                             "operation": "create",
                             "diff": {"new": opportunity},
-                            "tenant_id": tenant_id,
+                            "tenant_id": icp.tenant_id,
                             "opportunity_id": opportunity.id,
                         }
                     )
@@ -366,3 +367,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         if is_dict(data) and "slug" not in data and "name" in data and operation == "update":
             data["slug"] = await self.repository.get_available_slug(data["name"])
         return await super().to_model(data, operation)
+
+
+class ICPService(SQLAlchemyAsyncRepositoryService[ICP]):
+    """ICP Service."""
+
+    repository_type = ICPRepository
+    match_fields = ["id"]
+
+    def __init__(self, **repo_kwargs: Any) -> None:
+        self.repository: ICPRepository = self.repository_type(**repo_kwargs)
+        self.model_type = self.repository.model_type

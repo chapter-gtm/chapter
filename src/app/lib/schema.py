@@ -130,3 +130,33 @@ class Tool(CamelizedBaseStruct):
     name: str
     # Shouldn't be part of the tool but makes things easier for now
     certainty: Scale = Scale.LOW
+
+
+class OrgSizeCriteria(CamelizedBaseStruct):
+    """Org size data."""
+
+    engineering_min: int | None = None
+    engineering_max: int | None = None
+
+
+class CompanyCriteria(CamelizedBaseStruct):
+    """Company criteria."""
+
+    headcount_min: int | None = None
+    headcount_max: int | None = None
+    org_size: OrgSizeCriteria | None = None
+    funding: list[FundingRound] | None = None
+    countries: list[str] | None = None
+
+
+class ToolCriteria(CamelizedBaseStruct):
+    """Tool criteria."""
+
+    include: list[str] | None = None
+    exclude: list[str] | None = None
+
+
+class PersonCriteria(CamelizedBaseStruct):
+    """Person criteria."""
+
+    titles: list[str] | None = None

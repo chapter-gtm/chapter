@@ -10,7 +10,7 @@ from app.domain.accounts.schemas import User
 from app.domain.companies.schemas import Company
 from app.domain.people.schemas import Person
 from app.domain.jobs.schemas import JobPost
-from app.lib.schema import CamelizedBaseStruct, OpportunityStage
+from app.lib.schema import CamelizedBaseStruct, OpportunityStage, CompanyCriteria, ToolCriteria, PersonCriteria
 
 
 class OpportunityAuditLog(CamelizedBaseStruct):
@@ -66,3 +66,27 @@ class OpportunityUpdate(CamelizedBaseStruct):
     stage: OpportunityStage | None | msgspec.UnsetType = msgspec.UNSET
     notes: str | None | msgspec.UnsetType = msgspec.UNSET
     owner_id: UUID | None = None
+
+
+class ICP(CamelizedBaseStruct):
+    """An ICP."""
+
+    company: CompanyCriteria | None = None
+    tool: ToolCriteria | None = None
+    person: PersonCriteria | None = None
+
+
+class ICPCreate(CamelizedBaseStruct):
+    """An ICP create schema."""
+
+    company: CompanyCriteria | None = None
+    tool: ToolCriteria | None = None
+    person: PersonCriteria | None = None
+
+
+class ICPUpdate(CamelizedBaseStruct):
+    """An ICP update schema."""
+
+    company: CompanyCriteria | None | msgspec.UnsetType = msgspec.UNSET
+    tool: ToolCriteria | None | msgspec.UnsetType = msgspec.UNSET
+    person: PersonCriteria | None | msgspec.UnsetType = msgspec.UNSET
