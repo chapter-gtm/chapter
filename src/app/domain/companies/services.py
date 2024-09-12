@@ -102,6 +102,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         return await super().upsert(
             data=obj,
             item_id=results[0].id if count > 0 else None,
+            attribute_names=["url", "linkedin_profile_url"],
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
