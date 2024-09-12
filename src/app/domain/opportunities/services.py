@@ -174,18 +174,30 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
 
             # TODO: Case-insensetive match and filter on tool certainty
-            job_posts_statement = (
-                select(JobPost)
-                .where(
-                    and_(
+            if tool_stack_not_conditions:
+                job_posts_statement = (
+                    select(JobPost)
+                    .where(
+                        and_(
+                            or_(
+                                *tool_stack_or_conditions,
+                            ),
+                            *tool_stack_not_conditions,
+                        )
+                    )
+                    .execution_options(populate_existing=True)
+                )
+            else:
+                job_posts_statement = (
+                    select(JobPost)
+                    .where(
                         or_(
                             *tool_stack_or_conditions,
                         ),
-                        *tool_stack_not_conditions,
                     )
+                    .execution_options(populate_existing=True)
                 )
-                .execution_options(populate_existing=True)
-            )
+
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)
             opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
             for result in job_post_results:
