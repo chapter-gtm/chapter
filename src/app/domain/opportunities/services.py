@@ -174,7 +174,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
 
             # TODO: Case-insensetive match and filter on tool certainty
-            if tool_stack_not_conditions:
+            if icp.tool.exclude:
                 job_posts_statement = (
                     select(JobPost)
                     .where(
