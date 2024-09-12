@@ -161,17 +161,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
     ) -> Opportunity:
         """Generate opportunity from criteria."""
         icp_service = ICPService(session=self.repository.session)
-
-        if tenant_ids:
-            icps = await icp_service.list(CollectionFilter(field_name="tenant_id", values=tenant_ids))
-        else:
-            icps = await icp_service.list()
+        # TDOD: Filter for tenant_ids
+        icps = await icp_service.list()
 
         opportunities_found = 0
         for icp in icps:
-            # TODO:
-            # 1. Read criteria from tenant icp/criteria
-            # 2. Add created_at after <timestamp> filter
+            if icp.tenant_id not in tenant_ids:
+                continue
+            # TODO: Add created_at after <timestamp> filter
             tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
             tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
 
