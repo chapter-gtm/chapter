@@ -166,8 +166,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
         opportunities_found = 0
         for icp in icps:
-            if icp.tenant_id not in tenant_ids:
+            if tenant_ids and str(icp.tenant_id) not in tenant_ids:
                 continue
+
             # TODO: Add created_at after <timestamp> filter
             tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
             tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
