@@ -72,23 +72,27 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
               className="flex flex-row items-center justify-between text-sm text-zinc-700"
               key={index}
             >
-              <a
-                className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start"
-                href={contact.linkedinProfileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <CircleUserRoundIcon width={18} className="text-muted" />
-                <div className="flex flex-col justify-start gap-x-1">
-                  <p className="flex font-medium text-primary" key={index}>
-                    {contact.fullName}
-                  </p>
+              {contact.linkedinProfileUrl && (
+                <>
+                  <a
+                    className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start"
+                    href={contact.linkedinProfileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <CircleUserRoundIcon width={18} className="text-muted" />
+                    <div className="flex flex-col justify-start gap-x-1">
+                      <p className="flex font-medium text-primary" key={index}>
+                        {contact.fullName}
+                      </p>
 
-                  <p className="flex text-sm text-muted" key={index}>
-                    {contact.title}
-                  </p>
-                </div>
-              </a>
+                      <p className="flex text-sm text-muted" key={index}>
+                        {contact.title}
+                      </p>
+                    </div>
+                  </a>
+                </>
+              )}
 
               <div
                 className="flex flex-row justify-end gap-x-2 items-center"
