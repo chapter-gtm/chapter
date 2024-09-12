@@ -67,8 +67,10 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         now = datetime.now(timezone.utc)
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
 
-        if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
-            await logger.ainfo("Company already exists and is up-to-date", id=results[0].id, url=results[0].url)
+        if count > 0:
+            # TODO: Uncomment after upsert is fixed
+            # if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
+            await logger.ainfo("Company already exists", id=results[0].id, url=results[0].url)
             return results[0]
 
         if obj.url:
@@ -99,10 +101,10 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             words = [word.capitalize() for word in words]
             obj.last_funding = Funding(round_name=" ".join(words))
 
+        # TODO: Fix upsert
         return await super().upsert(
             data=obj,
             item_id=results[0].id if count > 0 else None,
-            attribute_names=["url", "linkedin_profile_url"],
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
