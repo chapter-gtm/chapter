@@ -83,7 +83,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         obj.industry = company_details.get("industry") or obj.industry
         obj.headcount = company_details.get("employee_count") or obj.headcount
         obj.founded_year = company_details.get("founded") or obj.founded_year
-        obj.url = company_details.get("website") or obj.website
+        obj.url = company_details.get("website") or obj.url
         obj.linkedin_profile_url = company_details.get("linkedin_url") or obj.linkedin_profile_url
         obj.hq_location = Location(
             country=company_details.get("location", {}).get("country"),
