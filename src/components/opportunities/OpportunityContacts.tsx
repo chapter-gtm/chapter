@@ -46,6 +46,18 @@ interface OpportunityDrawerProps {
   opportunity: Opportunity;
 }
 
+const handleCopyRecordLink = async (email: string | null) => {
+  try {
+    const currentDomain = window.location.host;
+    await navigator.clipboard.writeText(`${email}`);
+    toast.success("Email copied to clipboard");
+  } catch (error: any) {
+    toast.error("Failed to copy opportunity link.", {
+      description: error.toString(),
+    });
+  }
+};
+
 export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
   return (
     <>
@@ -60,7 +72,12 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
               className="flex flex-row items-center justify-between text-sm text-zinc-700"
               key={index}
             >
-              <div className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start">
+              <a
+                className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start"
+                href={contact.linkedinProfileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <CircleUserRoundIcon width={18} className="text-muted" />
                 <div className="flex flex-col justify-start gap-x-1">
                   <p className="flex font-medium text-primary" key={index}>
@@ -71,7 +88,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     {contact.title}
                   </p>
                 </div>
-              </div>
+              </a>
 
               <div
                 className="flex flex-row justify-end gap-x-2 items-center"
@@ -83,15 +100,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       // href={"mailto:" + contact.workEmail}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() =>
-                        toast("Event has been created", {
-                          description: "Sunday, December 03, 2023 at 9:00 AM",
-                          action: {
-                            label: "Undo",
-                            onClick: () => console.log("Undo"),
-                          },
-                        })
-                      }
+                      onClick={() => handleCopyRecordLink(contact?.workEmail)}
                     >
                       <Button variant={"default"}>
                         <Mail className="h-4 w-4" />
