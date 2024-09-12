@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import joinedload, noload, selectinload
 
-from app.db.models import Opportunity, OpportunityAuditLog
-from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService
+from app.db.models import Opportunity, OpportunityAuditLog, ICP
+from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService, ICPService
 
-__all__ = ("provide_opportunities_service", "provide_opportunities_audit_log_service")
+__all__ = ("provide_opportunities_service", "provide_opportunities_audit_log_service", "provide_icp_service")
 
 
 if TYPE_CHECKING:
@@ -27,9 +27,20 @@ async def provide_opportunities_service(db_session: AsyncSession) -> AsyncGenera
         yield service
 
 
-async def provide_opportunities_audit_log_service(db_session: AsyncSession) -> AsyncGenerator[OpportunityAuditLogService, None]:
+async def provide_opportunities_audit_log_service(
+    db_session: AsyncSession,
+) -> AsyncGenerator[OpportunityAuditLogService, None]:
     """Construct repository and service objects for the request."""
     async with OpportunityAuditLogService.new(
+        session=db_session,
+        load=[],
+    ) as service:
+        yield service
+
+
+async def provide_icp_service(db_session: AsyncSession) -> AsyncGenerator[ICPService, None]:
+    """Construct repository and service objects for the request."""
+    async with ICPService.new(
         session=db_session,
         load=[],
     ) as service:

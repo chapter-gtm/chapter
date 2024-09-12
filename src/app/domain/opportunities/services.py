@@ -388,3 +388,11 @@ class ICPService(SQLAlchemyAsyncRepositoryService[ICP]):
     def __init__(self, **repo_kwargs: Any) -> None:
         self.repository: ICPRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
+
+    async def get_by_tenant_id(
+        self,
+        tenant_id: UUID,
+        **kwargs: Any,
+    ) -> ICP:
+        """Get icp details."""
+        return await self.repository.get_by_tenant_id(tenant_id=tenant_id)

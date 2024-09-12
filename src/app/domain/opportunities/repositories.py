@@ -73,3 +73,12 @@ class ICPRepository(SQLAlchemyAsyncRepository[ICP]):
 
     model_type = ICP
     match_fields = ["id"]
+
+    async def get_by_tenant_id(
+        self,
+        tenant_id: UUID,
+    ) -> ICP:
+        """Get an icp along with it's associated details."""
+        return await self.get_one(
+            statement=select(ICP).where(ICP.tenant_id == tenant_id).options(),
+        )
