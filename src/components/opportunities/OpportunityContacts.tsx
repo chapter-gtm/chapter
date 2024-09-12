@@ -10,6 +10,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+
 import {
   Divide,
   ExternalLink,
@@ -76,9 +80,18 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 {contact.workEmail && (
                   <>
                     <a
-                      href={"mailto:" + contact.workEmail}
+                      // href={"mailto:" + contact.workEmail}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() =>
+                        toast("Event has been created", {
+                          description: "Sunday, December 03, 2023 at 9:00 AM",
+                          action: {
+                            label: "Undo",
+                            onClick: () => console.log("Undo"),
+                          },
+                        })
+                      }
                     >
                       <Button variant={"default"}>
                         <Mail className="h-4 w-4" />
