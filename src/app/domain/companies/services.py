@@ -51,9 +51,12 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         """Create a new company."""
         obj = await self.to_model(data, "create")
         filters = []
+
         if obj.url:
+            obj.url = obj.url.rstrip("/")
             filters.append(SearchFilter(field_name="url", value=obj.url, ignore_case=True))
         if obj.linkedin_profile_url:
+            obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
             filters.append(
                 SearchFilter(field_name="linkedin_profile_url", value=obj.linkedin_profile_url, ignore_case=True)
             )
@@ -72,12 +75,6 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             # if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
             await logger.ainfo("Company already exists", id=results[0].id, url=results[0].url)
             return results[0]
-
-        if obj.url:
-            obj.url = obj.url.rstrip("/")
-
-        if obj.linkedin_profile_url:
-            obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
 
         # TODO: Move to provider specific code
         company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
