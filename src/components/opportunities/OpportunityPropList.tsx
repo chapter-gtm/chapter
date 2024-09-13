@@ -11,7 +11,7 @@ import {
   Dot,
 } from "lucide-react";
 
-import { getIcp } from "@/utils/chapter/icp_criteria";
+import { getIcp } from "@/utils/chapter/icp";
 
 import { useState, useEffect } from "react";
 import {
@@ -36,6 +36,7 @@ import { OpportunityStage } from "@/types/opportunity";
 import { updateOpportunityStage } from "@/utils/chapter/opportunity";
 
 import { stageColors } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
 
 interface OpportunityPropListProps {
   opportunity: Opportunity;
@@ -53,8 +54,8 @@ export function OpportunityPropList({
   const [currentStage, setCurrentStage] = useState<OpportunityStage>(
     opportunity.stage
   );
+  const [icp, setIcp] = useState<Icp | null>(null);
   const stages = Object.values(OpportunityStage);
-  const icpTools: string[] = getIcp();
 
   const handleStageChange = async (newStage: string) => {
     try {
@@ -77,6 +78,18 @@ export function OpportunityPropList({
   useEffect(() => {
     setCurrentStage(opportunity.stage);
   }, [opportunity]);
+
+  useEffect(() => {
+    const fetchIcp = async () => {
+      try {
+        setIcp(await getIcp());
+      } catch (error) {
+        toast.error("Failed to get ICP.");
+      }
+    };
+
+    //fetchIcp();
+  }, []);
 
   return (
     <>
@@ -213,39 +226,54 @@ export function OpportunityPropList({
             <p>Search criteria</p>
           </div>
           <div className="flex flex-row gap-x-2">
-            {opportunity.jobPosts
-              ?.flatMap((jobPost) => jobPost.tools)
-              .filter((tool) => tool && icpTools.includes(tool.name))
-              .map((tool, index) => (
-                <>
-                  {tool && (
-                    <Badge key={index} variant={"default"}>
-                      {tool.name}
-                    </Badge>
-                  )}
-                </>
-              ))}
+            {icp &&
+              opportunity.jobPosts
+                ?.flatMap((jobPost) => jobPost.tools)
+                .filter((tool) => tool && icp.tool.include.includes(tool.name))
+                .map((tool, index) => (
+                  <>
+                    {tool && (
+                      <Badge key={index} variant={"default"}>
+                        {tool.name}
+                      </Badge>
+                    )}
+                  </>
+                ))}
           </div>
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
             <Target width={18} />
-            <p>Additional stack</p>
+            {icp ? <p>Additional stack</p> : <p>Tech stack</p>}
           </div>
           <div className="flex flex-1 flex-wrap gap-2">
-            {opportunity.jobPosts
-              ?.flatMap((jobPost) => jobPost.tools)
-              .filter((tool) => tool && !icpTools.includes(tool.name))
-              .map((tool, index) => (
-                <>
-                  {tool && (
-                    <Badge key={index} variant={"outline"}>
-                      {tool.name}
-                    </Badge>
-                  )}
-                </>
-              ))}
+            {icp
+              ? opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .filter(
+                    (tool) => tool && !icp.tool.include.includes(tool.name)
+                  )
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <Badge key={index} variant={"outline"}>
+                          {tool.name}
+                        </Badge>
+                      )}
+                    </>
+                  ))
+              : opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <Badge key={index} variant={"outline"}>
+                          {tool.name}
+                        </Badge>
+                      )}
+                    </>
+                  ))}
           </div>
         </div>
         <Separator />
