@@ -14,7 +14,7 @@ def get_domain(url: str) -> str:
         url = "https://" + url
 
     parsed_url = urlparse(url)
-    return parsed_url.netloc
+    return parsed_url.netloc.replace("www.", "")
 
 
 def get_domain_from_email(email: str) -> str:

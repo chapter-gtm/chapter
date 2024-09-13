@@ -13,6 +13,7 @@ from uuid_utils.compat import uuid4
 from app.lib.pdl import get_company_details
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 from app.db.models import Company
+from app.lib.utils import get_domain
 
 from .repositories import CompanyRepository
 
@@ -53,10 +54,10 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         filters = []
 
         if obj.url:
-            obj.url = obj.url.rstrip("/")
+            obj.url = get_domain(obj.url)
             filters.append(SearchFilter(field_name="url", value=obj.url, ignore_case=True))
         if obj.linkedin_profile_url:
-            obj.linkedin_profile_url = obj.linkedin_profile_url.rstrip("/")
+            obj.linkedin_profile_url = get_domain(obj.linkedin_profile_url)
             filters.append(
                 SearchFilter(field_name="linkedin_profile_url", value=obj.linkedin_profile_url, ignore_case=True)
             )
@@ -64,10 +65,8 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         if not filters:
             raise Exception("Unable to find company without url or linkedin_profile_url.")
 
-        await logger.ainfo("Lookup companies", url=obj.url, linkedin_url=obj.linkedin_profile_url)
         filters.append(LimitOffset(limit=1, offset=0))
         results, count = await self.list_and_count(*filters)
-        await logger.ainfo("Found companies", ids=[c.id for c in results], count=count)
 
         now = datetime.now(timezone.utc)
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
