@@ -24,7 +24,6 @@ import { type Location } from "@/types/location";
 import { type Tool } from "@/types/job_post";
 import { type Scale, ScaleLabel } from "@/types/scale";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
-import { getIcp } from "@/utils/chapter/icp_criteria";
 
 import { toTitleCase } from "@/utils/misc";
 
@@ -241,6 +240,11 @@ export const filters = [
       {
         value: "Rust",
         label: "Rust",
+        icon: undefined,
+      },
+      {
+        value: "Kubernetes",
+        label: "Kubernetes",
         icon: undefined,
       },
     ],
@@ -528,7 +532,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     ),
     cell: ({ row }) => {
       const tools: Tool[] = row.getValue("tools");
-      const icpTools: string[] = getIcp();
+      const icpTools: string[] = [
+        "Github Actions",
+        "Cypress",
+        "Playwright",
+        "Docker",
+        "Kubernetes",
+      ];
       return (
         <div className="flex items-center gap-2">
           {tools

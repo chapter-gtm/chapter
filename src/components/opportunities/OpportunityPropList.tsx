@@ -88,7 +88,7 @@ export function OpportunityPropList({
       }
     };
 
-    //fetchIcp();
+    fetchIcp();
   }, []);
 
   return (
