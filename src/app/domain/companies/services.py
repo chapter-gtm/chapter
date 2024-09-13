@@ -64,8 +64,10 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         if not filters:
             raise Exception("Unable to find company without url or linkedin_profile_url.")
 
+        await logger.ainfo("Lookup companies", url=obj.url, linkedin_url=obj.linkedin_profile_url)
         filters.append(LimitOffset(limit=1, offset=0))
         results, count = await self.list_and_count(*filters)
+        await logger.ainfo("Found companies", ids=[c.id for c in results], count=count)
 
         now = datetime.now(timezone.utc)
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
