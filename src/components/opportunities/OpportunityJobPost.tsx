@@ -14,6 +14,7 @@ import {
   CircleUserIcon,
   Linkedin,
   Mail,
+  Download,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -56,26 +57,34 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <Link href={""} onClick={handleDownload}>
-        <div className="mt-4 flex flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover hover:bg-accent-hover hover:border-violet-400/50">
-          <div className="flex gap-x-4">
-            <div className="w-9 items-center justify-center flex flex-col text-zinc-500">
-              <StickyNote width={20} />
-            </div>
-            <div className="flex flex-col justify-center gap-y-1 text-base">
-              <p className="font-medium dark:text-zinc-200">JobPost.pdf</p>{" "}
-              <p className="font-light text-muted">
-                Added{" "}
-                {opportunity?.jobPosts?.[0]?.createdAt &&
-                  timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
-              </p>
-            </div>
-          </div>
-          <div>
-            <ChevronRight width={20} />
-          </div>
+      <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col justify-start gap-x-1">
+          <p className="flex font-medium text-primary">Job Post</p>
+          <p className="flex text-sm text-muted">
+            Added{" "}
+            {opportunity?.jobPosts?.[0]?.createdAt &&
+              timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
+          </p>
         </div>
-      </Link>
+
+        <div className="flex flex-row justify-end gap-x-2 items-center">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={opportunity.jobPosts[0].url}
+          >
+            <Button variant={"default"}>
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </a>
+
+          <Link href={""} onClick={handleDownload}>
+            <Button variant={"default"}>
+              <Download className="h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      </div>
     </>
   );
 }
