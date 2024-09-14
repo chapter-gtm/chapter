@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
                         header.column.id === "select"
-                          ? "sticky left-0 bg-background"
+                          ? "sticky left-0 bg-card"
                           : ""
                       )}
                     >
@@ -156,7 +156,7 @@ export function DataTable<TData, TValue>({
                         "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
 
                         cell.column.id === "select"
-                          ? "sticky left-0 bg-background"
+                          ? "sticky left-0 bg-card"
                           : ""
                       )}
                       // This is where the cell should have a shade of color
