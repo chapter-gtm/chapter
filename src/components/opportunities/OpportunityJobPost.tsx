@@ -61,7 +61,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
         <div className="flex gap-x-1 flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover">
           <div className="flex flex-col text-zinc-500 dark:text-zinc-400">
             <p className="flex text-base font-medium">Job Post</p>
-            <p className="flex text-sm">
+            <p className="flex text-sm text-muted-foreground">
               Added{" "}
               {opportunity?.jobPosts?.[0]?.createdAt &&
                 timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
@@ -71,7 +71,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href={opportunity.jobPosts[0].url}
+              href={opportunity.jobPosts?.[0]?.url || undefined}
             >
               <Button variant={"outline"}>
                 <ExternalLink className="h-4 w-4" />
