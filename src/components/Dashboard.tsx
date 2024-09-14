@@ -143,7 +143,7 @@ export function Dashboard() {
             />
             <div className="flex flex-col gap-y-1">
               <p className="text-xl font-medium tracking-wide">Sales funnel</p>
-              <p className="text-base text-muted">Coming soon.</p>
+              <p className="text-base text-muted-foreground">Coming soon.</p>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@ export function Dashboard() {
             />
             <div className="flex flex-col gap-y-1">
               <p className="text-xl font-medium tracking-wide">Tasks</p>
-              <p className="text-base text-muted">Coming soon.</p>
+              <p className="text-base text-muted-foreground">Coming soon.</p>
             </div>
           </div>
         </div>
