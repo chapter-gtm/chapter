@@ -18,8 +18,13 @@ export async function getJobPostPdf(id: string) {
 
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
+    return url;
+}
+
+export async function downloadJobPostPdf(id: string) {
+    const pdfUrl = await getJobPostPdf(id);
     const link = document.createElement("a");
-    link.href = url;
+    link.href = pdfUrl;
     link.setAttribute("download", id);
     document.body.appendChild(link);
     link.click();
