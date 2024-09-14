@@ -52,6 +52,9 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
       return;
     }
     try {
+      if (!opportunity?.jobPosts?.[0]?.id) {
+        throw new Error("No job post found!");
+      }
       await downloadJobPostPdf(opportunity.jobPosts[0].id);
     } catch (error: any) {
       toast.error("Failed to fetch job post pdf", {
@@ -62,6 +65,9 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   const openJobPostModal = async () => {
     try {
+      if (!opportunity?.jobPosts?.[0]?.id) {
+        throw new Error("No job post found!");
+      }
       const url = await getJobPostPdf(opportunity.jobPosts[0].id);
       setJobPostPdfUrl(url);
     } catch (error: any) {
