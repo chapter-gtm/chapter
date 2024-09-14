@@ -80,13 +80,19 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <CircleUserRoundIcon width={18} className="text-muted" />
+                    <CircleUserRoundIcon
+                      width={18}
+                      className="text-muted-foreground"
+                    />
                     <div className="flex flex-col justify-start gap-x-1">
                       <p className="flex font-medium text-primary" key={index}>
                         {contact.fullName}
                       </p>
 
-                      <p className="flex text-sm text-muted" key={index}>
+                      <p
+                        className="flex text-sm text-muted-foreground"
+                        key={index}
+                      >
                         {contact.title}
                       </p>
                     </div>

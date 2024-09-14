@@ -57,32 +57,33 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <div className="flex flex-col gap-y-4">
-        <div className="flex flex-col justify-start gap-x-1">
-          <p className="flex font-medium text-primary">Job Post</p>
-          <p className="flex text-sm text-muted">
-            Added{" "}
-            {opportunity?.jobPosts?.[0]?.createdAt &&
-              timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
-          </p>
-        </div>
+      <div className="flex flex-col gap-y-4 pb-6">
+        <div className="flex gap-x-1 flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover">
+          <div className="flex flex-col text-zinc-500 dark:text-zinc-400">
+            <p className="flex text-base font-medium">Job Post</p>
+            <p className="flex text-sm">
+              Added{" "}
+              {opportunity?.jobPosts?.[0]?.createdAt &&
+                timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
+            </p>
+          </div>
+          <div className="flex flex-row justify-end gap-x-2 items-center">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={opportunity.jobPosts[0].url}
+            >
+              <Button variant={"outline"}>
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </a>
 
-        <div className="flex flex-row justify-end gap-x-2 items-center">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={opportunity.jobPosts[0].url}
-          >
-            <Button variant={"default"}>
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          </a>
-
-          <Link href={""} onClick={handleDownload}>
-            <Button variant={"default"}>
-              <Download className="h-4 w-4" />
-            </Button>
-          </Link>
+            <Link href={""} onClick={handleDownload}>
+              <Button variant={"outline"}>
+                <Download className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </>
