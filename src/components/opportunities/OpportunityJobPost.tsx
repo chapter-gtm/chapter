@@ -87,22 +87,20 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
     <>
       <div className="flex flex-col gap-y-4 pb-6">
         <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
-          <div className="flex gap-x-1 flex-row justify-between rounded-lg h-20 p-4 items-center gap-x-3 border border-border bg-popover">
-            <DialogContent>
-              <DialogHeader>
+          <div className="flex gap-x-1 flex-row justify-between rounded-lg p-6 h-20 items-center gap-x-3 border border-border bg-popover">
+            <DialogContent className="h-[800px] min-w-[600px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
+              <DialogHeader className="p-5 justify-center h-16 align-center">
                 <DialogTitle>{opportunity?.jobPosts?.[0]?.title}</DialogTitle>
                 <DialogDescription></DialogDescription>
               </DialogHeader>
               {jobPostPdfUrl && (
                 <iframe
                   src={jobPostPdfUrl}
-                  width="100%"
-                  height="500px"
-                  className="border rounded"
+                  height="100%"
+                  className="border w-full [min-h-800px]"
                   title="Job Post PDF"
                 />
               )}
-              <DialogFooter className="border-t border-border pt-4"></DialogFooter>
             </DialogContent>
             <div className="flex flex-col ">
               <p className="flex text-base font-medium">Job Post</p>
