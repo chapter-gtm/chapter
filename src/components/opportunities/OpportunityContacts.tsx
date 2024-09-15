@@ -30,6 +30,7 @@ import {
   CircleUserIcon,
   Linkedin,
   Mail,
+  PencilLine,
   CircleUserRoundIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -107,13 +108,21 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 {contact.workEmail && (
                   <>
                     <a
-                      // href={"mailto:" + contact.workEmail}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => handleCopyRecordLink(contact?.workEmail)}
                     >
                       <Button variant={"default"}>
                         <Mail className="h-4 w-4" />
+                      </Button>
+                    </a>
+                    <a
+                      href={"mailto:" + contact.workEmail}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant={"default"}>
+                        <PencilLine className="h-4 w-4" />
                       </Button>
                     </a>
                   </>
