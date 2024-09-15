@@ -16,9 +16,10 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { timeAgo } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
+import { VictoryChart, VictoryAxis, VictoryBar, VictoryLabel } from "victory";
 
 import { User } from "@/types/user";
-import { type Opportunity } from "@/types/opportunity";
+import { type Opportunity, OpportunityStage } from "@/types/opportunity";
 import { getOpportunities } from "@/utils/chapter/opportunity";
 import { getUserProfile } from "@/utils/chapter/users";
 
@@ -30,6 +31,8 @@ import { title } from "process";
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [opportunityCountByStageChartData, setOpportunityByStageChartData] =
+    useState<object[]>([{ x: 1, y: 0 }]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -42,12 +45,12 @@ export function Dashboard() {
     const fetchOpportunities = async () => {
       try {
         const opportunities = await getOpportunities(
-          20,
+          1000,
           1,
           "created_at",
           "desc",
-          "stage",
-          "Identified",
+          "",
+          "",
           true
         );
         setOpportunities(opportunities);
@@ -59,6 +62,43 @@ export function Dashboard() {
     fetchCurrentUser();
     fetchOpportunities();
   }, []);
+
+  useEffect(() => {
+    const calculateOpportunitiesCountByStage = async () => {
+      try {
+        const opportunityCountByStage = new Map<string, number>();
+
+        for (const value of Object.values(OpportunityStage)) {
+          opportunityCountByStage.set(value.toString(), 0);
+        }
+
+        for (const opportunity of opportunities) {
+          if (
+            Object.values(OpportunityStage).includes(
+              opportunity.stage as OpportunityStage
+            )
+          ) {
+            opportunityCountByStage.set(
+              opportunity.stage,
+              opportunityCountByStage.get(opportunity.stage)! + 1
+            );
+          }
+        }
+
+        const chartData: object[] = [];
+        for (const value of Object.values(OpportunityStage)) {
+          chartData.push({
+            x: value,
+            y: opportunityCountByStage.get(value.toString()),
+          });
+        }
+
+        setOpportunityByStageChartData(chartData);
+      } catch (error: any) {}
+    };
+
+    calculateOpportunitiesCountByStage();
+  }, [opportunities]);
 
   return (
     <div className="w-full relative">
@@ -76,44 +116,46 @@ export function Dashboard() {
             <div className="flex flex-row gap-x-4 mb-4 relative">
               {opportunities && opportunities.length > 0 ? (
                 <>
-                  {opportunities.map((op: Opportunity, index) => (
-                    <Link
-                      target="blank"
-                      href={`/opportunities/${op?.id}`}
-                      key={index}
-                    >
-                      <div
+                  {opportunities
+                    .filter((op) => op.stage === OpportunityStage.IDENTIFIED)
+                    .map((op: Opportunity, index) => (
+                      <Link
+                        target="blank"
+                        href={`/opportunities/${op?.id}`}
                         key={index}
-                        className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
                       >
-                        <div className="flex flex-col h-full justify-start content-center p-3  z-0">
-                          <div className="space-y-3 mt-2 relative justify-start">
-                            {op.company?.profilePicUrl ? (
-                              <Image
-                                src={op.company?.profilePicUrl}
-                                width={24}
-                                height={72}
-                                alt="Company Profile Picture"
-                                className="rounded-md border border-border"
-                              />
-                            ) : (
-                              <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
-                            )}
-                            {op.company?.name ? (
-                              <p className="text-xl font-semibold">
-                                {op.company?.name}
-                              </p>
-                            ) : (
-                              <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
-                            )}
+                        <div
+                          key={index}
+                          className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
+                        >
+                          <div className="flex flex-col h-full justify-start content-center p-3  z-0">
+                            <div className="space-y-3 mt-2 relative justify-start">
+                              {op.company?.profilePicUrl ? (
+                                <Image
+                                  src={op.company?.profilePicUrl}
+                                  width={24}
+                                  height={72}
+                                  alt="Company Profile Picture"
+                                  className="rounded-md border border-border"
+                                />
+                              ) : (
+                                <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
+                              )}
+                              {op.company?.name ? (
+                                <p className="text-xl font-semibold">
+                                  {op.company?.name}
+                                </p>
+                              ) : (
+                                <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
+                              )}
+                            </div>
+                            <p className="text-sm text-zinc-500 absolute bottom-2">
+                              Added {timeAgo(new Date(op.createdAt))}
+                            </p>
                           </div>
-                          <p className="text-sm text-zinc-500 absolute bottom-2">
-                            Added {timeAgo(new Date(op.createdAt))}
-                          </p>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
                 </>
               ) : (
                 <>
@@ -134,16 +176,17 @@ export function Dashboard() {
         </div>
         <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
           <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6 gap-y-3">
-            <Image
-              src="/images/customIcons/funnel.svg"
-              width={120}
-              height={120}
-              alt="Inbox"
-              className="py-3"
-            />
             <div className="flex flex-col gap-y-1">
-              <p className="text-xl font-medium tracking-wide">Sales funnel</p>
-              <p className="text-base text-muted-foreground">Coming soon.</p>
+              <VictoryChart domainPadding={10}>
+                <VictoryAxis tickLabelComponent={<VictoryLabel angle={45} />} />
+                <VictoryBar
+                  barRatio={0.7}
+                  labels={({ datum }) => datum.y}
+                  labelComponent={<VictoryLabel dy={30} />}
+                  style={{ labels: { fill: "white" } }}
+                  data={opportunityCountByStageChartData}
+                />
+              </VictoryChart>
             </div>
           </div>
         </div>
