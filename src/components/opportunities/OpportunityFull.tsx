@@ -10,6 +10,7 @@ import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityBrand } from "./OpportunityBrand";
 import { OpportunityJobPost } from "./OpportunityJobPost";
 import { OpportunityContacts } from "./OpportunityContacts";
+import { updateOpportunityNotes } from "@/utils/chapter/opportunity";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -64,6 +65,11 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     setOpportunity(updatedOpportunity);
   };
 
+  const onEditorContentChange = async (richText: string) => {
+    const op = await updateOpportunityNotes(opportunity.id, richText);
+    setOpportunity(op);
+  };
+
   return (
     <>
       <Toaster theme="light" />
@@ -98,18 +104,12 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                 </TabsTrigger>
               </TabsList>
               <div className="h-full w-full">
-                <TabsContent value="opTasks">
-                  {/* <div className="flex flex-col w-full bg-yellow-300 h-full">
-                    <div className="text-xl font-semibold text-zinc-700 dark:text-white">
-                      Tasks
-                    </div>
-                    <div className="text-secondary-foreground">
-                      Coming soon...
-                    </div>
-                  </div> */}
-                </TabsContent>
+                <TabsContent value="opTasks"></TabsContent>
                 <TabsContent value="opNotes">
-                  {/* <TextEditor description="" /> */}
+                  <TextEditor
+                    content={opportunity.notes}
+                    onChange={onEditorContentChange}
+                  />
                 </TabsContent>
               </div>
             </Tabs>

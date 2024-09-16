@@ -1,5 +1,3 @@
-import "./editor.css";
-
 import Tiptap from "@/TipTap";
 import {
   useCurrentEditor,
@@ -18,7 +16,12 @@ import Text from "@tiptap/extension-text";
 import Focus from "@tiptap/extension-focus";
 import Placeholder from "@tiptap/extension-placeholder";
 
-export default function TextEditor({ description }: { description: string }) {
+interface TextEditorProps {
+  content: string;
+  onChange: (richText: string) => void;
+}
+
+export default function TextEditor({ content, onChange }: TextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -28,6 +31,14 @@ export default function TextEditor({ description }: { description: string }) {
       }),
       Heading.configure({
         levels: [1, 2, 3],
+        HTMLAttributes: {
+          class: "my-custom-heading",
+        },
+      }),
+      Paragraph.configure({
+        HTMLAttributes: {
+          class: "my-custom-paragraph",
+        },
       }),
       BulletList,
       Focus.configure({
@@ -35,54 +46,23 @@ export default function TextEditor({ description }: { description: string }) {
         mode: "all",
       }),
     ],
-    content: description,
-    editable: true,
-    // autofocus: true,
+    content: content,
+    editable: false,
+    autofocus: true,
     editorProps: {
       attributes: {
         class:
-          "p-6 min-h-[400px] border-none border-0 focus:border-none focus:ring-0",
+          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
       },
     },
     onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
       console.log(editor.getHTML());
     },
   });
 
   return (
     <>
-      {/* {editor && (
-        <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
-          <div className="floating-menu">
-            <button
-              onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 1 }).run()
-              }
-              className={
-                editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-              }
-            >
-              H1
-            </button>
-            <button
-              onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
-              }
-              className={
-                editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-              }
-            >
-              H2
-            </button>
-            <button
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              className={editor.isActive("bulletList") ? "is-active" : ""}
-            >
-              Bullet list
-            </button>
-          </div>
-        </FloatingMenu>
-      )} */}
       <EditorContent editor={editor} />
     </>
   );

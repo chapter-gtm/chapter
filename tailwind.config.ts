@@ -1,16 +1,16 @@
 import { SelectContent } from "@radix-ui/react-select";
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
-const defaultTheme = require('tailwindcss/colors');
+const defaultTheme = require("tailwindcss/colors");
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -28,8 +28,7 @@ const config = {
       "2xl": "1.563rem",
       "3xl": "1.953rem",
       "4xl": "2.441rem",
-      "5xl": "3.052rem"
-
+      "5xl": "3.052rem",
     },
     extend: {
       colors: {
@@ -74,7 +73,6 @@ const config = {
           DEFAULT: "#9747FF",
           foreground: "hsl(var(--card-foreground))",
         },
-    
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -97,9 +95,7 @@ const config = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate")],
-   
-} satisfies Config
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+} satisfies Config;
 
-export default config
+export default config;
