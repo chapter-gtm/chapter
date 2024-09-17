@@ -66,6 +66,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
   };
 
   const onEditorContentChange = async (richText: string) => {
+    if (opportunity === null) return;
     const op = await updateOpportunityNotes(opportunity.id, richText);
     setOpportunity(op);
   };

@@ -225,14 +225,13 @@ export function Dashboard() {
                     data: { fill: "#8b5cf6" },
                     labels: { fill: "white" },
                   }}
-                  labels={({ datum }) => [datum.y.toString(), [datum.p + "%"]]}
-                  cornerRadius={{ topLeft: "8", topRight: "8" }}
+                  labels={({ datum }) => [datum.y, `${datum.p}%`]}
+                  // cornerRadius={{ topLeft: "8", topRight: "8" }}
                   labelComponent={
                     <VictoryLabel
                       backgroundStyle={{ fill: "black", stroke: "gray" }}
                       backgroundPadding={3}
                       lineHeight={[1, 2]}
-                      borderWidth={3}
                       textAnchor="middle"
                       backgroundComponent={<rect rx={4} ry={4} />}
                     />

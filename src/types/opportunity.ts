@@ -29,7 +29,7 @@ export type Opportunity = {
     slug: string | null;
     name: string;
     stage: OpportunityStage;
-    notes: string | null;
+    notes: string;
     owner: User | null;
     company: Company | null;
     contacts: Person[] | null;
