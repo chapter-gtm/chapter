@@ -220,6 +220,7 @@ export function Dashboard() {
                 />
                 <VictoryBar
                   barRatio={1.2}
+                  cornerRadius={{ topLeft: 10, topRight: 10 }}
                   data={opportunityCountByStageChartData}
                   style={{
                     data: { fill: "#8b5cf6" },
