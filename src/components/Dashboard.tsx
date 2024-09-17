@@ -16,7 +16,14 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { timeAgo } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
-import { VictoryChart, VictoryAxis, VictoryBar, VictoryLabel } from "victory";
+import {
+  VictoryChart,
+  VictoryAxis,
+  VictoryBar,
+  VictoryLabel,
+  VictoryTheme,
+  VictoryBrushLine,
+} from "victory";
 
 import { User } from "@/types/user";
 import { type Opportunity, OpportunityStage } from "@/types/opportunity";
@@ -86,11 +93,35 @@ export function Dashboard() {
         }
 
         const chartData: object[] = [];
+        let previousValue: number | null = null;
+        let p = 100;
+
         for (const value of Object.values(OpportunityStage)) {
+          let yValue = opportunityCountByStage.get(value.toString());
+          if (yValue === undefined || yValue === null) {
+            yValue = 0;
+          }
+
+          if (
+            previousValue !== null &&
+            previousValue !== 0 &&
+            yValue !== null
+          ) {
+            p = ((yValue ?? 0) / previousValue) * 100;
+            console.log(p);
+          } else if (previousValue === null) {
+            p = 100;
+          } else {
+            p = 0;
+          }
+
           chartData.push({
             x: value,
-            y: opportunityCountByStage.get(value.toString()),
+            y: yValue,
+            p: p,
           });
+
+          previousValue = yValue;
         }
 
         setOpportunityByStageChartData(chartData);
@@ -176,15 +207,36 @@ export function Dashboard() {
         </div>
         <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
           <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6 gap-y-3">
-            <div className="flex flex-col gap-y-1">
-              <VictoryChart domainPadding={10}>
-                <VictoryAxis tickLabelComponent={<VictoryLabel angle={45} />} />
+            <div className="flex flex-col gap-y-1 w-auto">
+              <VictoryChart
+                domainPadding={30}
+                height={300}
+                width={1200}
+                theme={VictoryTheme.material}
+              >
+                <VictoryAxis
+                  gridComponent={<VictoryBrushLine width={120} />}
+                  tickLabelComponent={<VictoryLabel angle={0} />}
+                />
                 <VictoryBar
-                  barRatio={0.7}
-                  labels={({ datum }) => datum.y}
-                  labelComponent={<VictoryLabel dy={30} />}
-                  style={{ labels: { fill: "white" } }}
+                  barRatio={1.2}
                   data={opportunityCountByStageChartData}
+                  style={{
+                    data: { fill: "#8b5cf6" },
+                    labels: { fill: "white" },
+                  }}
+                  labels={({ datum }) => [datum.y.toString(), [datum.p + "%"]]}
+                  cornerRadius={{ topLeft: "8", topRight: "8" }}
+                  labelComponent={
+                    <VictoryLabel
+                      backgroundStyle={{ fill: "black", stroke: "gray" }}
+                      backgroundPadding={3}
+                      lineHeight={[1, 2]}
+                      borderWidth={3}
+                      textAnchor="middle"
+                      backgroundComponent={<rect rx={4} ry={4} />}
+                    />
+                  }
                 />
               </VictoryChart>
             </div>
