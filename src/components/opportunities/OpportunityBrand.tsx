@@ -64,7 +64,7 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
               {opportunity.company?.name}
             </h2>
             <div className="flex flex-col">
-              <p className=" text-zinc-600 dark:text-zinc-300 mt-3">
+              <p className="text-zinc-600 dark:text-zinc-300 mt-3">
                 {opportunity.company?.description}
               </p>
               <div className="my-1 text-zinc-400 font-light text-sm">

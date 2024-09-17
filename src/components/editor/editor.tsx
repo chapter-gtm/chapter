@@ -32,32 +32,35 @@ export default function TextEditor({ content, onChange }: TextEditorProps) {
       Heading.configure({
         levels: [1, 2, 3],
         HTMLAttributes: {
-          class: "my-custom-heading",
+          class: "text-zinc-700 dark:text-zinc-200",
         },
       }),
       Paragraph.configure({
         HTMLAttributes: {
-          class: "my-custom-paragraph",
+          class: "p-0 m-0",
         },
       }),
-      BulletList,
+      BulletList.configure({
+        HTMLAttributes: {
+          class: "line-height-6",
+        },
+      }),
       Focus.configure({
         className: "has-focus",
         mode: "all",
       }),
     ],
     content: content,
-    editable: false,
+    editable: true,
     autofocus: true,
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none",
+          "prose m-0 focus:outline-none p-6 text-zinc-700 dark:text-zinc-200",
       },
     },
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
-      console.log(editor.getHTML());
     },
   });
 
