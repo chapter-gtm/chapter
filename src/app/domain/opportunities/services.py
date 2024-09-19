@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import difflib
 import structlog
+from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
@@ -10,7 +12,9 @@ from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, 
 from advanced_alchemy.filters import CollectionFilter
 from uuid_utils.compat import uuid4
 
-from app.lib.schema import CamelizedBaseStruct, OpportunityStage
+from app.lib.utils import get_domain, get_domain_from_email
+from app.lib.schema import CamelizedBaseStruct, OpportunityStage, Location, WorkExperience
+from app.lib.pdl import search_person_details
 from app.db.models import Opportunity, OpportunityAuditLog, JobPost, Person
 from .repositories import OpportunityRepository, OpportunityAuditLogRepository, ICPRepository
 
@@ -20,7 +24,11 @@ from app.db.models import (
     opportunity_person_relation,
     opportunity_job_post_relation,
     ICP,
+    Person,
 )
+
+from app.domain.people.schemas import PersonCreate
+from app.domain.people.services import PersonService
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -298,31 +306,6 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             tenant_id=icp.tenant_id,
                         )
 
-                    # TODO: Fetch the contact(s) with the right title from an external source
-                    person_statement = (
-                        select(Person.id)
-                        .where(
-                            and_(
-                                Person.title.op("%")(text("ANY(:titles)")).params(titles=icp.person.titles),
-                                Person.company_id == job_post.company.id,
-                            )
-                        )
-                        .execution_options(populate_existing=True)
-                    )
-                    await self.repository.session.execute(text("SET pg_trgm.similarity_threshold = 0.5;"))
-                    person_results = await self.repository.session.execute(statement=person_statement)
-                    person_ids = [result[0] for result in person_results]
-
-                    if not person_ids:
-                        logger.warn(
-                            "Skipping new opportunity because no appropriate contact found",
-                            job_post_id=job_post.id,
-                            company_id=job_post.company.id,
-                            company_url=job_post.company.url,
-                            tenant_id=icp.tenant_id,
-                        )
-                        continue
-
                     # Check if opportunity with the same company already exists
                     opportunity_statement = select(Opportunity.id).where(
                         and_(Opportunity.company_id == job_post.company.id, Opportunity.tenant_id == icp.tenant_id)
@@ -338,6 +321,128 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             tenant_id=icp.tenant_id,
                         )
                         continue
+
+                    # TODO: Fetch the contact(s) with the right title from an external source
+                    person_statement = (
+                        select(Person.id)
+                        .where(Person.company_id == job_post.company.id)
+                        .execution_options(populate_existing=True)
+                    )
+                    await self.repository.session.execute(text("SET pg_trgm.similarity_threshold = 0.5;"))
+                    person_results = await self.repository.session.execute(statement=person_statement)
+                    person_ids = [result[0] for result in person_results]
+
+                    if not person_ids:
+                        # Extract person from data provider
+                        try:
+                            persons = await search_person_details(
+                                job_post.company.url,
+                                titles=icp.person.titles,
+                                sub_roles=icp.person.sub_roles,
+                            )
+                        except:
+                            persons = []
+
+                        if not persons:
+                            logger.warn(
+                                "Skipping new opportunity because no appropriate contact found",
+                                job_post_id=job_post.id,
+                                company_id=job_post.company.id,
+                                company_url=job_post.company.url,
+                                tenant_id=icp.tenant_id,
+                            )
+
+                        person_objects = []
+                        for person_details in persons:
+
+                            if not difflib.get_close_matches(person_details.get("job_title", ""), icp.person.titles):
+                                logger.warn(
+                                    "Skipping person because title doesn't match ICP",
+                                    job_post_id=job_post.id,
+                                    company_id=job_post.company.id,
+                                    company_url=job_post.company.url,
+                                    tenant_id=icp.tenant_id,
+                                    title=person_details.get("job_title"),
+                                    icp_titles=icp.person.titles,
+                                )
+                                continue
+
+                            linkedin_profile_url = None
+                            twitter_profile_url = None
+                            github_profile_url = None
+                            birth_date = None
+                            work_email = None
+
+                            if person_details.get("linkedin_url"):
+                                linkedin_profile_url = "https://" + person_details.get("linkedin_url").rstrip("/")
+                            if person_details.get("twitter_url"):
+                                twitter_profile_url = "https://" + person_details.get("twitter_url").rstrip("/")
+                            if person_details.get("github_url"):
+                                github_profile_url = "https://" + person_details.get("github_url").rstrip("/")
+                            if person_details.get("birth_date"):
+                                birth_date = datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d").date()
+
+                            if person_details.get("work_email"):
+                                if get_domain_from_email(person_details.get("work_email", "")) == get_domain(
+                                    job_post.company.url
+                                ):
+                                    work_email = person_details.get("work_email")
+
+                            work_experiences = []
+                            for work_ex in person_details.get("experience", []):
+                                try:
+                                    work_experiences.append(
+                                        WorkExperience(
+                                            starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
+                                            title=work_ex.get("title", {}).get("name", "Unknown"),
+                                            company_name=work_ex.get("company", {}).get("name", "Unknown"),
+                                            company_url=work_ex.get("company", {}).get("website"),
+                                            company_linkedin_profile_url=work_ex.get("linkedin_url"),
+                                            ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
+                                            if work_ex.get("end_date")
+                                            else None,
+                                        )
+                                    )
+                                except Exception:
+                                    pass
+
+                            obj = PersonCreate(
+                                first_name=person_details.get("first_name"),
+                                last_name=person_details.get("last_name"),
+                                full_name=person_details.get("full_name"),
+                                title=person_details.get("job_title"),
+                                occupation=person_details.get("job_title_role"),
+                                industry=person_details.get("industry"),
+                                linkedin_profile_url=linkedin_profile_url,
+                                twitter_profile_url=twitter_profile_url,
+                                github_profile_url=github_profile_url,
+                                location=Location(
+                                    country=person_details.get("location_country"),
+                                    region=person_details.get("location_region"),
+                                    city=person_details.get("location_locality"),
+                                ),
+                                personal_emails=person_details.get("personal_emails", []),
+                                work_email=work_email,
+                                personal_numbers=person_details.get("personal_numbers", []),
+                                birth_date=birth_date,
+                                work_experiences=work_experiences,
+                                company_id=job_post.company.id,
+                            )
+                            person_objects.append(obj.to_dict())
+
+                        if not person_objects:
+                            logger.warn(
+                                "Skipping new opportunity because no relevant people found",
+                                job_post_id=job_post.id,
+                                company_id=job_post.company.id,
+                                company_url=job_post.company.url,
+                                tenant_id=icp.tenant_id,
+                            )
+                            continue
+
+                        person_service = PersonService(session=self.repository.session)
+                        persons = await person_service.upsert_many(person_objects)
+                        person_ids = [person.id for person in persons]
 
                     opportunity = await self.create(
                         {
