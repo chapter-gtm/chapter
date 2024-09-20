@@ -273,9 +273,9 @@ function getCompanySizeFromHeadcount(headcount: number) {
     companySizeLabel = "11-50";
   } else if (headcount <= 200) {
     companySizeLabel = "51-200";
-  } else if (headcount <= 201 - 500) {
+  } else if (headcount <= 500) {
     companySizeLabel = "201-500";
-  } else if (headcount <= 501 - 1000) {
+  } else if (headcount <= 1000) {
     companySizeLabel = "501-1000";
   } else {
     companySizeLabel = "1000+";
