@@ -160,3 +160,4 @@ class PersonCriteria(CamelizedBaseStruct):
     """Person criteria."""
 
     titles: list[str] | None = None
+    sub_roles: list[str] | None = None
