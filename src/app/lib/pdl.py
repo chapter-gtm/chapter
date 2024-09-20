@@ -118,6 +118,7 @@ async def search_person_details(
     search_criteria["bool"]["must"].append(role_criteria)
 
     params = {"query": json.dumps(search_criteria), "size": limit}
+    await logger.adebug("Searching relevant people", company_url=company_url, search_criteria=search_criteria)
 
     async with httpx.AsyncClient() as client:
         response = await client.get("https://api.peopledatalabs.com/v5/person/search", headers=headers, params=params)
