@@ -249,6 +249,48 @@ export const filters = [
       },
     ],
   },
+  {
+    tableColumnName: "investors",
+    label: "Investors",
+    // TODO: Build filters based on tenant ICP
+    filterOptions: [
+      {
+        value: "Y Combinator",
+        label: "Y Combinator",
+        icon: undefined,
+      },
+      {
+        value: "a16z",
+        label: "a16z",
+        icon: undefined,
+      },
+      {
+        value: "Accel",
+        label: "Accel",
+        icon: undefined,
+      },
+      {
+        value: "Sequoia Capital",
+        label: "Sequoia Capital",
+        icon: undefined,
+      },
+      {
+        value: "Redpoint",
+        label: "Redpoint",
+        icon: undefined,
+      },
+      {
+        value: "Lightspeed Venture Partners",
+        label: "Lightspeed Venture Partners",
+        icon: undefined,
+      },
+      {
+        value: "Bessemer Venture Partners",
+        label: "Bessemer Venture Partners",
+        icon: undefined,
+      },
+    ],
+  },
 ];
 
 function classNames(...classes: string[]) {
@@ -563,6 +605,13 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     filterFn: (row, id, value) => {
       const tools: Tool[] = row.getValue("tools");
       return tools.some((tool: Tool) => value.includes(tool.name));
+    },
+  },
+  {
+    accessorKey: "investors",
+    filterFn: (row, id, value) => {
+      const investors: string[] = row.getValue("investors");
+      return investors.some((investor: string) => value.includes(investor));
     },
   },
 ];

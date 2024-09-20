@@ -66,6 +66,7 @@ export function OpportunitiesMain() {
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
               tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
+              investors: rec.company?.lastFunding?.investors,
             };
             return record;
           })
