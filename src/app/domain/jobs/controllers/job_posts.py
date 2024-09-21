@@ -18,6 +18,7 @@ from litestar.exceptions import NotFoundException
 
 from app.config import constants
 from app.lib.schema import Location, Tool
+from app.lib.utils import get_domain
 from app.lib.scraperapi import extract_url_content
 from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
@@ -114,7 +115,14 @@ class JobPostController(Controller):
             return job_posts_service.to_schema(schema_type=JobPost, data=results[0])
 
         # Extract job post from URL
-        html_content = await extract_url_content(data.url)
+        render = False
+
+        # Some ur;s require a rendering javascript(done using headless browser)
+        job_link_domain = get_domain(data.url)
+        if job_link_domain.endswith("workable.com") or job_link_domain.endswith("linkedin.com"):
+            render = True
+
+        html_content = await extract_url_content(data.url, render=render)
         job_details = await extract_job_details_from_html(html_content)
 
         company_url = job_details.get("company", {}).get("url")

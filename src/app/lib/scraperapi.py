@@ -5,7 +5,7 @@ import httpx
 scraper_api_key = os.environ["SCRAPERAPI_API_KEY"]
 
 
-async def extract_url_content(url: str) -> str:
+async def extract_url_content(url: str, render: bool = False) -> str:
     """Extracts URL content using a 3rd party service"""
     params = {
         "api_key": scraper_api_key,
@@ -13,6 +13,7 @@ async def extract_url_content(url: str) -> str:
         "follow_redirect": "false",
         "country_code": "us",
         "device_type": "desktop",
+        "render": str(render).lower(),
     }
 
     async with httpx.AsyncClient() as client:
