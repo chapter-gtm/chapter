@@ -29,6 +29,7 @@ import {
   ChevronRight,
   CircleUserIcon,
   Linkedin,
+  XSquare,
   Mail,
   PencilLine,
   CircleUserRoundIcon,
@@ -69,40 +70,39 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
         {opportunity.contacts !== null &&
           opportunity.contacts.length > 0 &&
           opportunity.contacts.map((contact: Person, index) => (
-            <div
-              className="flex flex-row items-center justify-between text-sm text-zinc-700"
-              key={index}
-            >
-              {contact.linkedinProfileUrl && (
-                <>
-                  <a
-                    className="flex flex-row py-1 px-2 hover:bg-zinc-100 dark:hover:bg-zinc-700/20 gap-x-2 rounded-lg text-sm cursor-pointer justify-start self-start"
-                    href={contact.linkedinProfileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+            <div className="flex flex-col justify-start gap-y-3">
+              <div
+                className="flex flex-row items-center justify-start text-sm text-zinc-700 gap-x-3"
+                key={index}
+              >
+                {contact.linkedinProfileUrl && (
+                  <>
                     <CircleUserRoundIcon
                       width={18}
                       className="text-muted-foreground"
                     />
-                    <div className="flex flex-col justify-start gap-x-1">
-                      <p className="flex font-medium text-primary" key={index}>
-                        {contact.fullName}
-                      </p>
+                    <div className="flex flex-col justify-start">
+                      <div className="flex flex-row justify-start gap-x-1">
+                        <p
+                          className="flex font-medium text-primary"
+                          key={index}
+                        >
+                          {contact.fullName}
+                        </p>
 
-                      <p
-                        className="flex text-sm text-muted-foreground"
-                        key={index}
-                      >
-                        {contact.title}
-                      </p>
+                        <p
+                          className="flex text-sm text-muted-foreground"
+                          key={index}
+                        >
+                          {contact.title}
+                        </p>
+                      </div>
                     </div>
-                  </a>
-                </>
-              )}
-
+                  </>
+                )}
+              </div>
               <div
-                className="flex flex-row justify-end gap-x-2 items-center"
+                className="flex flex-row justify-start gap-x-2 items-center ps-7 h-6"
                 key={index}
               >
                 {contact.workEmail && (
@@ -112,18 +112,14 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       rel="noopener noreferrer"
                       onClick={() => handleCopyRecordLink(contact?.workEmail)}
                     >
-                      <Button variant={"default"}>
-                        <Mail className="h-4 w-4" />
-                      </Button>
+                      <Button size={"sm"}>Copy email</Button>
                     </a>
                     <a
                       href={"mailto:" + contact.workEmail}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant={"default"}>
-                        <PencilLine className="h-4 w-4" />
-                      </Button>
+                      <Button size={"sm"}>Draft email</Button>
                     </a>
                   </>
                 )}
@@ -134,8 +130,21 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant={"outline"}>
+                      <Button variant={"outline"} size={"sm"}>
                         <Linkedin className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  </>
+                )}
+                {contact.twitterProfileUrl && (
+                  <>
+                    <a
+                      href={contact.twitterProfileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant={"outline"} size={"sm"}>
+                        <XSquare className="h-4 w-4" />
                       </Button>
                     </a>
                   </>
