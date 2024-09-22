@@ -71,7 +71,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
         {opportunity.contacts !== null &&
           opportunity.contacts.length > 0 &&
           opportunity.contacts.map((contact: Person, index) => (
-            <div className="flex flex-col justify-start gap-y-3">
+            <div key={index} className="flex flex-col justify-start gap-y-3">
               <div
                 className="flex flex-row items-center justify-start text-sm text-zinc-700 gap-x-3"
                 key={index}
