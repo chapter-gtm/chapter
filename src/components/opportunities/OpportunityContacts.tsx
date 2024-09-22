@@ -29,10 +29,11 @@ import {
   ChevronRight,
   CircleUserIcon,
   Linkedin,
-  XSquare,
+  Twitter,
   Mail,
   PencilLine,
   CircleUserRoundIcon,
+  Github,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -144,7 +145,20 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       rel="noopener noreferrer"
                     >
                       <Button variant={"outline"} size={"sm"}>
-                        <XSquare className="h-4 w-4" />
+                        <Twitter className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  </>
+                )}
+                {contact.githubProfileUrl && (
+                  <>
+                    <a
+                      href={contact.githubProfileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant={"outline"} size={"sm"}>
+                        <Github className="h-4 w-4" />
                       </Button>
                     </a>
                   </>
