@@ -101,19 +101,21 @@ export function OpportunityPropList({
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger
-              asChild
-              className="h-8 rounded-full border-b border-border bg-popover"
-            >
-              <Button
+            <DropdownMenuTrigger>
+              <div
                 className={classNames(
                   stageColors[opportunity.stage]?.color,
-                  "py-1 rounded-full hover:none focus-visible:ring-0 ps-1"
+                  "flex ps-0.5 py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center "
                 )}
               >
-                <Dot />
+                <span
+                  className={classNames(
+                    stageColors[opportunity.stage]?.highlight,
+                    "h-1.5 w-1.5 rounded-full ms-1.5 me-1"
+                  )}
+                ></span>
                 {currentStage}
-              </Button>
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-popover border-border">
               <DropdownMenuLabel>Set stage</DropdownMenuLabel>
@@ -146,6 +148,7 @@ export function OpportunityPropList({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
+              className="bg-background hover:bg-background/50 dark:bg-card px-2 py-1.5 rounded-md dark:hover:bg-card/50"
             >
               {opportunity.company?.url}
             </a>

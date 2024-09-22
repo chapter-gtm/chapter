@@ -13,6 +13,17 @@ import {
   Dot,
 } from "lucide-react";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
+
 import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
 
@@ -390,23 +401,68 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     cell: ({ row }) => {
       const stage: OpportunityStage = row.getValue("stage") as OpportunityStage;
       const opportunityStage = getStageFromStage(stage);
+      const stages = Object.values(OpportunityStage);
+
+      // const handleStageChange = async (newStage: string) => {
+      //   try {
+      //     if (!stages.includes(newStage as OpportunityStage)) {
+      //       // toast.error("Failed to set stage.");
+      //       return;
+      //     }
+
+      //     opportunity = await updateOpportunityStage(
+      //       opportunity.id,
+      //       newStage as OpportunityStage
+      //     );
+      //     setCurrentStage(opportunity.stage);
+      //     updateOpportunity(opportunity);
+      //   } catch (error: any) {
+      //      toast.error("Failed to update stage.");
+      //   }
+      // };
 
       if (!opportunityStage) {
         return null;
       }
 
       return (
-        <div className="">
-          <div
-            className={classNames(
-              stageColors[stage]?.color,
-              "flex  py-0.5 rounded-full hover:none focus-visible:ring-0 pr-3 items-center"
-            )}
-          >
-            <Dot />
-            {opportunityStage.label}
-          </div>
-        </div>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="cursor-pointer">
+                <div
+                  className={classNames(
+                    stageColors[stage]?.color,
+                    "flex py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center"
+                  )}
+                >
+                  <span
+                    className={classNames(
+                      stageColors[stage]?.highlight,
+                      "h-1.5 w-1.5 rounded-full ms-1.5 me-1"
+                    )}
+                  ></span>
+                  {opportunityStage.label}
+                </div>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-popover border-border">
+              <DropdownMenuLabel>Set stage</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-border" />
+
+              <DropdownMenuRadioGroup
+              // value={stage}
+              // onValueChange={handleStageChange}
+              >
+                {stages.map((stage, index) => (
+                  <DropdownMenuRadioItem key={index} value={stage}>
+                    {stage}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       );
     },
     filterFn: (row, id, value) => {
