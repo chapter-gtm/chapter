@@ -175,6 +175,7 @@ export function OpportunitiesMain() {
                       onRowClick={handleOpenSheet}
                       enableRowSelection={true}
                       onSelectedRowsChange={handleRowSelection}
+                      stickyColumnCount={1}
                     />
                   </div>
                 </div>

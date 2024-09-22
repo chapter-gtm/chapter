@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick: <TData>(data: TData) => void;
   enableRowSelection: boolean;
   onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
+  stickyColumnCount: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -50,6 +51,7 @@ export function DataTable<TData, TValue>({
   onRowClick,
   enableRowSelection = false,
   onSelectedRowsChange,
+  stickyColumnCount = 0,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -124,7 +126,7 @@ export function DataTable<TData, TValue>({
                       colSpan={header.colSpan}
                       className={cn(
                         "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
-                        header.column.id === "companyName"
+                        header.column.getIndex() < stickyColumnCount
                           ? "sticky left-0 bg-card font-bold"
                           : ""
                       )}
@@ -150,32 +152,33 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-accent"
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      className={cn(
-                        "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
-
-                        cell.column.id === "companyName"
-                          ? "sticky left-0 bg-card font-semibold"
-                          : ""
-                      )}
-                      // This is where the cell should have a shade of color
-                      key={cell.id}
-                      onClick={(
-                        event: React.MouseEvent<HTMLTableCellElement>
-                      ) => {
-                        // Don't call row click handler when checkbox field(must has id="select") is clicked.
-                        if (cell.column.id !== "select") {
-                          onRowClick(row.original);
-                        }
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell
+                        className={cn(
+                          "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
+                          cell.column.getIndex() < stickyColumnCount
+                            ? "sticky left-0 bg-card font-semibold"
+                            : ""
+                        )}
+                        // This is where the cell should have a shade of color
+                        key={cell.id}
+                        onClick={(
+                          event: React.MouseEvent<HTMLTableCellElement>
+                        ) => {
+                          // Don't call row click handler when checkbox field(must has id="select") is clicked.
+                          if (cell.column.id !== "select") {
+                            onRowClick(row.original);
+                          }
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
