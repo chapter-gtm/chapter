@@ -117,7 +117,7 @@ async def search_person_details(
 
     search_criteria["bool"]["must"].append(role_criteria)
 
-    params = {"query": json.dumps(search_criteria), "size": limit}
+    params = {"query": json.dumps(search_criteria), "size": limit, "titlecase": "true"}
     await logger.ainfo("Searching relevant people", company_url=company_url, search_criteria=search_criteria)
 
     async with httpx.AsyncClient() as client:
