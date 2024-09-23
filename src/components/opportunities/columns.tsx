@@ -35,8 +35,8 @@ import { type Location } from "@/types/location";
 import { type Tool } from "@/types/job_post";
 import { type Scale, ScaleLabel } from "@/types/scale";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
-
-import { toTitleCase } from "@/utils/misc";
+import { updateOpportunityStage } from "@/utils/chapter/opportunity";
+import { toTitleCase, truncateString } from "@/utils/misc";
 
 export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
@@ -639,6 +639,14 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
   },
   {
     accessorKey: "investors",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Investors" />
+    ),
+    cell: ({ row }) => {
+      const investors: string[] = row.getValue("investors");
+      const investorList: string = truncateString(investors.join(", "));
+      return <div className="flex items-center gap-2">{investorList}</div>;
+    },
     filterFn: (row, id, value) => {
       const investors: string[] = row.getValue("investors");
       return investors.some((investor: string) => value.includes(investor));
