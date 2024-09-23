@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   enableRowSelection: boolean;
   onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
   stickyColumnCount: number;
+  nonClickableColumns: string[];
 }
 
 export function DataTable<TData, TValue>({
@@ -52,6 +53,7 @@ export function DataTable<TData, TValue>({
   enableRowSelection = false,
   onSelectedRowsChange,
   stickyColumnCount = 0,
+  nonClickableColumns = [],
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -167,7 +169,7 @@ export function DataTable<TData, TValue>({
                           event: React.MouseEvent<HTMLTableCellElement>
                         ) => {
                           // Don't call row click handler when checkbox field(must has id="select") is clicked.
-                          if (cell.column.id !== "select") {
+                          if (!nonClickableColumns.includes(cell.column.id)) {
                             onRowClick(row.original);
                           }
                         }}

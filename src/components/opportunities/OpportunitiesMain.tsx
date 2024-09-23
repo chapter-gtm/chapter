@@ -176,6 +176,7 @@ export function OpportunitiesMain() {
                       enableRowSelection={true}
                       onSelectedRowsChange={handleRowSelection}
                       stickyColumnCount={1}
+                      nonClickableColumns={["select", "stage"]}
                     />
                   </div>
                 </div>

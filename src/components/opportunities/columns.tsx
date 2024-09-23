@@ -23,6 +23,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 import { ColumnDef, VisibilityState } from "@tanstack/react-table";
 import { z } from "zod";
@@ -42,6 +43,7 @@ export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
 
 import { stageColors } from "@/types/opportunity";
+import { useState } from "react";
 
 export const filters = [
   {
@@ -373,6 +375,7 @@ function getLocationFromCountry(country: string) {
 }
 
 export const defaultColumnVisibility: VisibilityState = {
+  id: false,
   date: true,
   stage: true,
   companyName: true,
@@ -383,6 +386,18 @@ export const defaultColumnVisibility: VisibilityState = {
 };
 
 const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
+  {
+    id: "id",
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Id" />
+    ),
+    cell: ({ row }) => {
+      return <div className="flex">{row.getValue("id")}</div>;
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     id: "companyName",
     accessorKey: "companyName",
@@ -399,27 +414,27 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
       <DataTableColumnHeader column={column} title="Stage" />
     ),
     cell: ({ row }) => {
-      const stage: OpportunityStage = row.getValue("stage") as OpportunityStage;
+      const id: string = row.getValue("id");
+      const st: OpportunityStage = row.getValue("stage") as OpportunityStage;
+      const [stage, setStage] = useState<OpportunityStage>(st);
       const opportunityStage = getStageFromStage(stage);
       const stages = Object.values(OpportunityStage);
+      const handleStageChange = async (newStage: string) => {
+        try {
+          if (!stages.includes(newStage as OpportunityStage)) {
+            toast.error("Failed to set stage.");
+            return;
+          }
 
-      // const handleStageChange = async (newStage: string) => {
-      //   try {
-      //     if (!stages.includes(newStage as OpportunityStage)) {
-      //       // toast.error("Failed to set stage.");
-      //       return;
-      //     }
-
-      //     opportunity = await updateOpportunityStage(
-      //       opportunity.id,
-      //       newStage as OpportunityStage
-      //     );
-      //     setCurrentStage(opportunity.stage);
-      //     updateOpportunity(opportunity);
-      //   } catch (error: any) {
-      //      toast.error("Failed to update stage.");
-      //   }
-      // };
+          const opportunity = await updateOpportunityStage(
+            id,
+            newStage as OpportunityStage
+          );
+          setStage(newStage as OpportunityStage);
+        } catch (error: any) {
+          toast.error("Failed to set stage.");
+        }
+      };
 
       if (!opportunityStage) {
         return null;
@@ -451,12 +466,12 @@ const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
               <DropdownMenuSeparator className="bg-border" />
 
               <DropdownMenuRadioGroup
-              // value={stage}
-              // onValueChange={handleStageChange}
+                value={stage}
+                onValueChange={handleStageChange}
               >
-                {stages.map((stage, index) => (
-                  <DropdownMenuRadioItem key={index} value={stage}>
-                    {stage}
+                {stages.map((st, index) => (
+                  <DropdownMenuRadioItem key={index} value={st}>
+                    {st}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
