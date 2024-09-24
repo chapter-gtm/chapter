@@ -31,6 +31,7 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 
 import { type Opportunity, OpportunityStage } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
 import { type Company, FundingRound, OrgSize } from "@/types/company";
 import { type Location } from "@/types/location";
 import { type Tool } from "@/types/job_post";
@@ -44,289 +45,251 @@ export type RecordSchema = z.infer<typeof TableRecord>;
 
 import { stageColors } from "@/types/opportunity";
 
-export const filters = [
-  {
-    tableColumnName: "stage",
-    label: "Stage",
-    filterOptions: [
-      {
-        value: OpportunityStage.IDENTIFIED,
-        label: OpportunityStage.IDENTIFIED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.QUALIFIED,
-        label: OpportunityStage.QUALIFIED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.CONTACTED,
-        label: OpportunityStage.CONTACTED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.ENGAGED,
-        label: OpportunityStage.ENGAGED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.PROPOSED,
-        label: OpportunityStage.PROPOSED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.NEGOTIATED,
-        label: OpportunityStage.NEGOTIATED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.DEFERRED,
-        label: OpportunityStage.DEFERRED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.SUSPENDED,
-        label: OpportunityStage.SUSPENDED,
-        icon: Dot,
-      },
-      {
-        value: OpportunityStage.CUSTOMER,
-        label: OpportunityStage.CUSTOMER,
-        icon: Dot,
-      },
-    ],
-  },
-  {
-    tableColumnName: "companySize",
-    label: "Company Size",
-    filterOptions: [
-      {
-        value: "1-10",
-        label: "1-10",
-        icon: CircleUser,
-      },
-      {
-        value: "11-50",
-        label: "11-50",
-        icon: CircleUser,
-      },
-      {
-        value: "51-200",
-        label: "51-200",
-        icon: CircleUser,
-      },
-      {
-        value: "201-500",
-        label: "201-500",
-        icon: CircleUser,
-      },
-      {
-        value: "501-1000",
-        label: "501-1000",
-        icon: CircleUser,
-      },
-      {
-        value: "1000+",
-        label: "1000+",
-        icon: CircleUser,
-      },
-    ],
-  },
-  {
-    tableColumnName: "fundingRound",
-    label: "Funding",
-    filterOptions: [
-      {
-        value: FundingRound.GRANT,
-        label: FundingRound.GRANT,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.PRE_SEED,
-        label: FundingRound.PRE_SEED,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SEED,
-        label: FundingRound.SEED,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_A,
-        label: FundingRound.SERIES_A,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_B,
-        label: FundingRound.SERIES_B,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_C,
-        label: FundingRound.SERIES_C,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_D,
-        label: FundingRound.SERIES_D,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_E,
-        label: FundingRound.SERIES_E,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.SERIES_UNKNOWN,
-        label: FundingRound.SERIES_UNKNOWN,
-        icon: DollarSign,
-      },
-      {
-        value: FundingRound.PUBLIC,
-        label: FundingRound.PUBLIC,
-        icon: DollarSign,
-      },
-    ],
-  },
-  {
-    tableColumnName: "companyLocation",
-    label: "Location",
-    filterOptions: [
-      {
-        value: "Canada",
-        label: "Canada",
-        icon: MapPin,
-      },
-      {
-        value: "France",
-        label: "France",
-        icon: MapPin,
-      },
-      {
-        value: "Germany",
-        label: "Germany",
-        icon: MapPin,
-      },
-      {
-        value: "UK",
-        label: "UK",
-        icon: MapPin,
-      },
-      {
-        value: "US",
-        label: "US",
-        icon: MapPin,
-      },
-      {
-        value: "Rest of the World",
-        label: "Rest of the World",
-        icon: MapPin,
-      },
-    ],
-  },
-  {
-    tableColumnName: "tools",
-    label: "Tool Stack",
-    // TODO: Build filters based on tenant ICP
-    filterOptions: [
-      {
-        value: "Github Actions",
-        label: "Github Actions",
+export function getFilters(icp: Icp) {
+  const filters = [
+    {
+      tableColumnName: "stage",
+      label: "Stage",
+      filterOptions: [
+        {
+          value: OpportunityStage.IDENTIFIED,
+          label: OpportunityStage.IDENTIFIED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.QUALIFIED,
+          label: OpportunityStage.QUALIFIED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.CONTACTED,
+          label: OpportunityStage.CONTACTED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.ENGAGED,
+          label: OpportunityStage.ENGAGED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.PROPOSED,
+          label: OpportunityStage.PROPOSED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.NEGOTIATED,
+          label: OpportunityStage.NEGOTIATED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.DEFERRED,
+          label: OpportunityStage.DEFERRED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.SUSPENDED,
+          label: OpportunityStage.SUSPENDED,
+          icon: Dot,
+        },
+        {
+          value: OpportunityStage.CUSTOMER,
+          label: OpportunityStage.CUSTOMER,
+          icon: Dot,
+        },
+      ],
+    },
+    {
+      tableColumnName: "companySize",
+      label: "Company Size",
+      filterOptions: [
+        {
+          value: "1-10",
+          label: "1-10",
+          icon: CircleUser,
+        },
+        {
+          value: "11-50",
+          label: "11-50",
+          icon: CircleUser,
+        },
+        {
+          value: "51-200",
+          label: "51-200",
+          icon: CircleUser,
+        },
+        {
+          value: "201-500",
+          label: "201-500",
+          icon: CircleUser,
+        },
+        {
+          value: "501-1000",
+          label: "501-1000",
+          icon: CircleUser,
+        },
+        {
+          value: "1000+",
+          label: "1000+",
+          icon: CircleUser,
+        },
+      ],
+    },
+    {
+      tableColumnName: "fundingRound",
+      label: "Funding",
+      filterOptions: [
+        {
+          value: FundingRound.GRANT,
+          label: FundingRound.GRANT,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.PRE_SEED,
+          label: FundingRound.PRE_SEED,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SEED,
+          label: FundingRound.SEED,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_A,
+          label: FundingRound.SERIES_A,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_B,
+          label: FundingRound.SERIES_B,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_C,
+          label: FundingRound.SERIES_C,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_D,
+          label: FundingRound.SERIES_D,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_E,
+          label: FundingRound.SERIES_E,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.SERIES_UNKNOWN,
+          label: FundingRound.SERIES_UNKNOWN,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.PUBLIC,
+          label: FundingRound.PUBLIC,
+          icon: DollarSign,
+        },
+      ],
+    },
+    {
+      tableColumnName: "companyLocation",
+      label: "Location",
+      filterOptions: [
+        {
+          value: "Canada",
+          label: "Canada",
+          icon: MapPin,
+        },
+        {
+          value: "France",
+          label: "France",
+          icon: MapPin,
+        },
+        {
+          value: "Germany",
+          label: "Germany",
+          icon: MapPin,
+        },
+        {
+          value: "UK",
+          label: "UK",
+          icon: MapPin,
+        },
+        {
+          value: "US",
+          label: "US",
+          icon: MapPin,
+        },
+        {
+          value: "Rest of the World",
+          label: "Rest of the World",
+          icon: MapPin,
+        },
+      ],
+    },
+    {
+      tableColumnName: "tools",
+      label: "Tool Stack",
+      // TODO: Build filters based on tenant ICP
+      filterOptions: icp.tool.include.map((tool: string) => ({
+        value: tool,
+        label: tool,
         icon: undefined,
-      },
-      {
-        value: "Cypress",
-        label: "Cypress",
-        icon: undefined,
-      },
-      {
-        value: "Playwright",
-        label: "Playwright",
-        icon: undefined,
-      },
-      {
-        value: "Docker",
-        label: "Docker",
-        icon: undefined,
-      },
-      {
-        value: "Rust",
-        label: "Rust",
-        icon: undefined,
-      },
-      {
-        value: "Kubernetes",
-        label: "Kubernetes",
-        icon: undefined,
-      },
-      {
-        value: "PyTorch",
-        label: "PyTorch",
-        icon: undefined,
-      },
-      {
-        value: "TensorFlow",
-        label: "TensorFlow",
-        icon: undefined,
-      },
-      {
-        value: "HuggingFace",
-        label: "HuggingFace",
-        icon: undefined,
-      },
-    ],
-  },
-  {
-    tableColumnName: "investors",
-    label: "Investors",
-    // TODO: Build filters based on tenant ICP
-    filterOptions: [
-      {
-        value: "Y Combinator",
-        label: "Y Combinator",
-        icon: undefined,
-      },
-      {
-        value: "a16z",
-        label: "a16z",
-        icon: undefined,
-      },
-      {
-        value: "Accel",
-        label: "Accel",
-        icon: undefined,
-      },
-      {
-        value: "Sequoia Capital",
-        label: "Sequoia Capital",
-        icon: undefined,
-      },
-      {
-        value: "Redpoint",
-        label: "Redpoint",
-        icon: undefined,
-      },
-      {
-        value: "Lightspeed Venture Partners",
-        label: "Lightspeed Venture Partners",
-        icon: undefined,
-      },
-      {
-        value: "Bessemer Venture Partners",
-        label: "Bessemer Venture Partners",
-        icon: undefined,
-      },
-    ],
-  },
-];
+      })),
+    },
+    {
+      tableColumnName: "investors",
+      label: "Investors",
+      // TODO: Build filters based on tenant ICP
+      filterOptions: [
+        {
+          value: "Y Combinator",
+          label: "Y Combinator",
+          icon: undefined,
+        },
+        {
+          value: "a16z",
+          label: "a16z",
+          icon: undefined,
+        },
+        {
+          value: "Accel",
+          label: "Accel",
+          icon: undefined,
+        },
+        {
+          value: "Sequoia Capital",
+          label: "Sequoia Capital",
+          icon: undefined,
+        },
+        {
+          value: "Redpoint",
+          label: "Redpoint",
+          icon: undefined,
+        },
+        {
+          value: "Lightspeed Venture Partners",
+          label: "Lightspeed Venture Partners",
+          icon: undefined,
+        },
+        {
+          value: "Bessemer Venture Partners",
+          label: "Bessemer Venture Partners",
+          icon: undefined,
+        },
+      ],
+    },
+  ];
+
+  return filters;
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-function getStageFromStage(stage: OpportunityStage) {
+function getStageFromStage(icp: Icp, stage: OpportunityStage) {
+  const filters = getFilters(icp);
   const stageLabel: string = stage;
-
   const opportunityStage = filters[0].filterOptions.find(
     (opportunityStage) => opportunityStage.value === stageLabel
   );
@@ -334,7 +297,8 @@ function getStageFromStage(stage: OpportunityStage) {
   return opportunityStage;
 }
 
-function getCompanySizeFromHeadcount(headcount: number) {
+function getCompanySizeFromHeadcount(icp: Icp, headcount: number) {
+  const filters = getFilters(icp);
   let companySizeLabel = "Unknown";
   if (headcount <= 10) {
     companySizeLabel = "1-10";
@@ -356,7 +320,8 @@ function getCompanySizeFromHeadcount(headcount: number) {
   return companySize;
 }
 
-function getFundingFromFundingRound(fundingRound: FundingRound) {
+function getFundingFromFundingRound(icp: Icp, fundingRound: FundingRound) {
+  const filters = getFilters(icp);
   const fundingRoundLabel: string = fundingRound;
 
   const funding = filters[2].filterOptions.find(
@@ -366,7 +331,8 @@ function getFundingFromFundingRound(fundingRound: FundingRound) {
   return funding;
 }
 
-function getLocationFromCountry(country: string) {
+function getLocationFromCountry(icp: Icp, country: string) {
+  const filters = getFilters(icp);
   let locationLabel = "Rest of the World";
   if (country == "Canada") {
     locationLabel = "Canada";
@@ -400,6 +366,7 @@ export const defaultColumnVisibility: VisibilityState = {
 };
 
 export function getFixedColumns(
+  icp: Icp,
   updateOpportunity: (updatedOpportunity: Opportunity) => void
 ) {
   const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
@@ -435,7 +402,7 @@ export function getFixedColumns(
         const stage: OpportunityStage = row.getValue(
           "stage"
         ) as OpportunityStage;
-        const opportunityStage = getStageFromStage(stage);
+        const opportunityStage = getStageFromStage(icp, stage);
         const stages = Object.values(OpportunityStage);
         const handleStageChange = async (newStage: string) => {
           try {
@@ -504,7 +471,7 @@ export function getFixedColumns(
           return false;
         }
 
-        const opportunityStage = getStageFromStage(stage);
+        const opportunityStage = getStageFromStage(icp, stage);
         if (!opportunityStage) {
           return false;
         }
@@ -529,6 +496,7 @@ export function getFixedColumns(
       ),
       cell: ({ row }) => {
         const companySize = getCompanySizeFromHeadcount(
+          icp,
           row.getValue("companySize")
         );
         if (!companySize) {
@@ -546,7 +514,7 @@ export function getFixedColumns(
       },
       filterFn: (row, id, value) => {
         const headcount: number = row.getValue(id);
-        const companySize = getCompanySizeFromHeadcount(headcount);
+        const companySize = getCompanySizeFromHeadcount(icp, headcount);
         if (!companySize) {
           return false;
         }
@@ -573,6 +541,7 @@ export function getFixedColumns(
       ),
       cell: ({ row }) => {
         const funding = getFundingFromFundingRound(
+          icp,
           row.getValue("fundingRound")
         );
         if (!funding) {
@@ -590,7 +559,7 @@ export function getFixedColumns(
       },
       filterFn: (row, id, value) => {
         const fundingRound: FundingRound = row.getValue(id);
-        const funding = getFundingFromFundingRound(fundingRound);
+        const funding = getFundingFromFundingRound(icp, fundingRound);
         if (!funding) {
           return false;
         }
@@ -613,7 +582,7 @@ export function getFixedColumns(
           return false;
         }
 
-        const companyLocation = getLocationFromCountry(location.country);
+        const companyLocation = getLocationFromCountry(icp, location.country);
         if (!companyLocation) {
           return false;
         }
@@ -639,19 +608,11 @@ export function getFixedColumns(
       ),
       cell: ({ row }) => {
         const tools: Tool[] = row.getValue("tools");
-        const icpTools: string[] = [
-          "Github Actions",
-          "Cypress",
-          "Playwright",
-          "PyTorch",
-          "HuggingFace",
-          "Kubernetes",
-        ];
         return (
           <div className="flex items-center gap-2">
             {tools
               .filter((tool) => {
-                return icpTools.includes(tool.name);
+                return icp.tool.include.includes(tool.name);
               })
               .map((tool, index) => (
                 <Badge
@@ -693,9 +654,12 @@ export function getFixedColumns(
 }
 
 export function getRecordColumns(
+  icp: Icp,
   updateOpportunity: (updatedOpportunity: Opportunity) => void
 ) {
-  const finalColumns: ColumnDef<RecordSchema>[] =
-    getFixedColumns(updateOpportunity);
+  const finalColumns: ColumnDef<RecordSchema>[] = getFixedColumns(
+    icp,
+    updateOpportunity
+  );
   return finalColumns;
 }

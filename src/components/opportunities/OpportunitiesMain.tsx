@@ -1,13 +1,15 @@
 "use client";
 
+import { type Icp } from "@/types/icp";
 import { type Opportunity } from "@/types/opportunity";
 import { FundingRound } from "@/types/company";
 import { type Location } from "@/types/location";
+import { getIcp } from "@/utils/chapter/icp";
 import { getOpportunities } from "@/utils/chapter/opportunity";
 import {
   RecordSchema,
   TableRecord,
-  filters,
+  getFilters,
   getRecordColumns,
   defaultColumnVisibility,
 } from "./columns";
@@ -36,6 +38,7 @@ import { Icon } from "@radix-ui/react-select";
 export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [icp, setIcp] = useState<Icp | null>(null);
   const [records, setRecords] = useState<RecordSchema[]>([]);
   const [recordColumns, setRecordColumns] = useState<ColumnDef<RecordSchema>[]>(
     []
@@ -49,8 +52,9 @@ export function OpportunitiesMain() {
     useState<ColumnFiltersState>([]);
 
   useEffect(() => {
-    const fetchOpportunities = async () => {
+    const fetchIcpAndOpportunities = async () => {
       try {
+        const currentUserIcp = await getIcp();
         const opportunities = await getOpportunities();
 
         const oppMap = new Map<string, Opportunity>();
@@ -74,17 +78,18 @@ export function OpportunitiesMain() {
             return record;
           })
         );
+        setIcp(currentUserIcp);
         setOpportunityMap(oppMap);
         setRecords(tableRecords);
         setIsPopulated(true);
+
+        // Populate columns
+        setRecordColumns(getRecordColumns(currentUserIcp, updateOpportunity));
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };
-    fetchOpportunities();
-
-    // Populate columns
-    setRecordColumns(getRecordColumns(updateOpportunity));
+    fetchIcpAndOpportunities();
   }, []);
 
   const handleRowClick = function <TData>(data: TData) {
@@ -155,7 +160,11 @@ export function OpportunitiesMain() {
     opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
 
     // Repopulate columns
-    setRecordColumns(getRecordColumns(updateOpportunity));
+    if (icp) {
+      setRecordColumns(getRecordColumns(icp, updateOpportunity));
+    } else {
+      toast.error("Failed to refresh table, please reload.");
+    }
   };
 
   return (
@@ -170,7 +179,7 @@ export function OpportunitiesMain() {
         </div>
 
         <div className="h-full bg-card rounded-lg overflow-hidden border border-border">
-          {isPopulated ? (
+          {isPopulated && icp ? (
             <div>
               <Sheet modal={false} open={sheetOpen}>
                 <div>
@@ -178,7 +187,7 @@ export function OpportunitiesMain() {
                     <DataTable
                       columns={recordColumns}
                       data={records}
-                      filters={filters}
+                      filters={getFilters(icp)}
                       preSelectedFilters={preSelectedFilters}
                       defaultColumnVisibility={defaultColumnVisibility}
                       onRowClick={handleOpenSheet}
