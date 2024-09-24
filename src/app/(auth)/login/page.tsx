@@ -150,13 +150,13 @@ export default function AuthenticationPage() {
                     Welcome to Chapter
                   </h2>
                   <p className="text-base text-color-paragraph">
-                    Chapter is a purpose built sales tool for technical
+                    Chapter is a purpose-built sales tool for technical
                     founders. Get weekly high quality leads based on your search
                     criteria without the need to search, enrich, and stitch
                     prospect data manually.
                   </p>
                   <p className="text-base text-color-paragraph">
-                    Chapter just works, and get&apos;s out of your way.
+                    Chapter just works, and gets out of your way.
                   </p>
                   <p className="text-base text-color-paragraph">
                     Let&apos;s begin.
