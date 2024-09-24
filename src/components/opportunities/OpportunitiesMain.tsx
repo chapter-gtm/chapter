@@ -26,7 +26,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
 
-import { ColumnFiltersState } from "@tanstack/react-table";
+import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -37,6 +37,9 @@ export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [records, setRecords] = useState<RecordSchema[]>([]);
+  const [recordColumns, setRecordColumns] = useState<ColumnDef<RecordSchema>[]>(
+    []
+  );
   const [opportunityMap, setOpportunityMap] = useState<
     Map<string, Opportunity>
   >(new Map());
@@ -79,6 +82,9 @@ export function OpportunitiesMain() {
       }
     };
     fetchOpportunities();
+
+    // Populate columns
+    setRecordColumns(getRecordColumns());
   }, []);
 
   const handleRowClick = function <TData>(data: TData) {
@@ -147,6 +153,9 @@ export function OpportunitiesMain() {
 
     // Update map (which will be used to set selectedRow on the next row click)
     opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
+
+    // Repopulate columns
+    setRecordColumns(getRecordColumns());
   };
 
   return (
@@ -167,7 +176,7 @@ export function OpportunitiesMain() {
                 <div>
                   <div className="pb-4 w-full">
                     <DataTable
-                      columns={getRecordColumns()}
+                      columns={recordColumns}
                       data={records}
                       filters={filters}
                       preSelectedFilters={preSelectedFilters}
