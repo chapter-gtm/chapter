@@ -43,7 +43,6 @@ export const TableRecord = z.record(z.any());
 export type RecordSchema = z.infer<typeof TableRecord>;
 
 import { stageColors } from "@/types/opportunity";
-import { useState } from "react";
 
 export const filters = [
   {
@@ -400,7 +399,9 @@ export const defaultColumnVisibility: VisibilityState = {
   industry: true,
 };
 
-export function getFixedColumns() {
+export function getFixedColumns(
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
+) {
   const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     {
       id: "id",
@@ -431,8 +432,9 @@ export function getFixedColumns() {
       ),
       cell: ({ row }) => {
         const id: string = row.getValue("id");
-        const st: OpportunityStage = row.getValue("stage") as OpportunityStage;
-        const [stage, setStage] = useState<OpportunityStage>(st);
+        const stage: OpportunityStage = row.getValue(
+          "stage"
+        ) as OpportunityStage;
         const opportunityStage = getStageFromStage(stage);
         const stages = Object.values(OpportunityStage);
         const handleStageChange = async (newStage: string) => {
@@ -446,7 +448,7 @@ export function getFixedColumns() {
               id,
               newStage as OpportunityStage
             );
-            setStage(newStage as OpportunityStage);
+            updateOpportunity(opportunity);
           } catch (error: any) {
             toast.error("Failed to set stage.");
           }
@@ -690,7 +692,10 @@ export function getFixedColumns() {
   return fixedRecordColumns;
 }
 
-export function getRecordColumns() {
-  const finalColumns: ColumnDef<RecordSchema>[] = getFixedColumns();
+export function getRecordColumns(
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
+) {
+  const finalColumns: ColumnDef<RecordSchema>[] =
+    getFixedColumns(updateOpportunity);
   return finalColumns;
 }

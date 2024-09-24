@@ -84,7 +84,7 @@ export function OpportunitiesMain() {
     fetchOpportunities();
 
     // Populate columns
-    setRecordColumns(getRecordColumns());
+    setRecordColumns(getRecordColumns(updateOpportunity));
   }, []);
 
   const handleRowClick = function <TData>(data: TData) {
@@ -155,7 +155,7 @@ export function OpportunitiesMain() {
     opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
 
     // Repopulate columns
-    setRecordColumns(getRecordColumns());
+    setRecordColumns(getRecordColumns(updateOpportunity));
   };
 
   return (
