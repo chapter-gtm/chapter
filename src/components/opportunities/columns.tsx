@@ -541,8 +541,17 @@ export function getFixedColumns(
         const orgSize: OrgSize = row.getValue("orgSize");
         return <div className="flex">{orgSize.engineering}</div>;
       },
-      enableSorting: true,
+      sortingFn: (rowA, rowB, columnId) => {
+        const valueA: OrgSize = rowA.getValue(columnId);
+        const valueB: OrgSize = rowB.getValue(columnId);
+        return valueA.engineering > valueB.engineering
+          ? 1
+          : valueA.engineering < valueB.engineering
+          ? -1
+          : 0;
+      },
       enableHiding: true,
+      enableSorting: true,
     },
     {
       accessorKey: "fundingRound",
