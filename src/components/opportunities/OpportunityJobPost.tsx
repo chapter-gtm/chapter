@@ -113,7 +113,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
             <div className="flex flex-row justify-end gap-x-2 items-center">
               <DialogTrigger asChild>
                 <Button variant="outline" onClick={openJobPostModal}>
-                  <EyeIcon className="h-4 w-4" />
+                  View
                 </Button>
               </DialogTrigger>
               <a

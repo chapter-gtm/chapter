@@ -53,7 +53,7 @@ export function MainNav({ links }: NavProps) {
             "justify-start items-start h-auto px-3 items-center justify-center text-zinc-800 dark:text-zinc-200 h-10"
           )}
         >
-          {link.icon && <link.icon className=" h-4 w-4" />}
+          {link.icon && <link.icon className=" h-4 w-4 me-2" />}
           <span className="flex flex-col items-start">{link.title}</span>
         </Link>
       ))}

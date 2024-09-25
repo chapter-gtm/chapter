@@ -71,9 +71,12 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
         {opportunity.contacts !== null &&
           opportunity.contacts.length > 0 &&
           opportunity.contacts.map((contact: Person, index) => (
-            <div key={index} className="flex flex-col justify-start gap-y-3">
+            <div
+              key={index}
+              className="flex flex-col justify-start gap-y-1.5"
+            >
               <div
-                className="flex flex-row items-center justify-start text-sm text-zinc-700 gap-x-3"
+                className="flex flex-row items-center justify-start content-middle text-sm text-zinc-700 gap-x-3 "
                 key={index}
               >
                 {contact.linkedinProfileUrl && (
@@ -82,7 +85,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       width={18}
                       className="text-muted-foreground"
                     />
-                    <div className="flex flex-col justify-start">
+                    <div className="flex flex-row justify-between w-full items-center">
                       <div className="flex flex-row justify-start gap-x-1">
                         <p
                           className="flex font-medium text-primary"
@@ -90,13 +93,40 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           {contact.fullName}
                         </p>
-
                         <p
                           className="flex text-sm text-muted-foreground"
                           key={index}
                         >
                           {contact.title}
                         </p>
+                      </div>
+                      <div
+                        className="flex flex-row justify-start gap-x-2 items-center ps-7 h-6"
+                        key={index}
+                      >
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                          contact.workEmail
+                            ? handleCopyRecordLink(contact.workEmail)
+                            : null
+                          }
+                        >
+                          <Button size={"sm"} disabled={!contact.workEmail}>
+                          Copy email
+                          </Button>
+                        </a>
+                        <a
+                          href={contact.workEmail ? "mailto:" + contact.workEmail : undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button size={"sm"} disabled={!contact.workEmail}>
+                          Draft email
+                          </Button>
+                        </a>
+                        )}
                       </div>
                     </div>
                   </>
@@ -106,24 +136,6 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 className="flex flex-row justify-start gap-x-2 items-center ps-7 h-6"
                 key={index}
               >
-                {contact.workEmail && (
-                  <>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => handleCopyRecordLink(contact?.workEmail)}
-                    >
-                      <Button size={"sm"}>Copy email</Button>
-                    </a>
-                    <a
-                      href={"mailto:" + contact.workEmail}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button size={"sm"}>Draft email</Button>
-                    </a>
-                  </>
-                )}
                 {contact.linkedinProfileUrl && (
                   <>
                     <a
@@ -131,8 +143,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant={"outline"} size={"sm"}>
-                        <Linkedin className="h-4 w-4" />
+                      <Button variant={"outline"} className="w-8 h-8 p-1">
+                        <Linkedin className="h-3 w-3" />
                       </Button>
                     </a>
                   </>
@@ -144,8 +156,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant={"outline"} size={"sm"}>
-                        <Twitter className="h-4 w-4" />
+                      <Button variant={"outline"} className="w-8 h-8 p-1">
+                        <Twitter className="h-3 w-3" />
                       </Button>
                     </a>
                   </>
@@ -157,8 +169,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Button variant={"outline"} size={"sm"}>
-                        <Github className="h-4 w-4" />
+                      <Button variant={"outline"} className="w-8 h-8 p-1">
+                        <Github className="h-3 w-3" />
                       </Button>
                     </a>
                   </>

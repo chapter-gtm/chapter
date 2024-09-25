@@ -382,6 +382,7 @@ export function getFixedColumns(
       enableSorting: false,
       enableHiding: false,
     },
+
     {
       id: "companyName",
       accessorKey: "companyName",
@@ -389,8 +390,17 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Company" />
       ),
       cell: ({ row }) => {
-        return <div className="flex">{row.getValue("companyName")}</div>;
+        return (
+          <div className="flex flex-row justify-between pe-2">
+            <div>{row.getValue("companyName")}</div>
+            <span className="text-light hover:bg-popover/20 px-1.5 py-0.5 bg-popover rounded-md curser">
+              Open
+            </span>
+          </div>
+        );
       },
+      enableSorting: false,
+      enableHiding: false,
     },
     {
       accessorKey: "stage",

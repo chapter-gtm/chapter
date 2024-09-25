@@ -9,6 +9,7 @@ import {
   Link,
   LinkedinIcon,
   Dot,
+  ExternalLink,
 } from "lucide-react";
 
 import { getIcp } from "@/utils/chapter/icp";
@@ -135,6 +136,28 @@ export function OpportunityPropList({
           </DropdownMenu>
         </div>
         <Separator />
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Target width={18} />
+            <p>Relevant tools</p>
+          </div>
+          <div className="flex flex-row gap-x-2">
+            {icp &&
+              opportunity.jobPosts
+                ?.flatMap((jobPost) => jobPost.tools)
+                .filter((tool) => tool && icp.tool.include.includes(tool.name))
+                .map((tool, index) => (
+                  <>
+                    {tool && (
+                      <Badge key={index} variant={"default"}>
+                        {tool.name}
+                      </Badge>
+                    )}
+                  </>
+                ))}
+          </div>
+        </div>
+        <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Link width={18} />
@@ -148,9 +171,12 @@ export function OpportunityPropList({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-background hover:bg-background/50 dark:bg-card px-2 py-1.5 rounded-md dark:hover:bg-card/50"
+              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-card px-2 py-1 rounded-md dark:hover:bg-card/50 flex items-center"
             >
               {opportunity.company?.url}
+              <span className="ms-1">
+                <ExternalLink className="w-3" />
+              </span>
             </a>
           ) : (
             <p className="font-medium">{opportunity.company?.url}</p>
@@ -161,7 +187,7 @@ export function OpportunityPropList({
             <LinkedinIcon width={16} />
             <p>LinkedIn</p>
           </div>
-          <p className="flex-1 font-medium overflow-hidden truncate">
+          <p className="flex-1 font-medium overflow-hidden gap-x-2 bg-background hover:bg-background/50">
             {opportunity.company?.linkedinProfileUrl ? (
               <a
                 href={`https://${opportunity.company?.linkedinProfileUrl.replace(
@@ -171,7 +197,10 @@ export function OpportunityPropList({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {opportunity.company?.linkedinProfileUrl}
+                LinkedIn
+                <span className="ms-1">
+                  <ExternalLink className="w-3" />
+                </span>
               </a>
             ) : null}
           </p>
@@ -222,33 +251,12 @@ export function OpportunityPropList({
               )}
           </div>
         </div>
-        <Separator />
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Target width={18} />
-            <p>Search criteria</p>
-          </div>
-          <div className="flex flex-row gap-x-2">
-            {icp &&
-              opportunity.jobPosts
-                ?.flatMap((jobPost) => jobPost.tools)
-                .filter((tool) => tool && icp.tool.include.includes(tool.name))
-                .map((tool, index) => (
-                  <>
-                    {tool && (
-                      <Badge key={index} variant={"default"}>
-                        {tool.name}
-                      </Badge>
-                    )}
-                  </>
-                ))}
-          </div>
-        </div>
+
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
             <Target width={18} />
-            {icp ? <p>Additional stack</p> : <p>Tech stack</p>}
+            {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
           </div>
           <div className="flex flex-1 flex-wrap gap-2">
             {icp

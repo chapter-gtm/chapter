@@ -32,6 +32,7 @@ interface OpportunityFullProps {
 
 export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const [endType, setEndType] = useState<Boolean | null>(null);
 
   useEffect(() => {
     const fetchOpportunity = async () => {
@@ -69,6 +70,14 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     if (opportunity === null) return;
     const op = await updateOpportunityNotes(opportunity.id, richText);
     setOpportunity(op);
+
+    const newContentLength = richText.length - (opportunity.notes?.length || 0);
+    if (newContentLength >= 6) {
+      setEndType(true);
+      setTimeout(() => {
+        setEndType(false);
+      }, 3000);
+    }
   };
 
   return (
@@ -90,19 +99,28 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
             </div>
 
             <Tabs defaultValue="opNotes" className="flex-1 overflow-hidden">
-              <TabsList className="h-14 bg-transparent w-full justify-start border-b border-border rounded-none px-3 space-x-3">
-                <TabsTrigger
-                  value="opNotes"
-                  className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
-                >
-                  Notes{" "}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="opTasks"
-                  className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20 py-2"
-                >
-                  Tasks{" "}
-                </TabsTrigger>
+              <TabsList className="h-14 bg-transparent w-full justify-between border-b border-border rounded-none px-3 space-x-3">
+                <div className="flex">
+                  <TabsTrigger
+                    value="opNotes"
+                    className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
+                  >
+                    Notes{" "}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="opTasks"
+                    className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20 py-2"
+                  >
+                    Tasks{" "}
+                  </TabsTrigger>
+                </div>
+                {endType && (
+                  <>
+                    <div className="px-2 py-1.5 bg-popover text-sm rounded-lg">
+                      Auto saved..
+                    </div>
+                  </>
+                )}
               </TabsList>
               <div className="h-full w-full">
                 <TabsContent value="opTasks"></TabsContent>

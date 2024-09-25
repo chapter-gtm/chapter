@@ -34,12 +34,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { title } from "process";
+import { type Icp } from "@/types/icp";
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [opportunityCountByStageChartData, setOpportunityByStageChartData] =
     useState<object[]>([{ x: 1, y: 0 }]);
+
+  const [icp, setIcp] = useState<Icp | null>(null);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -179,6 +182,23 @@ export function Dashboard() {
                               ) : (
                                 <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
                               )}
+                            </div>
+                            <div className="flex flex-wrap">
+                              {icp &&
+                                op.jobPosts
+                                  ?.flatMap((jobPost) => jobPost.tools)
+                                  .filter(
+                                    (tool) =>
+                                      tool &&
+                                      icp.tool.include.includes(tool.name)
+                                  )
+                                  .map((tool, index) => (
+                                    <>
+                                      {tool && (
+                                        <div key={index}>{tool.name}</div>
+                                      )}
+                                    </>
+                                  ))}
                             </div>
                             <p className="text-sm text-zinc-500 absolute bottom-2">
                               Added {timeAgo(new Date(op.createdAt))}

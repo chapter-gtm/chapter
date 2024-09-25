@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
 import { MainNav, NavPropsLink } from "@/components/MainNav";
-import { LucideIceCream, HomeIcon } from "lucide-react";
+import { LucideIceCream, HomeIcon, Building2 } from "lucide-react";
 
 export function TopNavbar() {
   const links: NavPropsLink[] = [
     {
-      title: "",
+      title: "Home",
       label: "Home",
       variant: "secondary",
       route: "/dashboard",
@@ -17,6 +17,7 @@ export function TopNavbar() {
       label: "",
       variant: "secondary",
       route: "/opportunities",
+      icon: Building2,
     },
   ];
 

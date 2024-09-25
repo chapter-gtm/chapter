@@ -49,7 +49,7 @@ export function OpportunityDrawer({
 }: OpportunityDrawerProps) {
   return (
     <>
-      <div className="flex-1 overflow-y-auto rounded-xl m-5 ">
+      <div className="flex flex-col flex-1 m-5 ">
         <OpportunityBrand opportunity={opportunity} />
         <OpportunityJobPost opportunity={opportunity} />
         <OpportunityPropList

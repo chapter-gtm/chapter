@@ -41,6 +41,7 @@ interface DataTableProps<TData, TValue> {
   onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
   stickyColumnCount: number;
   nonClickableColumns: string[];
+  defaultPageSize?: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -54,6 +55,7 @@ export function DataTable<TData, TValue>({
   onSelectedRowsChange,
   stickyColumnCount = 0,
   nonClickableColumns = [],
+  defaultPageSize = 20,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [selectedRow, setSelectedRow] = React.useState(0);
@@ -83,6 +85,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    initialState: {
+      pagination: {
+        pageSize: defaultPageSize,
+      },
+    },
   });
 
   React.useEffect(() => {
@@ -152,7 +159,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-accent"
+                  className="hover:bg-red-300"
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
@@ -160,7 +167,7 @@ export function DataTable<TData, TValue>({
                         className={cn(
                           "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
                           cell.column.getIndex() < stickyColumnCount
-                            ? "sticky left-0 bg-card font-semibold"
+                            ? "sticky left-0 font-semibold"
                             : ""
                         )}
                         // This is where the cell should have a shade of color
