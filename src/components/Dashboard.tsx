@@ -7,7 +7,10 @@ import {
   ListTodo,
   LineChart,
   Inbox,
+  Users,
 } from "lucide-react";
+import { getIcp } from "@/utils/chapter/icp";
+
 import { EmptySelectionCard } from "@/components/EmptySelectionCard";
 import { PageHeaderRow } from "@/components/PageHeaderRow";
 import { Card } from "./ui/card";
@@ -52,6 +55,11 @@ export function Dashboard() {
       } catch (error) {}
     };
 
+    const fetchIcp = async () => {
+      const currentUserIcp = await getIcp();
+      setIcp(currentUserIcp);
+    };
+
     const fetchOpportunities = async () => {
       try {
         const opportunities = await getOpportunities(
@@ -70,6 +78,7 @@ export function Dashboard() {
     };
 
     fetchCurrentUser();
+    fetchIcp();
     fetchOpportunities();
   }, []);
 
@@ -176,14 +185,14 @@ export function Dashboard() {
                                 <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
                               )}
                               {op.company?.name ? (
-                                <p className="text-xl font-semibold">
+                                <p className="text-xl font-semibold line-clamp-2">
                                   {op.company?.name}
                                 </p>
                               ) : (
                                 <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
                               )}
                             </div>
-                            <div className="flex flex-wrap">
+                            <div className="flex flex-wrap pt-2 gap-x-2 gap-y-1">
                               {icp &&
                                 op.jobPosts
                                   ?.flatMap((jobPost) => jobPost.tools)
@@ -195,10 +204,19 @@ export function Dashboard() {
                                   .map((tool, index) => (
                                     <>
                                       {tool && (
-                                        <div key={index}>{tool.name}</div>
+                                        <div
+                                          key={index}
+                                          className="text-xs px-1.5 py-1 bg-background/50 dark:bg-popover rounded-md text-secondary-foreground"
+                                        >
+                                          {tool.name}
+                                        </div>
                                       )}
                                     </>
                                   ))}
+                              <div className="items-center flex text-xs px-1.5 py-1 bg-background/50 dark:bg-popover rounded-md text-secondary-foreground">
+                                {/* <Users className="h-3 w-3 me-1.5" /> */}
+                                Eng {op.company?.orgSize?.engineering}
+                              </div>
                             </div>
                             <p className="text-sm text-zinc-500 absolute bottom-2">
                               Added {timeAgo(new Date(op.createdAt))}

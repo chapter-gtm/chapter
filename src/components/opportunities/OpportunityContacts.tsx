@@ -94,7 +94,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                   >
                     <div className="flex flex-row items-center justify-between ">
                       <div className="flex flex-row gap-x-2">
-                        <div className="py-1.5 px-2.5 bg-popover rounded-lg text-primary">
+                        <div className="py-1.5 px-2.5 bg-background hover:bg-background/50 dark:bg-popover rounded-lg text-primary">
                           {contact.firstName}
                         </div>
 
@@ -191,7 +191,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         </Button>
                       </div>
                     </div>
-                    <p className="font-normal text-secondary/50 ps-2 pt-2">
+                    <p className="font-normal text-zinc-500 ps-2 pt-2">
                       {contact.title}
                     </p>
                   </div>
