@@ -11,6 +11,7 @@ from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, 
 from uuid_utils.compat import uuid4
 
 from app.lib.pdl import get_company_details
+from app.lib.pitchbook import get_company_investors
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 from app.db.models import Company
 from app.lib.utils import get_domain
@@ -98,6 +99,13 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             words = last_round_name.split("_")
             words = [word.capitalize() for word in words]
             obj.last_funding = Funding(round_name=" ".join(words))
+
+        # Get investor names and last funding round name
+        try:
+            investors = await get_company_investors(obj.url)
+            obj.last_funding.investors = investors
+        except Exception as e:
+            await logger.awarn("Failed to get company investors", url=obj.url, exc_info=e)
 
         # TODO: Fix upsert
         return await super().upsert(
