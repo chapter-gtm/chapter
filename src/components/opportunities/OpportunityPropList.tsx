@@ -9,7 +9,9 @@ import {
   Link,
   LinkedinIcon,
   Dot,
+  Map,
   ExternalLink,
+  Heart,
 } from "lucide-react";
 
 import { getIcp } from "@/utils/chapter/icp";
@@ -94,6 +96,10 @@ export function OpportunityPropList({
 
   return (
     <>
+      <Separator />
+      <div className="text-base font-medium my-4 text-zinc-700 dark:text-zinc-200 ps-2">
+        Properties
+      </div>
       <div className="flex flex-col gap-y-4 py-4 ps-2">
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -171,7 +177,7 @@ export function OpportunityPropList({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-card px-2 py-1 rounded-md dark:hover:bg-card/50 flex items-center"
+              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-popover px-2 py-1 rounded-md dark:hover:bg-popover/50 flex items-center"
             >
               {opportunity.company?.url}
               <span className="ms-1">
@@ -184,28 +190,35 @@ export function OpportunityPropList({
         </div>
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <LinkedinIcon width={16} />
-            <p>LinkedIn</p>
+            <Heart width={16} />
+            <p>Social</p>
           </div>
-          <p className="flex-1 font-medium overflow-hidden gap-x-2 bg-background hover:bg-background/50">
-            {opportunity.company?.linkedinProfileUrl ? (
-              <a
-                href={`https://${opportunity.company?.linkedinProfileUrl.replace(
-                  /^https?:\/\//,
-                  ""
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-                <span className="ms-1">
-                  <ExternalLink className="w-3" />
-                </span>
-              </a>
-            ) : null}
-          </p>
+
+          {opportunity.company?.linkedinProfileUrl ? (
+            <a
+              href={`https://${opportunity.company?.linkedinProfileUrl.replace(
+                /^https?:\/\//,
+                ""
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-popover px-2 py-1 rounded-md dark:hover:bg-popover/50 flex items-center"
+            >
+              LinkedIn
+              <span className="ms-1">
+                <ExternalLink className="w-3" />
+              </span>
+            </a>
+          ) : null}
         </div>
         <Separator />
+        {/* <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Map width={18} />
+            <p>Location</p>
+          </div>
+          <p className="font-medium">{opportunity.company?.hqLocation}</p>
+        </div> */}
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Factory width={18} />
@@ -287,7 +300,6 @@ export function OpportunityPropList({
                   ))}
           </div>
         </div>
-        <Separator />
       </div>
     </>
   );

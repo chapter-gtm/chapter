@@ -86,15 +86,17 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
       {opportunity !== null && (
         <div className="bg-background p-6 flex flex-1">
           <div className="flex flex-row flex-1 bg-card rounded-lg overflow">
-            <div className="basis-[520px] overflow-y-scroll p-6 border-e border-border">
+            <div className="basis-[620px] overflow-y-scroll p-6 border-e border-border">
               <div className="flex flex-col">
                 <OpportunityBrand opportunity={opportunity} />
                 <OpportunityJobPost opportunity={opportunity} />
+
+                <OpportunityContacts opportunity={opportunity} />
+
                 <OpportunityPropList
                   opportunity={opportunity}
                   updateOpportunity={updateOpportunity}
                 />
-                <OpportunityContacts opportunity={opportunity} />
               </div>
             </div>
 
@@ -106,12 +108,6 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                     className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
                   >
                     Notes{" "}
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="opTasks"
-                    className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20 py-2"
-                  >
-                    Tasks{" "}
                   </TabsTrigger>
                 </div>
                 {endType && (

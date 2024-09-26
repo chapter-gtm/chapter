@@ -32,7 +32,7 @@ export default function TextEditor({ content, onChange }: TextEditorProps) {
       Heading.configure({
         levels: [1, 2, 3],
         HTMLAttributes: {
-          class: "text-zinc-700 dark:text-zinc-200",
+          class: "text-zinc-700 dark:text-zinc-200 font-semibold",
         },
       }),
       Paragraph.configure({
@@ -56,7 +56,7 @@ export default function TextEditor({ content, onChange }: TextEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose m-0 focus:outline-none p-6 text-zinc-700 dark:text-zinc-200",
+          "prose m-0 focus:outline-none p-6 text-zinc-700 dark:text-zinc-200 min-h-[400px] font-normal",
       },
     },
     onUpdate: ({ editor }) => {
