@@ -143,7 +143,7 @@ export function OpportunitiesMain() {
     setSheetOpen(false);
   };
 
-  const updateOpportunity = (updatedOpportunity: Opportunity) => {
+  const updateOpportunity = async (updatedOpportunity: Opportunity) => {
     // Update records
     setRecords((prevItems) =>
       prevItems.map((item) =>
@@ -158,6 +158,7 @@ export function OpportunitiesMain() {
 
     // Update map (which will be used to set selectedRow on the next row click)
     opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
+    setOpportunityMap(opportunityMap);
 
     // Repopulate columns
     if (icp) {
