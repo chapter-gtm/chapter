@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Annotated
+from datetime import timedelta
 
 from advanced_alchemy.utils.text import slugify
 from litestar import Controller, Request, Response, get, post
@@ -49,7 +50,7 @@ class AccessController(Controller):
     ) -> Response[OAuth2Login]:
         """Authenticate a user."""
         user = await users_service.authenticate(data.username, data.password)
-        return auth.login(user.email)
+        return auth.login(user.email, token_expiration=timedelta(days=7))
 
     @post(
         operation_id="AccountLogout",
