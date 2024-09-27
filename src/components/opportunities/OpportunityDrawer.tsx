@@ -52,11 +52,11 @@ export function OpportunityDrawer({
       <div className="flex flex-col flex-1 m-5 ">
         <OpportunityBrand opportunity={opportunity} />
         <OpportunityJobPost opportunity={opportunity} />
+        <OpportunityContacts opportunity={opportunity} />
         <OpportunityPropList
           opportunity={opportunity}
           updateOpportunity={updateOpportunity}
         />
-        <OpportunityContacts opportunity={opportunity} />
       </div>
     </>
   );
