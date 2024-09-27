@@ -11,6 +11,7 @@ import {
   MapPin,
   CircleUser,
   Dot,
+  ChevronDown,
 } from "lucide-react";
 
 import {
@@ -439,7 +440,7 @@ export function getFixedColumns(
           <>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <div className="cursor-pointer">
+                <div className="cursor-pointer flex flex-row justify-between gap-x-2 items-center">
                   <div
                     className={classNames(
                       stageColors[stage]?.color,
@@ -454,6 +455,7 @@ export function getFixedColumns(
                     ></span>
                     {opportunityStage.label}
                   </div>
+                  <ChevronDown />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover border-border">
