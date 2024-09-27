@@ -546,9 +546,13 @@ export function getFixedColumns(
       sortingFn: (rowA, rowB, columnId) => {
         const valueA: OrgSize = rowA.getValue(columnId);
         const valueB: OrgSize = rowB.getValue(columnId);
-        return valueA.engineering > valueB.engineering
+        return valueA.engineering !== null &&
+          valueB.engineering !== null &&
+          valueA.engineering > valueB.engineering
           ? 1
-          : valueA.engineering < valueB.engineering
+          : valueA.engineering !== null &&
+            valueB.engineering !== null &&
+            valueA.engineering < valueB.engineering
           ? -1
           : 0;
       },
