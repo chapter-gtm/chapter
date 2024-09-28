@@ -30,7 +30,7 @@ import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
 
 import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@radix-ui/react-select";
@@ -39,6 +39,7 @@ export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [icp, setIcp] = useState<Icp | null>(null);
+  const icpRef = useRef(icp);
   const [records, setRecords] = useState<RecordSchema[]>([]);
   const [recordColumns, setRecordColumns] = useState<ColumnDef<RecordSchema>[]>(
     []
@@ -46,6 +47,8 @@ export function OpportunitiesMain() {
   const [opportunityMap, setOpportunityMap] = useState<
     Map<string, Opportunity>
   >(new Map());
+  const opportunityMapRef = useRef(opportunityMap);
+
   const [selectedRow, setSelectedRow] = useState<Opportunity | null>(null);
   const [selectedRows, setSelectedRows] = useState<Opportunity[]>([]);
   const [preSelectedFilters, setPreSelectedFilters] =
@@ -84,13 +87,27 @@ export function OpportunitiesMain() {
         setIsPopulated(true);
 
         // Populate columns
-        setRecordColumns(getRecordColumns(currentUserIcp, updateOpportunity));
+        setRecordColumns(
+          getRecordColumns(
+            currentUserIcp,
+            updateOpportunityCallback,
+            handleOpenDrawerCallback
+          )
+        );
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };
     fetchIcpAndOpportunities();
   }, []);
+
+  useEffect(() => {
+    opportunityMapRef.current = opportunityMap;
+  }, [opportunityMap]);
+
+  useEffect(() => {
+    icpRef.current = icp;
+  }, [icp]);
 
   const handleRowClick = function <TData>(data: TData) {
     const record: RecordSchema = data as RecordSchema;
@@ -130,43 +147,73 @@ export function OpportunitiesMain() {
     }
   };
 
-  const handleOpenSheet = function <TData>(data: TData) {
+  const handleOpenSheetCallback = function <TData>(data: TData) {
     const record: RecordSchema = data as RecordSchema;
-    const opportunity: Opportunity | undefined = opportunityMap.get(record.id);
+    const opportunity: Opportunity | undefined = opportunityMapRef.current.get(
+      record.id
+    );
     if (opportunity !== undefined) {
       setSelectedRow(opportunity);
     }
-    setSheetOpen(true);
+    if (!sheetOpen) {
+      setSheetOpen(true);
+    }
   };
+
+  const handleOpenDrawerCallback = useCallback(async (id: string) => {
+    const opportunity: Opportunity | undefined =
+      opportunityMapRef.current.get(id);
+    if (!opportunity) {
+      toast.error("Failed to load opportunity");
+      return;
+    }
+    setSelectedRow(opportunity);
+    if (!sheetOpen) {
+      setSheetOpen(true);
+    }
+  }, []);
 
   const handleCloseSheet = function () {
     setSheetOpen(false);
   };
 
-  const updateOpportunity = async (updatedOpportunity: Opportunity) => {
-    // Update records
-    setRecords((prevItems) =>
-      prevItems.map((item) =>
-        item.id === updatedOpportunity.id
-          ? { ...item, ...updatedOpportunity }
-          : item
-      )
-    );
+  const updateOpportunityCallback = useCallback(
+    async (updatedOpportunity: Opportunity) => {
+      // Update records
+      setRecords((prevItems) =>
+        prevItems.map((item) =>
+          item.id === updatedOpportunity.id
+            ? { ...item, ...updatedOpportunity }
+            : item
+        )
+      );
 
-    // Update selected row
-    setSelectedRow(updatedOpportunity);
+      // Update selected row
+      setSelectedRow(updatedOpportunity);
 
-    // Update map (which will be used to set selectedRow on the next row click)
-    opportunityMap.set(updatedOpportunity.id, updatedOpportunity);
-    setOpportunityMap(opportunityMap);
+      // Update map (which will be used to set selectedRow on the next row click)
+      const updatedOpportunityMap = new Map<string, Opportunity>(
+        opportunityMapRef.current
+      );
+      updatedOpportunityMap.set(updatedOpportunity.id, updatedOpportunity);
+      setOpportunityMap(updatedOpportunityMap);
 
-    // Repopulate columns
-    if (icp) {
-      setRecordColumns(getRecordColumns(icp, updateOpportunity));
-    } else {
-      toast.error("Failed to refresh table, please reload.");
-    }
-  };
+      // Repopulate columns
+      if (icpRef.current) {
+        setRecordColumns(
+          getRecordColumns(
+            icpRef.current,
+            updateOpportunityCallback,
+            handleOpenDrawerCallback
+          )
+        );
+      } else {
+        console.log(icpRef.current);
+        toast.error("Failed to refresh table, please reload.");
+      }
+    },
+    []
+  );
 
   return (
     <>
@@ -191,7 +238,6 @@ export function OpportunitiesMain() {
                       filters={getFilters(icp)}
                       preSelectedFilters={preSelectedFilters}
                       defaultColumnVisibility={defaultColumnVisibility}
-                      onRowClick={handleOpenSheet}
                       enableRowSelection={true}
                       onSelectedRowsChange={handleRowSelection}
                       stickyColumnCount={1}
@@ -200,10 +246,7 @@ export function OpportunitiesMain() {
                   </div>
                 </div>
 
-                <SheetContent
-                  className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border"
-                  onInteractOutside={handleCloseSheet}
-                >
+                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border">
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                       <SheetClose
@@ -254,7 +297,7 @@ export function OpportunitiesMain() {
                     {selectedRow !== null && (
                       <OpportunityDrawer
                         opportunity={selectedRow}
-                        updateOpportunity={updateOpportunity}
+                        updateOpportunity={updateOpportunityCallback}
                       />
                     )}
                   </div>

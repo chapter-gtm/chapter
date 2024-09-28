@@ -24,6 +24,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 import { ColumnDef, VisibilityState } from "@tanstack/react-table";
@@ -368,7 +369,8 @@ export const defaultColumnVisibility: VisibilityState = {
 
 export function getFixedColumns(
   icp: Icp,
-  updateOpportunity: (updatedOpportunity: Opportunity) => void
+  updateOpportunity: (updatedOpportunity: Opportunity) => void,
+  handleOpenDrawer: (id: string) => void
 ) {
   const fixedRecordColumns: ColumnDef<RecordSchema>[] = [
     {
@@ -391,12 +393,18 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Company" />
       ),
       cell: ({ row }) => {
+        const id: string = row.getValue("id");
         return (
           <div className="flex flex-row justify-between pe-2">
             <div>{row.getValue("companyName")}</div>
-            <span className="text-light hover:bg-popover/20 px-1.5 py-0.5 bg-popover rounded-md curser">
+            <Button
+              className="text-light hover:bg-popover/20 px-1.5 py-0.5 bg-popover rounded-md curser"
+              onClick={async () => {
+                await handleOpenDrawer(id);
+              }}
+            >
               Open
-            </span>
+            </Button>
           </div>
         );
       },
@@ -426,7 +434,7 @@ export function getFixedColumns(
               id,
               newStage as OpportunityStage
             );
-            updateOpportunity(opportunity);
+            await updateOpportunity(opportunity);
           } catch (error: any) {
             toast.error("Failed to set stage.");
           }
@@ -680,11 +688,13 @@ export function getFixedColumns(
 
 export function getRecordColumns(
   icp: Icp,
-  updateOpportunity: (updatedOpportunity: Opportunity) => void
+  updateOpportunity: (updatedOpportunity: Opportunity) => void,
+  handleOpenDrawer: (id: string) => void
 ) {
   const finalColumns: ColumnDef<RecordSchema>[] = getFixedColumns(
     icp,
-    updateOpportunity
+    updateOpportunity,
+    handleOpenDrawer
   );
   return finalColumns;
 }
