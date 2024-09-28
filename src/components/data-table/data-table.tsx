@@ -36,7 +36,7 @@ interface DataTableProps<TData, TValue> {
   filters: ToolbarFilter[];
   preSelectedFilters?: ColumnFiltersState;
   defaultColumnVisibility?: VisibilityState;
-  onRowClick: <TData>(data: TData) => void;
+  onRowClick?: <TData>(data: TData) => void;
   enableRowSelection: boolean;
   onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
   stickyColumnCount: number;
@@ -50,7 +50,7 @@ export function DataTable<TData, TValue>({
   filters,
   preSelectedFilters = [],
   defaultColumnVisibility = {},
-  onRowClick,
+  onRowClick = undefined,
   enableRowSelection = false,
   onSelectedRowsChange,
   stickyColumnCount = 0,
@@ -177,7 +177,9 @@ export function DataTable<TData, TValue>({
                         ) => {
                           // Don't call row click handler when checkbox field(must has id="select") is clicked.
                           if (!nonClickableColumns.includes(cell.column.id)) {
-                            onRowClick(row.original);
+                            if (onRowClick) {
+                              onRowClick(row.original);
+                            }
                           }
                         }}
                       >
