@@ -37,9 +37,12 @@ async def provide_users_service(db_session: AsyncSession) -> AsyncGenerator[User
         load=[
             selectinload(UserModel.roles).options(joinedload(UserRole.role, innerjoin=True)),
             selectinload(UserModel.oauth_accounts),
+            """
+            TODO: Enable when roles are fully implemented
             selectinload(UserModel.teams).options(
                 joinedload(TeamMember.team, innerjoin=True).options(load_only(Team.name)),
             ),
+            """,
         ],
     ) as service:
         yield service

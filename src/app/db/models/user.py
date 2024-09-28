@@ -43,13 +43,13 @@ class User(UUIDAuditBase):
     )
     roles: Mapped[list[UserRole]] = relationship(
         back_populates="user",
-        lazy="selectin",
+        lazy="noload",
         uselist=True,
         cascade="all, delete",
     )
     teams: Mapped[list[TeamMember]] = relationship(
         back_populates="user",
-        lazy="selectin",
+        lazy="noload",
         uselist=True,
         cascade="all, delete",
         viewonly=True,

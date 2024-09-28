@@ -25,7 +25,7 @@ class AccessController(Controller):
     """User login and registration."""
 
     tags = ["Access"]
-    dependencies = {"users_service": Provide(provide_users_service), "roles_service": Provide(provide_roles_service)}
+    dependencies = {"users_service": Provide(provide_users_service)}
     signature_namespace = {
         "UserService": UserService,
         "RoleService": RoleService,
