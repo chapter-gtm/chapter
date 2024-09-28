@@ -12,6 +12,7 @@ import {
   Map,
   ExternalLink,
   Heart,
+  ChevronDown,
 } from "lucide-react";
 
 import { getIcp } from "@/utils/chapter/icp";
@@ -109,19 +110,22 @@ export function OpportunityPropList({
 
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <div
-                className={classNames(
-                  stageColors[opportunity.stage]?.color,
-                  "flex ps-0.5 py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center "
-                )}
-              >
-                <span
+              <div className="cursor-pointer flex flex-row justify-between gap-x-2 items-center">
+                <div
                   className={classNames(
-                    stageColors[opportunity.stage]?.highlight,
-                    "h-1.5 w-1.5 rounded-full ms-1.5 me-1"
+                    stageColors[opportunity.stage]?.color,
+                    "flex ps-0.5 py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center "
                   )}
-                ></span>
-                {currentStage}
+                >
+                  <span
+                    className={classNames(
+                      stageColors[opportunity.stage]?.highlight,
+                      "h-1.5 w-1.5 rounded-full ms-1.5 me-1"
+                    )}
+                  ></span>
+                  {currentStage}
+                </div>
+                <ChevronDown />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-popover border-border">
