@@ -58,7 +58,15 @@ export function OpportunitiesMain() {
     const fetchIcpAndOpportunities = async () => {
       try {
         const currentUserIcp = await getIcp();
-        const opportunities = await getOpportunities();
+        const opportunities = await getOpportunities(
+          1000,
+          1,
+          "created_at",
+          "desc",
+          "",
+          "",
+          true
+        );
 
         const oppMap = new Map<string, Opportunity>();
         opportunities.forEach((r) => oppMap.set(r.id, r));
@@ -208,7 +216,6 @@ export function OpportunitiesMain() {
           )
         );
       } else {
-        console.log(icpRef.current);
         toast.error("Failed to refresh table, please reload.");
       }
     },
