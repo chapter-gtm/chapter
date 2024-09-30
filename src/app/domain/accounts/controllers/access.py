@@ -14,7 +14,7 @@ from litestar.security.jwt import OAuth2Login
 
 from app.db.models import User as UserModel  # noqa: TCH001
 from app.domain.accounts import urls
-from app.domain.accounts.dependencies import provide_roles_service, provide_users_service
+from app.domain.accounts.dependencies import provide_users_service
 from app.domain.accounts.guards import auth, requires_active_user
 from app.domain.accounts.schemas import AccountLogin, AccountRegister, User
 from app.domain.accounts.services import RoleService, UserService
