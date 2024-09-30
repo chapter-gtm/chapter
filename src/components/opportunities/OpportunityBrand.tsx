@@ -46,6 +46,7 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="min-w-[72px] min-h-[72px] max-w-[72px] max-h-[72px]"
               >
                 <Image
                   src={opportunity.company?.profilePicUrl}

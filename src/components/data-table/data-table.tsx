@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
                       className={cn(
                         "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
                         header.column.getIndex() < stickyColumnCount
-                          ? "sticky left-0 bg-card font-bold"
+                          ? "sticky left-0 bg-card font-bold min-w-[200px]"
                           : ""
                       )}
                     >
@@ -159,15 +159,22 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="dark-hover:bg-popover hover:bg-background"
+                  className={cn(
+                    " text-sm",
+                    selectedRow === row.index
+                      ? "bg-popover"
+                      : "text-muted-foreground"
+                  )}
                 >
+                  {/* className="dark-hover:bg-popover hover:bg-background" */}
+
                   {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell
                         className={cn(
                           "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
                           cell.column.getIndex() < stickyColumnCount
-                            ? "sticky left-0 font-semibold"
+                            ? "sticky left-0 font-semibold bg-card"
                             : ""
                         )}
                         // This is where the cell should have a shade of color
@@ -180,6 +187,7 @@ export function DataTable<TData, TValue>({
                             if (onRowClick) {
                               onRowClick(row.original);
                             }
+                            setSelectedRow(row.index);
                           }
                         }}
                       >

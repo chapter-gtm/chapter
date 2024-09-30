@@ -109,7 +109,7 @@ export function OpportunityPropList({
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="hover:bg-popover flex-1 py-0.5 rounded-lg">
               <div className="cursor-pointer flex flex-row justify-between gap-x-2 items-center">
                 <div
                   className={classNames(
@@ -125,7 +125,7 @@ export function OpportunityPropList({
                   ></span>
                   {currentStage}
                 </div>
-                <ChevronDown />
+                <ChevronDown className="w-4 h-4 me-2" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-popover border-border">
@@ -165,6 +165,41 @@ export function OpportunityPropList({
                     )}
                   </>
                 ))}
+          </div>
+        </div>
+        <Separator />
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
+            <Target width={18} />
+            {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
+          </div>
+          <div className="flex flex-1 flex-wrap gap-2">
+            {icp
+              ? opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .filter(
+                    (tool) => tool && !icp.tool.include.includes(tool.name)
+                  )
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <Badge key={index} variant={"outline"}>
+                          {tool.name}
+                        </Badge>
+                      )}
+                    </>
+                  ))
+              : opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <Badge key={index} variant={"outline"}>
+                          {tool.name}
+                        </Badge>
+                      )}
+                    </>
+                  ))}
           </div>
         </div>
         <Separator />
@@ -266,42 +301,6 @@ export function OpportunityPropList({
               opportunity.company?.lastFunding.investors.length > 0 && (
                 <p>{opportunity.company.lastFunding.investors.join(" · ")}</p>
               )}
-          </div>
-        </div>
-
-        <Separator />
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
-            <Target width={18} />
-            {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
-          </div>
-          <div className="flex flex-1 flex-wrap gap-2">
-            {icp
-              ? opportunity.jobPosts
-                  ?.flatMap((jobPost) => jobPost.tools)
-                  .filter(
-                    (tool) => tool && !icp.tool.include.includes(tool.name)
-                  )
-                  .map((tool, index) => (
-                    <>
-                      {tool && (
-                        <Badge key={index} variant={"outline"}>
-                          {tool.name}
-                        </Badge>
-                      )}
-                    </>
-                  ))
-              : opportunity.jobPosts
-                  ?.flatMap((jobPost) => jobPost.tools)
-                  .map((tool, index) => (
-                    <>
-                      {tool && (
-                        <Badge key={index} variant={"outline"}>
-                          {tool.name}
-                        </Badge>
-                      )}
-                    </>
-                  ))}
           </div>
         </div>
       </div>

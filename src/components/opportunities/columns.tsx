@@ -395,10 +395,10 @@ export function getFixedColumns(
       cell: ({ row }) => {
         const id: string = row.getValue("id");
         return (
-          <div className="flex flex-row justify-between pe-2">
+          <div className="flex flex-row justify-between items-center pe-2">
             <div>{row.getValue("companyName")}</div>
             <Button
-              className="text-light hover:bg-popover/20 px-1.5 py-0.5 bg-popover rounded-md curser"
+              className="text-light hover:bg-popover/20 px-1.5 py-0.5 h-7 bg-popover rounded-md curser"
               onClick={async () => {
                 await handleOpenDrawer(id);
               }}
@@ -447,7 +447,7 @@ export function getFixedColumns(
         return (
           <>
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger className="w-full">
                 <div className="cursor-pointer flex flex-row justify-between gap-x-2 items-center">
                   <div
                     className={classNames(
