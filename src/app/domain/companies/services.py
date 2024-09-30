@@ -78,8 +78,18 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             await logger.ainfo("Company already exists", id=results[0].id, url=results[0].url)
             return results[0]
 
+        try:
+            company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
+            location = Location(
+                country=company_details.get("location", {}).get("country"),
+                region=company_details.get("location", {}).get("region"),
+                city=company_details.get("location", {}).get("locality"),
+            )
+        except Exception as e:
+            await logger.awarn("Error getting company details", exc_info=e)
+            location = None
+
         # TODO: Move to provider specific code
-        company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
         obj.description = company_details.get("headline") or obj.description
         obj.type = company_details.get("type") or obj.type
         obj.industry = company_details.get("industry") or obj.industry
@@ -87,11 +97,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         obj.founded_year = company_details.get("founded") or obj.founded_year
         obj.url = company_details.get("website") or obj.url
         obj.linkedin_profile_url = company_details.get("linkedin_url") or obj.linkedin_profile_url
-        obj.hq_location = Location(
-            country=company_details.get("location", {}).get("country"),
-            region=company_details.get("location", {}).get("region"),
-            city=company_details.get("location", {}).get("locality"),
-        )
+        obj.hq_location = location
         # TODO: Enable Premium field
         # obj.org_size = OrgSize(**company_details.get("employee_count_by_role", {}))
         if company_details.get("funding_stages"):
