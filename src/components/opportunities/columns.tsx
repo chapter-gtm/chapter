@@ -463,7 +463,7 @@ export function getFixedColumns(
                     ></span>
                     {opportunityStage.label}
                   </div>
-                  <ChevronDown />
+                  <ChevronDown className="w-3 me-1.5" />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-popover border-border">
