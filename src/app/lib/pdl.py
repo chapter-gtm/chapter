@@ -52,7 +52,7 @@ async def get_person_details(social_url: str) -> dict[str, Any]:
         response = await client.get("https://api.peopledatalabs.com/v5/person/enrich", headers=headers, params=params)
         data = response.json()
         if not data.get("data"):
-            await logger.awarn("Person not found.", response=data, url=url, social_url=social_url)
+            await logger.awarn("Person not found.", response=data, social_url=social_url)
             raise Exception("Person not found.")
         return data.get("data")
 
