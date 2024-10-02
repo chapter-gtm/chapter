@@ -202,7 +202,7 @@ export function OpportunityPropList({
                   ))}
           </div>
         </div>
-        <Separator />
+        {/* <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Link width={18} />
@@ -226,8 +226,8 @@ export function OpportunityPropList({
           ) : (
             <p className="font-medium">{opportunity.company?.url}</p>
           )}
-        </div>
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+        </div> */}
+        {/* <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Heart width={16} />
             <p>Social</p>
@@ -249,7 +249,7 @@ export function OpportunityPropList({
               </span>
             </a>
           ) : null}
-        </div>
+        </div> */}
         <Separator />
         {/* <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -291,7 +291,7 @@ export function OpportunityPropList({
             {opportunity.company?.lastFunding?.roundName}
           </p>
         </div>
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+        <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Banknote width={18} />
             <p>Investors</p>

@@ -152,13 +152,11 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                             </>
                           )}
                         </div>
-                        <Button
-                          className="flex items-center pe-0.5 ps-1.5 gap-x-1 bg-card h-8 hover:bg-primary/10 cursor-pointer text-muted-foreground hover:text-primary"
+                        <div
+                          className="flex items-center pe-0.5 ps-1.5 gap-x-1 bg-card h-8 cursor-default text-muted-foreground rounded-lg"
                           key={index}
-                          disabled={!contact.workEmail}
-                          variant={"outline"}
                         >
-                          <div className="px-1 ">
+                          <div className="px-1">
                             {contact.workEmail
                               ? "Email Available"
                               : "Email Unavailable"}
@@ -200,7 +198,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                               </a>
                             </>
                           )}
-                        </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
