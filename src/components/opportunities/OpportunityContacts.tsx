@@ -75,7 +75,7 @@ const handleCopyRecordLink = async (email: string | null) => {
 export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
   return (
     <>
-      <Accordion type="single" collapsible defaultValue="item-1">
+      <Accordion type="single" collapsible>
         <AccordionItem className="border-none" value="item-1">
           <AccordionTrigger className="hover:no-underline	 justify-start gap-x-2">
             <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
