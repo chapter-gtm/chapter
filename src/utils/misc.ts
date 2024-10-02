@@ -77,3 +77,10 @@ export function truncateString(str: string, maxLength: number = 30): string {
   }
   return str.slice(0, maxLength - 1) + "…";
 }
+
+export function isDateInLastNHours(date: Date, n: number = 24): boolean {
+  const now = new Date(); // Current date and time
+  const nHoursAgo = new Date(now.getTime() - n * 60 * 60 * 1000); // n hours ago from now
+
+  return date > nHoursAgo && date <= now;
+}
