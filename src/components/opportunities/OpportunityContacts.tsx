@@ -14,6 +14,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
+import { usePostHog } from "posthog-js/react";
+
 import {
   Accordion,
   AccordionContent,
@@ -55,6 +57,7 @@ import { OpportunityJobPost } from "./OpportunityJobPost";
 
 import { Separator } from "@/components/ui/separator";
 import { Investor } from "@/types/company";
+import posthog from "posthog-js";
 
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
@@ -70,6 +73,26 @@ const handleCopyRecordLink = async (email: string | null) => {
       description: error.toString(),
     });
   }
+};
+
+const handleEmailClick = () => {
+  // toast.success("Email sent!");
+  posthog.capture("email clicked");
+};
+
+const handleTwitterClick = () => {
+  toast.success("Twitter link clicked!");
+  posthog.capture("twitter clicked");
+};
+
+const handleLinkedinClick = () => {
+  toast.success("Linkedin link clicked!");
+  posthog.capture("linkedin clicked");
+};
+
+const handleGithubClick = () => {
+  toast.success("Github link clicked!");
+  posthog.capture("github clicked");
 };
 
 export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
@@ -101,7 +124,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                           {contact.title}
                         </p>
                       </div>
-                      <div className="flex flex-row justify-between">
+                      <div className="flex flex-row justify-start">
                         <div className="flex flex-wrap gap-x-2">
                           {contact.linkedinProfileUrl && (
                             <>
@@ -112,7 +135,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                               >
                                 <Button
                                   variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10 "
+                                  className="w-8 h-8 p-1 hover:bg-primary/10"
+                                  onClick={handleLinkedinClick}
                                 >
                                   <Linkedin className="h-3 w-3" />
                                 </Button>
@@ -128,7 +152,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                               >
                                 <Button
                                   variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10 "
+                                  className="w-8 h-8 p-1 hover:bg-primary/10"
+                                  onClick={handleTwitterClick}
                                 >
                                   <Twitter className="h-3 w-3" />
                                 </Button>
@@ -144,15 +169,38 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                               >
                                 <Button
                                   variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10 "
+                                  className="w-8 h-8 p-1 hover:bg-primary/10"
+                                  onClick={handleGithubClick}
                                 >
                                   <Github className="h-3 w-3" />
                                 </Button>
                               </a>
                             </>
                           )}
+                          {contact.workEmail && (
+                            <>
+                              <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() =>
+                                  contact.workEmail
+                                    ? handleCopyRecordLink(contact.workEmail)
+                                    : null
+                                }
+                              >
+                                <Button
+                                  variant={"outline"}
+                                  className="w-8 h-8 p-1 hover:bg-primary/10"
+                                  disabled={!contact.workEmail}
+                                  onClick={handleEmailClick}
+                                >
+                                  <Mail className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            </>
+                          )}
                         </div>
-                        <div
+                        {/* <div
                           className="flex items-center pe-0.5 ps-1.5 gap-x-1 bg-card h-8 cursor-default text-muted-foreground rounded-lg"
                           key={index}
                         >
@@ -176,6 +224,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                                 <Button
                                   className="px-2 bg-transparent hover:bg-primary/10 h-6.5 w-6.5 text-muted-foreground hover:text-primary"
                                   disabled={!contact.workEmail}
+                                  onClick={handleEmailClick}
                                 >
                                   <Clipboard className="h-3 w-3" />
                                 </Button>
@@ -192,13 +241,14 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                                 <Button
                                   className="px-2 bg-transparent hover:bg-primary/10 h-6.5 w-6.5 text-muted-foreground hover:text-primary"
                                   disabled={!contact.workEmail}
+                                  onClick={handleEmailClick}
                                 >
                                   <PencilLine className="h-3 w-3" />
                                 </Button>
                               </a>
                             </>
                           )}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
