@@ -673,7 +673,7 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Investors" />
       ),
       cell: ({ row }) => {
-        const investors: string[] = row.getValue("investors");
+        const investors: string[] = row.getValue("investors") || [];
         const investorList: string = truncateString(investors.join(", "));
         return <div className="flex items-center gap-2">{investorList}</div>;
       },
