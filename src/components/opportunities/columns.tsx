@@ -408,7 +408,7 @@ export function getFixedColumns(
           </div>
         );
       },
-      enableSorting: false,
+      enableSorting: true,
       enableHiding: false,
     },
     {
