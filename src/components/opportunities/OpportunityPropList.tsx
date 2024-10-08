@@ -202,62 +202,7 @@ export function OpportunityPropList({
                   ))}
           </div>
         </div>
-        {/* <Separator />
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Link width={18} />
-            <p>Domain</p>
-          </div>
-          {opportunity.company?.url ? (
-            <a
-              href={`https://${opportunity.company?.url.replace(
-                /^https?:\/\//,
-                ""
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-popover px-2 py-1 rounded-md dark:hover:bg-popover/50 flex items-center"
-            >
-              {opportunity.company?.url}
-              <span className="ms-1">
-                <ExternalLink className="w-3" />
-              </span>
-            </a>
-          ) : (
-            <p className="font-medium">{opportunity.company?.url}</p>
-          )}
-        </div> */}
-        {/* <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Heart width={16} />
-            <p>Social</p>
-          </div>
-
-          {opportunity.company?.linkedinProfileUrl ? (
-            <a
-              href={`https://${opportunity.company?.linkedinProfileUrl.replace(
-                /^https?:\/\//,
-                ""
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gap-x-2 bg-background hover:bg-background/50 dark:bg-popover px-2 py-1 rounded-md dark:hover:bg-popover/50 flex items-center"
-            >
-              LinkedIn
-              <span className="ms-1">
-                <ExternalLink className="w-3" />
-              </span>
-            </a>
-          ) : null}
-        </div> */}
         <Separator />
-        {/* <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Map width={18} />
-            <p>Location</p>
-          </div>
-          <p className="font-medium">{opportunity.company?.hqLocation}</p>
-        </div> */}
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Factory width={18} />
