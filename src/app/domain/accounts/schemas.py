@@ -72,6 +72,7 @@ class User(CamelizedBaseStruct):
     roles: list[UserRole] = []
     oauth_accounts: list[OauthAccount] = []
     avatar_url: str | None = None
+    recentlyViewedOpportunityIds: list[UUID] = []
 
     def __post_init__(self):
         """Build a profile pic url from company url."""
@@ -95,6 +96,7 @@ class UserUpdate(CamelizedBaseStruct, omit_defaults=True):
     is_superuser: bool | None | msgspec.UnsetType = msgspec.UNSET
     is_active: bool | None | msgspec.UnsetType = msgspec.UNSET
     is_verified: bool | None | msgspec.UnsetType = msgspec.UNSET
+    recentlyViewedOpportunityIds: list[UUID] | None | msgspec.UnsetType = msgspec.UNSET
 
 
 class AccountLogin(CamelizedBaseStruct):

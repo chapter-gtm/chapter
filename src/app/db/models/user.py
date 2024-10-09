@@ -6,6 +6,7 @@ from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import UUIDAuditBase
 from sqlalchemy import String, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
@@ -31,6 +32,7 @@ class User(UUIDAuditBase):
     joined_at: Mapped[date] = mapped_column(default=datetime.now)
     login_count: Mapped[int] = mapped_column(default=0)
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False)
+    recently_viewed_opportunity_ids: Mapped[list[UUID]] = mapped_column(JSONB, nullable=True, default=[])
     # -----------
     # ORM Relationships
     # ------------
