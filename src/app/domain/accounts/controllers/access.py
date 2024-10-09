@@ -6,7 +6,7 @@ from typing import Annotated
 from datetime import timedelta
 
 from advanced_alchemy.utils.text import slugify
-from litestar import Controller, Request, Response, get, post
+from litestar import Controller, Request, Response, get, post, patch
 from litestar.di import Provide
 from litestar.enums import RequestEncodingType
 from litestar.params import Body
@@ -16,7 +16,7 @@ from app.db.models import User as UserModel  # noqa: TCH001
 from app.domain.accounts import urls
 from app.domain.accounts.dependencies import provide_users_service
 from app.domain.accounts.guards import auth, requires_active_user
-from app.domain.accounts.schemas import AccountLogin, AccountRegister, User
+from app.domain.accounts.schemas import AccountLogin, AccountRegister, User, UserUpdate
 from app.domain.accounts.services import RoleService, UserService
 from app.domain.accounts.utils import get_signed_user_profile_pic_url
 
@@ -116,3 +116,18 @@ class AccessController(Controller):
         user = users_service.to_schema(current_user, schema_type=User)
         user.avatar_url = get_signed_user_profile_pic_url(user.id)
         return user
+
+    @patch(
+        operation_id="UpdateCurrentUser",
+        name="account:update",
+        path=urls.ACCOUNT_PROFILE_UPDATE,
+    )
+    async def update_profile(
+        self,
+        data: UserUpdate,
+        current_user: UserModel,
+        users_service: UserService,
+    ) -> User:
+        """Update user profile."""
+        db_obj = await users_service.update(item_id=current_user.id, data=data.to_dict())
+        return users_service.to_schema(db_obj, schema_type=User)

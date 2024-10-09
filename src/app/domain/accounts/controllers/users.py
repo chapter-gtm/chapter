@@ -100,7 +100,7 @@ class UserController(Controller):
             description="The user to update.",
         ),
     ) -> User:
-        """Create a new user."""
+        """Update user."""
         db_obj = await users_service.update(item_id=user_id, data=data.to_dict())
         return users_service.to_schema(db_obj, schema_type=User)
 
