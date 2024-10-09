@@ -17,7 +17,7 @@ import { Card } from "./ui/card";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import Image from "next/image";
-import { timeAgo } from "@/utils/misc";
+import { timeAgo, isDateInLastNHours } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
 import {
   VictoryChart,
@@ -160,7 +160,11 @@ export function Dashboard() {
               {opportunities && opportunities.length > 0 ? (
                 <>
                   {opportunities
-                    .filter((op) => op.stage === OpportunityStage.IDENTIFIED)
+                    .filter(
+                      (op) =>
+                        op.stage === OpportunityStage.IDENTIFIED &&
+                        isDateInLastNHours(new Date(op.createdAt))
+                    )
                     .map((op: Opportunity, index) => (
                       <Link
                         target="blank"
