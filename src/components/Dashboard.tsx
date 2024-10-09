@@ -42,19 +42,14 @@ import { type Icp } from "@/types/icp";
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [recentlyViewedOpportunities, setRecentlyViewedOpportunities] =
+    useState<Opportunity[]>([]);
   const [opportunityCountByStageChartData, setOpportunityByStageChartData] =
     useState<object[]>([{ x: 1, y: 0 }]);
 
   const [icp, setIcp] = useState<Icp | null>(null);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const user = await getUserProfile();
-        setCurrentUser(user);
-      } catch (error) {}
-    };
-
     const fetchIcp = async () => {
       const currentUserIcp = await getIcp();
       setIcp(currentUserIcp);
@@ -62,6 +57,7 @@ export function Dashboard() {
 
     const fetchOpportunities = async () => {
       try {
+        const user = await getUserProfile();
         const opportunities = await getOpportunities(
           1000,
           1,
@@ -71,13 +67,25 @@ export function Dashboard() {
           "",
           true
         );
+        setCurrentUser(user);
         setOpportunities(opportunities);
+        const filteredOpportunities = opportunities.filter((op) =>
+          user.recentlyViewedOpportunityIds.includes(op.id)
+        );
+        const orderedOpportunities = user.recentlyViewedOpportunityIds
+          .map((id) => filteredOpportunities.find((op) => op.id === id))
+          .filter((op) => op !== undefined);
+        setRecentlyViewedOpportunities(orderedOpportunities);
       } catch (error: any) {
         toast.error("Failed to load data.", { description: error.toString() });
       }
     };
 
-    fetchCurrentUser();
+    const gatherRecentlyViewedOpportunities = async (
+      user: User,
+      opportunities: Opportunity[]
+    ) => {};
+
     fetchIcp();
     fetchOpportunities();
   }, []);
@@ -163,7 +171,7 @@ export function Dashboard() {
                     .filter(
                       (op) =>
                         op.stage === OpportunityStage.IDENTIFIED &&
-                        isDateInLastNHours(new Date(op.createdAt))
+                        isDateInLastNHours(new Date(op.createdAt), 72)
                     )
                     .map((op: Opportunity, index) => (
                       <Link
@@ -229,6 +237,98 @@ export function Dashboard() {
                         </div>
                       </Link>
                     ))}
+                </>
+              ) : (
+                <>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-row justify-start items-center gap-x-2 py-2">
+          <Inbox className=" w-4 text-zinc-500" />
+          <p className="text-sm font-semibold tracking-normal">
+            Recently viewed
+          </p>
+        </div>
+        <div className="flex relative">
+          <div className="h-52 min-w-52 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
+
+          <div className="flex w-full min-h-52 h-52 overflow-x-scroll relative ">
+            <div className="flex flex-row gap-x-4 mb-4 relative">
+              {currentUser &&
+              currentUser.recentlyViewedOpportunityIds.length > 0 &&
+              recentlyViewedOpportunities.length > 0 ? (
+                <>
+                  {recentlyViewedOpportunities.map((op: Opportunity, index) => (
+                    <Link
+                      target="blank"
+                      href={`/opportunities/${op?.id}`}
+                      key={index}
+                    >
+                      <div
+                        key={index}
+                        className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
+                      >
+                        <div className="flex flex-col h-full justify-start content-center p-3  z-0">
+                          <div className="space-y-3 mt-2 relative justify-start">
+                            {op.company?.profilePicUrl ? (
+                              <Image
+                                src={op.company?.profilePicUrl}
+                                width={24}
+                                height={72}
+                                alt="Company Profile Picture"
+                                className="rounded-md border border-border"
+                              />
+                            ) : (
+                              <div className="h-[72px] w-[24px] bg-green-400 flex"></div>
+                            )}
+                            {op.company?.name ? (
+                              <p className="text-xl font-semibold line-clamp-2">
+                                {op.company?.name}
+                              </p>
+                            ) : (
+                              <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap pt-2 gap-x-2 gap-y-1">
+                            {icp &&
+                              op.jobPosts
+                                ?.flatMap((jobPost) => jobPost.tools)
+                                .filter(
+                                  (tool) =>
+                                    tool && icp.tool.include.includes(tool.name)
+                                )
+                                .map((tool, index) => (
+                                  <>
+                                    {tool && (
+                                      <div
+                                        key={index}
+                                        className="text-xs px-1.5 py-1 bg-background/50 dark:bg-popover rounded-md text-secondary-foreground"
+                                      >
+                                        {tool.name}
+                                      </div>
+                                    )}
+                                  </>
+                                ))}
+                            <div className="items-center flex text-xs px-1.5 py-1 bg-background/50 dark:bg-popover rounded-md text-secondary-foreground">
+                              {/* <Users className="h-3 w-3 me-1.5" /> */}
+                              Eng {op.company?.orgSize?.engineering}
+                            </div>
+                          </div>
+                          <p className="text-sm text-zinc-500 absolute bottom-2">
+                            Added {timeAgo(new Date(op.createdAt))}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </>
               ) : (
                 <>

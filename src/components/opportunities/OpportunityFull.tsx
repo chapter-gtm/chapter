@@ -10,6 +10,10 @@ import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityBrand } from "./OpportunityBrand";
 import { OpportunityJobPost } from "./OpportunityJobPost";
 import { OpportunityContacts } from "./OpportunityContacts";
+import {
+  getUserProfile,
+  addOpportunityToRecentlyViewed,
+} from "@/utils/chapter/users";
 import { updateOpportunityNotes } from "@/utils/chapter/opportunity";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,6 +43,10 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
       try {
         const opp = await getOpportunity(opportunityId);
         setOpportunity(opp);
+
+        // Add opportunity to recently viewed list for user
+        const user = await getUserProfile();
+        await addOpportunityToRecentlyViewed(user, opp.id);
       } catch (error: any) {
         toast.error("Failed to fetch opportunity", {
           description: error.toString(),

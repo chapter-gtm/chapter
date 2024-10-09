@@ -25,3 +25,35 @@ export async function getUserProfile() {
 export async function getUserJWTToken() {
     return await getUserToken();
 }
+
+export async function addOpportunityToRecentlyViewed(
+    user: User,
+    opportunityId: string
+) {
+    if (user.recentlyViewedOpportunityIds.includes(opportunityId)) {
+        return;
+    }
+
+    const updatedIds = [opportunityId, ...user.recentlyViewedOpportunityIds];
+    console.log("Updating ids");
+    console.log(updatedIds);
+
+    const token = await getUserToken();
+    const response = await fetch(
+        process.env.NEXT_PUBLIC_CHAPTER_API_URL! + "/me",
+        {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+            },
+            body: JSON.stringify({
+                recentlyViewedOpportunityIds: updatedIds.slice(0, 10),
+            }),
+        }
+    );
+    console.log(response);
+    if (!response.ok) {
+        const msg = await response.json();
+        throw new Error(msg?.detail);
+    }
+}

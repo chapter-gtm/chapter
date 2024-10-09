@@ -7,6 +7,10 @@ import { type Location } from "@/types/location";
 import { getIcp } from "@/utils/chapter/icp";
 import { getOpportunities } from "@/utils/chapter/opportunity";
 import {
+  getUserProfile,
+  addOpportunityToRecentlyViewed,
+} from "@/utils/chapter/users";
+import {
   RecordSchema,
   TableRecord,
   getFilters,
@@ -179,6 +183,10 @@ export function OpportunitiesMain() {
     if (!sheetOpen) {
       setSheetOpen(true);
     }
+
+    // Add opportunity to recently viewed list for user
+    const user = await getUserProfile();
+    await addOpportunityToRecentlyViewed(user, opportunity.id);
   }, []);
 
   const handleCloseSheet = function () {
