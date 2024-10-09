@@ -12,7 +12,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  FilterFn,
 } from "@tanstack/react-table";
+import { rankItem } from "@tanstack/match-sorter-utils";
 import { cn } from "@/lib/utils";
 
 import {
@@ -43,6 +45,33 @@ interface DataTableProps<TData, TValue> {
   nonClickableColumns: string[];
   defaultPageSize?: number;
 }
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  console.log(columnId);
+  const cellValue = String(row.getValue(columnId));
+  const tokens = cellValue.split(",").map((token) => token.trim());
+
+  let highestRank: any = null;
+  let anyPassed = false;
+
+  // Tokens between commas are considered for fuzzy match because
+  // complex objects are expected to be separated by commas
+  // This conversion happens in accessorFn in column defini9tion
+  tokens.forEach((token) => {
+    const itemRank = rankItem(token, value);
+
+    if (!highestRank || itemRank.rank < highestRank.rank) {
+      highestRank = itemRank;
+    }
+
+    if (itemRank.passed) {
+      anyPassed = true;
+    }
+  });
+  addMeta({ highestRank });
+
+  return anyPassed;
+};
 
 export function DataTable<TData, TValue>({
   columns,
@@ -81,6 +110,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: fuzzyFilter,
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),

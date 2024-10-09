@@ -47,7 +47,13 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
       <div className="flex items-center space-x-2 relative">
-        <h2 className="font-medium text-sm me-2">Filters</h2>
+        <Input
+          placeholder="Search..."
+          onChange={(event) =>
+            table.setGlobalFilter(String(event.target.value))
+          }
+          className="h-8 w-[150px] lg:w-[250px]"
+        />
         {filters.map((item, index) => (
           <DataTableFacetedFilter
             key={index}

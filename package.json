@@ -34,6 +34,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.41.1",
+    "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.12.0",
     "@tiptap/extension-bullet-list": "^2.6.5",
     "@tiptap/extension-floating-menu": "^2.6.5",

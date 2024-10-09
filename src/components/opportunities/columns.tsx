@@ -605,8 +605,12 @@ export function getFixedColumns(
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Location" />
       ),
+      accessorFn: (row) => {
+        const location: Location = row.companyLocation;
+        return location?.country;
+      },
       cell: ({ row }) => {
-        const location: Location = row.getValue("companyLocation");
+        const location: Location = row.original.companyLocation;
         return <div className="flex">{`${location?.country}`}</div>;
       },
       filterFn: (row, id, value) => {
@@ -627,11 +631,14 @@ export function getFixedColumns(
     },
     {
       accessorKey: "industry",
+      accessorFn: (row) => {
+        return row.industry || "";
+      },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Industry" />
       ),
       cell: ({ row }) => {
-        return <div className="flex">{row.getValue("industry")}</div>;
+        return <div className="flex">{row.original.industry}</div>;
       },
     },
     {
@@ -639,8 +646,12 @@ export function getFixedColumns(
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Tool Stack" />
       ),
+      accessorFn: (row) => {
+        const tools: Tool[] = row.tools;
+        return tools.map((tool) => tool.name).join(", ");
+      },
       cell: ({ row }) => {
-        const tools: Tool[] = row.getValue("tools");
+        const tools: Tool[] = row.original.tools;
         return (
           <div className="flex items-center gap-2">
             {tools
@@ -672,13 +683,17 @@ export function getFixedColumns(
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Investors" />
       ),
+      accessorFn: (row) => {
+        const investors: string[] = row.investors || [];
+        return truncateString(investors.join(", "));
+      },
       cell: ({ row }) => {
-        const investors: string[] = row.getValue("investors") || [];
+        const investors: string[] = row.original.investors || [];
         const investorList: string = truncateString(investors.join(", "));
         return <div className="flex items-center gap-2">{investorList}</div>;
       },
       filterFn: (row, id, value) => {
-        const investors: string[] = row.getValue("investors");
+        const investors: string[] = row.getValue("investors") || [];
         return investors.some((investor: string) => value.includes(investor));
       },
     },
