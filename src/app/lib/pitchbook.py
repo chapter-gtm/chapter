@@ -39,7 +39,11 @@ async def get_company_investors(url: str) -> list[str]:
         )
         data = response.json()
         try:
-            investors = [item["investorName"] for item in data]
+            investors = [
+                item["investorName"]
+                for item in data
+                if "individual" not in item["investorTypes"][0]["type"]["description"]
+            ]
         except (KeyError, TypeError, IndexError):
             await logger.awarn("Investors found.", response=data, url=url)
             raise Exception("Investors not found.")
