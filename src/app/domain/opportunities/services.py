@@ -17,6 +17,7 @@ from app.lib.schema import CamelizedBaseStruct, OpportunityStage, Location, Work
 from app.lib.pdl import search_person_details
 from app.db.models import Opportunity, OpportunityAuditLog, JobPost, Person
 from .repositories import OpportunityRepository, OpportunityAuditLogRepository, ICPRepository
+from .utils import extract_context_from_job_post
 
 from app.db.models import (
     Opportunity,
@@ -444,10 +445,22 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         persons = await person_service.upsert_many(person_objects)
                         person_ids = [person.id for person in persons]
 
+                    # Fetch context from job post
+                    context = {}
+                    if job_post.body and icp.pitch:
+                        context["job_post"] = extract_context_from_job_post(job_post.body, icp.pitch)
+                    else:
+                        logger.warn(
+                            "Cannot generate opportunity context, job post body or icp pitch missing",
+                            job_post_id=job_post.id,
+                            icp=icp.id,
+                        )
+
                     opportunity = await self.create(
                         {
                             "name": job_post.company.name,
                             "stage": OpportunityStage.IDENTIFIED.value,
+                            "context": context,
                             "company_id": job_post.company.id,
                             "contact_ids": person_ids,
                             "job_post_ids": [job_post.id],
