@@ -66,7 +66,6 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
     )
 
     job_details = json.loads(chat_response.choices[0].message.content)
-    print(job_details)
     if (
         not "title" in job_details
         or "name" not in job_details.get("company")
