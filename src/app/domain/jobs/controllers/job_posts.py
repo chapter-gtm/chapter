@@ -140,6 +140,7 @@ class JobPostController(Controller):
         # Add job post
         job_post = JobPostCreate(
             title=job_details.get("title", "Engineer"),
+            body=html_content,
             url=data.url.rstrip("/"),
             location=Location(
                 country=job_details.get("location", {}).get("country"),
