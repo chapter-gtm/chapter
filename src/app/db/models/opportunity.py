@@ -9,11 +9,11 @@ from sqlalchemy import String, Text, ForeignKey, Index, Column, Table, UniqueCon
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import JSONB
 
-from app.lib.schema import OpportunityStage
+from app.lib.schema import OpportunityStage, OpportunityContext
 from .company import Company
 from .person import Person
 from .job_post import JobPost
-from .custom_types import OpportunityStageType
+from .custom_types import OpportunityStageType, OpportunityContextType
 
 if TYPE_CHECKING:
     from .user import User
@@ -68,6 +68,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
         OpportunityStageType, nullable=False, default="identified", index=True
     )
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    context: Mapped[OpportunityStage] = mapped_column(OpportunityStageType, nullable=True, default={})
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True)

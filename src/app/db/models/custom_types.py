@@ -13,6 +13,7 @@ from app.lib.schema import (
     WorkExperience,
     SocialActivity,
     OpportunityStage,
+    OpportunityContext,
     OrgSize,
     Tool,
     Scale,
@@ -160,4 +161,12 @@ class CompanyCriteriaType(JSONBType):
             obj.funding = funding_rounds
             obj.org_size = OrgSizeCriteria.from_dict(obj.org_size)
             return obj
+        return None
+
+
+class OpportunityContextType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return OpportunityContext.from_dict(value)
         return None

@@ -10,7 +10,14 @@ from app.domain.accounts.schemas import User
 from app.domain.companies.schemas import Company
 from app.domain.people.schemas import Person
 from app.domain.jobs.schemas import JobPost
-from app.lib.schema import CamelizedBaseStruct, OpportunityStage, CompanyCriteria, ToolCriteria, PersonCriteria
+from app.lib.schema import (
+    CamelizedBaseStruct,
+    OpportunityStage,
+    OpportunityContext,
+    CompanyCriteria,
+    ToolCriteria,
+    PersonCriteria,
+)
 
 
 class OpportunityAuditLog(CamelizedBaseStruct):
@@ -34,6 +41,7 @@ class Opportunity(CamelizedBaseStruct):
     updated_at: datetime
     stage: OpportunityStage
     notes: str
+    context: OpportunityContext | None = None
     owner: User | None = None
     company: Company | None = None
     contacts: list[Person] | None = None
