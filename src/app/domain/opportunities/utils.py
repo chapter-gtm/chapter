@@ -13,7 +13,7 @@ client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
 context_prompt = """
     Only extract the following information directly from the given job post(which is in the form of HTML/JS code)
     without adding any outside knowledge or assumptions:
-    - Pick up 0 to 2 most relevant sentences(along with the reason) from the job post that prove that the compaany that made the post needs my product(pitch: {product_pitch}).
+    - Pick up 0 to 2 most relevant sentences(if they exist and along with the reason) from the job post that prove with high certainty that the compaany that made the post needs my product(pitch: {product_pitch}).
 
     Format the extracted information into the following short JSON object:
     {{
@@ -32,7 +32,7 @@ async def extract_context_from_job_post(html_content: str, product_pitch: str) -
     messages = [
         {
             "role": "user",
-            "content": relevancy_prompt.format(html_content=html_content, product_pitch=product_pitch),
+            "content": context_prompt.format(html_content=html_content, product_pitch=product_pitch),
         }
     ]
     chat_response = await client.chat.completions.create(
