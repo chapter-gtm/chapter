@@ -161,3 +161,9 @@ class PersonCriteria(CamelizedBaseStruct):
 
     titles: list[str] | None = None
     sub_roles: list[str] | None = None
+
+
+class OpportunityContext(CamelizedBaseStruct):
+    """Opportunity context."""
+
+    job_post: list[dict[str, Any]] | None = None
