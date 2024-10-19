@@ -45,4 +45,5 @@ async def extract_context_from_job_post(html_content: str, product_pitch: str) -
     )
 
     context = json.loads(chat_response.choices[0].message.content)
+    logger.info("Context extracted from job post", context=context)
     return context
