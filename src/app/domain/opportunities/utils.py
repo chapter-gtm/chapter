@@ -15,7 +15,7 @@ context_prompt = """
     without adding any outside knowledge or assumptions:
     - Pick up 0 to 2 most relevant sentences(if they exist and along with the reason) from the job post that prove with high certainty that the compaany that made the post needs my product(pitch: {product_pitch}).
 
-    Format the extracted information into the following short JSON object:
+    Format the extracted information into a json serializable array of objects as per this format:
     [ {{"sentence": "sentence 1", "reason": "reason 1"}}, {{"sentence": "sentence 2", "reason": "reason 2"}} ]
 
     Note: Do NOT include anything that's not part of the post.
