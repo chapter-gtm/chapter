@@ -448,7 +448,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     # Fetch context from job post
                     context = {}
                     if job_post.body and icp.pitch:
-                        context["job_post"] = await extract_context_from_job_post(job_post.body, icp.pitch)
+                        context = await extract_context_from_job_post(job_post.body, icp.pitch)
                     else:
                         logger.warn(
                             "Cannot generate opportunity context, job post body or icp pitch missing",
