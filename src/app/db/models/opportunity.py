@@ -68,7 +68,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
         OpportunityStageType, nullable=False, default="identified", index=True
     )
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
-    context: Mapped[OpportunityContext] = mapped_column(OpportunityContextType, nullable=True, default={})
+    context: Mapped[OpportunityContext | None] = mapped_column(OpportunityContextType, nullable=True, default={})
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True)
