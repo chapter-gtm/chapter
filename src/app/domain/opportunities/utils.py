@@ -16,7 +16,7 @@ context_prompt = """
     - Pick up 0 to 2 most relevant sentences(if they exist and along with the reason) from the job post that prove with high certainty that the compaany that made the post needs my product(pitch: {product_pitch}).
 
     Format the extracted information into a json serializable array of objects as per this format:
-    [ {{"sentence": "sentence 1", "reason": "reason 1"}}, {{"sentence": "sentence 2", "reason": "reason 2"}} ]
+    {{"result": [ {{"sentence": "sentence 1", "reason": "reason 1"}}, {{"sentence": "sentence 2", "reason": "reason 2"}} ]}}
 
     Note: Do NOT include anything that's not part of the post.
 
@@ -43,5 +43,5 @@ async def extract_context_from_job_post(html_content: str, product_pitch: str) -
     )
 
     context = json.loads(chat_response.choices[0].message.content)
-    logger.info("Context extracted from job post", context=context)
-    return context
+    logger.debug("Context extracted from job post", context=context)
+    return context.get("result", [])
