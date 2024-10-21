@@ -89,9 +89,12 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <div className="flex flex-col gap-y-4 pb-6">
+      <div className="flex flex-col  pb-6">
+        <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
+          Job post
+        </div>
         <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
-          <div className="flex gap-x-1 flex-row justify-between rounded-lg p-6 h-20 items-center gap-x-3 border border-border bg-popover">
+          <div className="flex gap-x-1 flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-popover w-full">
             <DialogContent className="h-[800px] min-w-[900px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
               <DialogHeader className="p-5 justify-center h-16 align-center">
                 <DialogTitle>{opportunity?.jobPosts?.[0]?.title}</DialogTitle>
@@ -106,11 +109,8 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
                 />
               )}
             </DialogContent>
-            <div className="flex flex-col ">
-              <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                Job Post
-              </p>
-              <p className="flex text-base font-medium">
+            <div className="flex flex-col flex-1 overflow-hidden">
+              <p className="text-base font-medium truncate text-ellipsis ">
                 {opportunity?.jobPosts?.[0]?.title}
               </p>
               <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
@@ -119,7 +119,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
                   timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
               </p>
             </div>
-            <div className="flex flex-row justify-end gap-x-2 items-center">
+            <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
               <DialogTrigger asChild>
                 <Button variant="outline" onClick={openJobPostModal}>
                   View
@@ -145,9 +145,9 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
         </Dialog>
         {opportunity?.context !== null &&
           opportunity?.context.jobPost.length > 0 && (
-            <div>
-              <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
-                Job Post Highlights
+            <div className="flex flex-col px-6">
+              <div className="text-xs tracking-wide font-semibold my-3 text-zinc-500 uppercase dark:text-zinc-400">
+                Job post highlights
               </div>
 
               <div className="flex flex-col gap-y-4">
@@ -158,7 +158,10 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
                   ) => (
                     <div key={index}>
                       <ul>
-                        <li>{jobPostContext.sentence}</li>
+                        <li className="flex gap-x-2">
+                          <span className="min-w-1 h-6 bg-zinc-700 dark:bg-zinc-100 rounded-lg"></span>
+                          <p className="text-base">{jobPostContext.sentence}</p>
+                        </li>
                       </ul>
                     </div>
                   )
