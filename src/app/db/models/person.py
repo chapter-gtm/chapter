@@ -63,6 +63,7 @@ class Person(UUIDAuditBase, SlugKey):
     social_activities: Mapped[list[SocialActivity] | None] = mapped_column(
         SocialActivityType, nullable=True, default=None
     )
+    skills: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, index=True)
     # -----------
     # ORM Relationships

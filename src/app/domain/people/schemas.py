@@ -38,6 +38,7 @@ class Person(CamelizedBaseStruct):
     languages: list[str] | None = None
     work_experiences: list[WorkExperience] | None = None
     social_activities: list[SocialActivity] | None = None
+    skills: list[str] | None = None
 
 
 class PersonCreate(CamelizedBaseStruct):
@@ -65,6 +66,7 @@ class PersonCreate(CamelizedBaseStruct):
     languages: list[str] | None = None
     work_experiences: list[WorkExperience] | None = None
     social_activities: list[SocialActivity] | None = None
+    skills: list[str] | None = None
     company_id: str | None = None
 
 
@@ -100,3 +102,4 @@ class PersonUpdate(CamelizedBaseStruct, omit_defaults=True):
     languages: list[str] | None | msgspec.UnsetType = msgspec.UNSET
     work_experiences: list[WorkExperience] | None | msgspec.UnsetType = msgspec.UNSET
     social_activities: list[SocialActivity] | None | msgspec.UnsetType = msgspec.UNSET
+    skills: list[str] | None | msgspec.UnsetType = msgspec.UNSET

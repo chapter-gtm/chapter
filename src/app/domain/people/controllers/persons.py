@@ -177,6 +177,7 @@ class PersonController(Controller):
             personal_numbers=person_details.get("personal_numbers", []),
             birth_date=birth_date,
             work_experiences=work_experiences,
+            skills=person_details.get("skills"),
             company_id=company_db_obj.id,
         )
         db_obj = await persons_service.upsert(obj.to_dict(), item_id=results[0].id if count > 0 else None)
