@@ -28,7 +28,11 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-import { Opportunity } from "@/types/opportunity";
+import {
+  Opportunity,
+  OpportunityJobPostContext,
+  OpportunityContext,
+} from "@/types/opportunity";
 import { downloadJobPostPdf, getJobPostPdf } from "@/utils/chapter/job_post";
 
 import Link from "next/link";
@@ -103,7 +107,12 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
               )}
             </DialogContent>
             <div className="flex flex-col ">
-              <p className="flex text-base font-medium">Job Post</p>
+              <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                Job Post
+              </p>
+              <p className="flex text-base font-medium">
+                {opportunity?.jobPosts?.[0]?.title}
+              </p>
               <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
                 Added{" "}
                 {opportunity?.jobPosts?.[0]?.createdAt &&
@@ -134,6 +143,29 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
             </div>
           </div>
         </Dialog>
+        {opportunity?.context !== null &&
+          opportunity?.context.jobPost.length > 0 && (
+            <div>
+              <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
+                Job Post Highlights
+              </div>
+
+              <div className="flex flex-col gap-y-4">
+                {opportunity?.context?.jobPost.map(
+                  (
+                    jobPostContext: OpportunityJobPostContext,
+                    index: number
+                  ) => (
+                    <div key={index}>
+                      <ul>
+                        <li>{jobPostContext.sentence}</li>
+                      </ul>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
       </div>
     </>
   );
