@@ -42,6 +42,7 @@ export type Person = {
     languages: string[] | null;
     workExperiences: WorkExperience[] | null;
     socialActivities: SocialActivity[] | null;
+    skills: string[] | null;
     createdAt: Date;
     updatedAt: Date;
 };
