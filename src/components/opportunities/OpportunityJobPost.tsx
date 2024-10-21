@@ -147,7 +147,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
           opportunity?.context.jobPost.length > 0 && (
             <div className="flex flex-col px-6">
               <div className="text-xs tracking-wide font-semibold my-3 text-zinc-500 uppercase dark:text-zinc-400">
-                Job post highlights
+                Highlights
               </div>
 
               <div className="flex flex-col gap-y-4">
