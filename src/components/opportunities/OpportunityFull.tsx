@@ -17,6 +17,7 @@ import {
 import { updateOpportunityNotes } from "@/utils/chapter/opportunity";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import {
@@ -29,6 +30,11 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Editor, FloatingMenu } from "@tiptap/react";
+
+import { Separator } from "@/components/ui/separator";
+
+import Placeholder from "@tiptap/extension-placeholder";
+import { OpportunityStageList } from "./OpportunityStageList";
 
 interface OpportunityFullProps {
   opportunityId: string;
@@ -94,17 +100,52 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
       {opportunity !== null && (
         <div className="bg-background p-6 flex flex-1">
           <div className="flex flex-row flex-1 bg-card rounded-lg overflow">
-            <div className="basis-[620px] overflow-y-scroll p-6 border-e border-border">
+            <div className="basis-[520px] overflow-y-scroll border-e border-border">
               <div className="flex flex-col">
                 <OpportunityBrand opportunity={opportunity} />
-                <OpportunityJobPost opportunity={opportunity} />
-
-                <OpportunityContacts opportunity={opportunity} />
-
-                <OpportunityPropList
+                <Separator />
+                <OpportunityStageList
                   opportunity={opportunity}
                   updateOpportunity={updateOpportunity}
                 />
+                <Separator />
+
+                <Tabs defaultValue="account" className="p-5">
+                  <TabsList className="grid w-full grid-cols-3 p-0 h-auto bg-transparent border-border border">
+                    <TabsTrigger
+                      className="data-[state=active]:bg-popover"
+                      value="account"
+                    >
+                      Account info
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="people"
+                      className="data-[state=active]:bg-popover"
+                    >
+                      Points of contact
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="evidence"
+                      className="data-[state=active]:bg-popover"
+                    >
+                      Evidence
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="account">
+                    <OpportunityPropList
+                      opportunity={opportunity}
+                      updateOpportunity={updateOpportunity}
+                    />
+                  </TabsContent>
+                  <TabsContent value="people">
+                    {" "}
+                    <OpportunityContacts opportunity={opportunity} />
+                  </TabsContent>
+                  <TabsContent value="evidence">
+                    {" "}
+                    <OpportunityJobPost opportunity={opportunity} />
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
 

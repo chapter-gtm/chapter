@@ -89,10 +89,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <div className="flex flex-col  pb-6">
-        <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
-          Job post
-        </div>
+      <div className="flex flex-col py-6">
         <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
           <div className="flex gap-x-1 flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-popover w-full">
             <DialogContent className="h-[800px] min-w-[900px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
@@ -145,7 +142,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
         </Dialog>
         {opportunity?.context !== null &&
           opportunity?.context.jobPost.length > 0 && (
-            <div className="flex flex-col px-6">
+            <div className="flex flex-col p-2">
               <div className="text-xs tracking-wide font-semibold my-3 text-zinc-500 uppercase dark:text-zinc-400">
                 Highlights
               </div>
@@ -159,7 +156,7 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
                     <div key={index}>
                       <ul>
                         <li className="flex gap-x-2">
-                          <span className="min-w-1 h-6 bg-zinc-700 dark:bg-zinc-100 rounded-lg"></span>
+                          <span className="min-w-1 h-auto bg-zinc-700 dark:bg-zinc-100 rounded-lg"></span>
                           <p className="text-base">{jobPostContext.sentence}</p>
                         </li>
                       </ul>

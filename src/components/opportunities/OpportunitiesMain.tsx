@@ -261,7 +261,7 @@ export function OpportunitiesMain() {
                   </div>
                 </div>
 
-                <SheetContent className="sm:max-w-[700px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border">
+                <SheetContent className="sm:max-w-[525px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border">
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
                       <SheetClose

@@ -47,6 +47,8 @@ import {
   Github,
   ChevronDown,
   Heart,
+  GraduationCap,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -58,6 +60,7 @@ import { OpportunityJobPost } from "./OpportunityJobPost";
 import { Separator } from "@/components/ui/separator";
 import { Investor } from "@/types/company";
 import posthog from "posthog-js";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
@@ -98,109 +101,125 @@ const handleGithubClick = () => {
 export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
   return (
     <>
-      <Accordion type="single" collapsible>
-        <AccordionItem className="border-none" value="item-1">
-          <AccordionTrigger className="hover:no-underline	 justify-start gap-x-2">
-            <div className="text-base font-medium my-3 text-zinc-700 dark:text-zinc-200 ps-2">
-              Point of contact
-            </div>
-          </AccordionTrigger>
+      <div className="flex flex-col py-6 gap-y-4">
+        {opportunity.contacts !== null &&
+          opportunity.contacts.length > 0 &&
+          opportunity.contacts.map((contact: Person, index) => (
+            <div
+              key={index}
+              className="flex flex-col justify-start gap-y-1.5 pb-4"
+            >
+              <div className="flex flex-col justify-start bg-popover rounded-lg px-3 py-2.5 gap-y-2">
+                <div className="flex flex-row gap-x-2 items-center pt-1.5">
+                  <div className="bg-background hover:bg-background/50 dark:bg-popover rounded-lg text-primary font-semibold ps-0.5">
+                    {contact.firstName}
+                  </div>
+                </div>
 
-          <AccordionContent className="flex flex-col gap-y-4">
-            <div className="flex flex-col gap-y-4">
-              {opportunity.contacts !== null &&
-                opportunity.contacts.length > 0 &&
-                opportunity.contacts.map((contact: Person, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col justify-start gap-y-1.5 pb-4"
-                  >
-                    <div className="flex flex-col justify-start bg-popover rounded-lg px-3 py-2.5 gap-y-2">
-                      <div className="flex flex-row gap-x-2 items-center pt-1.5">
-                        <div className="bg-background hover:bg-background/50 dark:bg-popover rounded-lg text-primary font-semibold ps-0.5">
-                          {contact.firstName}
-                        </div>
-                        <p className="font-normal text-zinc-400">
-                          {contact.title}
-                        </p>
-                      </div>
-                      <div className="flex flex-row justify-start">
-                        <div className="flex flex-wrap gap-x-2">
-                          {contact.linkedinProfileUrl && (
-                            <>
-                              <a
-                                href={contact.linkedinProfileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button
-                                  variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10"
-                                  onClick={handleLinkedinClick}
-                                >
-                                  <Linkedin className="h-3 w-3" />
-                                </Button>
-                              </a>
-                            </>
-                          )}
-                          {contact.twitterProfileUrl && (
-                            <>
-                              <a
-                                href={contact.twitterProfileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button
-                                  variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10"
-                                  onClick={handleTwitterClick}
-                                >
-                                  <Twitter className="h-3 w-3" />
-                                </Button>
-                              </a>
-                            </>
-                          )}
-                          {contact.githubProfileUrl && (
-                            <>
-                              <a
-                                href={contact.githubProfileUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button
-                                  variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10"
-                                  onClick={handleGithubClick}
-                                >
-                                  <Github className="h-3 w-3" />
-                                </Button>
-                              </a>
-                            </>
-                          )}
-                          {contact.workEmail && (
-                            <>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() =>
-                                  contact.workEmail
-                                    ? handleCopyRecordLink(contact.workEmail)
-                                    : null
-                                }
-                              >
-                                <Button
-                                  variant={"outline"}
-                                  className="w-8 h-8 p-1 hover:bg-primary/10"
-                                  disabled={!contact.workEmail}
-                                  onClick={handleEmailClick}
-                                >
-                                  <Mail className="h-3 w-3" />
-                                </Button>
-                              </a>
-                            </>
-                          )}
-                        </div>
-                        {/* <div
+                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                    <PersonIcon width={18} />
+                    <p>Role</p>
+                  </div>
+                  <p className="font-medium">{contact.title}</p>
+                </div>
+
+                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                    <GraduationCap width={18} />
+                    <p>Skills</p>
+                  </div>
+                  {contact.skills &&
+                    contact.skills.length > 0 &&
+                    contact.skills.map((skill: string, index) => (
+                      <p className="font-medium">{skill}</p>
+                    ))}
+                </div>
+
+                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                    <Send width={18} />
+                    <p>Channels</p>
+                  </div>
+                  <div className="flex flex-wrap gap-x-2">
+                    {contact.linkedinProfileUrl && (
+                      <>
+                        <a
+                          href={contact.linkedinProfileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            variant={"outline"}
+                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            onClick={handleLinkedinClick}
+                          >
+                            <Linkedin className="h-3 w-3" />
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                    {contact.twitterProfileUrl && (
+                      <>
+                        <a
+                          href={contact.twitterProfileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            variant={"outline"}
+                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            onClick={handleTwitterClick}
+                          >
+                            <Twitter className="h-3 w-3" />
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                    {contact.githubProfileUrl && (
+                      <>
+                        <a
+                          href={contact.githubProfileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Button
+                            variant={"outline"}
+                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            onClick={handleGithubClick}
+                          >
+                            <Github className="h-3 w-3" />
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                    {contact.workEmail && (
+                      <>
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                            contact.workEmail
+                              ? handleCopyRecordLink(contact.workEmail)
+                              : null
+                          }
+                        >
+                          <Button
+                            variant={"outline"}
+                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            disabled={!contact.workEmail}
+                            onClick={handleEmailClick}
+                          >
+                            <Mail className="h-3 w-3" />
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-row justify-start">
+                  {/* <div
                           className="flex items-center pe-0.5 ps-1.5 gap-x-1 bg-card h-8 cursor-default text-muted-foreground rounded-lg"
                           key={index}
                         >
@@ -249,14 +268,11 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                             </>
                           )}
                         </div> */}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                </div>
+              </div>
             </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+          ))}
+      </div>
     </>
   );
 }

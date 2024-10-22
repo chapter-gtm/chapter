@@ -26,7 +26,7 @@ export default function TextEditor({ content, onChange }: TextEditorProps) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: "Write something …",
+        placeholder: "Message drafts",
         emptyEditorClass: "is-editor-empty",
       }),
       Heading.configure({
