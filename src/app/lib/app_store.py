@@ -32,7 +32,7 @@ async def get_ios_app_url(company_url: str) -> str:
             if result.get("sellerUrl") and get_domain(result.get("sellerUrl")) == company_domain:
                 return result.get("trackViewUrl")
 
-    await logger.awarn("Android app not found.", company_name=company_name)
+    await logger.awarn("iOS app not found.", data=data, company_url=company_url)
     return None
 
 
