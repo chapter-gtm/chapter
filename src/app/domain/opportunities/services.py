@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import difflib
 import structlog
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
@@ -164,6 +164,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
     async def scan(
         self,
         tenant_ids: list[str] | None = None,
+        last_n_days: int = 60,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
@@ -178,34 +179,38 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             if tenant_ids and str(icp.tenant_id) not in tenant_ids:
                 continue
 
-            # TODO: Add created_at after <timestamp> filter
-            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
-            tool_stack_not_conditions = [not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))]
+            date_n_days_ago = datetime.now(timezone.utc) - timedelta(days=last_n_days)
+            and_conditions = [
+                JobPost.created_at > date_n_days_ago,
+                Opportunity.id.is_(None),
+            ]
 
             # TODO: Case-insensetive match and filter on tool certainty
+            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
+
             if icp.tool.exclude:
-                job_posts_statement = (
-                    select(JobPost)
-                    .where(
-                        and_(
-                            or_(
-                                *tool_stack_or_conditions,
-                            ),
-                            *tool_stack_not_conditions,
-                        )
-                    )
-                    .execution_options(populate_existing=True)
+                tool_stack_not_conditions = [
+                    not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))
+                ]
+                and_conditions.extend(tool_stack_not_conditions)
+
+            job_posts_statement = (
+                select(JobPost)
+                # TODO: This would still include job posts from last N days not matching this tenant that were previously discarded
+                .outerjoin(
+                    Opportunity,
+                    (JobPost.company_id == Opportunity.company_id) & (Opportunity.tenant_id == icp.tenant_id),
                 )
-            else:
-                job_posts_statement = (
-                    select(JobPost)
-                    .where(
+                .where(
+                    and_(
                         or_(
                             *tool_stack_or_conditions,
                         ),
+                        *and_conditions,
                     )
-                    .execution_options(populate_existing=True)
                 )
+                .execution_options(populate_existing=True)
+            )
 
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)
             opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
@@ -306,22 +311,6 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             company_location=job_post.company.hq_location,
                             tenant_id=icp.tenant_id,
                         )
-
-                    # Check if opportunity with the same company already exists
-                    opportunity_statement = select(Opportunity.id).where(
-                        and_(Opportunity.company_id == job_post.company.id, Opportunity.tenant_id == icp.tenant_id)
-                    )
-                    opportunity_results = await self.repository.session.execute(statement=opportunity_statement)
-                    opportunity_ids = [result[0] for result in opportunity_results]
-                    if opportunity_ids:
-                        logger.info(
-                            "Skipping new opportunity because one with the same company already exists",
-                            job_post_id=job_post.id,
-                            company_id=job_post.company.id,
-                            company_url=job_post.company.url,
-                            tenant_id=icp.tenant_id,
-                        )
-                        continue
 
                     # TODO: Fetch the contact(s) with the right title from an external source
                     person_statement = (
