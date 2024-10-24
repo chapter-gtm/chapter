@@ -15,6 +15,7 @@ from app.lib.pitchbook import get_company_investors
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 from app.db.models import Company
 from app.lib.utils import get_domain
+from app.lib.app_store import get_ios_app_url, get_android_app_url
 
 from .repositories import CompanyRepository
 
@@ -112,6 +113,9 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             obj.last_funding.investors = investors
         except Exception as e:
             await logger.awarn("Failed to get company investors", url=obj.url, exc_info=e)
+
+        obj.ios_app_url = get_ios_app_url(obj.url)
+        obj.android_app_url = get_android_app_url(obj.name, obj.url)
 
         # TODO: Fix upsert
         return await super().upsert(

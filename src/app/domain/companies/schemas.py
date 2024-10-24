@@ -29,6 +29,8 @@ class Company(CamelizedBaseStruct):
     hq_location: Location | None = None
     last_funding: Funding | None = None
     org_size: OrgSize | None = None
+    ios_app_url: str | None = None
+    android_app_url: str | None = None
 
     def __post_init__(self):
         """Build a profile pic url from company url."""
@@ -50,6 +52,8 @@ class CompanyCreate(CamelizedBaseStruct):
     hq_location: Location | None = None
     last_funding: Funding | None = None
     org_size: OrgSize | None = None
+    ios_app_url: str | None = None
+    android_app_url: str | None = None
 
 
 class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
@@ -65,4 +69,6 @@ class CompanyUpdate(CamelizedBaseStruct, omit_defaults=True):
     linkedin_profile_url: str | None | msgspec.UnsetType = msgspec.UNSET
     hq_location: Location | None | msgspec.UnsetType = msgspec.UNSET
     last_funding: Funding | None | msgspec.UnsetType = msgspec.UNSET
-    org_size: OrgSize | None = None
+    org_size: OrgSize | None | msgspec.UnsetType = msgspec.UNSET
+    ios_app_url: str | None | msgspec.UnsetType = msgspec.UNSET
+    android_app_url: str | None | msgspec.UnsetType = msgspec.UNSET

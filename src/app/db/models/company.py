@@ -33,6 +33,8 @@ class Company(UUIDAuditBase, SlugKey):
     hq_location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     last_funding: Mapped[Funding | None] = mapped_column(FundingType, nullable=True, default=None)
     org_size: Mapped[OrgSize | None] = mapped_column(OrgSizeType, nullable=True, default=None)
+    ios_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    android_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     # -----------
     # ORM Relationships
     # ------------
