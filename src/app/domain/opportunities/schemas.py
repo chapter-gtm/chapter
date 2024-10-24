@@ -65,6 +65,7 @@ class OpportunityScanFor(CamelizedBaseStruct):
     """An opportunity scan schema."""
 
     tenant_ids: list[str] | None = None
+    last_n_days: int = 7
 
 
 class OpportunityUpdate(CamelizedBaseStruct):

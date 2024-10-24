@@ -164,7 +164,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
     async def scan(
         self,
         tenant_ids: list[str] | None = None,
-        last_n_days: int = 60,
+        last_n_days: int = 7,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,

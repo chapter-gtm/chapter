@@ -122,10 +122,8 @@ class OpportunityController(Controller):
         data: OpportunityScanFor,
     ) -> None:
         """Create a new opportunity."""
-        obj = data.to_dict()
-
         # TODO: Run as a backgound job
-        return await opportunities_service.scan(data.tenant_ids)
+        return await opportunities_service.scan(data.tenant_ids, data.last_n_days)
 
     @get(
         operation_id="GetOpportunity",
