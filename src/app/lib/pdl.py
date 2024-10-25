@@ -30,8 +30,10 @@ async def get_company_details(url: str = None, social_url: str = None) -> dict[s
     async with httpx.AsyncClient() as client:
         response = await client.get("https://api.peopledatalabs.com/v5/company/enrich", headers=headers, params=params)
         data = response.json()
-        if not data:
-            await logger.awarn("Company not found.", response=data, url=url, social_url=social_url)
+        if response.status_code != 200 or not data:
+            await logger.awarn(
+                "Company not found.", status=response.status_code, response=data, url=url, social_url=social_url
+            )
             raise Exception("Company not found.")
         return data
 
