@@ -88,6 +88,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             )
         except Exception as e:
             await logger.awarn("Error getting company details", exc_info=e)
+            company_details = {}
             location = None
 
         # TODO: Move to provider specific code
