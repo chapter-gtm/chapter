@@ -114,8 +114,8 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         except Exception as e:
             await logger.awarn("Failed to get company investors", url=obj.url, exc_info=e)
 
-        obj.ios_app_url = get_ios_app_url(obj.url)
-        obj.android_app_url = get_android_app_url(obj.name, obj.url)
+        obj.ios_app_url = await get_ios_app_url(obj.url)
+        obj.android_app_url = await get_android_app_url(obj.name, obj.url)
 
         # TODO: Fix upsert
         return await super().upsert(
