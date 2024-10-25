@@ -40,6 +40,8 @@ class Company(CamelizedBaseStruct):
         if self.url:
             self.profile_pic_url = get_logo_dev_link(self.url)
 
+        # TODO: Fetch app details but the methods are async
+        """
         if self.ios_app_url:
             ios_app_details = get_ios_app_details(self.ios_app_url)
             self.ios_app_details = AppDetails(**ios_app_details)
@@ -47,6 +49,7 @@ class Company(CamelizedBaseStruct):
         if self.android_app_url:
             android_app_details = get_android_app_details(self.android_app_url)
             self.android_app_details = AppDetails(**android_app_details)
+        """
 
 
 class CompanyCreate(CamelizedBaseStruct):

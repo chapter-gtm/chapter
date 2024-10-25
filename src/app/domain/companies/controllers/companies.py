@@ -59,11 +59,11 @@ class CompanyController(Controller):
                 company.profile_pic_url = get_logo_dev_link(company.url)
 
             if company.ios_app_url:
-                ios_app_details = get_ios_app_details(self.ios_app_url)
+                ios_app_details = await get_ios_app_details(company.ios_app_url)
                 company.ios_app_details = AppDetails(**ios_app_details)
 
             if company.android_app_url:
-                android_app_details = get_android_app_details(self.android_app_url)
+                android_app_details = await get_android_app_details(company.android_app_url)
                 company.android_app_details = AppDetails(**android_app_details)
 
         return paginated_response
@@ -108,6 +108,14 @@ class CompanyController(Controller):
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
         if company.url:
             company.profile_pic_url = get_logo_dev_link(company.url)
+
+        if company.ios_app_url:
+            ios_app_details = await get_ios_app_details(company.ios_app_url)
+            company.ios_app_details = AppDetails(**ios_app_details)
+
+        if company.android_app_url:
+            android_app_details = await get_android_app_details(company.android_app_url)
+            company.android_app_details = AppDetails(**android_app_details)
 
         return company
 
