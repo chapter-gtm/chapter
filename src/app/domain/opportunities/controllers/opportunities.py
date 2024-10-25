@@ -9,14 +9,21 @@ from litestar.di import Provide
 from litestar.exceptions import ValidationException
 
 from app.config import constants
+from app.lib.schema import AppDetails
 from app.lib.utils import get_logo_dev_link
+from app.lib.app_store import get_ios_app_details, get_android_app_details
 from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user, requires_superuser
 from app.domain.accounts.dependencies import provide_users_service
 from app.domain.accounts.services import UserService
 from app.domain.opportunities import urls
 from app.domain.opportunities.dependencies import provide_opportunities_service, provide_opportunities_audit_log_service
-from app.domain.opportunities.schemas import Opportunity, OpportunityCreate, OpportunityUpdate, OpportunityScanFor
+from app.domain.opportunities.schemas import (
+    Opportunity,
+    OpportunityCreate,
+    OpportunityUpdate,
+    OpportunityScanFor,
+)
 from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService
 
 if TYPE_CHECKING:
@@ -67,6 +74,14 @@ class OpportunityController(Controller):
         for opportunity in paginated_response.items:
             if opportunity.company and opportunity.company.url:
                 opportunity.company.profile_pic_url = get_logo_dev_link(opportunity.company.url)
+
+            if opportunity.company.ios_app_url:
+                ios_app_details = get_ios_app_details(self.ios_app_url)
+                opportunity.company.ios_app_details = AppDetails(**ios_app_details)
+
+            if opportunity.company.android_app_url:
+                android_app_details = get_android_app_details(self.android_app_url)
+                opportunity.company.android_app_details = AppDetails(**android_app_details)
 
         return paginated_response
 
@@ -150,6 +165,14 @@ class OpportunityController(Controller):
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
         if opportunity.company and opportunity.company.url:
             opportunity.company.profile_pic_url = get_logo_dev_link(opportunity.company.url)
+
+        if opportunity.company.ios_app_url:
+            ios_app_details = get_ios_app_details(self.ios_app_url)
+            opportunity.company.ios_app_details = AppDetails(**ios_app_details)
+
+        if opportunity.company.android_app_url:
+            android_app_details = get_android_app_details(self.android_app_url)
+            opportunity.company.android_app_details = AppDetails(**android_app_details)
 
         return opportunity
 

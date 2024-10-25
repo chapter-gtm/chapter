@@ -6,8 +6,9 @@ from datetime import datetime
 import msgspec
 
 from app.db.models.company import Company
-from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
+from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize, AppDetails
 from app.lib.utils import get_logo_dev_link
+from app.lib.app_store import get_ios_app_details, get_android_app_details
 
 
 class Company(CamelizedBaseStruct):
@@ -31,11 +32,21 @@ class Company(CamelizedBaseStruct):
     org_size: OrgSize | None = None
     ios_app_url: str | None = None
     android_app_url: str | None = None
+    ios_app_details: AppDetails | None = None
+    android_app_details: AppDetails | None = None
 
     def __post_init__(self):
         """Build a profile pic url from company url."""
         if self.url:
             self.profile_pic_url = get_logo_dev_link(self.url)
+
+        if self.ios_app_url:
+            ios_app_details = get_ios_app_details(self.ios_app_url)
+            self.ios_app_details = AppDetails(**ios_app_details)
+
+        if self.android_app_url:
+            android_app_details = get_android_app_details(self.android_app_url)
+            self.android_app_details = AppDetails(**android_app_details)
 
 
 class CompanyCreate(CamelizedBaseStruct):

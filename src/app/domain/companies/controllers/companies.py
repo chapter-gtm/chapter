@@ -9,10 +9,11 @@ from litestar.di import Provide
 
 from app.config import constants
 from app.lib.utils import get_logo_dev_link
+from app.lib.app_store import get_ios_app_details, get_android_app_details
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies import urls
 from app.domain.companies.dependencies import provide_companies_service
-from app.domain.companies.schemas import Company, CompanyCreate, CompanyUpdate
+from app.domain.companies.schemas import Company, CompanyCreate, CompanyUpdate, AppDetails
 from app.domain.companies.services import CompanyService
 
 if TYPE_CHECKING:
@@ -56,6 +57,14 @@ class CompanyController(Controller):
         for company in paginated_response.items:
             if company.url:
                 company.profile_pic_url = get_logo_dev_link(company.url)
+
+            if company.ios_app_url:
+                ios_app_details = get_ios_app_details(self.ios_app_url)
+                company.ios_app_details = AppDetails(**ios_app_details)
+
+            if company.android_app_url:
+                android_app_details = get_android_app_details(self.android_app_url)
+                company.android_app_details = AppDetails(**android_app_details)
 
         return paginated_response
 
