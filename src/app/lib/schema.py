@@ -1,5 +1,5 @@
 from typing import Any
-from datetime import date
+from datetime import date, datetime
 import enum
 
 import msgspec
@@ -167,3 +167,17 @@ class OpportunityContext(CamelizedBaseStruct):
     """Opportunity context."""
 
     job_post: list[dict[str, Any]] | None = None
+
+
+class AppDetails(CamelizedBaseStruct):
+    """App details."""
+
+    id: str
+    url: str
+    version: str
+    release_date: datetime
+    current_version_release_date: datetime
+    rating: float
+    rating_count: float
+    price: float
+    installs: str | None = None
