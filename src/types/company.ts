@@ -18,6 +18,7 @@ export enum FundingRound {
     SERIES_E = "Series E",
     SERIES_UNKNOWN = "Series Unknown",
     PRIVATE_EQUITY = "Private Equity",
+    CORPORATE_ROUND = "Corporate Round",
     PUBLIC = "Public",
 }
 
