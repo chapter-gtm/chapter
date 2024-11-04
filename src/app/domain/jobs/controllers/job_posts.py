@@ -122,7 +122,7 @@ class JobPostController(Controller):
         if job_link_domain.endswith("workable.com") or job_link_domain.endswith("linkedin.com"):
             render = True
 
-        html_content = await extract_url_content(data.url, render=render)
+        html_content = await extract_url_content(data.url, render=render, timeout=data.timeout)
         job_details = await extract_job_details_from_html(html_content)
 
         company_url = job_details.get("company", {}).get("url")

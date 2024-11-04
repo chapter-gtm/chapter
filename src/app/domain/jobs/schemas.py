@@ -51,6 +51,7 @@ class JobPostCreateFromURL(CamelizedBaseStruct):
     """A job post create from URL schema."""
 
     url: str
+    timeout: float = 30.0
 
 
 class JobPostUpdate(CamelizedBaseStruct, omit_defaults=True):
