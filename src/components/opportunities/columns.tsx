@@ -212,12 +212,12 @@ export function getFilters(icp: Icp) {
           icon: MapPin,
         },
         {
-          value: "UK",
+          value: "United Kingdom",
           label: "UK",
           icon: MapPin,
         },
         {
-          value: "US",
+          value: "United States",
           label: "US",
           icon: MapPin,
         },
@@ -343,9 +343,9 @@ function getLocationFromCountry(icp: Icp, country: string) {
   } else if (country == "Germany") {
     locationLabel = "Germany";
   } else if (country == "UK" || country == "United Kingdom") {
-    locationLabel = "UK";
+    locationLabel = "United Kingdom";
   } else if (country == "US" || country == "United States") {
-    locationLabel = "US";
+    locationLabel = "United States";
   } else {
     locationLabel = "Rest of the World";
   }
@@ -614,7 +614,7 @@ export function getFixedColumns(
         return <div className="flex">{`${location?.country}`}</div>;
       },
       filterFn: (row, id, value) => {
-        const location: Location = row.getValue(id);
+        const location: Location = row.original[id];
         if (!location?.country) {
           return false;
         }
@@ -674,7 +674,7 @@ export function getFixedColumns(
         );
       },
       filterFn: (row, id, value) => {
-        const tools: Tool[] = row.getValue("tools");
+        const tools: Tool[] = row.original["tools"] || [];
         return tools.some((tool: Tool) => value.includes(tool.name));
       },
     },
@@ -693,7 +693,7 @@ export function getFixedColumns(
         return <div className="flex items-center gap-2">{investorList}</div>;
       },
       filterFn: (row, id, value) => {
-        const investors: string[] = row.getValue("investors") || [];
+        const investors: string[] = row.original["investors"] || [];
         return investors.some((investor: string) => value.includes(investor));
       },
     },
