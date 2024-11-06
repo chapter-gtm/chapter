@@ -41,7 +41,7 @@ class User(UUIDAuditBase):
         back_populates="users",
         innerjoin=True,
         uselist=False,
-        lazy="joined",
+        lazy="noload",
     )
     roles: Mapped[list[UserRole]] = relationship(
         back_populates="user",

@@ -94,5 +94,5 @@ class Opportunity(UUIDAuditBase, SlugKey):
         lazy="selectin",
     )
     logs: Mapped[list[OpportunityAuditLog]] = relationship(
-        lazy="selectin",
+        lazy="noload",
     )
