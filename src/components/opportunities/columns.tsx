@@ -249,7 +249,7 @@ export function getFilters(icp: Icp) {
           icon: undefined,
         },
         {
-          value: "a16z",
+          value: "Andreessen Horowitz",
           label: "a16z",
           icon: undefined,
         },
