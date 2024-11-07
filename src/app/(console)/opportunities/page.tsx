@@ -3,7 +3,7 @@ import { PageHeaderRow } from "@/components/PageHeaderRow";
 import { OpportunitiesMain } from "@/components/opportunities/OpportunitiesMain";
 
 export const metadata: Metadata = {
-  title: "Funnel: Chapter App",
+  title: "Opportunities: Chapter App",
   description: "Lead gen for founders",
 };
 
