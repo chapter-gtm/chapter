@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { handleLogin, handleLogout } from "@/utils/auth";
 import { type User } from "@/types/user";
 
@@ -48,5 +50,7 @@ export async function logout() {
         throw error;
     } finally {
         handleLogout();
+        revalidatePath("/", "layout");
+        redirect("/login");
     }
 }
