@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, Final, TYPE_CHECKING
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase, orm_registry
-from sqlalchemy import String, Text, ForeignKey, Index, Column, Table, UniqueConstraint
+from sqlalchemy import String, Text, ForeignKey, Index, Column, Table, UniqueConstraint, desc
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -33,6 +33,7 @@ opportunity_job_post_relation: Final[Table] = Table(
     Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True),
     Column("job_post_id", ForeignKey("job_post.id", ondelete="CASCADE"), primary_key=True),
     Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
+    Index("idx_opportunity_job_post_relation_opportunity_job", "opportunity_id", "job_post_id"),
 )
 
 
@@ -61,6 +62,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
     __pii_columns__ = {}
     __table_args__ = (
         Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),
+        Index("idx_opportunity_tenant_id_created_at", "tenant_id", desc("created_at")),
         UniqueConstraint("tenant_id", "company_id"),
     )
     name: Mapped[str] = mapped_column(nullable=False, index=True)
@@ -70,8 +72,8 @@ class Opportunity(UUIDAuditBase, SlugKey):
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
     context: Mapped[OpportunityContext | None] = mapped_column(OpportunityContextType, nullable=True, default={})
     tenant_id: Mapped[UUID] = mapped_column(ForeignKey("tenant.id"), nullable=False, index=True)
-    owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None)
-    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("user_account.id"), nullable=True, default=None, index=True)
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, index=True)
     # -----------
     # ORM Relationships
     # ------------
