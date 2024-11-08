@@ -72,5 +72,5 @@ class Person(UUIDAuditBase, SlugKey):
         back_populates="people",
         innerjoin=True,
         uselist=False,
-        lazy="joined",
+        lazy="noload",
     )

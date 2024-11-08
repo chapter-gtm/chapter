@@ -34,5 +34,5 @@ class JobPost(UUIDAuditBase):
     # ORM Relationships
     # ------------
     company: Mapped[Company] = relationship(
-        lazy="joined",
+        lazy="noload",
     )

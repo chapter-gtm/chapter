@@ -41,5 +41,5 @@ class Company(UUIDAuditBase, SlugKey):
     people: Mapped[list[Person]] = relationship(
         back_populates="company",
         innerjoin=True,
-        lazy="selectin",
+        lazy="noload",
     )

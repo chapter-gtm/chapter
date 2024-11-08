@@ -25,5 +25,5 @@ class Tenant(UUIDAuditBase, SlugKey):
     users: Mapped[list[User]] = relationship(
         back_populates="tenant",
         innerjoin=True,
-        lazy="selectin",
+        lazy="noload",
     )
