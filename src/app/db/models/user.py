@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import UUIDAuditBase
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 class User(UUIDAuditBase):
     __tablename__ = "user_account"
-    __table_args__ = {"comment": "User accounts for application access"}
+    __table_args__ = (Index("ix_user_account_id", "id"),)
     __pii_columns__ = {"name", "email", "avatar_url"}
 
     email: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
