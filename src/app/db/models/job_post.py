@@ -6,7 +6,7 @@ from uuid import UUID
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
 from sqlalchemy import String, Text, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, deferred
 
 from app.lib.schema import Location, Funding, Tool
 from .custom_types import LocationType, FundingType, ToolType
@@ -37,3 +37,6 @@ class JobPost(UUIDAuditBase):
     company: Mapped[Company] = relationship(
         lazy="noload",
     )
+
+    # Defer loading large fields
+    body = deferred(body)
