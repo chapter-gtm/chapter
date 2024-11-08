@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 opportunity_person_relation: Final[Table] = Table(
     "opportunity_person_relation",
     orm_registry.metadata,
-    Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True),
+    Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True, index=True),
     Column("person_id", ForeignKey("person.id", ondelete="CASCADE"), primary_key=True),
     Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
 )
@@ -30,7 +30,7 @@ opportunity_person_relation: Final[Table] = Table(
 opportunity_job_post_relation: Final[Table] = Table(
     "opportunity_job_post_relation",
     orm_registry.metadata,
-    Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True),
+    Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True, index=True),
     Column("job_post_id", ForeignKey("job_post.id", ondelete="CASCADE"), primary_key=True),
     Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
     Index("idx_opportunity_job_post_relation_opportunity_job", "opportunity_id", "job_post_id"),
@@ -62,6 +62,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
     __pii_columns__ = {}
     __table_args__ = (
         Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),
+        Index("idx_opportunity_created_at", "tenant_id", desc("created_at")),
         Index("idx_opportunity_tenant_id_created_at", "tenant_id", desc("created_at")),
         UniqueConstraint("tenant_id", "company_id"),
     )

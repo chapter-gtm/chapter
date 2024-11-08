@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from uuid import UUID
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import String, Text, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,6 +17,7 @@ class JobPost(UUIDAuditBase):
     """A job post."""
 
     __tablename__ = "job_post"
+    __table_args__ = (Index("ix_job_post_id", "id"),)
     __pii_columns__ = {}
     title: Mapped[str] = mapped_column(nullable=False, index=True)
     body: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)

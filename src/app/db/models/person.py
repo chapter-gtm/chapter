@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from datetime import date
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,6 +20,7 @@ class Person(UUIDAuditBase, SlugKey):
     """A person."""
 
     __tablename__ = "person"
+    __table_args__ = (Index("ix_person_id", "id"),)
     __pii_columns__ = {
         "first_name",
         "last_name",
