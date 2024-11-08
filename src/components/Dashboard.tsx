@@ -29,14 +29,6 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { timeAgo, isDateInLastNHours } from "@/utils/misc";
 import { Button } from "@/components/ui/button";
-import {
-  VictoryChart,
-  VictoryAxis,
-  VictoryBar,
-  VictoryLabel,
-  VictoryTheme,
-  VictoryBrushLine,
-} from "victory";
 
 import { User } from "@/types/user";
 import { type Opportunity, OpportunityStage } from "@/types/opportunity";
