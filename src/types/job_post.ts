@@ -10,7 +10,6 @@ export type Tool = {
 export type JobPost = {
     id: string;
     title: number | null;
-    body: string | null;
     location: Location | null;
     seniority_level: string | null;
     employment_type: string | null;
