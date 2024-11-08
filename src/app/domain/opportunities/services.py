@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
-from sqlalchemy.orm import InstrumentedAttribute, selectinload
+from sqlalchemy.orm import InstrumentedAttribute, selectinload, undefer
 from advanced_alchemy.filters import SearchFilter, LimitOffset
 from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
@@ -210,7 +210,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     )
                 )
                 .execution_options(populate_existing=True)
-                .options(selectinload(JobPost.company))
+                .options(selectinload(JobPost.company), undefer(JobPost.body))
             )
 
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)
