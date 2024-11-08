@@ -17,7 +17,6 @@ class JobPost(CamelizedBaseStruct):
     title: str
     created_at: datetime
     updated_at: datetime
-    body: str | None = None
     location: Location | None = None
     seniority_level: str | None = None
     employment_type: str | None = None
