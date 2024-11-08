@@ -30,7 +30,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
+import {
+  ChevronsRight,
+  ExternalLink,
+  LinkIcon,
+  Building2,
+  Landmark,
+  ChevronRight,
+} from "lucide-react";
 
 import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
@@ -38,6 +45,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@radix-ui/react-select";
+
+import { OpportunityStageList } from "./OpportunityStageList";
 
 export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false);
@@ -232,79 +241,87 @@ export function OpportunitiesMain() {
 
   return (
     <>
-      <div className="w-full mt-2 ">
+      <div className="flex flex-col flex-1 h-full pt-20 p-6">
         <Toaster theme="light" />
-        <div className="flex flex-row justify-start space-y-1 gap-x-2 center h-[60px] items-center ps-2">
-          <Building2 width={18} />
-          <h2 className="text-base font-medium tracking-normal text-color-header">
-            All opportunities ({records.length})
-          </h2>
+        <div className="w-full">
+          <div className="flex flex-row justify-start gap-x-2 center  items-center ps-2 py-5">
+            <Building2 width={18} />
+            <h2 className="text-base font-medium tracking-normal text-color-header">
+              All opportunities ({records.length})
+            </h2>
+          </div>
         </div>
 
-        <div className="h-full bg-card rounded-lg overflow-hidden border border-border">
+        <div className="flex flex-col flex-1 overflow-hidden bg-card rounded-lg border border-border">
           {isPopulated && icp ? (
-            <div>
+            <>
               <Sheet modal={false} open={sheetOpen}>
-                <div>
-                  <div className="pb-4 w-full">
-                    <DataTable
-                      columns={recordColumns}
-                      data={records}
-                      filters={getFilters(icp)}
-                      preSelectedFilters={preSelectedFilters}
-                      defaultColumnVisibility={defaultColumnVisibility}
-                      enableRowSelection={true}
-                      onSelectedRowsChange={handleRowSelection}
-                      stickyColumnCount={1}
-                      nonClickableColumns={["select", "stage"]}
-                    />
-                  </div>
-                </div>
+                <DataTable
+                  columns={recordColumns}
+                  data={records}
+                  filters={getFilters(icp)}
+                  preSelectedFilters={preSelectedFilters}
+                  defaultColumnVisibility={defaultColumnVisibility}
+                  enableRowSelection={true}
+                  onSelectedRowsChange={handleRowSelection}
+                  stickyColumnCount={1}
+                  nonClickableColumns={["select", "stage"]}
+                />
 
                 <SheetContent className="sm:max-w-[525px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border">
                   <TooltipProvider delayDuration={0}>
-                    <div className="flex flex-row justify-start h-14 w-full px-3 py-2">
-                      <SheetClose
-                        onClick={handleCloseSheet}
-                        className="relative h-10 w-10 justify-center items-center rounded-lg transition-opacity hover:bg-accent focus:outline-none"
-                      >
-                        <ChevronsRight className="h-4 w-4 mx-auto" />
-                        <span className="sr-only">Close</span>
-                      </SheetClose>
+                    <div className="flex flex-row justify-between pt-2 w-full items-center text-zinc-500 dark:text-zinc-400">
+                      <div className="flex flex-row justify-start items-center px-3 py-2">
+                        <SheetClose
+                          onClick={handleCloseSheet}
+                          className="relative h-7 w-7 justify-center items-center rounded-lg transition-opacity hover:bg-accent focus:outline-none"
+                        >
+                          <ChevronsRight className="h-4 w-4 mx-auto" />
+                          <span className="sr-only">Close</span>
+                        </SheetClose>
 
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link
-                            target="_blank"
-                            href={`/opportunities/${selectedRow?.id}`}
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              disabled={false}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link
+                              target="_blank"
+                              href={`/opportunities/${selectedRow?.id}`}
+                              className="w-7 h-7 ps-1.5 content-center justify-center hover:bg-accent rounded-lg"
                             >
                               <ExternalLink className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>View fullscreen</TooltipContent>
-                      </Tooltip>
+                            </Link>
+                          </TooltipTrigger>
+                          {/* <TooltipContent>View fullscreen</TooltipContent> */}
+                        </Tooltip>
 
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            disabled={false}
-                            onClick={() =>
-                              handleCopyRecordLink(selectedRow?.id)
-                            }
-                          >
-                            <LinkIcon className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Share link</TooltipContent>
-                      </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="w-7 h-7 p-0 text-zinc-400 bg-transparent border-none"
+                              onClick={() =>
+                                handleCopyRecordLink(selectedRow?.id)
+                              }
+                            >
+                              <LinkIcon className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                        </Tooltip>
+                        <div className="text-sm ps-2.5 pe-3">|</div>
+
+                        <div className="text-sm">
+                          <span className="text-zinc-500 dark:text-zinc-400">
+                            {selectedRow !== null && (
+                              <>{selectedRow.company?.slug}</>
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      {selectedRow !== null && (
+                        <OpportunityStageList
+                          opportunity={selectedRow}
+                          updateOpportunity={updateOpportunityCallback}
+                        />
+                      )}
                     </div>
                   </TooltipProvider>
 
@@ -318,7 +335,7 @@ export function OpportunitiesMain() {
                   </div>
                 </SheetContent>
               </Sheet>
-            </div>
+            </>
           ) : (
             <div className="flex flex-col flex-1 pb-12 border-e border-border bg-card"></div>
           )}

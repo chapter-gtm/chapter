@@ -13,7 +13,17 @@ import {
   ExternalLink,
   Heart,
   ChevronDown,
+  CalendarFold,
+  Hash,
+  Star,
 } from "lucide-react";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { AppleLogo } from "../icons";
 import { GooglePlayLogo } from "../icons";
@@ -104,7 +114,7 @@ export function OpportunityPropList({
   return (
     <>
       <div className="flex flex-col gap-y-4 py-6 ps-2">
-        <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <span>
               <svg
@@ -130,10 +140,12 @@ export function OpportunityPropList({
             </span>
             <p>Rating</p>
           </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">4.6</div>
-        </div>
+          <div className="flex flex-1 flex-wrap gap-x-2">
+            {opportunity.company?.name === "Eventbase" ? "4.0" : "3.1"}
+          </div>
+        </div> */}
 
-        <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <span>
               <svg
@@ -151,8 +163,50 @@ export function OpportunityPropList({
             </span>
             <p>Rating</p>
           </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">4.8</div>
-        </div>
+          <div className="flex flex-1 flex-wrap gap-x-2">
+            {opportunity.company?.name === "Eventbase" ? "4.2" : "3.4"}
+          </div>
+        </div> */}
+
+        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Hash width={18} />
+            <p>Number of reviews</p>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-x-2">1,200</div>
+        </div> */}
+
+        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <CalendarFold width={18} />
+            <p>Last release</p>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-x-2">
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="flex py-0.5 rounded-md px-1.5 bg-green-200 text-green-900 cursor-default">
+                    6 days ago
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="absolute left-8">
+                  <div className="flex max-w-24 text-zinc-100 hover:bg-popover ">
+                    Appears to be under active development
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </div> */}
+
+        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Hash width={18} />
+            <p>Number of installs</p>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-x-2">5000+</div>
+        </div> */}
+
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -181,34 +235,47 @@ export function OpportunityPropList({
             <Target width={18} />
             {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
           </div>
-          <div className="flex flex-1 flex-wrap gap-2">
-            {icp
-              ? opportunity.jobPosts
-                  ?.flatMap((jobPost) => jobPost.tools)
-                  .filter(
-                    (tool) => tool && !icp.tool.include.includes(tool.name)
-                  )
-                  .map((tool, index) => (
-                    <>
-                      {tool && (
-                        <Badge key={index} variant={"outline"}>
-                          {tool.name}
-                        </Badge>
-                      )}
-                    </>
-                  ))
-              : opportunity.jobPosts
-                  ?.flatMap((jobPost) => jobPost.tools)
-                  .map((tool, index) => (
-                    <>
-                      {tool && (
-                        <Badge key={index} variant={"outline"}>
-                          {tool.name}
-                        </Badge>
-                      )}
-                    </>
-                  ))}
-          </div>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex border border-zinc-100 px-2 py-1 text-xs font-medium rounded-lg text-zinc-100 hover:bg-popover cursor-default">
+                  See all
+                </div>
+              </TooltipTrigger>
+              <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
+                {icp
+                  ? opportunity.jobPosts
+                      ?.flatMap((jobPost) => jobPost.tools)
+                      .filter(
+                        (tool) => tool && !icp.tool.include.includes(tool.name)
+                      )
+                      .map((tool, index) => (
+                        <>
+                          {tool && (
+                            <Badge
+                              key={index}
+                              variant={"outline"}
+                              className="border-border"
+                            >
+                              {tool.name}
+                            </Badge>
+                          )}
+                        </>
+                      ))
+                  : opportunity.jobPosts
+                      ?.flatMap((jobPost) => jobPost.tools)
+                      .map((tool, index) => (
+                        <>
+                          {tool && (
+                            <Badge key={index} variant={"outline"}>
+                              {tool.name}
+                            </Badge>
+                          )}
+                        </>
+                      ))}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">

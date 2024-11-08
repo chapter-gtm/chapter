@@ -38,6 +38,8 @@
         --radius: 0.5rem;
         --color-paragraph: 240 4% 46%;
         --color-header: 240 4% 16%;
+
+        --chart: 234 179% 8%;
     }
 
     .dark {
@@ -72,6 +74,8 @@
         --color-paragraph: 240 4% 46%;
 
         --color-header: 240 6% 90%;
+
+        --chart: 234 179% 8%;
     }
     .card {
         background-color: var(--card);

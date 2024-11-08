@@ -98,16 +98,21 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     <>
       <Toaster theme="light" />
       {opportunity !== null && (
-        <div className="bg-background p-6 flex flex-1">
+        <div className="bg-background pt-24 p-6 flex flex-1">
           <div className="flex flex-row flex-1 bg-card rounded-lg overflow">
             <div className="basis-[520px] overflow-y-scroll border-e border-border">
               <div className="flex flex-col">
-                <OpportunityBrand opportunity={opportunity} />
+                <div className="flex flex-row justify-between items-center px-3 py-3.5">
+                  <div className="text-sm text-zinc-400">
+                    {opportunity.slug}
+                  </div>
+                  <OpportunityStageList
+                    opportunity={opportunity}
+                    updateOpportunity={updateOpportunity}
+                  />
+                </div>
                 <Separator />
-                <OpportunityStageList
-                  opportunity={opportunity}
-                  updateOpportunity={updateOpportunity}
-                />
+                <OpportunityBrand opportunity={opportunity} />
                 <Separator />
 
                 <Tabs defaultValue="account" className="p-5">

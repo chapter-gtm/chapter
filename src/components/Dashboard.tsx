@@ -11,6 +11,16 @@ import {
 } from "lucide-react";
 import { getIcp } from "@/utils/chapter/icp";
 
+import { TrendingUp, BellDot } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
 import { EmptySelectionCard } from "@/components/EmptySelectionCard";
 import { PageHeaderRow } from "@/components/PageHeaderRow";
 import { Card } from "./ui/card";
@@ -48,6 +58,16 @@ export function Dashboard() {
     useState<object[]>([{ x: 1, y: 0 }]);
 
   const [icp, setIcp] = useState<Icp | null>(null);
+
+  const [newOpportunities, setNewOpportunities] = useState<Boolean>(false);
+  const [newOpportunityCount, setNewOpportunityCount] = useState<number>(0);
+
+  const chartConfig = {
+    x: {
+      label: "Desktop",
+      color: "rgb(var(--chart))",
+    },
+  } satisfies ChartConfig;
 
   useEffect(() => {
     const fetchIcp = async () => {
@@ -99,6 +119,22 @@ export function Dashboard() {
           opportunityCountByStage.set(value.toString(), 0);
         }
 
+        let count = 0;
+
+        const hasNewOpportunities = opportunities.filter((op) => {
+          const matchesCondition =
+            op.stage === OpportunityStage.IDENTIFIED &&
+            isDateInLastNHours(new Date(op.createdAt), 72);
+
+          if (matchesCondition) {
+            count++; // Increment count for each match
+            setNewOpportunities(true);
+          }
+          return matchesCondition; // Keep only matching opportunities
+        });
+
+        setNewOpportunityCount(count);
+
         for (const opportunity of opportunities) {
           if (
             Object.values(OpportunityStage).includes(
@@ -138,13 +174,14 @@ export function Dashboard() {
           chartData.push({
             x: value,
             y: yValue,
-            p: p,
           });
 
           previousValue = yValue;
         }
 
         setOpportunityByStageChartData(chartData);
+        console.log("Data::::");
+        console.log(chartData);
       } catch (error: any) {}
     };
 
@@ -152,19 +189,36 @@ export function Dashboard() {
   }, [opportunities]);
 
   return (
-    <div className="w-full relative">
-      <div className="flex flex-col space-y-2 px-6 mt-2 pb-24">
+    <div className="overflow-auto w-full p-32">
+      <div className="flex flex-col space-y-2 px-6 mt-2">
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">
-            Recently identified
+            Newly identified
           </p>
         </div>
         <div className="flex relative">
-          <div className="h-52 min-w-52 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
+          <div className="h-60 min-w-52 bg-gradient-to-l from-background/90 to-transparent absolute z-10 right-0 pointer-events-none"></div>
 
-          <div className="flex w-full min-h-52 h-52 overflow-x-scroll relative ">
-            <div className="flex flex-row gap-x-4 mb-4 relative">
+          <div className="flex w-full overflow-x-auto relative">
+            <div className="flex flex-row h-60 gap-x-3 w-full">
+              {/* {newOpportunities === true && (
+                <>
+                  {" "}
+                  <div className="flex-none basis-1/6 h-60 bg-card/10 rounded-xl border border-border">
+                    <div className="flex flex-col justify-center content-center items-center py-6">
+                      <BellDot className="w-16 h-20 text-zinc-600" />
+                      <h3 className="text-center font-medium text-zinc-200 px-6 pt-5">
+                        {" "}
+                        JP, you have new leads
+                      </h3>
+                      <p className="text-sm text-zinc-500 pt-2">
+                        Since last login
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )} */}
               {opportunities && opportunities.length > 0 ? (
                 <>
                   {opportunities
@@ -178,12 +232,10 @@ export function Dashboard() {
                         target="blank"
                         href={`/opportunities/${op?.id}`}
                         key={index}
+                        className="flex-none basis-1/6 h-full"
                       >
-                        <div
-                          key={index}
-                          className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
-                        >
-                          <div className="flex flex-col h-full justify-start content-center p-3  z-0">
+                        <div className="flex w-full h-full flex-col relative bg-card rounded-xl border border-violet-500 hover:border-muted cursor-pointer ">
+                          <div className="flex flex-col justify-start content-center p-3 z-0">
                             <div className="space-y-3 mt-2 relative justify-start">
                               {op.company?.profilePicUrl ? (
                                 <Image
@@ -201,7 +253,7 @@ export function Dashboard() {
                                   {op.company?.name}
                                 </p>
                               ) : (
-                                <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
+                                <div className="h-12 w-full animate-pulse"></div>
                               )}
                             </div>
                             <div className="flex flex-wrap pt-2 gap-x-2 gap-y-1">
@@ -240,28 +292,31 @@ export function Dashboard() {
                 </>
               ) : (
                 <>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  {Array.from(Array(6), (e, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="basis-1/2 sm:basis-1/4 h-60 bg-card rounded-xl border border-border animate-pulse"
+                      ></div>
+                    );
+                  })}
                 </>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-row justify-start items-center gap-x-2 py-2">
+        <div className="flex flex-row justify-start items-center gap-x-2 pt-6 pb-2">
           <Inbox className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">
             Recently viewed
           </p>
         </div>
         <div className="flex relative">
-          <div className="h-52 min-w-52 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
+          <div className="h-60 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
 
-          <div className="flex w-full min-h-52 h-52 overflow-x-scroll relative ">
-            <div className="flex flex-row gap-x-4 mb-4 relative">
+          <div className="flex w-full overflow-x-scroll relative ">
+            <div className="relative flex flex-row w-full gap-3 h-60">
               {currentUser &&
               currentUser.recentlyViewedOpportunityIds.length > 0 &&
               recentlyViewedOpportunities.length > 0 ? (
@@ -271,11 +326,9 @@ export function Dashboard() {
                       target="blank"
                       href={`/opportunities/${op?.id}`}
                       key={index}
+                      className="flex-none basis-1/6"
                     >
-                      <div
-                        key={index}
-                        className="flex flex-col relative h-52 w-44 bg-card rounded-xl border border-border hover:border-muted cursor-pointer "
-                      >
+                      <div className="flex flex-col relative h-60 col-span-1 bg-card rounded-xl border border-border hover:border-muted cursor-pointer ">
                         <div className="flex flex-col h-full justify-start content-center p-3  z-0">
                           <div className="space-y-3 mt-2 relative justify-start">
                             {op.company?.profilePicUrl ? (
@@ -294,7 +347,7 @@ export function Dashboard() {
                                 {op.company?.name}
                               </p>
                             ) : (
-                              <div className="h-12 w-full bg-yellow-400 animate-pulse"></div>
+                              <div className="h-12 w-full animate-pulse"></div>
                             )}
                           </div>
                           <div className="flex flex-wrap pt-2 gap-x-2 gap-y-1">
@@ -332,76 +385,55 @@ export function Dashboard() {
                 </>
               ) : (
                 <>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
-                  <div className="h-52 w-44 bg-card/80 border border-border rounded-xl animate-pulse"></div>
+                  {Array.from(Array(6), (e, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="basis-1/2 sm:basis-1/4 h-60 bg-card rounded-xl border border-border animate-pulse"
+                      ></div>
+                    );
+                  })}
                 </>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
+        <div className="flex flex-row justify-start items-center gap-x-2 mt-10  pt-6 pb-2">
           <LineChart className=" w-4 text-zinc-500" />
           <p className="text-sm font-semibold tracking-normal">My progress</p>
         </div>
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
-          <div className="flex flex-col flex-1 justify-center items-center text-center content-center py-6 gap-y-3">
-            <div className="flex flex-col gap-y-1 w-auto">
-              <VictoryChart
-                domainPadding={30}
-                height={300}
-                width={1200}
-                theme={VictoryTheme.material}
+        <div className="flex flex-row bg-white dark:bg-zinc-800/50 rounded-xl border border-border ">
+          <div className="w-full">
+            <ChartContainer config={chartConfig} className="min-w-full h-96">
+              <BarChart
+                accessibilityLayer
+                data={opportunityCountByStageChartData}
+                margin={{
+                  top: 20,
+                }}
               >
-                <VictoryAxis
-                  gridComponent={<VictoryBrushLine width={120} />}
-                  tickLabelComponent={<VictoryLabel angle={0} />}
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="x"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
                 />
-                <VictoryBar
-                  barRatio={1.2}
-                  cornerRadius={{ topLeft: 10, topRight: 10 }}
-                  data={opportunityCountByStageChartData}
-                  style={{
-                    data: { fill: "#8b5cf6" },
-                    labels: { fill: "white" },
-                  }}
-                  labels={({ datum }) => [datum.y, `${datum.p}%`]}
-                  // cornerRadius={{ topLeft: "8", topRight: "8" }}
-                  labelComponent={
-                    <VictoryLabel
-                      backgroundStyle={{ fill: "black", stroke: "gray" }}
-                      backgroundPadding={3}
-                      lineHeight={[1, 2]}
-                      textAnchor="middle"
-                      backgroundComponent={<rect rx={4} ry={4} />}
-                    />
-                  }
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
                 />
-              </VictoryChart>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-row justify-start items-center gap-x-2 mt-10 py-2">
-          <CheckSquareIcon className=" w-4 text-zinc-500" />
-          <p className="text-sm font-semibold tracking-normal">My tasks</p>
-        </div>
-
-        <div className="flex flex-row min-h-96 h-96 w-full bg-white dark:bg-zinc-800/50 rounded-xl border border-border">
-          <div className="flex flex-col flex-1 justify-center items-center text-center content-center gap-y-3">
-            <Image
-              src="/images/customIcons/task.svg"
-              width={80}
-              height={80}
-              alt="Inbox"
-              className="py-3"
-            />
-            <div className="flex flex-col gap-y-1">
-              <p className="text-xl font-medium tracking-wide">Tasks</p>
-              <p className="text-base text-muted-foreground">Coming soon.</p>
-            </div>
+                <Bar dataKey="y" fill="var(--color-desktop)" radius={8}>
+                  <LabelList
+                    position="top"
+                    className="fill-foreground"
+                    offset={12}
+                    fontSize={12}
+                  />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
           </div>
         </div>
       </div>

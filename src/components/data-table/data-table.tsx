@@ -150,14 +150,17 @@ export function DataTable<TData, TValue>({
   }, [preSelectedFilters]);
 
   return (
-    <div className="space-y-1">
+    <>
       <DataTableToolbar table={table} filters={filters} />
 
-      <div className="flex overflow-x-auto border-t border-b border-border">
-        <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 border-b border-border w-full">
+      <div className="flex-1 h-full overflow-auto border-t border-b border-border">
+        <Table>
+          <TableHeader className="sticky z-20 top-0 border-b border-border w-full">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-accent">
+              <TableRow
+                key={headerGroup.id}
+                className="hover:bg-accent bg-card"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
@@ -244,6 +247,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </div>
+    </>
   );
 }

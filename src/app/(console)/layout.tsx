@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-dvh relative">
+    <div className="h-dvh flex flex-col relative overflow-hidden">
       <div className="fixed top-0 w-full bg-background z-50">
         <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border bg-background">
           <TopNavbar />
@@ -26,10 +26,7 @@ export default function RootLayout({
           </div>
         </div>
       </div>
-
-      <main className="flex flex-1 overflow-scroll pt-24 h-full relative bg-background">
-        {children}
-      </main>
+      <>{children}</>
     </div>
   );
 }

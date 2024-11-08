@@ -4,12 +4,7 @@ import Image from "next/image";
 import { timeAgo } from "@/utils/misc";
 import { type Person } from "@/types/person";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import {
   Divide,
   ExternalLink,
@@ -54,10 +49,7 @@ export function OpportunityDrawer({
         <div className="flex flex-col">
           <OpportunityBrand opportunity={opportunity} />
           <Separator />
-          <OpportunityStageList
-            opportunity={opportunity}
-            updateOpportunity={updateOpportunity}
-          />
+
           <Separator />
 
           <Tabs defaultValue="account" className="p-5">

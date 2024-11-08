@@ -105,18 +105,16 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
         {opportunity.contacts !== null &&
           opportunity.contacts.length > 0 &&
           opportunity.contacts.map((contact: Person, index) => (
-            <div
-              key={index}
-              className="flex flex-col justify-start gap-y-1.5 pb-4"
-            >
+            <div key={index} className="flex flex-col justify-start gap-y-1.5">
               <div className="flex flex-col justify-start bg-popover rounded-lg px-3 py-2.5 gap-y-2">
-                <div className="flex flex-row gap-x-2 items-center pt-1.5">
-                  <div className="bg-background hover:bg-background/50 dark:bg-popover rounded-lg text-primary font-semibold ps-0.5">
-                    {contact.firstName}
+                <div className="flex flex-row gap-x-2 items-center">
+                  <div className="text-sm text-primary font-medium">
+                    {contact.fullName}
                   </div>
                 </div>
+                <Separator />
 
-                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                <div className="flex flex-row h-8 items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
                   <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
                     <PersonIcon width={18} />
                     <p>Role</p>
@@ -124,19 +122,38 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                   <p className="font-medium">{contact.title}</p>
                 </div>
 
-                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200 pb-">
+                  <div className="flex gap-x-2 items-center min-w-52 text-zinc-500 dark:text-zinc-400">
                     <GraduationCap width={18} />
                     <p>Skills</p>
                   </div>
-                  {contact.skills &&
-                    contact.skills.length > 0 &&
-                    contact.skills.map((skill: string, index) => (
-                      <p className="font-medium">{skill}</p>
-                    ))}
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md">
+                          {contact.skills && contact.skills.length > 0
+                            ? contact.skills.join(" ")
+                            : "Empty"}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {contact.skills && contact.skills.length > 0
+                          ? contact.skills.map((skill, index) => (
+                              <div
+                                key={index}
+                                className="flex gap-x-2 items-center"
+                              >
+                                <p>{skill}</p>
+                              </div>
+                            ))
+                          : "Empty"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
 
-                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                <div className="flex flex-row h-8 items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
                   <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
                     <Send width={18} />
                     <p>Channels</p>
@@ -151,7 +168,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 hover:bg-primary/10"
                             onClick={handleLinkedinClick}
                           >
                             <Linkedin className="h-3 w-3" />
@@ -168,7 +185,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 hover:bg-primary/10"
                             onClick={handleTwitterClick}
                           >
                             <Twitter className="h-3 w-3" />
@@ -185,7 +202,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 hover:bg-primary/10"
                             onClick={handleGithubClick}
                           >
                             <Github className="h-3 w-3" />
@@ -206,7 +223,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-8 h-8 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 hover:bg-primary/10"
                             disabled={!contact.workEmail}
                             onClick={handleEmailClick}
                           >
