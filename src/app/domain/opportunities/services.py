@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
+from sqlalchemy.orm import InstrumentedAttribute, selectinload
 from advanced_alchemy.filters import SearchFilter, LimitOffset
 from advanced_alchemy.exceptions import RepositoryError
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
@@ -41,7 +42,6 @@ if TYPE_CHECKING:
     from advanced_alchemy.repository._util import LoadSpec
     from advanced_alchemy.service import ModelDictT
     from msgspec import Struct
-    from sqlalchemy.orm import InstrumentedAttribute
 
 __all__ = ("OpportunityService", "OpportunityAuditLogService", "ICPService")
 logger = structlog.get_logger()
@@ -210,6 +210,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     )
                 )
                 .execution_options(populate_existing=True)
+                .options(selectinload(JobPost.company))
             )
 
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)

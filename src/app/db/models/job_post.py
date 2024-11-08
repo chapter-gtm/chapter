@@ -35,7 +35,7 @@ class JobPost(UUIDAuditBase):
     # ORM Relationships
     # ------------
     company: Mapped[Company] = relationship(
-        lazy="select",
+        lazy="noload",
     )
 
     # Defer loading large fields
