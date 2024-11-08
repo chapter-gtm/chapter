@@ -22,6 +22,7 @@ class UserOauthAccount(UUIDAuditBase):
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("user_account.id", ondelete="cascade"),
         nullable=False,
+        index=True,
     )
     oauth_name: Mapped[str] = mapped_column(String(length=100), index=True, nullable=False)
     access_token: Mapped[str] = mapped_column(String(length=1024), nullable=False)

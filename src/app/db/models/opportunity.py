@@ -61,6 +61,7 @@ class Opportunity(UUIDAuditBase, SlugKey):
     __tablename__ = "opportunity"
     __pii_columns__ = {}
     __table_args__ = (
+        Index("ix_opportunity_id", "id"),
         Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),
         Index("idx_opportunity_created_at", "tenant_id", desc("created_at")),
         Index("idx_opportunity_tenant_id_created_at", "tenant_id", desc("created_at")),
