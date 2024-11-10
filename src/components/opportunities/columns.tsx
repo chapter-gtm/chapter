@@ -181,8 +181,23 @@ export function getFilters(icp: Icp) {
           icon: DollarSign,
         },
         {
+          value: FundingRound.SERIES_F,
+          label: FundingRound.SERIES_F,
+          icon: DollarSign,
+        },
+        {
           value: FundingRound.SERIES_UNKNOWN,
           label: FundingRound.SERIES_UNKNOWN,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.PRIVATE_EQUITY,
+          label: FundingRound.PRIVATE_EQUITY,
+          icon: DollarSign,
+        },
+        {
+          value: FundingRound.CORPORATE_ROUND,
+          label: FundingRound.CORPORATE_ROUND,
           icon: DollarSign,
         },
         {
