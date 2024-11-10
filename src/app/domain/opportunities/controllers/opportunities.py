@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import structlog
 from typing import TYPE_CHECKING, Annotated
-from datetime import datetime, timezone
 
 from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
@@ -70,10 +69,7 @@ class OpportunityController(Controller):
         filters: Annotated[list[FilterTypes], Dependency(skip_validation=True)],
     ) -> OffsetPagination[Opportunity]:
         """List opportunities that your account can access.."""
-        start_time = datetime.now(timezone.utc)
         results, total = await opportunities_service.get_opportunities(*filters, tenant_id=current_user.tenant_id)
-        time_elapsed = datetime.now(timezone.utc) - start_time
-        logger.info("Opportunities fetched", time_elapsed=str(time_elapsed))
         paginated_response = opportunities_service.to_schema(
             data=results, total=total, schema_type=Opportunity, filters=filters
         )
