@@ -374,7 +374,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             if person_details.get("github_url"):
                                 github_profile_url = "https://" + person_details.get("github_url").rstrip("/")
                             if person_details.get("birth_date"):
-                                birth_date = datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d").date()
+                                try:
+                                    birth_date = datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d").date()
+                                except Exception as e:
+                                    logger.warn(
+                                        "Failed to parse birth date for a person",
+                                        person_details=person_details,
+                                        exc_info=e,
+                                    )
 
                             if person_details.get("work_email"):
                                 if get_domain_from_email(person_details.get("work_email", "")) == get_domain(
