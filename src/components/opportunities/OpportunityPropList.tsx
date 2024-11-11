@@ -77,7 +77,10 @@ export function OpportunityPropList({
   const [icp, setIcp] = useState<Icp | null>(null);
   const stages = Object.values(OpportunityStage);
 
-  const handleDocLink = async (url: string) => {
+  const handleDocLink = async (url: string | undefined | null) => {
+    if (url === undefined || url === null) {
+      return;
+    }
     window.open(url);
   };
 
@@ -125,17 +128,18 @@ export function OpportunityPropList({
             </span>
             <p>Knowledge center</p>
           </div>
-          {opportunity.company?.docsUrl !== null && (
-            <div className="flex flex-1 flex-wrap gap-x-2">
-              <Button
-                onClick={() => handleDocLink(opportunity.company?.docsUrl)}
-                variant={"outline"}
-                className="px-2 py-1 text-xs font-medium h-auto"
-              >
-                Documentation
-              </Button>
-            </div>
-          )}
+          {opportunity.company?.docsUrl !== undefined &&
+            opportunity.company?.docsUrl !== null && (
+              <div className="flex flex-1 flex-wrap gap-x-2">
+                <Button
+                  onClick={() => handleDocLink(opportunity.company?.docsUrl)}
+                  variant={"outline"}
+                  className="px-2 py-1 text-xs font-medium h-auto"
+                >
+                  Documentation
+                </Button>
+              </div>
+            )}
         </div>
 
         {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
