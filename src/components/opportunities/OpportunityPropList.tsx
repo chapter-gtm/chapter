@@ -77,14 +77,8 @@ export function OpportunityPropList({
   const [icp, setIcp] = useState<Icp | null>(null);
   const stages = Object.values(OpportunityStage);
 
-  const handleDocLink = async () => {
-    if (opportunity.company?.name === "Datadog") {
-      window.open("https://docs.datadoghq.com/");
-      return;
-    } else {
-      window.open("https://help.ibotta.com/hc/en-us");
-      return;
-    }
+  const handleDocLink = async (url: string) => {
+    window.open(url);
   };
 
   const handleStageChange = async (newStage: string) => {
@@ -134,7 +128,7 @@ export function OpportunityPropList({
           {opportunity.company?.docsUrl !== null && (
             <div className="flex flex-1 flex-wrap gap-x-2">
               <Button
-                onClick={handleDocLink}
+                onClick={() => handleDocLink(opportunity.company?.docsUrl)}
                 variant={"outline"}
                 className="px-2 py-1 text-xs font-medium h-auto"
               >
