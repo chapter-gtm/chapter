@@ -35,6 +35,7 @@ class Company(UUIDAuditBase, SlugKey):
     org_size: Mapped[OrgSize | None] = mapped_column(OrgSizeType, nullable=True, default=None)
     ios_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     android_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    docs_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     # -----------
     # ORM Relationships
     # ------------
