@@ -32,6 +32,7 @@ class Company(CamelizedBaseStruct):
     org_size: OrgSize | None = None
     ios_app_url: str | None = None
     android_app_url: str | None = None
+    docs_url: str | None = None
     ios_app_details: AppDetails | None = None
     android_app_details: AppDetails | None = None
 
