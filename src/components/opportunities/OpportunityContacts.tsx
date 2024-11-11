@@ -114,16 +114,16 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 </div>
                 <Separator />
 
-                <div className="flex flex-row h-8 items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-44 min-w-44 max-w-44 text-zinc-500 dark:text-zinc-400">
                     <PersonIcon width={18} />
                     <p>Role</p>
                   </div>
                   <p className="font-medium">{contact.title}</p>
                 </div>
 
-                <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200 pb-">
-                  <div className="flex gap-x-2 items-center min-w-52 text-zinc-500 dark:text-zinc-400">
+                <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-44 min-w-44 max-w-44 text-zinc-500 dark:text-zinc-400">
                     <GraduationCap width={18} />
                     <p>Skills</p>
                   </div>
@@ -131,7 +131,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md">
+                        <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md flex-1">
                           {contact.skills && contact.skills.length > 0
                             ? contact.skills.join(" ")
                             : "Empty"}
@@ -154,11 +154,11 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                 </div>
 
                 <div className="flex flex-row h-8 items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                  <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                  <div className="flex gap-x-2 items-center min-w-44 max-w-44 w-44 text-zinc-500 dark:text-zinc-400">
                     <Send width={18} />
                     <p>Channels</p>
                   </div>
-                  <div className="flex flex-wrap gap-x-2">
+                  <div className="flex flex-1 flex-wrap gap-x-2">
                     {contact.linkedinProfileUrl && (
                       <>
                         <a
