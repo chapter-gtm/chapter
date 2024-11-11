@@ -215,13 +215,13 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
             opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)
-            if not job_post_results:
-                logger.info(
-                    "No new jobs found matching tool stack and date range",
-                    tools_include=icp.tool.include,
-                    tools_exclude=icp.tool.exclude,
-                    last_n_days=last_n_days,
-                )
+            logger.info(
+                "Searched for new jobs matching tool stack and date range",
+                tools_include=icp.tool.include,
+                tools_exclude=icp.tool.exclude,
+                last_n_days=last_n_days,
+                count=job_post_results.rowcount,
+            )
 
             for result in job_post_results:
                 job_post = result[0]
