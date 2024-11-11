@@ -131,15 +131,17 @@ export function OpportunityPropList({
             </span>
             <p>Knowledge center</p>
           </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">
-            <Button
-              onClick={handleDocLink}
-              variant={"outline"}
-              className="px-2 py-1 text-xs font-medium h-auto"
-            >
-              Documentation
-            </Button>
-          </div>
+          {opportunity.company?.docsUrl !== null && (
+            <div className="flex flex-1 flex-wrap gap-x-2">
+              <Button
+                onClick={handleDocLink}
+                variant={"outline"}
+                className="px-2 py-1 text-xs font-medium h-auto"
+              >
+                Documentation
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">

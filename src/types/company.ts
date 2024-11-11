@@ -75,6 +75,9 @@ export type Company = {
     linkedinProfileUrl: string | null;
     twitterProfileUrl: string | null;
     crunchbaseProfileUrl: string | null;
+    iosAppUrl: string | null;
+    androidAppUrl: string | null;
+    docsUrl: string | null;
     hqLocation: Location | null;
     lastFunding: Funding | null;
     orgSize: OrgSize | null;
