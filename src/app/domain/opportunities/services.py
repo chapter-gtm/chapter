@@ -215,15 +215,10 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
             opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
             job_post_results = await self.repository.session.execute(statement=job_posts_statement)
-            logger.info(
-                "Searched for new jobs matching tool stack and date range",
-                tools_include=icp.tool.include,
-                tools_exclude=icp.tool.exclude,
-                last_n_days=last_n_days,
-                count=job_post_results.rowcount,
-            )
 
+            matching_job_count = 0
             for result in job_post_results:
+                matching_job_count += 1
                 job_post = result[0]
                 try:
                     if not job_post.company:
@@ -480,6 +475,15 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 except Exception as e:
                     logger.error("Error processing job post or person", job_post_id=job_post.id, exc_info=e)
                     await self.repository.session.rollback()
+
+            logger.info(
+                "Searched for new jobs matching tool stack and date range",
+                tools_include=icp.tool.include,
+                tools_exclude=icp.tool.exclude,
+                last_n_days=last_n_days,
+                matching_job_count=matching_job_count,
+                icp=icp.tenant_id,
+            )
 
         return opportunities_found
 
