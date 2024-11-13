@@ -79,22 +79,18 @@ const handleCopyRecordLink = async (email: string | null) => {
 };
 
 const handleEmailClick = () => {
-  // toast.success("Email sent!");
   posthog.capture("email clicked");
 };
 
 const handleTwitterClick = () => {
-  toast.success("Twitter link clicked!");
   posthog.capture("twitter clicked");
 };
 
 const handleLinkedinClick = () => {
-  toast.success("Linkedin link clicked!");
   posthog.capture("linkedin clicked");
 };
 
 const handleGithubClick = () => {
-  toast.success("Github link clicked!");
   posthog.capture("github clicked");
 };
 
