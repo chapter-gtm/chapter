@@ -106,8 +106,8 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
           opportunity.contacts.length > 0 &&
           opportunity.contacts.map((contact: Person, index) => (
             <div key={index} className="flex flex-col justify-start gap-y-1.5">
-              <div className="flex flex-col justify-start bg-popover rounded-lg px-3 py-2.5 gap-y-2">
-                <div className="flex flex-row gap-x-2 items-center">
+              <div className="flex flex-col justify-start bg-card dark:bg-popover rounded-lg px-3 py-2.5 gap-y-2 border border-border">
+                <div className="flex flex-row gap-x-2 items-center py-1">
                   <div className="text-sm text-primary font-medium">
                     {contact.fullName}
                   </div>
@@ -133,7 +133,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       <TooltipTrigger asChild>
                         <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md flex-1">
                           {contact.skills && contact.skills.length > 0
-                            ? contact.skills.join(" ")
+                            ? contact.skills.join(" · ")
                             : "Empty"}
                         </p>
                       </TooltipTrigger>
@@ -168,7 +168,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-6 h-6 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 bg-popover hover:bg-muted"
                             onClick={handleLinkedinClick}
                           >
                             <Linkedin className="h-3 w-3" />
@@ -185,7 +185,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-6 h-6 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 bg-popover hover:bg-muted"
                             onClick={handleTwitterClick}
                           >
                             <Twitter className="h-3 w-3" />
@@ -202,7 +202,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-6 h-6 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 bg-popover hover:bg-muted"
                             onClick={handleGithubClick}
                           >
                             <Github className="h-3 w-3" />
@@ -223,7 +223,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                         >
                           <Button
                             variant={"outline"}
-                            className="w-6 h-6 p-1 hover:bg-primary/10"
+                            className="w-6 h-6 p-1 bg-popover hover:bg-muted"
                             disabled={!contact.workEmail}
                             onClick={handleEmailClick}
                           >

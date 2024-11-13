@@ -155,21 +155,18 @@ export function DataTable<TData, TValue>({
 
       <div className="flex-1 h-full overflow-auto border-t border-b border-border">
         <Table>
-          <TableHeader className="sticky z-20 top-0 border-b border-border w-full">
+          <TableHeader className="sticky z-20 top-0 w-full bg-transparent">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="hover:bg-accent bg-card"
-              >
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       className={cn(
-                        "border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none",
+                        "[&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none bg-transparent",
                         header.column.getIndex() < stickyColumnCount
-                          ? "sticky left-0 bg-card font-bold min-w-[200px]"
+                          ? "sticky left-0 font-bold min-w-[200px] bg-card dark:bg-popover/50"
                           : ""
                       )}
                     >
@@ -195,19 +192,17 @@ export function DataTable<TData, TValue>({
                   className={cn(
                     " text-sm",
                     selectedRow === row.index
-                      ? "bg-popover"
+                      ? "bg-card"
                       : "text-muted-foreground"
                   )}
                 >
-                  {/* className="dark-hover:bg-popover hover:bg-background" */}
-
                   {row.getVisibleCells().map((cell) => {
                     return (
                       <TableCell
                         className={cn(
                           "truncate border-e border-border [&:has([role=checkbox])]:pr-2 [&:has([role=checkbox])]:border-none py-1",
                           cell.column.getIndex() < stickyColumnCount
-                            ? "sticky left-0 font-semibold bg-card"
+                            ? "sticky left-0 font-semibold bg-card dark:bg-popover/50"
                             : ""
                         )}
                         // This is where the cell should have a shade of color

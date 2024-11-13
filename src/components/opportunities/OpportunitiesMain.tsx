@@ -241,7 +241,7 @@ export function OpportunitiesMain() {
 
   return (
     <>
-      <div className="flex flex-col flex-1 h-full pt-20 p-6">
+      <div className="flex flex-col flex-1 h-full pt-20 p-6 bg-white dark:bg-background">
         <Toaster theme="light" />
         <div className="w-full">
           <div className="flex flex-row justify-start gap-x-2 center  items-center ps-2 py-5">
@@ -252,7 +252,7 @@ export function OpportunitiesMain() {
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 overflow-hidden bg-card rounded-lg border border-border">
+        <div className="flex flex-col flex-1 overflow-hidden bg-white dark:bg-card rounded-lg border border-border">
           {isPopulated && icp ? (
             <>
               <Sheet modal={false} open={sheetOpen}>
@@ -268,13 +268,13 @@ export function OpportunitiesMain() {
                   nonClickableColumns={["select", "stage"]}
                 />
 
-                <SheetContent className="sm:max-w-[525px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-card dark:bg-background border-border">
+                <SheetContent className="sm:max-w-[525px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-white dark:bg-card border-border">
                   <TooltipProvider delayDuration={0}>
-                    <div className="flex flex-row justify-between pt-2 w-full items-center text-zinc-500 dark:text-zinc-400">
+                    <div className="flex flex-row justify-between pt-2 w-full items-center text-zinc-500 dark:text-zinc-400 pe-3">
                       <div className="flex flex-row justify-start items-center px-3 py-2">
                         <SheetClose
                           onClick={handleCloseSheet}
-                          className="relative h-7 w-7 justify-center items-center rounded-lg transition-opacity hover:bg-accent focus:outline-none"
+                          className="relative h-7 w-7 justify-center items-center rounded-lg transition-opacity hover:bg-popover focus:outline-none"
                         >
                           <ChevronsRight className="h-4 w-4 mx-auto" />
                           <span className="sr-only">Close</span>
@@ -285,7 +285,7 @@ export function OpportunitiesMain() {
                             <Link
                               target="_blank"
                               href={`/opportunities/${selectedRow?.id}`}
-                              className="w-7 h-7 ps-1.5 content-center justify-center hover:bg-accent rounded-lg"
+                              className="w-7 h-7 ps-1.5 content-center justify-center hover:bg-popover rounded-lg"
                             >
                               <ExternalLink className="h-4 w-4" />
                             </Link>
@@ -297,7 +297,7 @@ export function OpportunitiesMain() {
                           <TooltipTrigger asChild>
                             <Button
                               variant="outline"
-                              className="w-7 h-7 p-0 text-zinc-400 bg-transparent border-none"
+                              className="w-7 h-7 p-0 text-zinc-600 dark:text-zinc-400 bg-transparent border-none"
                               onClick={() =>
                                 handleCopyRecordLink(selectedRow?.id)
                               }

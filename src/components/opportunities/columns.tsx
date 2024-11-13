@@ -413,7 +413,7 @@ export function getFixedColumns(
           <div className="flex flex-row justify-between items-center pe-2">
             <div>{row.getValue("companyName")}</div>
             <Button
-              className="text-light hover:bg-popover/20 px-1.5 py-0.5 h-7 bg-popover rounded-md curser"
+              className="text-light px-2 max-h-8 py-0.5 rounded-md curser border border-border bg-popover dark:bg-muted/60 hover:bg-popover/20 hover:text-foreground"
               onClick={async () => {
                 await handleOpenDrawer(id);
               }}
@@ -674,16 +674,15 @@ export function getFixedColumns(
                 return icp.tool.include.includes(tool.name);
               })
               .map((tool, index) => (
-                <Badge
+                <div
                   key={index}
-                  variant="default"
                   className={classNames(
                     ScaleLabel[tool.certainty]?.color,
-                    "bg-primary text-primary-foreground"
+                    "bg-popover dark:bg-muted/80 text-primary font-medium px-2 py-1 text-xs rounded-md"
                   )}
                 >
                   {tool.name}
-                </Badge>
+                </div>
               ))}
           </div>
         );

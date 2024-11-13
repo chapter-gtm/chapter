@@ -48,7 +48,6 @@ export function OpportunityDrawer({
       <div className="flex flex-col flex-1">
         <div className="flex flex-col">
           <OpportunityBrand opportunity={opportunity} />
-          <Separator />
 
           <Separator />
 

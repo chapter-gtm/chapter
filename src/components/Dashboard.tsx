@@ -181,7 +181,7 @@ export function Dashboard() {
   }, [opportunities]);
 
   return (
-    <div className="overflow-auto w-full p-32">
+    <div className="overflow-auto w-full p-32 bg-background">
       <div className="flex flex-col space-y-2 px-6 mt-2">
         <div className="flex flex-row justify-start items-center gap-x-2 py-2">
           <Inbox className=" w-4 text-zinc-500" />
@@ -190,27 +190,10 @@ export function Dashboard() {
           </p>
         </div>
         <div className="flex relative">
-          <div className="h-60 min-w-52 bg-gradient-to-l from-background/90 to-transparent absolute z-10 right-0 pointer-events-none"></div>
+          <div className="h-60 min-w-52 bg-gradient-to-l from-background/70 to-transparent absolute z-10 right-0 pointer-events-none"></div>
 
           <div className="flex w-full overflow-x-auto relative">
             <div className="flex flex-row h-60 gap-x-3 w-full">
-              {/* {newOpportunities === true && (
-                <>
-                  {" "}
-                  <div className="flex-none basis-1/6 h-60 bg-card/10 rounded-xl border border-border">
-                    <div className="flex flex-col justify-center content-center items-center py-6">
-                      <BellDot className="w-16 h-20 text-zinc-600" />
-                      <h3 className="text-center font-medium text-zinc-200 px-6 pt-5">
-                        {" "}
-                        JP, you have new leads
-                      </h3>
-                      <p className="text-sm text-zinc-500 pt-2">
-                        Since last login
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )} */}
               {opportunities && opportunities.length > 0 ? (
                 <>
                   {opportunities
@@ -226,7 +209,7 @@ export function Dashboard() {
                         key={index}
                         className="flex-none basis-1/6 h-full"
                       >
-                        <div className="flex w-full h-full flex-col relative bg-card rounded-xl border border-violet-500 hover:border-muted cursor-pointer ">
+                        <div className="flex w-full h-full flex-col relative bg-card rounded-xl border border-violet-400/40 hover:border-violet-500 cursor-pointer ">
                           <div className="flex flex-col justify-start content-center p-3 z-0">
                             <div className="space-y-3 mt-2 relative justify-start">
                               {op.company?.profilePicUrl ? (
@@ -305,7 +288,7 @@ export function Dashboard() {
           </p>
         </div>
         <div className="flex relative">
-          <div className="h-60 bg-gradient-to-l from-background/50 to-transparent absolute z-10 right-0 pointer-events-none"></div>
+          <div className="h-60 min-w-52 bg-gradient-to-l from-background/70 to-transparent absolute z-10 right-0 pointer-events-none"></div>
 
           <div className="flex w-full overflow-x-scroll relative ">
             <div className="relative flex flex-row w-full gap-3 h-60">

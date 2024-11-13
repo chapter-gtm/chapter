@@ -65,13 +65,13 @@ export function UserNav({ className }: UserNavProps) {
               variant="outline"
               className={cn("w-full justify-between", className)}
             >
-              <div className="flex flex-inline">
-                <Avatar className="mr-2 h-5 w-5 rounded-lg">
+              <div className="flex flex-inline items-center">
+                <Avatar className="mr-2 h-6 w-6 rounded-lg">
                   <AvatarImage
                     src={currentUser.avatarUrl}
                     alt={currentUser.name}
                   />
-                  <AvatarFallback className="text-xs bg-zinc-200">
+                  <AvatarFallback className="text-xs bg-muted">
                     {getNameInitials(currentUser.name)}
                   </AvatarFallback>
                 </Avatar>

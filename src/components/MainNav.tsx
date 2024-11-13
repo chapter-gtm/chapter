@@ -48,9 +48,9 @@ export function MainNav({ links }: NavProps) {
           className={cn(
             buttonVariants({ variant: link.variant }),
             pathname === link.route
-              ? "bg-white hover:bg-zinc-100 dark:bg-card dark:hover:bg-zinc-700/50 "
-              : "hover:bg-zinc-100/60 dark:bg-transparent dark:hover:bg-zinc-800",
-            "justify-start items-start h-auto px-3 items-center justify-center text-zinc-800 dark:text-zinc-200 h-10"
+              ? "dark:bg-card bg-popover hover:bg-muted dark:hover:bg-popover"
+              : "bg-background/50 hover:bg-zinc-200 dark:bg-transparent dark:hover:bg-zinc-800",
+            "px-3 items-center justify-center text-zinc-800 dark:text-zinc-200 h-10"
           )}
         >
           {link.icon && <link.icon className=" h-4 w-4 me-2" />}

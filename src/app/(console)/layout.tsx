@@ -18,8 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <div className="h-dvh flex flex-col relative overflow-hidden">
-      <div className="fixed top-0 w-full bg-background z-50">
-        <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border bg-background">
+      <div className="fixed top-0 w-full z-50">
+        {/* Navbar start */}
+        <div className="flex flex-row h-20 py-3 items-center px-6 border-b border-border/40 bg-card dark:bg-background">
           <TopNavbar />
           <div className="ml-auto flex items-center space-x-4">
             <UserNav />

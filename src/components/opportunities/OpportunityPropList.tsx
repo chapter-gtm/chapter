@@ -1,5 +1,6 @@
 import {
   Loader,
+  InfoIcon,
   Factory,
   Users,
   Banknote,
@@ -121,89 +122,30 @@ export function OpportunityPropList({
   return (
     <>
       <div className="flex flex-col gap-y-4 py-6 ps-2">
-        <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <span>
-              <ExternalLink width={18} />
-            </span>
-            <p>Knowledge center</p>
-          </div>
-          {opportunity.company?.docsUrl !== undefined &&
-            opportunity.company?.docsUrl !== null && (
-              <div className="flex flex-1 flex-wrap gap-x-2">
-                <Button
-                  onClick={() => handleDocLink(opportunity.company?.docsUrl)}
-                  variant={"outline"}
-                  className="px-2 py-1 text-xs font-medium h-auto"
-                >
-                  Documentation
-                </Button>
-              </div>
-            )}
-        </div>
-
-        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <span>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 21 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.84822 0.839956C2.8433 0.841596 2.84002 0.85144 2.8351 0.853081C2.82361 0.854721 2.80721 0.8498 2.79572 0.853081C2.70713 0.862925 2.6251 0.899018 2.55947 0.958081C2.27729 1.1123 2.1001 1.42894 2.1001 1.77183V19.32C2.1001 19.5808 2.21494 19.8548 2.42822 20.0156C2.52666 20.1255 2.67596 20.1747 2.82197 20.1468C3.01393 20.1567 3.21572 20.114 3.38635 20.0156C3.74236 19.8089 11.012 15.6056 11.012 15.6056L14.8051 13.4137C14.8133 13.4104 14.8231 13.4055 14.8313 13.4006L14.8838 13.3743C14.8838 13.3743 14.9347 13.3481 14.9363 13.3481C14.9413 13.3432 14.9446 13.3399 14.9495 13.335C15.0627 13.2693 18.17 11.481 18.5982 11.235C18.8935 11.0643 19.1281 10.7871 19.1232 10.4475C19.1183 10.1078 18.8788 9.84371 18.6113 9.69933C18.4637 9.62058 17.5056 9.07261 16.6163 8.55746C15.7271 8.0423 14.8838 7.54683 14.8838 7.54683L11.012 5.31558C11.012 5.31558 3.97205 1.25011 3.55697 1.01058C3.41096 0.926909 3.24525 0.859643 3.08447 0.839956C3.00408 0.830112 2.92697 0.826831 2.84822 0.839956ZM2.9401 1.96871L11.4976 10.4606L2.9401 18.9525V1.96871ZM4.9351 2.76933C7.07119 4.00308 10.592 6.03746 10.592 6.03746L13.9782 7.99308L12.0882 9.86996L4.9351 2.76933ZM14.7263 8.42621C14.9281 8.54433 15.4417 8.84292 16.1963 9.27933C17.0856 9.79449 17.9978 10.3162 18.2176 10.4343C18.2389 10.4458 18.2324 10.4524 18.2438 10.4606C18.2274 10.4721 18.2225 10.4753 18.1782 10.5C17.7746 10.7329 15.1578 12.2521 14.7395 12.495L12.6788 10.4606L14.7263 8.42621ZM12.0882 11.0381L13.9913 12.9281L10.592 14.8837C10.592 14.8837 7.16307 16.8623 4.94822 18.1387L12.0882 11.0381Z"
-                  fill="white"
-                />
-              </svg>
-            </span>
-            <p>Rating</p>
-          </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">
-            {opportunity.company?.name === "Eventbase" ? "4.2" : "3.4"}
-          </div>
-        </div> */}
-
-        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Hash width={18} />
-            <p>Number of reviews</p>
-          </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">1,200</div>
-        </div> */}
-
-        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <CalendarFold width={18} />
-            <p>Last release</p>
-          </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex py-0.5 rounded-md px-1.5 bg-green-200 text-green-900 cursor-default">
-                    6 days ago
+        {opportunity.company?.docsUrl !== undefined &&
+          opportunity.company?.docsUrl !== null && (
+            <>
+              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                  <span>
+                    <InfoIcon width={18} />
                   </span>
-                </TooltipTrigger>
-                <TooltipContent className="absolute left-8">
-                  <div className="flex max-w-24 text-zinc-100 hover:bg-popover ">
-                    Appears to be under active development
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div> */}
+                  <p>Docs / API</p>
+                </div>
 
-        {/* <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Hash width={18} />
-            <p>Number of installs</p>
-          </div>
-          <div className="flex flex-1 flex-wrap gap-x-2">5000+</div>
-        </div> */}
-
+                <div className="flex flex-1 flex-wrap gap-x-2">
+                  <Button
+                    onClick={() => handleDocLink(opportunity.company?.docsUrl)}
+                    variant={"outline"}
+                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
+                  >
+                    Link
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -218,9 +160,12 @@ export function OpportunityPropList({
                 .map((tool, index) => (
                   <>
                     {tool && (
-                      <Badge key={index} variant={"default"}>
+                      <div
+                        key={index}
+                        className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
+                      >
                         {tool.name}
-                      </Badge>
+                      </div>
                     )}
                   </>
                 ))}
@@ -235,7 +180,7 @@ export function OpportunityPropList({
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex border border-zinc-100 px-2 py-1 text-xs font-medium rounded-lg text-zinc-100 hover:bg-popover cursor-default">
+                <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
                   See all
                 </div>
               </TooltipTrigger>
