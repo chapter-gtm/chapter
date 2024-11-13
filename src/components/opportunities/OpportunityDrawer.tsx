@@ -22,17 +22,12 @@ import {
   Linkedin,
   Mail,
 } from "lucide-react";
-import Link from "next/link";
 
 import { Opportunity } from "@/types/opportunity";
-import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityBrand } from "./OpportunityBrand";
-import { OpportunityJobPost } from "./OpportunityJobPost";
-import { OpportunityContacts } from "./OpportunityContacts";
-import { OpportunityStageList } from "./OpportunityStageList";
+import { OpportunityTabs } from "./OpportunityTabs";
 
 import { Separator } from "@/components/ui/separator";
-import { Investor } from "@/types/company";
 
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
@@ -48,45 +43,11 @@ export function OpportunityDrawer({
       <div className="flex flex-col flex-1">
         <div className="flex flex-col">
           <OpportunityBrand opportunity={opportunity} />
-
           <Separator />
-
-          <Tabs defaultValue="account" className="p-5">
-            <TabsList className="grid w-full grid-cols-3 p-0 h-auto bg-transparent border-border border">
-              <TabsTrigger
-                className="data-[state=active]:bg-popover"
-                value="account"
-              >
-                Account info
-              </TabsTrigger>
-              <TabsTrigger
-                value="people"
-                className="data-[state=active]:bg-popover"
-              >
-                Points of contact
-              </TabsTrigger>
-              <TabsTrigger
-                value="evidence"
-                className="data-[state=active]:bg-popover"
-              >
-                Evidence
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="account">
-              <OpportunityPropList
-                opportunity={opportunity}
-                updateOpportunity={updateOpportunity}
-              />
-            </TabsContent>
-            <TabsContent value="people">
-              {" "}
-              <OpportunityContacts opportunity={opportunity} />
-            </TabsContent>
-            <TabsContent value="evidence">
-              {" "}
-              <OpportunityJobPost opportunity={opportunity} />
-            </TabsContent>
-          </Tabs>
+          <OpportunityTabs
+            opportunity={opportunity}
+            updateOpportunity={updateOpportunity}
+          />
         </div>
       </div>
     </>
