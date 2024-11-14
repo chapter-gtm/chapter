@@ -40,7 +40,7 @@ class Opportunity(CamelizedBaseStruct):
     created_at: datetime
     updated_at: datetime
     stage: OpportunityStage
-    notes: str
+    notes: str | None = None
     context: OpportunityContext | None = None
     owner: User | None = None
     company: Company | None = None
