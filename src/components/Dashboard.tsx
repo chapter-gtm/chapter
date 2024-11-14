@@ -399,7 +399,11 @@ export function Dashboard() {
                   cursor={false}
                   content={<ChartTooltipContent hideLabel />}
                 />
-                <Bar dataKey="y" fill="var(--color-desktop)" radius={8}>
+                <Bar
+                  dataKey="y"
+                  style={{ fill: `hsl(var(--chart))` }}
+                  radius={8}
+                >
                   <LabelList
                     position="top"
                     className="fill-foreground"
