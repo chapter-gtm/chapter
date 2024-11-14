@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from litestar import Controller, delete, get, patch, post
+from litestar import Controller, delete, get, patch, post, put
 from litestar.di import Provide
 from litestar.exceptions import ValidationException
 
@@ -13,7 +13,7 @@ from app.domain.accounts.guards import requires_active_user
 from app.domain.accounts.services import UserService
 from app.domain.opportunities import urls
 from app.domain.opportunities.dependencies import provide_icp_service
-from app.domain.opportunities.schemas import ICP
+from app.domain.opportunities.schemas import ICP, ICPCreate, ICPUpdate
 from app.domain.opportunities.services import ICPService
 
 if TYPE_CHECKING:
@@ -50,4 +50,40 @@ class ICPController(Controller):
     ) -> ICP:
         """Get details about a comapny."""
         db_obj = await icp_service.get_by_tenant_id(current_user.tenant_id)
+        return icp_service.to_schema(schema_type=ICP, data=db_obj)
+
+    @post(
+        operation_id="CreateCompany",
+        name="icp:create",
+        summary="Create a new ICP.",
+        path=urls.ICP_CREATE,
+    )
+    async def create_icp(
+        self,
+        icp_service: ICPService,
+        current_user: UserModel,
+        data: ICPCreate,
+    ) -> ICP:
+        """Create a new ICP."""
+        obj = data.to_dict()
+        icp = await icp_service.get_by_tenant_id(current_user.tenant_id)
+        db_obj = await icp_service.create(obj, item_id=icp.id)
+        return icp_service.to_schema(schema_type=ICP, data=db_obj)
+
+    @put(
+        operation_id="UpdateCompany",
+        name="icp:update",
+        summary="Update a new ICP.",
+        path=urls.ICP_CREATE,
+    )
+    async def update_icp(
+        self,
+        icp_service: ICPService,
+        current_user: UserModel,
+        data: ICPUpdate,
+    ) -> ICP:
+        """Update an ICP."""
+        obj = data.to_dict()
+        icp = await icp_service.get_by_tenant_id(current_user.tenant_id)
+        db_obj = await icp_service.update(obj, item_id=icp.id)
         return icp_service.to_schema(schema_type=ICP, data=db_obj)
