@@ -80,7 +80,7 @@ class OpportunityUpdate(CamelizedBaseStruct):
 class ICP(CamelizedBaseStruct):
     """An ICP."""
 
-    name: str | None = None
+    name: str
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
     person: PersonCriteria | None = None
@@ -89,7 +89,7 @@ class ICP(CamelizedBaseStruct):
 class ICPCreate(CamelizedBaseStruct):
     """An ICP create schema."""
 
-    name: str | None = None
+    name: str
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
     person: PersonCriteria | None = None

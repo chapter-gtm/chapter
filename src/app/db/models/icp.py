@@ -3,7 +3,7 @@ from __future__ import annotations
 from uuid import UUID
 
 from advanced_alchemy.base import UUIDAuditBase
-from sqlalchemy import String, ForeignKey, Index
+from sqlalchemy import String, ForeignKey, Index, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -15,8 +15,11 @@ class ICP(UUIDAuditBase):
     """ICP criteria."""
 
     __tablename__ = "icp"
-    __table_args__ = (Index("ix_icp_id", "id"),)
-    name: Mapped[str] = mapped_column(nullable=True, index=True)
+    __table_args__ = (
+        Index("ix_icp_id", "id"),
+        UniqueConstraint("name", "tenant_id", name="uix_name_tenant_id"),
+    )
+    name: Mapped[str] = mapped_column(nullable=False)
     company: Mapped[CompanyCriteria] = mapped_column(CompanyCriteriaType, nullable=True)
     tool: Mapped[ToolCriteria] = mapped_column(ToolCriteriaType, nullable=True)
     person: Mapped[PersonCriteria] = mapped_column(PersonCriteriaType, nullable=True, default="identified", index=True)
