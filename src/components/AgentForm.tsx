@@ -134,17 +134,44 @@ const stackList = [
 const jobTitlesList = [
   { value: "Founder", label: "Founder / Co-founder" },
   { value: "CTO", label: "CTO" },
-  { value: "Head of Engineering", label: "Head of Engineering" },
-  { value: "Director of Engineering", label: "Director of Engineering" },
-  { value: "VP of Engineering", label: "VP of Engineering" },
-  { value: "Head of Product", label: "Head of Product" },
-  { value: "Director of Product", label: "Director of Product" },
-  { value: "VP of Product", label: "VP of Product" },
-  { value: "Staff Engineer", label: "Staff Engineer" },
-  { value: "Tech Lead", label: "Tech Lead" },
+  { value: "CPO", label: "CPO" },
+  {
+    value: "Head / Director / VP of Engineering",
+    label: "Head / Director / VP of Engineering",
+  },
+  {
+    value: "Head / Director / VP of Product",
+    label: "Head / Director / VP of Product",
+  },
+  {
+    value: "Tech Lead / Staff Engineer / EM",
+    label: "Tech Lead / Staff Engineer / EM",
+  },
   { value: "Platform Engineer", label: "Platform Engineer" },
   { value: "DevOps Engineer", label: "DevOps Engineer" },
 ];
+
+const jobTitlesAliasMap: Record<string, string[]> = {
+  "Head / Director / VP of Engineering": [
+    "VP of Engineering",
+    "Vice President of Engineering",
+    "Head of Engineering",
+    "Director of Engineering",
+  ],
+  "Head / Director / VP of Product": [
+    "VP of Product",
+    "Vice President of Product",
+    "Head of Product",
+    "Director of Product",
+  ],
+  "Tech Lead / Staff Engineer": [
+    "Tech Lead",
+    "Staff Engineer",
+    "Engineering Manager",
+  ],
+  CTO: ["CTO", "Chief Technology Officer"],
+  CPO: ["CPO", "Chief Product Officer"],
+};
 
 type AgentFormValues = z.infer<typeof agentFormSchema>;
 
@@ -174,6 +201,12 @@ export function AgentForm() {
 
   const onSubmit = async (data: AgentFormValues) => {
     try {
+      // Deaggregate titles before saving
+      data.person.titles = data.person.titles
+        .map((key) =>
+          key in jobTitlesAliasMap ? jobTitlesAliasMap[key] : [key]
+        )
+        .flat();
       const updatedIcp = await updateIcp(data as Icp);
       setIcp(updatedIcp);
       toast.success("ICP Saved!");
@@ -192,6 +225,29 @@ export function AgentForm() {
 
   useEffect(() => {
     if (icp !== null) {
+      // Aggregate titles to reduce noise
+      const titleKeys = new Set<string>();
+      const foundTitles = new Set<string>();
+      for (const [key, values] of Object.entries(jobTitlesAliasMap)) {
+        if (icp.person.titles.some((title) => values.includes(title))) {
+          titleKeys.add(key);
+
+          icp.person.titles.forEach((title) => {
+            if (values.includes(title)) {
+              foundTitles.add(title);
+            }
+          });
+        }
+      }
+
+      // Add missing search terms to the matchingKeys array
+      icp.person.titles.forEach((title) => {
+        if (!foundTitles.has(title)) {
+          titleKeys.add(title);
+        }
+      });
+
+      icp.person.titles = Array.from(titleKeys);
       form.reset(icp);
     }
   }, [icp]);
