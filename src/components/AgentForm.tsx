@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -35,8 +36,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui//textarea";
-import { toast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+
+import { type Icp } from "@/types/icp";
+import { getIcp, updateIcp } from "@/utils/chapter/icp";
 
 import {
   ToolStack,
@@ -46,11 +51,40 @@ import {
 } from "@/types/company";
 
 const agentFormSchema = z.object({
-  fundingRound: z.string(),
-  headcount: z.string(),
-  industry: z.string(),
-  toolStack: z.string(),
-  engineeringSize: z.string(),
+  company: z.object({
+    funding: z.array(z.string()),
+    headcountMin: z
+      .number({ invalid_type_error: "Min must be a number" })
+      .min(1, "Min must be greater than 0")
+      .max(10000, "Max must not be greater than 10,000")
+      .int(),
+    headcountMax: z
+      .number({ invalid_type_error: "Max must be a number" })
+      .min(1, "Max must be greater than 0 and min")
+      .max(10000, "Max must not be greater than 10,000")
+      .int(),
+    orgSize: z.object({
+      engineeringMin: z
+        .number({ invalid_type_error: "Min must be a number" })
+        .min(1, "Min must be greater than 0")
+        .max(1000, "Max must not be greater than 1000")
+        .int(),
+      engineeringMax: z
+        .number({ invalid_type_error: "Max must be a number" })
+        .min(1, "Max must be greater than 0 and min")
+        .max(1000, "Max must not be greater than 1000")
+        .int(),
+    }),
+    countries: z.array(z.string()),
+  }),
+  tool: z.object({
+    include: z.array(z.string()),
+    exclude: z.array(z.string()),
+  }),
+  person: z.object({
+    titles: z.array(z.string()),
+    subRoles: z.array(z.string()),
+  }),
 });
 
 const multiSelectVariants = cva(
@@ -73,12 +107,33 @@ const multiSelectVariants = cva(
   }
 );
 
-const frameworksList = [
-  { value: "react", label: "React" },
-  { value: "angular", label: "Angular" },
-  { value: "vue", label: "Vue" },
-  { value: "svelte", label: "Svelte" },
-  { value: "ember", label: "Ember" },
+const stackList = [
+  { value: "Github Actions", label: "Github Actions" },
+  { value: "Docker", label: "Docker" },
+  { value: "Kubernetes", label: "Kubernetes" },
+  { value: "Cypress", label: "Cypress" },
+  { value: "Playwright", label: "Playwright" },
+  { value: "Rust", label: "Rust" },
+  { value: "Python", label: "Python" },
+  { value: "TensorFlow", label: "TensorFlow" },
+  { value: "PyTorch", label: "PyTorch" },
+  { value: "LlamaIndex", label: "LlamaIndex" },
+  { value: "LangChain", label: "LangChain" },
+];
+
+const jobTitlesList = [
+  { value: "Founder", label: "Founder / Co-founder" },
+  { value: "CTO", label: "CTO" },
+  { value: "Head of Engineering", label: "Head of Engineering" },
+  { value: "Director of Engineering", label: "Director of Engineering" },
+  { value: "VP of Engineering", label: "VP of Engineering" },
+  { value: "Head of Product", label: "Head of Product" },
+  { value: "Director of Product", label: "Director of Product" },
+  { value: "VP of Product", label: "VP of Product" },
+  { value: "Staff Engineer", label: "Staff Engineer" },
+  { value: "Tech Lead", label: "Tech Lead" },
+  { value: "Platform Engineer", label: "Platform Engineer" },
+  { value: "DevOps Engineer", label: "DevOps Engineer" },
 ];
 
 type AgentFormValues = z.infer<typeof agentFormSchema>;
@@ -86,82 +141,65 @@ type AgentFormValues = z.infer<typeof agentFormSchema>;
 export function AgentForm() {
   const form = useForm<AgentFormValues>({
     resolver: zodResolver(agentFormSchema),
-    mode: "onChange",
+    mode: "onBlur",
+    defaultValues: {
+      company: {
+        funding: ["Seed", "Series A", "Series B"],
+        headcountMin: 10,
+        headcountMax: 1000,
+        orgSize: {
+          engineeringMin: 5,
+          engineeringMax: 100,
+        },
+      },
+      tool: {
+        include: ["Docker", "Kubernetes"],
+        exclude: [],
+      },
+      person: { titles: ["Founder", "CTO"], subRoles: [] },
+    },
   });
 
-  const [selectedStack, setSelectedStack] = React.useState<string[]>([]);
-  const [selectedFrameworks, setSelectedFrameworks] = React.useState<string[]>([
-    "react",
-    "angular",
-  ]);
+  const [icp, setIcp] = useState<Icp | null>(null);
 
-  const handleUnselectStack = React.useCallback((stack: ToolStack) => {
-    setSelectedStack((prev) => prev.filter((s) => s !== stack));
-  }, []);
-
-  const handleSelectStack = (selected: string[]) => {
-    setSelectedStack(selected);
+  const onSubmit = async (data: AgentFormValues) => {
+    try {
+      const updatedIcp = await updateIcp(data as Icp);
+      setIcp(updatedIcp);
+      toast.success("ICP Saved!");
+    } catch (error: any) {
+      toast.error("Failed to load data.", { description: error.toString() });
+    }
   };
 
-  function onSubmit(data: AgentFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+  useEffect(() => {
+    const fetchIcp = async () => {
+      const currentUserIcp = await getIcp();
+      setIcp(currentUserIcp);
+    };
+    fetchIcp();
+  }, []);
+
+  useEffect(() => {
+    if (icp !== null) {
+      form.reset(icp);
+    }
+  }, [icp]);
 
   return (
     <>
+      <Toaster theme="light" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col gap-y-8">
             <div>
               <h3 className="text-xl font-medium py-10">Meta data</h3>
-              <FormField
-                control={form.control}
-                name="industry"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-row justify-between">
-                      <div className="flex flex-col gap-y-2">
-                        <FormLabel>Industry</FormLabel>
-                        <FormDescription>
-                          Describe the industry (if applicable) you are selling
-                          to.
-                        </FormDescription>
-                      </div>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl className="w-52">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Industry" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="max-w-52">
-                          {Object.entries(Industry).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>
-                              {value}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
 
             <div>
               <FormField
                 control={form.control}
-                name="fundingRound"
+                name="company.funding"
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-col gap-y-6 justify-between">
@@ -172,53 +210,16 @@ export function AgentForm() {
                           your service, and can pay for it.
                         </FormDescription>
                       </div>
-                      <div className="flex flex-row gap-x-4">
-                        <div className="grid w-44 max-w-sm items-center gap-1.5">
-                          <Label htmlFor="email">Min</Label>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="max-w-52">
-                              {Object.entries(FundingRound).map(
-                                ([key, value]) => (
-                                  <SelectItem key={key} value={key}>
-                                    {value}
-                                  </SelectItem>
-                                )
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="grid w-44 max-w-sm items-center gap-1.5">
-                          <Label htmlFor="email">Max</Label>
-
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="max-w-52">
-                              {Object.entries(FundingRound).map(
-                                ([key, value]) => (
-                                  <SelectItem key={key} value={key}>
-                                    {value}
-                                  </SelectItem>
-                                )
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
+                      <MultiSelect
+                        options={Object.values(FundingRound).map((value) => ({
+                          label: value,
+                          value: value,
+                        }))}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="Select frameworks"
+                        variant="default"
+                      />
                     </div>
                     <FormMessage />
                   </FormItem>
@@ -232,12 +233,12 @@ export function AgentForm() {
               <div>
                 <FormField
                   control={form.control}
-                  name="engineeringSize"
+                  name="company.headcountMin"
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex flex-col gap-y-6 justify-between">
                         <div className="flex flex-col gap-y-2">
-                          <FormLabel>Engineering Size</FormLabel>
+                          <FormLabel>Company Headcount</FormLabel>
                           <FormDescription>
                             Teamsize can work as a proxy for new roles,
                             responsibilities and challenges. Both min and max
@@ -248,16 +249,66 @@ export function AgentForm() {
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Min</Label>
                             <Input
-                              type="team-size"
-                              id="team-min"
+                              {...form.register("company.headcountMin", {
+                                valueAsNumber: true,
+                              })}
                               placeholder="Minimum size"
                             />
                           </div>
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Max</Label>
                             <Input
-                              type="team-size"
-                              id="team-max"
+                              {...form.register("company.headcountMax", {
+                                valueAsNumber: true,
+                              })}
+                              placeholder="Maximum size"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div>
+                <FormField
+                  control={form.control}
+                  name="company.orgSize.engineeringMin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-6 justify-between">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel>Engineering Size</FormLabel>
+                          <FormDescription>
+                            Engineering size can work as a proxy for new roles,
+                            responsibilities and challenges. Both min and max
+                            are optional.
+                          </FormDescription>
+                        </div>
+                        <div className="flex flex-row gap-x-4">
+                          <div className="grid w-44 max-w-sm items-center gap-1.5">
+                            <Label htmlFor="email">Min</Label>
+                            <Input
+                              {...form.register(
+                                "company.orgSize.engineeringMin",
+                                {
+                                  valueAsNumber: true,
+                                }
+                              )}
+                              placeholder="Minimum size"
+                            />
+                          </div>
+                          <div className="grid w-44 max-w-sm items-center gap-1.5">
+                            <Label htmlFor="email">Max</Label>
+                            <Input
+                              {...form.register(
+                                "company.orgSize.engineeringMax",
+                                {
+                                  valueAsNumber: true,
+                                }
+                              )}
                               placeholder="Maximum size"
                             />
                           </div>
@@ -277,7 +328,7 @@ export function AgentForm() {
 
             <FormField
               control={form.control}
-              name="toolStack"
+              name="tool.include"
               render={({ field }) => (
                 <FormItem>
                   <div className="flex flex-col gap-y-3 justify-between w-full">
@@ -290,10 +341,10 @@ export function AgentForm() {
                     </div>
 
                     <MultiSelect
-                      options={frameworksList}
-                      onValueChange={setSelectedFrameworks}
-                      defaultValue={selectedFrameworks}
-                      placeholder="Select frameworks"
+                      options={stackList}
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Select stack"
                       variant="default"
                     />
                   </div>
@@ -302,6 +353,38 @@ export function AgentForm() {
               )}
             />
           </div>
+          <Separator />
+
+          <div className="flex flex-col gap-y-4">
+            <h3 className="text-xl font-medium pt-8">Persona</h3>
+
+            <FormField
+              control={form.control}
+              name="person.titles"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col gap-y-3 justify-between w-full">
+                    <div className="flex flex-col gap-y-2">
+                      <FormLabel>Titles</FormLabel>
+                      <FormDescription>
+                        Who do you want to talk to?
+                      </FormDescription>
+                    </div>
+
+                    <MultiSelect
+                      options={jobTitlesList}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      placeholder="Select titles"
+                      variant="default"
+                    />
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <div className="flex py-12">
             <Button variant={"primary"} type="submit">
               Save

@@ -20,6 +20,7 @@ export type ToolCriteria = {
 
 export type PersonCriteria = {
     titles: string[];
+    subRoles: string[];
 };
 
 export type Icp = {
