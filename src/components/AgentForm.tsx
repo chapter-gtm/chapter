@@ -51,32 +51,42 @@ import {
 } from "@/types/company";
 
 const agentFormSchema = z.object({
-  company: z.object({
-    funding: z.array(z.string()),
-    headcountMin: z
-      .number({ invalid_type_error: "Min must be a number" })
-      .min(1, "Min must be greater than 0")
-      .max(10000, "Max must not be greater than 10,000")
-      .int(),
-    headcountMax: z
-      .number({ invalid_type_error: "Max must be a number" })
-      .min(1, "Max must be greater than 0 and min")
-      .max(10000, "Max must not be greater than 10,000")
-      .int(),
-    orgSize: z.object({
-      engineeringMin: z
+  company: z
+    .object({
+      funding: z.array(z.string()),
+      headcountMin: z
         .number({ invalid_type_error: "Min must be a number" })
         .min(1, "Min must be greater than 0")
-        .max(1000, "Max must not be greater than 1000")
+        .max(10000, "Max must not be greater than 10,000")
         .int(),
-      engineeringMax: z
+      headcountMax: z
         .number({ invalid_type_error: "Max must be a number" })
         .min(1, "Max must be greater than 0 and min")
-        .max(1000, "Max must not be greater than 1000")
+        .max(10000, "Max must not be greater than 10,000")
         .int(),
+      orgSize: z
+        .object({
+          engineeringMin: z
+            .number({ invalid_type_error: "Min must be a number" })
+            .min(1, "Min must be greater than 0")
+            .max(1000, "Max must not be greater than 1000")
+            .int(),
+          engineeringMax: z
+            .number({ invalid_type_error: "Max must be a number" })
+            .min(1, "Max must be greater than 0 and min")
+            .max(1000, "Max must not be greater than 1000")
+            .int(),
+        })
+        .refine((data) => data.engineeringMax > data.engineeringMin, {
+          message: "Max must be greater than Min",
+          path: ["engineeringMax"],
+        }),
+      countries: z.array(z.string()),
+    })
+    .refine((data) => data.headcountMax > data.headcountMin, {
+      message: "Max must be greater than Min",
+      path: ["headcountMax"],
     }),
-    countries: z.array(z.string()),
-  }),
   tool: z.object({
     include: z.array(z.string()),
     exclude: z.array(z.string()),
@@ -231,21 +241,20 @@ export function AgentForm() {
               <h3 className="text-xl font-medium pt-8">Org structure</h3>
 
               <div>
-                <FormField
-                  control={form.control}
-                  name="company.headcountMin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-col gap-y-6 justify-between">
-                        <div className="flex flex-col gap-y-2">
-                          <FormLabel>Company Headcount</FormLabel>
-                          <FormDescription>
-                            Teamsize can work as a proxy for new roles,
-                            responsibilities and challenges. Both min and max
-                            are optional.
-                          </FormDescription>
-                        </div>
-                        <div className="flex flex-row gap-x-4">
+                <div className="flex flex-col gap-y-2">
+                  <FormLabel>Company Headcount</FormLabel>
+                  <FormDescription>
+                    Teamsize can work as a proxy for new roles, responsibilities
+                    and challenges. Both min and max are optional.
+                  </FormDescription>
+                </div>
+                <div className="flex flex-col gap-y-6 justify-between">
+                  <div className="flex flex-row gap-x-4">
+                    <FormField
+                      control={form.control}
+                      name="company.headcountMin"
+                      render={({ field }) => (
+                        <FormItem>
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Min</Label>
                             <Input
@@ -254,7 +263,16 @@ export function AgentForm() {
                               })}
                               placeholder="Minimum size"
                             />
+                            <FormMessage />
                           </div>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="company.headcountMax"
+                      render={({ field }) => (
+                        <FormItem>
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Max</Label>
                             <Input
@@ -263,31 +281,30 @@ export function AgentForm() {
                               })}
                               placeholder="Maximum size"
                             />
+                            <FormMessage />
                           </div>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
-                <FormField
-                  control={form.control}
-                  name="company.orgSize.engineeringMin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-col gap-y-6 justify-between">
-                        <div className="flex flex-col gap-y-2">
-                          <FormLabel>Engineering Size</FormLabel>
-                          <FormDescription>
-                            Engineering size can work as a proxy for new roles,
-                            responsibilities and challenges. Both min and max
-                            are optional.
-                          </FormDescription>
-                        </div>
-                        <div className="flex flex-row gap-x-4">
+                <div className="flex flex-col gap-y-2">
+                  <FormLabel>Engineering Team Size</FormLabel>
+                  <FormDescription>
+                    Teamsize can work as a proxy for new roles, responsibilities
+                    and challenges. Both min and max are optional.
+                  </FormDescription>
+                </div>
+                <div className="flex flex-col gap-y-6 justify-between">
+                  <div className="flex flex-row gap-x-4">
+                    <FormField
+                      control={form.control}
+                      name="company.orgSize.engineeringMin"
+                      render={({ field }) => (
+                        <FormItem>
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Min</Label>
                             <Input
@@ -299,7 +316,16 @@ export function AgentForm() {
                               )}
                               placeholder="Minimum size"
                             />
+                            <FormMessage />
                           </div>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="company.orgSize.engineeringMax"
+                      render={({ field }) => (
+                        <FormItem>
                           <div className="grid w-44 max-w-sm items-center gap-1.5">
                             <Label htmlFor="email">Max</Label>
                             <Input
@@ -311,13 +337,13 @@ export function AgentForm() {
                               )}
                               placeholder="Maximum size"
                             />
+                            <FormMessage />
                           </div>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
