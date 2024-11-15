@@ -201,6 +201,11 @@ export function getFilters(icp: Icp) {
           icon: DollarSign,
         },
         {
+          value: FundingRound.DEBT_FINANCING,
+          label: FundingRound.DEBT_FINANCING,
+          icon: DollarSign,
+        },
+        {
           value: FundingRound.PUBLIC,
           label: FundingRound.PUBLIC,
           icon: DollarSign,
