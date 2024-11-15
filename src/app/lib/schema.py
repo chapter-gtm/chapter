@@ -59,6 +59,7 @@ class FundingRound(enum.Enum):
     PRIVATE_EQUITY = "Private Equity"
     EQUITY_CROWDFUNDING = "Equity Crowdfunding"
     CORPORATE_ROUND = "Corporate Round"
+    DEBT_FINANCING = "Debt Financing"
     PUBLIC = "Public"
 
 
