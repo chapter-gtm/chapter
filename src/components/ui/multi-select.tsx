@@ -209,7 +209,7 @@ export const MultiSelect = React.forwardRef<
               )}
             >
               <div className="flex items-center justify-between w-full mx-auto text-muted-foreground font-light px-2">
-                Search tools
+                Multi-select
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground" />
               </div>
             </Button>
@@ -301,7 +301,7 @@ export const MultiSelect = React.forwardRef<
           </PopoverContent>
         </Popover>
         {selectedValues.length > 0 ? (
-          <div className="absolute w-full top-12 left-0">
+          <div className="w-full mt-4">
             <div className="flex flex-row gap-x-2 items-center justify-start">
               {selectedValues.slice(0, maxCount).map((value) => {
                 const option = options.find((o) => o.value === value);

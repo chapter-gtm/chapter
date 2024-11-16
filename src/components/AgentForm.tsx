@@ -259,64 +259,57 @@ export function AgentForm() {
   return (
     <>
       <Toaster theme="light" />
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-y-8">
-            <div>
-              <h3 className="text-xl font-medium py-10">Meta data</h3>
-            </div>
+            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+              <div className="flex flex-col py-2 ">
+                <FormField
+                  control={form.control}
+                  name="company.funding"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-4 justify-between relative">
+                        <FormLabel className="text-lg">Funding stage</FormLabel>
 
-            <div>
-              <FormField
-                control={form.control}
-                name="company.funding"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-y-6 justify-between">
-                      <div className="flex flex-col gap-y-2">
-                        <FormLabel>Funding stage</FormLabel>
-                        <FormDescription>
-                          With the assumption that companies of this stage need
-                          your service, and can pay for it.
-                        </FormDescription>
+                        <MultiSelect
+                          options={Object.values(FundingRound).map((value) => ({
+                            label: value,
+                            value: value,
+                          }))}
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                          placeholder="Select frameworks"
+                          variant="default"
+                          className="w-full"
+                        />
                       </div>
-                      <MultiSelect
-                        options={Object.values(FundingRound).map((value) => ({
-                          label: value,
-                          value: value,
-                        }))}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select frameworks"
-                        variant="default"
-                      />
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Separator />
-            <div className="flex flex-col gap-y-4">
-              <h3 className="text-xl font-medium pt-8">Org structure</h3>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              <div>
-                <div className="flex flex-col gap-y-2">
-                  <FormLabel>Company Headcount</FormLabel>
-                  <FormDescription>
-                    Teamsize can work as a proxy for new roles, responsibilities
-                    and challenges. Both min and max are optional.
-                  </FormDescription>
-                </div>
+              <Separator />
+
+              <div className="flex flex-col gap-y-2">
+                <FormLabel className="text-lg">Company Headcount</FormLabel>
+
                 <div className="flex flex-col gap-y-6 justify-between">
                   <div className="flex flex-row gap-x-4">
                     <FormField
                       control={form.control}
                       name="company.headcountMin"
                       render={({ field }) => (
-                        <FormItem>
-                          <div className="grid w-44 max-w-sm items-center gap-1.5">
-                            <Label htmlFor="email">Min</Label>
+                        <FormItem className="flex flex-col flex-grow">
+                          <div className="flex flex-col items-start gap-1.5">
+                            <Label
+                              htmlFor="email"
+                              className="text-muted-foreground"
+                            >
+                              Min
+                            </Label>
                             <Input
                               {...form.register("company.headcountMin", {
                                 valueAsNumber: true,
@@ -332,9 +325,14 @@ export function AgentForm() {
                       control={form.control}
                       name="company.headcountMax"
                       render={({ field }) => (
-                        <FormItem>
-                          <div className="grid w-44 max-w-sm items-center gap-1.5">
-                            <Label htmlFor="email">Max</Label>
+                        <FormItem className="flex flex-col flex-grow">
+                          <div className="flex flex-col  items-start gap-1.5">
+                            <Label
+                              htmlFor="email"
+                              className="text-muted-foreground"
+                            >
+                              Max
+                            </Label>
                             <Input
                               {...form.register("company.headcountMax", {
                                 valueAsNumber: true,
@@ -350,23 +348,25 @@ export function AgentForm() {
                 </div>
               </div>
 
-              <div>
-                <div className="flex flex-col gap-y-2">
-                  <FormLabel>Engineering Team Size</FormLabel>
-                  <FormDescription>
-                    Teamsize can work as a proxy for new roles, responsibilities
-                    and challenges. Both min and max are optional.
-                  </FormDescription>
-                </div>
+              <Separator />
+
+              <div className="flex flex-col gap-y-2">
+                <FormLabel className="text-lg">Engineering Team Size</FormLabel>
+
                 <div className="flex flex-col gap-y-6 justify-between">
                   <div className="flex flex-row gap-x-4">
                     <FormField
                       control={form.control}
                       name="company.orgSize.engineeringMin"
                       render={({ field }) => (
-                        <FormItem>
-                          <div className="grid w-44 max-w-sm items-center gap-1.5">
-                            <Label htmlFor="email">Min</Label>
+                        <FormItem className="flex flex-col flex-grow">
+                          <div className="flex flex-col items-start gap-1.5">
+                            <Label
+                              htmlFor="email"
+                              className="text-muted-foreground"
+                            >
+                              Min
+                            </Label>
                             <Input
                               {...form.register(
                                 "company.orgSize.engineeringMin",
@@ -385,9 +385,14 @@ export function AgentForm() {
                       control={form.control}
                       name="company.orgSize.engineeringMax"
                       render={({ field }) => (
-                        <FormItem>
-                          <div className="grid w-44 max-w-sm items-center gap-1.5">
-                            <Label htmlFor="email">Max</Label>
+                        <FormItem className="flex flex-col flex-grow">
+                          <div className="flex flex-col items-start gap-1.5">
+                            <Label
+                              htmlFor="email"
+                              className="text-muted-foreground"
+                            >
+                              Max
+                            </Label>
                             <Input
                               {...form.register(
                                 "company.orgSize.engineeringMax",
@@ -406,75 +411,68 @@ export function AgentForm() {
                 </div>
               </div>
             </div>
-          </div>
-          <Separator />
 
-          <div className="flex flex-col gap-y-4">
-            <h3 className="text-xl font-medium pt-8">Search criteria</h3>
+            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+              <FormField
+                control={form.control}
+                name="tool.include"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-col gap-y-3 justify-between w-full">
+                      <div className="flex flex-col gap-y-2">
+                        <FormLabel className="text-lg">Tool Stack</FormLabel>
+                      </div>
 
-            <FormField
-              control={form.control}
-              name="tool.include"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-y-3 justify-between w-full">
-                    <div className="flex flex-col gap-y-2">
-                      <FormLabel>Tool Stack</FormLabel>
-                      <FormDescription>
-                        If knowing the tool stack is a proxy that they care
-                        about your service.
-                      </FormDescription>
+                      <MultiSelect
+                        className="w-full"
+                        options={stackList}
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                        placeholder="Select stack"
+                        variant="default"
+                      />
                     </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-                    <MultiSelect
-                      options={stackList}
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                      placeholder="Select stack"
-                      variant="default"
-                    />
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Separator />
+            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+              <FormField
+                control={form.control}
+                name="person.titles"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex flex-col gap-y-3 justify-between w-full">
+                      <div className="flex flex-col gap-y-2">
+                        <FormLabel className="text-lg">Personas</FormLabel>
+                      </div>
 
-          <div className="flex flex-col gap-y-4">
-            <h3 className="text-xl font-medium pt-8">Persona</h3>
-
-            <FormField
-              control={form.control}
-              name="person.titles"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex flex-col gap-y-3 justify-between w-full">
-                    <div className="flex flex-col gap-y-2">
-                      <FormLabel>Titles</FormLabel>
-                      <FormDescription>
-                        Who do you want to talk to?
-                      </FormDescription>
+                      <MultiSelect
+                        options={jobTitlesList}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        placeholder="Select titles"
+                        variant="default"
+                        className="w-full"
+                      />
                     </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-                    <MultiSelect
-                      options={jobTitlesList}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      placeholder="Select titles"
-                      variant="default"
-                    />
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex py-12">
-            <Button variant={"primary"} type="submit">
-              Save
-            </Button>
+            <div className="flex">
+              <Button
+                variant={"primary"}
+                type="submit"
+                className="text-base px-6"
+              >
+                Save
+              </Button>
+            </div>
           </div>
         </form>
       </Form>
