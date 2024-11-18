@@ -4,7 +4,7 @@ import { type Icp } from "@/types/icp";
 import { type Opportunity } from "@/types/opportunity";
 import { FundingRound } from "@/types/company";
 import { type Location } from "@/types/location";
-import { getIcp } from "@/utils/chapter/icp";
+import { getIcps } from "@/utils/chapter/icp";
 import { getOpportunities } from "@/utils/chapter/opportunity";
 import {
   getUserProfile,
@@ -70,7 +70,11 @@ export function OpportunitiesMain() {
   useEffect(() => {
     const fetchIcpAndOpportunities = async () => {
       try {
-        const currentUserIcp = await getIcp();
+        const currentUserIcps = await getIcps();
+        if (currentUserIcps === null || currentUserIcps.length <= 0) {
+          throw new Error("Failed to fetch ICP");
+        }
+
         const opportunities = await getOpportunities(
           1000,
           1,
@@ -102,7 +106,7 @@ export function OpportunitiesMain() {
             return record;
           })
         );
-        setIcp(currentUserIcp);
+        setIcp(currentUserIcps[0]);
         setOpportunityMap(oppMap);
         setRecords(tableRecords);
         setIsPopulated(true);
@@ -110,7 +114,7 @@ export function OpportunitiesMain() {
         // Populate columns
         setRecordColumns(
           getRecordColumns(
-            currentUserIcp,
+            currentUserIcps[0],
             updateOpportunityCallback,
             handleOpenDrawerCallback
           )

@@ -29,7 +29,7 @@ import {
 import { AppleLogo } from "../icons";
 import { GooglePlayLogo } from "../icons";
 
-import { getIcp } from "@/utils/chapter/icp";
+import { getIcps } from "@/utils/chapter/icp";
 
 import { useState, useEffect } from "react";
 import {
@@ -110,7 +110,11 @@ export function OpportunityPropList({
   useEffect(() => {
     const fetchIcp = async () => {
       try {
-        setIcp(await getIcp());
+        const currentUserIcps = await getIcps();
+        if (currentUserIcps === null || currentUserIcps.length <= 0) {
+          throw new Error("Failed to fetch ICP");
+        }
+        setIcp(currentUserIcps[0]);
       } catch (error) {
         toast.error("Failed to get ICP.");
       }

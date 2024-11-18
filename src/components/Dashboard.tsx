@@ -9,7 +9,7 @@ import {
   Inbox,
   Users,
 } from "lucide-react";
-import { getIcp } from "@/utils/chapter/icp";
+import { getIcps } from "@/utils/chapter/icp";
 
 import { TrendingUp, BellDot } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
@@ -63,8 +63,13 @@ export function Dashboard() {
 
   useEffect(() => {
     const fetchIcp = async () => {
-      const currentUserIcp = await getIcp();
-      setIcp(currentUserIcp);
+      const currentUserIcps = await getIcps();
+
+      if (currentUserIcps === null || currentUserIcps.length <= 0) {
+        toast.success("Failed to fetch ICP");
+      } else {
+        setIcp(currentUserIcps[0]);
+      }
     };
 
     const fetchOpportunities = async () => {
