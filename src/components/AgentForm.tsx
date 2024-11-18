@@ -468,7 +468,7 @@ export function AgentForm() {
               <Button
                 variant={"primary"}
                 type="submit"
-                className="text-base px-6"
+                className="text-base px-6 text-white"
               >
                 Save
               </Button>
