@@ -54,13 +54,13 @@ const agentFormSchema = z.object({
           engineeringMin: z
             .number({ invalid_type_error: "Min must be a number" })
             .min(1, "Min must be greater than 0")
-            .max(1000, "Max must not be greater than 1000")
+            .max(2000, "Max must not be greater than 1000")
             .int()
             .default(1),
           engineeringMax: z
             .number({ invalid_type_error: "Max must be a number" })
             .min(1, "Max must be greater than 0 and min")
-            .max(1000, "Max must not be greater than 1000")
+            .max(2000, "Max must not be greater than 1000")
             .int()
             .default(100),
         })
