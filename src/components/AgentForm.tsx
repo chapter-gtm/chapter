@@ -168,7 +168,7 @@ const jobTitlesAliasMap: Record<string, string[]> = {
     "Head of Product",
     "Director of Product",
   ],
-  "Tech Lead / Staff Engineer": [
+  "Tech Lead / Staff Engineer / EM": [
     "Tech Lead",
     "Staff Engineer",
     "Engineering Manager",
@@ -251,6 +251,7 @@ export function AgentForm() {
         }
       });
 
+      console.log(titleKeys);
       icp.person.titles = Array.from(titleKeys);
       form.reset(icp);
     }
