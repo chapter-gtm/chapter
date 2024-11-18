@@ -4,11 +4,7 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ICPCriteria() {
-  const icpList = [
-    { value: "primary" },
-    { value: "secondary" },
-    { value: "testing" },
-  ];
+  const icpList = [{ value: "Primary" }];
 
   return (
     <>
@@ -39,7 +35,7 @@ export default function ICPCriteria() {
               </div>
             </div>
 
-            <Tabs defaultValue="primary" className="grid grid-cols-4 gap-2">
+            <Tabs defaultValue="Primary" className="grid grid-cols-4 gap-2">
               {/* Start of left column */}
               <div className="col-span-1 pb-20 py-2">
                 <div className="flex flex-col gap-y-2">
@@ -48,19 +44,18 @@ export default function ICPCriteria() {
                     {icpList.map((icp, index) => (
                       <TabsTrigger
                         key={index}
-                        value="{icp.value}"
+                        value={icp.value}
                         className="py-3 w-full bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
                       >
                         <div className="flex w-full text-base">{icp.value}</div>
                       </TabsTrigger>
                     ))}
                   </TabsList>
-                  <div className="p-3 text-sm font-medium ">+ Add new</div>
                 </div>
               </div>
               {/* Start of right column: content */}
               <TabsContent
-                value="primary"
+                value="Primary"
                 className="col-span-3 flex flex-col gap-y-4 pb-20 px-6"
               >
                 <AgentForm />

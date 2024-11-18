@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
 import { type Icp } from "@/types/icp";
-import { getIcp, updateIcp } from "@/utils/chapter/icp";
+import { getIcps, updateIcp } from "@/utils/chapter/icp";
 
 import { FundingRound } from "@/types/company";
 
@@ -193,11 +193,15 @@ export function AgentForm() {
           key in jobTitlesAliasMap ? jobTitlesAliasMap[key] : [key]
         )
         .flat();
-      const updatedIcp = await updateIcp(data as Icp);
+
+      if (icp === null) {
+        throw new Error("ICP not found");
+      }
+      const updatedIcp = await updateIcp(icp.id, data as Icp);
       setIcp(updatedIcp);
       toast.success("ICP Saved!");
     } catch (error: any) {
-      toast.error("Failed to load data.", { description: error.toString() });
+      toast.error("Failed to save ICP.", { description: error.toString() });
     }
   };
 
@@ -207,8 +211,12 @@ export function AgentForm() {
 
   useEffect(() => {
     const fetchIcp = async () => {
-      const currentUserIcp = await getIcp();
-      setIcp(currentUserIcp);
+      const currentUserIcps = await getIcps();
+      if (currentUserIcps === null || currentUserIcps.length <= 0) {
+        toast.success("Failed to fetch ICP");
+      } else {
+        setIcp(currentUserIcps[0]);
+      }
     };
     fetchIcp();
   }, []);
@@ -246,27 +254,207 @@ export function AgentForm() {
     <>
       <Toaster theme="light" />
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onError)}>
-          <div className="flex flex-col gap-y-8">
-            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-              <div className="flex flex-col py-2 ">
+      {icp !== null && (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit, onError)}>
+            <div className="flex flex-col gap-y-8">
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+                <div className="flex flex-col py-2 ">
+                  <FormField
+                    control={form.control}
+                    name="company.funding"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex flex-col gap-y-4 justify-between relative">
+                          <FormLabel className="text-lg">
+                            Funding stage
+                          </FormLabel>
+
+                          <MultiSelect
+                            options={Object.values(FundingRound).map(
+                              (value) => ({
+                                label: value,
+                                value: value,
+                              })
+                            )}
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            placeholder="Select frameworks"
+                            variant="default"
+                            className="w-full"
+                          />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Separator />
+
+                <div className="flex flex-col gap-y-2">
+                  <FormLabel className="text-lg">Company Headcount</FormLabel>
+
+                  <div className="flex flex-col gap-y-6 justify-between">
+                    <div className="flex flex-row gap-x-4">
+                      <FormField
+                        control={form.control}
+                        name="company.headcountMin"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col flex-grow">
+                            <div className="flex flex-col items-start gap-1.5">
+                              <Label
+                                htmlFor="email"
+                                className="text-muted-foreground"
+                              >
+                                Min
+                              </Label>
+                              <Input
+                                {...form.register("company.headcountMin", {
+                                  valueAsNumber: true,
+                                })}
+                                placeholder="Minimum size"
+                              />
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="company.headcountMax"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col flex-grow">
+                            <div className="flex flex-col  items-start gap-1.5">
+                              <Label
+                                htmlFor="email"
+                                className="text-muted-foreground"
+                              >
+                                Max
+                              </Label>
+                              <Input
+                                {...form.register("company.headcountMax", {
+                                  valueAsNumber: true,
+                                })}
+                                placeholder="Maximum size"
+                              />
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="flex flex-col gap-y-2">
+                  <FormLabel className="text-lg">
+                    Engineering Team Size
+                  </FormLabel>
+
+                  <div className="flex flex-col gap-y-6 justify-between">
+                    <div className="flex flex-row gap-x-4">
+                      <FormField
+                        control={form.control}
+                        name="company.orgSize.engineeringMin"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col flex-grow">
+                            <div className="flex flex-col items-start gap-1.5">
+                              <Label
+                                htmlFor="email"
+                                className="text-muted-foreground"
+                              >
+                                Min
+                              </Label>
+                              <Input
+                                {...form.register(
+                                  "company.orgSize.engineeringMin",
+                                  {
+                                    valueAsNumber: true,
+                                  }
+                                )}
+                                placeholder="Minimum size"
+                              />
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="company.orgSize.engineeringMax"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col flex-grow">
+                            <div className="flex flex-col items-start gap-1.5">
+                              <Label
+                                htmlFor="email"
+                                className="text-muted-foreground"
+                              >
+                                Max
+                              </Label>
+                              <Input
+                                {...form.register(
+                                  "company.orgSize.engineeringMax",
+                                  {
+                                    valueAsNumber: true,
+                                  }
+                                )}
+                                placeholder="Maximum size"
+                              />
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
                 <FormField
                   control={form.control}
-                  name="company.funding"
+                  name="tool.include"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex flex-col gap-y-4 justify-between relative">
-                        <FormLabel className="text-lg">Funding stage</FormLabel>
+                      <div className="flex flex-col gap-y-3 justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel className="text-lg">Tool Stack</FormLabel>
+                        </div>
 
                         <MultiSelect
-                          options={Object.values(FundingRound).map((value) => ({
-                            label: value,
-                            value: value,
-                          }))}
+                          className="w-full"
+                          options={stackList}
                           defaultValue={field.value}
                           onValueChange={field.onChange}
-                          placeholder="Select frameworks"
+                          placeholder="Select stack"
+                          variant="default"
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+                <FormField
+                  control={form.control}
+                  name="person.titles"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-3 justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel className="text-lg">Personas</FormLabel>
+                        </div>
+
+                        <MultiSelect
+                          options={jobTitlesList}
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          placeholder="Select titles"
                           variant="default"
                           className="w-full"
                         />
@@ -277,191 +465,19 @@ export function AgentForm() {
                 />
               </div>
 
-              <Separator />
-
-              <div className="flex flex-col gap-y-2">
-                <FormLabel className="text-lg">Company Headcount</FormLabel>
-
-                <div className="flex flex-col gap-y-6 justify-between">
-                  <div className="flex flex-row gap-x-4">
-                    <FormField
-                      control={form.control}
-                      name="company.headcountMin"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col flex-grow">
-                          <div className="flex flex-col items-start gap-1.5">
-                            <Label
-                              htmlFor="email"
-                              className="text-muted-foreground"
-                            >
-                              Min
-                            </Label>
-                            <Input
-                              {...form.register("company.headcountMin", {
-                                valueAsNumber: true,
-                              })}
-                              placeholder="Minimum size"
-                            />
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="company.headcountMax"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col flex-grow">
-                          <div className="flex flex-col  items-start gap-1.5">
-                            <Label
-                              htmlFor="email"
-                              className="text-muted-foreground"
-                            >
-                              Max
-                            </Label>
-                            <Input
-                              {...form.register("company.headcountMax", {
-                                valueAsNumber: true,
-                              })}
-                              placeholder="Maximum size"
-                            />
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="flex flex-col gap-y-2">
-                <FormLabel className="text-lg">Engineering Team Size</FormLabel>
-
-                <div className="flex flex-col gap-y-6 justify-between">
-                  <div className="flex flex-row gap-x-4">
-                    <FormField
-                      control={form.control}
-                      name="company.orgSize.engineeringMin"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col flex-grow">
-                          <div className="flex flex-col items-start gap-1.5">
-                            <Label
-                              htmlFor="email"
-                              className="text-muted-foreground"
-                            >
-                              Min
-                            </Label>
-                            <Input
-                              {...form.register(
-                                "company.orgSize.engineeringMin",
-                                {
-                                  valueAsNumber: true,
-                                }
-                              )}
-                              placeholder="Minimum size"
-                            />
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="company.orgSize.engineeringMax"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col flex-grow">
-                          <div className="flex flex-col items-start gap-1.5">
-                            <Label
-                              htmlFor="email"
-                              className="text-muted-foreground"
-                            >
-                              Max
-                            </Label>
-                            <Input
-                              {...form.register(
-                                "company.orgSize.engineeringMax",
-                                {
-                                  valueAsNumber: true,
-                                }
-                              )}
-                              placeholder="Maximum size"
-                            />
-                            <FormMessage />
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
+              <div className="flex">
+                <Button
+                  variant={"primary"}
+                  type="submit"
+                  className="text-base px-6 text-white"
+                >
+                  Save
+                </Button>
               </div>
             </div>
-
-            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-              <FormField
-                control={form.control}
-                name="tool.include"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-y-3 justify-between w-full">
-                      <div className="flex flex-col gap-y-2">
-                        <FormLabel className="text-lg">Tool Stack</FormLabel>
-                      </div>
-
-                      <MultiSelect
-                        className="w-full"
-                        options={stackList}
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        placeholder="Select stack"
-                        variant="default"
-                      />
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-              <FormField
-                control={form.control}
-                name="person.titles"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-col gap-y-3 justify-between w-full">
-                      <div className="flex flex-col gap-y-2">
-                        <FormLabel className="text-lg">Personas</FormLabel>
-                      </div>
-
-                      <MultiSelect
-                        options={jobTitlesList}
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        placeholder="Select titles"
-                        variant="default"
-                        className="w-full"
-                      />
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex">
-              <Button
-                variant={"primary"}
-                type="submit"
-                className="text-base px-6 text-white"
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </form>
-      </Form>
+          </form>
+        </Form>
+      )}
     </>
   );
 }
