@@ -484,7 +484,7 @@ export function AgentForm() {
                         <Textarea
                           {...form.register("pitch")}
                           placeholder="Type your short pitch here."
-                          maxLength={120}
+                          maxLength={200}
                         />
                       </div>
                       <FormMessage />
