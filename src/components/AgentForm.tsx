@@ -251,7 +251,6 @@ export function AgentForm() {
         }
       });
 
-      console.log(titleKeys);
       icp.person.titles = Array.from(titleKeys);
       form.reset(icp);
     }
