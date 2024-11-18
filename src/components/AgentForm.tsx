@@ -20,6 +20,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 import { MultiSelect } from "@/components/ui/multi-select";
 
@@ -81,6 +82,9 @@ const agentFormSchema = z.object({
     titles: z.array(z.string()),
     subRoles: z.array(z.string()),
   }),
+  pitch: z
+    .string()
+    .max(200, { message: "Pitch cannot exceed 150 characters." }),
 });
 
 const multiSelectVariants = cva(
@@ -180,6 +184,7 @@ export function AgentForm() {
         exclude: [],
       },
       person: { titles: ["Founder", "CTO"], subRoles: [] },
+      pitch: "",
     },
   });
 
@@ -457,6 +462,29 @@ export function AgentForm() {
                           placeholder="Select titles"
                           variant="default"
                           className="w-full"
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+                <FormField
+                  control={form.control}
+                  name="pitch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-3 justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel className="text-lg">Pitch</FormLabel>
+                        </div>
+
+                        <Textarea
+                          {...form.register("pitch")}
+                          placeholder="Type your short pitch here."
+                          maxLength={120}
                         />
                       </div>
                       <FormMessage />

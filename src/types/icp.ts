@@ -28,4 +28,5 @@ export type Icp = {
     company: CompanyCriteria;
     tool: ToolCriteria;
     person: PersonCriteria;
+    pitch: string;
 };
