@@ -47,7 +47,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  console.log(columnId);
   const cellValue = String(row.getValue(columnId));
   const tokens = cellValue.split(",").map((token) => token.trim());
 

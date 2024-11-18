@@ -161,7 +161,6 @@ export function Dashboard() {
             yValue !== null
           ) {
             p = ((yValue ?? 0) / previousValue) * 100;
-            console.log(p);
           } else if (previousValue === null) {
             p = 100;
           } else {
@@ -177,8 +176,6 @@ export function Dashboard() {
         }
 
         setOpportunityByStageChartData(chartData);
-        console.log("Data::::");
-        console.log(chartData);
       } catch (error: any) {}
     };
 
