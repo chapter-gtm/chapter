@@ -516,10 +516,20 @@ class ICPService(SQLAlchemyAsyncRepositoryService[ICP]):
         self.repository: ICPRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
-    async def get_by_tenant_id(
+    async def get_icps(
         self,
+        *filters: FilterTypes,
+        tenant_id: UUID,
+        **kwargs: Any,
+    ) -> tuple[list[ICP], int]:
+        """Get all ICPs for a tenant."""
+        return await self.repository.get_icps(*filters, tenant_id=tenant_id, **kwargs)
+
+    async def get_icp(
+        self,
+        icp_id: UUID,
         tenant_id: UUID,
         **kwargs: Any,
     ) -> ICP:
         """Get icp details."""
-        return await self.repository.get_by_tenant_id(tenant_id=tenant_id)
+        return await self.repository.get_icp(icp_id=icp_id, tenant_id=tenant_id)

@@ -74,11 +74,30 @@ class ICPRepository(SQLAlchemyAsyncRepository[ICP]):
     model_type = ICP
     match_fields = ["id"]
 
-    async def get_by_tenant_id(
+    async def get_icps(
         self,
+        *filters: FilterTypes | ColumnElement[bool],
+        tenant_id: UUID,
+        auto_expunge: bool | None = None,
+        force_basic_query_mode: bool | None = None,
+        **kwargs: Any,
+    ) -> tuple[list[ICP], int]:
+        """Get paginated list and total count of opportunities that a tenant can access."""
+
+        return await self.list_and_count(
+            *filters,
+            statement=select(ICP).where(ICP.tenant_id == tenant_id).order_by(ICP.created_at.asc()),
+            auto_expunge=auto_expunge,
+            force_basic_query_mode=force_basic_query_mode,
+            **kwargs,
+        )
+
+    async def get_icp(
+        self,
+        icp_id: UUID,
         tenant_id: UUID,
     ) -> ICP:
         """Get an icp along with it's associated details."""
         return await self.get_one(
-            statement=select(ICP).where(ICP.tenant_id == tenant_id).options(),
+            statement=select(ICP).where((ICP.id == icp_id) & (ICP.tenant_id == tenant_id)).options(),
         )

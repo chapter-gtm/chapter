@@ -80,10 +80,12 @@ class OpportunityUpdate(CamelizedBaseStruct):
 class ICP(CamelizedBaseStruct):
     """An ICP."""
 
+    id: UUID
     name: str
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
     person: PersonCriteria | None = None
+    pitch: str | None = None
 
 
 class ICPCreate(CamelizedBaseStruct):
@@ -93,6 +95,7 @@ class ICPCreate(CamelizedBaseStruct):
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
     person: PersonCriteria | None = None
+    pitch: str | None = None
 
 
 class ICPUpdate(CamelizedBaseStruct):
@@ -102,3 +105,4 @@ class ICPUpdate(CamelizedBaseStruct):
     company: CompanyCriteria | None | msgspec.UnsetType = msgspec.UNSET
     tool: ToolCriteria | None | msgspec.UnsetType = msgspec.UNSET
     person: PersonCriteria | None | msgspec.UnsetType = msgspec.UNSET
+    pitch: str | None | msgspec.UnsetType = msgspec.UNSET
