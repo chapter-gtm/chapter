@@ -1,22 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { z } from "zod";
 
 import * as React from "react";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,14 +23,6 @@ import { Label } from "@/components/ui/label";
 
 import { MultiSelect } from "@/components/ui/multi-select";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui//textarea";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -43,12 +30,7 @@ import { Separator } from "@/components/ui/separator";
 import { type Icp } from "@/types/icp";
 import { getIcp, updateIcp } from "@/utils/chapter/icp";
 
-import {
-  ToolStack,
-  EngineeringSize,
-  FundingRound,
-  Industry,
-} from "@/types/company";
+import { FundingRound } from "@/types/company";
 
 const agentFormSchema = z.object({
   company: z
@@ -219,6 +201,10 @@ export function AgentForm() {
     }
   };
 
+  const onError = (errors: FieldValues) => {
+    toast.error("Failed to validate data.");
+  };
+
   useEffect(() => {
     const fetchIcp = async () => {
       const currentUserIcp = await getIcp();
@@ -261,7 +247,7 @@ export function AgentForm() {
       <Toaster theme="light" />
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit, onError)}>
           <div className="flex flex-col gap-y-8">
             <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
               <div className="flex flex-col py-2 ">
