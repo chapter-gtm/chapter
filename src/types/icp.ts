@@ -25,6 +25,7 @@ export type PersonCriteria = {
 
 export type Icp = {
     id: string;
+    name: string;
     company: CompanyCriteria;
     tool: ToolCriteria;
     person: PersonCriteria;

@@ -27,16 +27,19 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { MultiSelect } from "@/components/ui/multi-select";
 
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
 import { type Icp } from "@/types/icp";
-import { getIcps, updateIcp } from "@/utils/chapter/icp";
+import { updateIcp } from "@/utils/chapter/icp";
 
 import { FundingRound } from "@/types/company";
 
 const agentFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Add ICP should have a unique name." })
+    .max(20, { message: "ICP name cannot exceed 20 characters." }),
   company: z
     .object({
       funding: z.array(z.string()),
@@ -168,11 +171,17 @@ const jobTitlesAliasMap: Record<string, string[]> = {
 
 type AgentFormValues = z.infer<typeof agentFormSchema>;
 
-export function AgentForm() {
+interface AgentFormProps {
+  icp: Icp;
+  refreshIcp: (updatedIcp: Icp) => void;
+}
+
+export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
   const form = useForm<AgentFormValues>({
     resolver: zodResolver(agentFormSchema),
     mode: "onBlur",
     defaultValues: {
+      name: "New ICP",
       company: {
         funding: ["Seed", "Series A", "Series B"],
         headcountMin: 10,
@@ -191,8 +200,6 @@ export function AgentForm() {
     },
   });
 
-  const [icp, setIcp] = useState<Icp | null>(null);
-
   const onSubmit = async (data: AgentFormValues) => {
     try {
       // Deaggregate titles before saving
@@ -206,7 +213,7 @@ export function AgentForm() {
         throw new Error("ICP not found");
       }
       const updatedIcp = await updateIcp(icp.id, data as Icp);
-      setIcp(updatedIcp);
+      refreshIcp(updatedIcp);
       toast.success("ICP Saved!");
     } catch (error: any) {
       toast.error("Failed to save ICP.", { description: error.toString() });
@@ -216,18 +223,6 @@ export function AgentForm() {
   const onError = (errors: FieldValues) => {
     toast.error("Failed to validate data.");
   };
-
-  useEffect(() => {
-    const fetchIcp = async () => {
-      const currentUserIcps = await getIcps();
-      if (currentUserIcps === null || currentUserIcps.length <= 0) {
-        toast.success("Failed to fetch ICP");
-      } else {
-        setIcp(currentUserIcps[0]);
-      }
-    };
-    fetchIcp();
-  }, []);
 
   useEffect(() => {
     if (icp !== null) {
@@ -260,8 +255,6 @@ export function AgentForm() {
 
   return (
     <>
-      <Toaster theme="light" />
-
       {icp !== null && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit, onError)}>
@@ -290,14 +283,14 @@ export function AgentForm() {
                   {/* <FormLabel className="text-lg">Agent name</FormLabel> */}
                   <FormField
                     control={form.control}
-                    name="icp.name"
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
                         <div className="flex flex-col gap-y-3 justify-between w-full">
                           <Input
-                            {...form.register("icp.name")}
-                            placeholder="Agent's name"
-                            maxLength={200}
+                            {...form.register("name")}
+                            placeholder="ICP name"
+                            maxLength={20}
                             className="text-base"
                           />
                         </div>
@@ -319,7 +312,7 @@ export function AgentForm() {
                             Your value proposition
                           </FormLabel>
                           <FormDescription>
-                            The value you bring, use-case or problem you're
+                            The value you bring, use-case or problem you&apos;re
                             solving for this specific ICP
                           </FormDescription>
                         </div>
