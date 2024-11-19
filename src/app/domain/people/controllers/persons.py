@@ -174,7 +174,7 @@ class PersonController(Controller):
             ),
             personal_emails=person_details.get("personal_emails", []),
             work_email=work_email,
-            personal_numbers=person_details.get("personal_numbers", []),
+            phone_numbers=person_details.get("phone_numbers", []),
             birth_date=birth_date,
             work_experiences=work_experiences,
             skills=person_details.get("skills"),

@@ -424,7 +424,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                                 ),
                                 personal_emails=person_details.get("personal_emails", []),
                                 work_email=work_email,
-                                personal_numbers=person_details.get("personal_numbers", []),
+                                phone_numbers=person_details.get("phone_numbers", []),
                                 birth_date=birth_date,
                                 work_experiences=work_experiences,
                                 company_id=job_post.company.id,
@@ -451,7 +451,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         context["job_post"] = await extract_context_from_job_post(job_post.body, icp.pitch)
                     else:
                         logger.warn(
-                            "Cannot generate opportunity context, job post body or icp pitch missing",
+                            "Cannot generate opportunity highlight, job post body or icp pitch missing",
                             job_post_id=job_post.id,
                             icp=icp.id,
                         )

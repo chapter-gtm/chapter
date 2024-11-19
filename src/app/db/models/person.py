@@ -29,7 +29,7 @@ class Person(UUIDAuditBase, SlugKey):
         "profile_pic_url",
         "personal_emails",
         "work_emails",
-        "personal_numbers",
+        "phone_numbers",
         "social_activities",
     }
     first_name: Mapped[str] = mapped_column(nullable=True, default=None)
@@ -54,7 +54,7 @@ class Person(UUIDAuditBase, SlugKey):
     location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     personal_emails: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)
     work_email: Mapped[str | None] = mapped_column(nullable=True, default=None)
-    personal_numbers: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)
+    phone_numbers: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)
     birth_date: Mapped[date | None] = mapped_column(nullable=True, default=None)
     gender: Mapped[str | None] = mapped_column(nullable=True, default=None)
     languages: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True, default=None)

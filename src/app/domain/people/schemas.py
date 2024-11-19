@@ -32,7 +32,7 @@ class Person(CamelizedBaseStruct):
     location: Location | None = None
     personal_emails: list[str] | None = None
     work_email: str | None = None
-    personal_numbers: list[str] | None = None
+    phone_numbers: list[str] | None = None
     birth_date: date | None = None
     gender: str | None = None
     languages: list[str] | None = None
@@ -60,7 +60,7 @@ class PersonCreate(CamelizedBaseStruct):
     location: Location | None = None
     personal_emails: list[str] | None = None
     work_email: str | None = None
-    personal_numbers: list[str] | None = None
+    phone_numbers: list[str] | None = None
     birth_date: date | None = None
     gender: str | None = None
     languages: list[str] | None = None
