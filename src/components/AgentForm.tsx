@@ -9,9 +9,12 @@ import * as React from "react";
 
 import { cva } from "class-variance-authority";
 
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -264,6 +267,77 @@ export function AgentForm() {
           <form onSubmit={form.handleSubmit(onSubmit, onError)}>
             <div className="flex flex-col gap-y-8">
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+                {/* Start of header */}
+                <div className="flex flex-col rounded-xl justify-center items-center bg-popover py-8">
+                  <Image
+                    src="/images/customIcons/agent.svg"
+                    width={70}
+                    height={70}
+                    alt="Inbox"
+                    className="hidden dark:block"
+                  />
+                  <Image
+                    src="/images/customIcons/agent-light.svg"
+                    width={70}
+                    height={70}
+                    alt="Inbox"
+                    className="dark:hidden"
+                  />
+                </div>
+
+                {/* Start of name */}
+                <div className="flex flex-col gap-y-2">
+                  {/* <FormLabel className="text-lg">Agent name</FormLabel> */}
+                  <FormField
+                    control={form.control}
+                    name="icp.name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex flex-col gap-y-3 justify-between w-full">
+                          <Input
+                            {...form.register("icp.name")}
+                            placeholder="Agent's name"
+                            maxLength={200}
+                            className="text-base"
+                          />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Start of pitch */}
+                <FormField
+                  control={form.control}
+                  name="pitch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-3 justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel className="text-lg">
+                            Your value proposition
+                          </FormLabel>
+                          <FormDescription>
+                            The value you bring, use-case or problem you're
+                            solving for this specific ICP
+                          </FormDescription>
+                        </div>
+
+                        <Textarea
+                          {...form.register("pitch")}
+                          placeholder="Type your short pitch here."
+                          maxLength={200}
+                          className="bg-transparent border-border text-base font-normal"
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
                 <div className="flex flex-col py-2 ">
                   <FormField
                     control={form.control}
@@ -427,6 +501,10 @@ export function AgentForm() {
                       <div className="flex flex-col gap-y-3 justify-between w-full">
                         <div className="flex flex-col gap-y-2">
                           <FormLabel className="text-lg">Tool Stack</FormLabel>
+                          <FormDescription>
+                            Tools, libraries or frameworks that can be used as
+                            proxy, e.g. Docker, Kubernetes, etc.
+                          </FormDescription>
                         </div>
 
                         <MultiSelect
@@ -453,6 +531,9 @@ export function AgentForm() {
                       <div className="flex flex-col gap-y-3 justify-between w-full">
                         <div className="flex flex-col gap-y-2">
                           <FormLabel className="text-lg">Personas</FormLabel>
+                          <FormDescription>
+                            Team members you wish to contact
+                          </FormDescription>
                         </div>
 
                         <MultiSelect
@@ -462,29 +543,6 @@ export function AgentForm() {
                           placeholder="Select titles"
                           variant="default"
                           className="w-full"
-                        />
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-                <FormField
-                  control={form.control}
-                  name="pitch"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-col gap-y-3 justify-between w-full">
-                        <div className="flex flex-col gap-y-2">
-                          <FormLabel className="text-lg">Pitch</FormLabel>
-                        </div>
-
-                        <Textarea
-                          {...form.register("pitch")}
-                          placeholder="Type your short pitch here."
-                          maxLength={200}
                         />
                       </div>
                       <FormMessage />
