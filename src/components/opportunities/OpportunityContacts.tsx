@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { timeAgo } from "@/utils/misc";
+import { timeAgo, formatPhoneNumber } from "@/utils/misc";
 import { type Person } from "@/types/person";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -49,6 +49,7 @@ import {
   Heart,
   GraduationCap,
   Send,
+  Phone,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -66,32 +67,28 @@ interface OpportunityDrawerProps {
   opportunity: Opportunity;
 }
 
-const handleCopyRecordLink = async (email: string | null) => {
+const handleCopyEmail = async (email: string | null) => {
   try {
     const currentDomain = window.location.host;
     await navigator.clipboard.writeText(`${email}`);
     toast.success("Email copied to clipboard");
   } catch (error: any) {
-    toast.error("Failed to copy opportunity link.", {
+    toast.error("Failed to copy email.", {
       description: error.toString(),
     });
   }
 };
 
-const handleEmailClick = () => {
-  posthog.capture("email clicked");
-};
-
-const handleTwitterClick = () => {
-  posthog.capture("twitter clicked");
-};
-
-const handleLinkedinClick = () => {
-  posthog.capture("linkedin clicked");
-};
-
-const handleGithubClick = () => {
-  posthog.capture("github clicked");
+const handleCopyPhone = async (email: string | null) => {
+  try {
+    const currentDomain = window.location.host;
+    await navigator.clipboard.writeText(`${email}`);
+    toast.success("Phone copied to clipboard");
+  } catch (error: any) {
+    toast.error("Failed to copy phone.", {
+      description: error.toString(),
+    });
+  }
 };
 
 export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
@@ -165,7 +162,6 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                           <Button
                             variant={"outline"}
                             className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                            onClick={handleLinkedinClick}
                           >
                             <Linkedin className="h-3 w-3" />
                           </Button>
@@ -182,7 +178,6 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                           <Button
                             variant={"outline"}
                             className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                            onClick={handleTwitterClick}
                           >
                             <Twitter className="h-3 w-3" />
                           </Button>
@@ -199,7 +194,6 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                           <Button
                             variant={"outline"}
                             className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                            onClick={handleGithubClick}
                           >
                             <Github className="h-3 w-3" />
                           </Button>
@@ -213,7 +207,7 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                           rel="noopener noreferrer"
                           onClick={() =>
                             contact.workEmail
-                              ? handleCopyRecordLink(contact.workEmail)
+                              ? handleCopyEmail(contact.workEmail)
                               : null
                           }
                         >
@@ -221,66 +215,46 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                             variant={"outline"}
                             className="w-6 h-6 p-1 bg-popover hover:bg-muted"
                             disabled={!contact.workEmail}
-                            onClick={handleEmailClick}
                           >
                             <Mail className="h-3 w-3" />
                           </Button>
                         </a>
                       </>
                     )}
+                    {contact.phoneNumbers &&
+                      contact.phoneNumbers.length > 0 && (
+                        <>
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() =>
+                              contact.phoneNumbers
+                                ? handleCopyPhone(contact.phoneNumbers[0])
+                                : null
+                            }
+                          >
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant={"outline"}
+                                    className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                    disabled={!contact.phoneNumbers}
+                                  >
+                                    <Phone className="h-3 w-3" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>
+                                    {formatPhoneNumber(contact.phoneNumbers[0])}
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </a>
+                        </>
+                      )}
                   </div>
-                </div>
-
-                <div className="flex flex-row justify-start">
-                  {/* <div
-                          className="flex items-center pe-0.5 ps-1.5 gap-x-1 bg-card h-8 cursor-default text-muted-foreground rounded-lg"
-                          key={index}
-                        >
-                          <div className="px-1">
-                            {contact.workEmail
-                              ? "Email Available"
-                              : "Email Unavailable"}
-                          </div>
-
-                          {contact.workEmail && (
-                            <>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() =>
-                                  contact.workEmail
-                                    ? handleCopyRecordLink(contact.workEmail)
-                                    : null
-                                }
-                              >
-                                <Button
-                                  className="px-2 bg-transparent hover:bg-primary/10 h-6.5 w-6.5 text-muted-foreground hover:text-primary"
-                                  disabled={!contact.workEmail}
-                                  onClick={handleEmailClick}
-                                >
-                                  <Clipboard className="h-3 w-3" />
-                                </Button>
-                              </a>
-                              <a
-                                href={
-                                  contact.workEmail
-                                    ? "mailto:" + contact.workEmail
-                                    : undefined
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Button
-                                  className="px-2 bg-transparent hover:bg-primary/10 h-6.5 w-6.5 text-muted-foreground hover:text-primary"
-                                  disabled={!contact.workEmail}
-                                  onClick={handleEmailClick}
-                                >
-                                  <PencilLine className="h-3 w-3" />
-                                </Button>
-                              </a>
-                            </>
-                          )}
-                        </div> */}
                 </div>
               </div>
             </div>

@@ -36,7 +36,7 @@ export type Person = {
     location: Location | null;
     personalEmails: string[] | null;
     workEmail: string | null;
-    personalNumbers: string[] | null;
+    phoneNumbers: string[] | null;
     birthDate: Date | null;
     gender: string | null;
     languages: string[] | null;

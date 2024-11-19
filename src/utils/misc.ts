@@ -1,3 +1,5 @@
+import { parsePhoneNumber } from "libphonenumber-js";
+
 export function getNameInitials(name: string): string {
   const words = name.split(" ");
   const initials = words.map((word) => word.charAt(0));
@@ -83,4 +85,9 @@ export function isDateInLastNHours(date: Date, n: number = 24): boolean {
   const nHoursAgo = new Date(now.getTime() - n * 60 * 60 * 1000); // n hours ago from now
 
   return date > nHoursAgo && date <= now;
+}
+
+export function formatPhoneNumber(phone: string): string {
+  const phoneNumber = parsePhoneNumber(phone);
+  return phoneNumber.formatInternational();
 }
