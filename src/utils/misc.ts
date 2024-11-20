@@ -20,9 +20,13 @@ export function titleCaseToCamelCase(titleCaseString: string): string {
     .replace(/^(.)/, ($1) => $1.toLowerCase());
 }
 
-export function humanDate(date: Date, showTime: boolean = false): string {
+export function humanDate(
+  date: Date,
+  showTime: boolean = false,
+  showDay: boolean = false,
+  showYear: boolean = false
+): string {
   const options: Intl.DateTimeFormatOptions = {
-    weekday: "short",
     day: "numeric",
     month: "short",
   };
@@ -31,6 +35,14 @@ export function humanDate(date: Date, showTime: boolean = false): string {
     options["minute"] = "2-digit";
     options["hour"] = "2-digit";
     options["timeZoneName"] = "short";
+  }
+
+  if (showYear) {
+    options["year"] = "numeric";
+  }
+
+  if (showDay) {
+    options["weekday"] = "short";
   }
 
   if (date === null) {

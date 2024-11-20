@@ -526,7 +526,9 @@ export function getFixedColumns(
       ),
       cell: ({ row }) => {
         const createdAt: Date = row.getValue("date");
-        return <div className="flex">{humanDate(createdAt)}</div>;
+        return (
+          <div className="flex">{humanDate(createdAt, false, true, false)}</div>
+        );
       },
     },
     {

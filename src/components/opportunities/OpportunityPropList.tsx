@@ -17,6 +17,8 @@ import {
   CalendarFold,
   Hash,
   Star,
+  DollarSign,
+  Calendar,
 } from "lucide-react";
 
 import {
@@ -29,6 +31,7 @@ import {
 import { AppleLogo } from "../icons";
 import { GooglePlayLogo } from "../icons";
 
+import { humanDate } from "@/utils/misc";
 import { getIcps } from "@/utils/chapter/icp";
 
 import { useState, useEffect } from "react";
@@ -251,7 +254,7 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Landmark width={18} />
-            <p>Fundraising</p>
+            <p>Funding</p>
           </div>
           <p className="font-medium">
             {opportunity.company?.lastFunding?.roundName}
@@ -268,6 +271,33 @@ export function OpportunityPropList({
                 <p>{opportunity.company.lastFunding.investors.join(" · ")}</p>
               )}
           </div>
+        </div>
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Calendar width={18} />
+            <p>Date</p>
+          </div>
+          <p className="font-medium">
+            {opportunity.company?.lastFunding?.announcedDate
+              ? humanDate(
+                  new Date(opportunity.company?.lastFunding?.announcedDate),
+                  false,
+                  false,
+                  true
+                )
+              : ""}
+          </p>
+        </div>
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <DollarSign width={18} />
+            <p>Amount</p>
+          </div>
+          <p className="font-medium">
+            {opportunity.company?.lastFunding?.moneyRaised !== null
+              ? opportunity.company?.lastFunding?.moneyRaised.toLocaleString()
+              : ""}
+          </p>
         </div>
       </div>
     </>
