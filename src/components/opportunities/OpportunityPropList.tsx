@@ -154,7 +154,7 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Target width={18} />
-            <p>Relevant mentions</p>
+            <p>Tool Stack</p>
           </div>
           <div className="flex flex-row gap-x-2">
             {icp &&
