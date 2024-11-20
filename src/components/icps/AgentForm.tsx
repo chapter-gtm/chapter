@@ -125,6 +125,8 @@ const stackList = [
   { value: "PyTorch", label: "PyTorch" },
   { value: "LlamaIndex", label: "LlamaIndex" },
   { value: "LangChain", label: "LangChain" },
+  { value: "LLMs", label: "LLMs" },
+  { value: "RAG", label: "RAG" },
   { value: "HuggingFace", label: "HuggingFace" },
 ];
 
