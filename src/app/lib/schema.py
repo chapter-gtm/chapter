@@ -67,7 +67,7 @@ class Funding(CamelizedBaseStruct):
     """Funding data."""
 
     round_name: FundingRound = FundingRound.SERIES_UNKNOWN
-    money_raised: int | None = None
+    money_raised: float | None = None
     announced_date: date | None = None
     investors: list[Investor] = []
 

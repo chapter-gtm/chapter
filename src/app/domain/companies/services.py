@@ -11,7 +11,7 @@ from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, 
 from uuid_utils.compat import uuid4
 
 from app.lib.pdl import get_company_details
-from app.lib.pitchbook import get_company_investors
+from app.lib.pitchbook import get_company_funding_data
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
 from app.db.models import Company
 from app.lib.utils import get_domain
@@ -106,14 +106,19 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             last_round_name = company_details.get("funding_stages")[0]
             words = last_round_name.split("_")
             words = [word.capitalize() for word in words]
-            obj.last_funding = Funding(round_name=" ".join(words))
 
         # Get investor names and last funding round name
         try:
-            investors = await get_company_investors(obj.url)
-            obj.last_funding.investors = investors
+            funding_data = await get_company_funding_data(obj.url)
+            obj.last_funding = Funding(
+                round_name=funding_data["round_name"],
+                money_raised=funding_data["money_raised"],
+                announced_date=funding_data["announced_date"],
+                investors=funding_data["investors"],
+            )
         except Exception as e:
-            await logger.awarn("Failed to get company investors", url=obj.url, exc_info=e)
+            obj.last_funding = Funding()
+            await logger.awarn("Failed to get company funding data", url=obj.url, exc_info=e)
 
         obj.ios_app_url = await get_ios_app_url(obj.url)
         obj.android_app_url = await get_android_app_url(obj.name, obj.url)
