@@ -128,6 +128,7 @@ const stackList = [
   { value: "LLMs", label: "LLMs" },
   { value: "RAG", label: "RAG" },
   { value: "HuggingFace", label: "HuggingFace" },
+  { value: "OpenAI", label: "OpenAI" },
 ];
 
 const jobTitlesList = [
