@@ -125,6 +125,7 @@ const stackList = [
   { value: "PyTorch", label: "PyTorch" },
   { value: "LlamaIndex", label: "LlamaIndex" },
   { value: "LangChain", label: "LangChain" },
+  { value: "HuggingFace", label: "HuggingFace" },
 ];
 
 const jobTitlesList = [
@@ -134,6 +135,10 @@ const jobTitlesList = [
   {
     value: "Head / Director / VP of Engineering",
     label: "Head / Director / VP of Engineering",
+  },
+  {
+    value: "Head / Director / VP of AI / ML",
+    label: "Head / Director / VP of AI / ML",
   },
   {
     value: "Head / Director / VP of Product",
@@ -153,6 +158,12 @@ const jobTitlesAliasMap: Record<string, string[]> = {
     "Vice President of Engineering",
     "Head of Engineering",
     "Director of Engineering",
+  ],
+  "Head / Director / VP of AI / ML": [
+    "VP of AI / ML",
+    "Vice President of AI / ML",
+    "Head of AI / ML",
+    "Director of AI / ML",
   ],
   "Head / Director / VP of Product": [
     "VP of Product",
@@ -313,7 +324,9 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           </FormLabel>
                           <FormDescription>
                             The value you bring, use-case or problem you&apos;re
-                            solving for this specific ICP
+                            solving for this specific ICP. This information will
+                            be used to identify relevant highlights from
+                            evidence, such as job postings.
                           </FormDescription>
                         </div>
 
