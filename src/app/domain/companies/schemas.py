@@ -33,6 +33,11 @@ class Company(CamelizedBaseStruct):
     ios_app_url: str | None = None
     android_app_url: str | None = None
     docs_url: str | None = None
+    blog_url: str | None = None
+    github_url: str | None = None
+    discord_url: str | None = None
+    slack_url: str | None = None
+    twitter_url: str | None = None
     ios_app_details: AppDetails | None = None
     android_app_details: AppDetails | None = None
 

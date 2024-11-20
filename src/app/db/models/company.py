@@ -36,6 +36,11 @@ class Company(UUIDAuditBase, SlugKey):
     ios_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     android_app_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
     docs_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    blog_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None)
+    github_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
+    discord_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
+    slack_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
+    twitter_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     # -----------
     # ORM Relationships
     # ------------

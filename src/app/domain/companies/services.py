@@ -13,11 +13,13 @@ from uuid_utils.compat import uuid4
 from app.lib.pdl import get_company_details
 from app.lib.pitchbook import get_company_funding_data
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
-from app.db.models import Company
 from app.lib.utils import get_domain
 from app.lib.app_store import get_ios_app_url, get_android_app_url
+from app.lib.scraperapi import extract_url_content
+from app.db.models import Company
 
 from .repositories import CompanyRepository
+from .utils import extract_data_from_page
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -122,6 +124,15 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
 
         obj.ios_app_url = await get_ios_app_url(obj.url)
         obj.android_app_url = await get_android_app_url(obj.name, obj.url)
+
+        company_homepage_html_content = await extract_url_content(obj.url, render=True)
+        company_homepage_data = await extract_data_from_page(company_homepage_html_content)
+        obj.docs_url = company_homepage_data.get("docs_url")
+        obj.blog_url = company_homepage_data.get("blog_url")
+        obj.github_url = company_homepage_data.get("github_url")
+        obj.discord_url = company_homepage_data.get("discord_url")
+        obj.slack_url = company_homepage_data.get("slack_url")
+        obj.twitter_url = company_homepage_data.get("twitter_url")
 
         # TODO: Fix upsert
         return await super().upsert(
