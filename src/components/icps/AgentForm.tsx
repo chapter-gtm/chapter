@@ -158,8 +158,8 @@ const jobTitlesList = [
     label: "Tech Lead / Staff Engineer / EM",
   },
   {
-    value: "Dev Rel / Dev Ex / Developer Advocate",
-    label: "Dev Rel / Dev Ex / Developer Advocate",
+    value: "Dev Rel / Ex / Advocate / Platform",
+    label: "Dev Rel / Ex / Advocate / Platform",
   },
   {
     value: "Technical Writer / Documentation Manager",
@@ -188,10 +188,11 @@ const jobTitlesAliasMap: Record<string, string[]> = {
     "Head of Product",
     "Director of Product",
   ],
-  "Dev Rel / Dev Ex / Developer Advocate": [
+  "Dev Rel / Ex / Advocate / Platform": [
     "Developer Relations",
     "Developer Advocate",
     "Developer Experience",
+    "Developer Platform",
   ],
   "Technical Writer / Documentation Manager": [
     "Technical Writer",
