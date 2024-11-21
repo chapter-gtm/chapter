@@ -108,7 +108,12 @@ class PersonController(Controller):
             return persons_service.to_schema(schema_type=Person, data=results[0])
 
         # Extract person from data provider
-        person_details = await get_person_details(data.url)
+        person_details = None
+        try:
+            person_details = await get_person_details(data.url)
+        except Exception as e:
+            logger.aerror("Error extracting person details", exc_info=e)
+            raise Exception("Error extracting person details")
 
         linkedin_profile_url = None
         twitter_profile_url = None
