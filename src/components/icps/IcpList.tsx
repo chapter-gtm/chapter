@@ -21,7 +21,7 @@ export function IcpList() {
       } else {
         setIcps(currentUserIcps);
         if (currentUserIcps && currentUserIcps.length > 0) {
-          setSelectedTab(currentUserIcps[0].name);
+          setSelectedTab(currentUserIcps[0].id);
         }
       }
     };
@@ -49,7 +49,7 @@ export function IcpList() {
             <div className="flex flex-col gap-y-1">
               <Tabs
                 className="grid grid-cols-4 gap-2"
-                value={icps[0].name}
+                value={selectedTab}
                 onValueChange={handleTabChange}
               >
                 {/* Start of left column */}
@@ -59,8 +59,8 @@ export function IcpList() {
                     <TabsList className="flex flex-col gap-y-1 h-auto bg-transparent">
                       {icps.map((icp, index) => (
                         <TabsTrigger
-                          key={icp.name}
-                          value={icp.name}
+                          key={index}
+                          value={icp.id}
                           className="py-3 w-full bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
                         >
                           <div className="flex w-full text-base">
@@ -75,8 +75,8 @@ export function IcpList() {
 
                 {icps.map((icp, index) => (
                   <TabsContent
-                    key={icp.name}
-                    value={icp.name}
+                    key={index}
+                    value={icp.id}
                     className="col-span-3 flex flex-col  pb-20 px-6 mt-1"
                   >
                     <AgentForm icp={icp} refreshIcp={handleUpdateIcp} />
