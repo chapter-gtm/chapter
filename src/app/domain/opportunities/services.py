@@ -179,6 +179,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             if tenant_ids and str(icp.tenant_id) not in tenant_ids:
                 continue
 
+            if not icp.tool.include:
+                logger.debug("Skipping icp as tools include list is empty", icp=icp)
+
             date_n_days_ago = datetime.now(timezone.utc) - timedelta(days=last_n_days)
             and_conditions = [
                 JobPost.created_at > date_n_days_ago,
