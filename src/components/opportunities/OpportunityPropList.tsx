@@ -19,6 +19,10 @@ import {
   Star,
   DollarSign,
   Calendar,
+  FileText,
+  Newspaper,
+  Triangle,
+  Layers,
 } from "lucide-react";
 
 import {
@@ -135,7 +139,7 @@ export function OpportunityPropList({
               <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
                 <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
                   <span>
-                    <InfoIcon width={18} />
+                    <FileText width={18} />
                   </span>
                   <p>Docs / API</p>
                 </div>
@@ -153,10 +157,67 @@ export function OpportunityPropList({
               </div>
             </>
           )}
+        {opportunity.company?.blogUrl !== undefined &&
+          opportunity.company?.blogUrl !== null && (
+            <>
+              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                  <span>
+                    <Newspaper width={18} />
+                  </span>
+                  <p>Blog</p>
+                </div>
+
+                <div className="flex flex-1 flex-wrap gap-x-2">
+                  <Button
+                    onClick={() => handleDocLink(opportunity.company?.blogUrl)}
+                    variant={"outline"}
+                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
+                  >
+                    Link
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        {opportunity.company?.changelogUrl !== undefined &&
+          opportunity.company?.changelogUrl !== null && (
+            <>
+              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+                  <span>
+                    <Triangle width={18} />
+                  </span>
+                  <p>Changelog</p>
+                </div>
+
+                <div className="flex flex-1 flex-wrap gap-x-2">
+                  <Button
+                    onClick={() =>
+                      handleDocLink(opportunity.company?.changelogUrl)
+                    }
+                    variant={"outline"}
+                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
+                  >
+                    Link
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
+                  <p>
+                    {opportunity.company?.productLastReleasedAt &&
+                      "Last Release: " +
+                        humanDate(
+                          new Date(opportunity.company?.productLastReleasedAt)
+                        )}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Target width={18} />
+            <Layers width={18} />
             <p>Tool Stack</p>
           </div>
           <div className="flex flex-row gap-x-2">
@@ -181,7 +242,7 @@ export function OpportunityPropList({
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
-            <Target width={18} />
+            <Layers width={18} />
             {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
           </div>
           <TooltipProvider delayDuration={0}>
