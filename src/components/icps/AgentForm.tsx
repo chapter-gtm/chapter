@@ -117,6 +117,8 @@ const stackList = [
   { value: "Github Actions", label: "Github Actions" },
   { value: "Docker", label: "Docker" },
   { value: "Kubernetes", label: "Kubernetes" },
+  { value: "GitOps", label: "GitOps" },
+  { value: "Argo CD", label: "Argo CD" },
   { value: "Cypress", label: "Cypress" },
   { value: "Playwright", label: "Playwright" },
   { value: "Rust", label: "Rust" },
