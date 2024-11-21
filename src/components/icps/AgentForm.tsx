@@ -131,6 +131,10 @@ const stackList = [
   { value: "RAG", label: "RAG" },
   { value: "HuggingFace", label: "HuggingFace" },
   { value: "OpenAI", label: "OpenAI" },
+  { value: "APIs", label: "APIs" },
+  { value: "REST APIs", label: "REST APIs" },
+  { value: "GraphQL", label: "GraphQL" },
+  { value: "OpenAPI", label: "OpenAPI" },
 ];
 
 const jobTitlesList = [
@@ -152,6 +156,14 @@ const jobTitlesList = [
   {
     value: "Tech Lead / Staff Engineer / EM",
     label: "Tech Lead / Staff Engineer / EM",
+  },
+  {
+    value: "Dev Rel / Dev Ex / Developer Advocate",
+    label: "Dev Rel / Dev Ex / Developer Advocate",
+  },
+  {
+    value: "Technical Writer / Documentation Manager",
+    label: "Technical Writer / Documentation Manager",
   },
   { value: "Platform Engineer", label: "Platform Engineer" },
   { value: "DevOps Engineer", label: "DevOps Engineer" },
@@ -175,6 +187,15 @@ const jobTitlesAliasMap: Record<string, string[]> = {
     "Vice President of Product",
     "Head of Product",
     "Director of Product",
+  ],
+  "Dev Rel / Dev Ex / Developer Advocate": [
+    "Developer Relations",
+    "Developer Advocate",
+    "Developer Experience",
+  ],
+  "Technical Writer / Documentation Manager": [
+    "Technical Writer",
+    "Documentation Manager",
   ],
   "Tech Lead / Staff Engineer / EM": [
     "Tech Lead",
