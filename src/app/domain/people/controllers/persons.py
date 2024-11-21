@@ -115,6 +115,13 @@ class PersonController(Controller):
         github_profile_url = None
         birth_date = None
         work_email = None
+        person_company_name = person_details.get("job_company_name")
+        person_company_url = person_details.get("job_company_website")
+        person_company_linkedin_url = person_details.get("job_company_linkedin_url")
+
+        if not person_company_name and not person_company_url and not person_company_linkedin_url:
+            await logger.aerror("Company not found in person details", person_details=person_details)
+            raise Exception("Company not present in person details")
 
         if person_details.get("linkedin_url"):
             linkedin_profile_url = "https://" + person_details.get("linkedin_url").rstrip("/")
@@ -127,9 +134,9 @@ class PersonController(Controller):
 
         # Add or update company
         company = CompanyCreate(
-            name=person_details.get("job_company_name"),
-            url=person_details.get("job_company_website"),
-            linkedin_profile_url=person_details.get("job_company_linkedin_url"),
+            name=person_company_name,
+            url=person_company_url,
+            linkedin_profile_url=person_company_linkedin_url,
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
