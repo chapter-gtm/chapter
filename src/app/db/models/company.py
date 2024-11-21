@@ -42,6 +42,7 @@ class Company(UUIDAuditBase, SlugKey):
     discord_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     slack_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     twitter_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
+    product_last_released_at: Mapped[date] = mapped_column(nullable=True, default=None)
     # -----------
     # ORM Relationships
     # ------------

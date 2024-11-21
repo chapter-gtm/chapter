@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from uuid import UUID  # noqa: TCH003
-from datetime import datetime
+from datetime import datetime, date
 
 import msgspec
 
@@ -41,6 +41,7 @@ class Company(CamelizedBaseStruct):
     twitter_url: str | None = None
     ios_app_details: AppDetails | None = None
     android_app_details: AppDetails | None = None
+    product_last_released_at: date | None = None
 
     def __post_init__(self):
         """Build a profile pic url from company url."""
