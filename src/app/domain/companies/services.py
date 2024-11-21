@@ -129,6 +129,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         company_homepage_data = await extract_data_from_page(company_homepage_html_content)
         obj.docs_url = company_homepage_data.get("docs_url")
         obj.blog_url = company_homepage_data.get("blog_url")
+        obj.changelog_url = company_homepage_data.get("changelog_url")
         obj.github_url = company_homepage_data.get("github_url")
         obj.discord_url = company_homepage_data.get("discord_url")
         obj.slack_url = company_homepage_data.get("slack_url")

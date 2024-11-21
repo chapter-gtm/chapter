@@ -19,6 +19,7 @@ prompt = """
     {{
         "docs_url": "<docs url>",
         "blog_url": "<blog url>",
+        "changelog_url": "<changelog url>",
         "github_url": "<github url>",
         "discord_url": "<discord url>",
         "slack_url": "<slack url>",
