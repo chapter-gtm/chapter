@@ -250,7 +250,7 @@ export function getFilters(icp: Icp) {
     },
     {
       tableColumnName: "tools",
-      label: "Tool Stack",
+      label: "Relevant Stack",
       // TODO: Build filters based on tenant ICP
       filterOptions: icp.tool.include.map((tool: string) => ({
         value: tool,
@@ -666,7 +666,7 @@ export function getFixedColumns(
     {
       accessorKey: "tools",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Tool Stack" />
+        <DataTableColumnHeader column={column} title="Relevant Stack" />
       ),
       accessorFn: (row) => {
         const tools: Tool[] = row.tools;

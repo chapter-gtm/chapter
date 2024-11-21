@@ -53,9 +53,10 @@ export function IcpList() {
                 onValueChange={handleTabChange}
               >
                 {/* Start of left column */}
-                <div className="col-span-1 pb-20">
-                  <div className="flex flex-col gap-y-2">
+                <div className="col-span-1 pb-20 relative">
+                  <div className="flex flex-col gap-y-2 sticky top-24">
                     {/* Vertical alignment of tabs */}
+                    <h3 className="font-medium ps-2 py-3">Agents</h3>
                     <TabsList className="flex flex-col gap-y-1 h-auto bg-transparent">
                       {icps.map((icp, index) => (
                         <TabsTrigger
@@ -72,16 +73,13 @@ export function IcpList() {
                   </div>
                 </div>
                 {/* Start of right column: content */}
-
-                {icps.map((icp, index) => (
-                  <TabsContent
-                    key={index}
-                    value={icp.id}
-                    className="col-span-3 flex flex-col  pb-20 px-6 mt-1"
-                  >
-                    <AgentForm icp={icp} refreshIcp={handleUpdateIcp} />
-                  </TabsContent>
-                ))}
+                <div className="col-span-3 flex flex-col  pb-20 px-6 mt-1">
+                  {icps.map((icp, index) => (
+                    <TabsContent key={index} value={icp.id}>
+                      <AgentForm icp={icp} refreshIcp={handleUpdateIcp} />
+                    </TabsContent>
+                  ))}
+                </div>
               </Tabs>
             </div>
           </div>

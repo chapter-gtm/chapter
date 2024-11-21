@@ -200,16 +200,14 @@ export function OpportunityPropList({
                     variant={"outline"}
                     className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
                   >
-                    Link
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                  <p>
                     {opportunity.company?.productLastReleasedAt &&
                       "Last Release: " +
                         humanDate(
                           new Date(opportunity.company?.productLastReleasedAt)
                         )}
-                  </p>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Button>
+                  <p></p>
                 </div>
               </div>
             </>
@@ -218,7 +216,7 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Layers width={18} />
-            <p>Tool Stack</p>
+            <p>Relevant Stack</p>
           </div>
           <div className="flex flex-row gap-x-2">
             {icp &&
@@ -243,49 +241,57 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
             <Layers width={18} />
-            {icp ? <p>Additional stack</p> : <p>Additional stack</p>}
+            <p>Additional stack</p>
           </div>
-          <TooltipProvider delayDuration={0}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
-                  See all
-                </div>
-              </TooltipTrigger>
-              <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
-                {icp
-                  ? opportunity.jobPosts
-                      ?.flatMap((jobPost) => jobPost.tools)
-                      .filter(
-                        (tool) => tool && !icp.tool.include.includes(tool.name)
-                      )
-                      .map((tool, index) => (
-                        <>
-                          {tool && (
-                            <Badge
-                              key={index}
-                              variant={"outline"}
-                              className="border-border"
-                            >
-                              {tool.name}
-                            </Badge>
-                          )}
-                        </>
-                      ))
-                  : opportunity.jobPosts
-                      ?.flatMap((jobPost) => jobPost.tools)
-                      .map((tool, index) => (
-                        <>
-                          {tool && (
-                            <Badge key={index} variant={"outline"}>
-                              {tool.name}
-                            </Badge>
-                          )}
-                        </>
-                      ))}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+
+          {icp &&
+            opportunity &&
+            opportunity.jobPosts &&
+            opportunity.jobPosts.length > 0 &&
+            opportunity.jobPosts[0].tools?.length > 0 && (
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
+                      See all
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
+                    {icp
+                      ? opportunity.jobPosts
+                          ?.flatMap((jobPost) => jobPost.tools)
+                          .filter(
+                            (tool) =>
+                              tool && !icp.tool.include.includes(tool.name)
+                          )
+                          .map((tool, index) => (
+                            <>
+                              {tool && (
+                                <Badge
+                                  key={index}
+                                  variant={"outline"}
+                                  className="border-border"
+                                >
+                                  {tool.name}
+                                </Badge>
+                              )}
+                            </>
+                          ))
+                      : opportunity.jobPosts
+                          ?.flatMap((jobPost) => jobPost.tools)
+                          .map((tool, index) => (
+                            <>
+                              {tool && (
+                                <Badge key={index} variant={"outline"}>
+                                  {tool.name}
+                                </Badge>
+                              )}
+                            </>
+                          ))}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
         </div>
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">

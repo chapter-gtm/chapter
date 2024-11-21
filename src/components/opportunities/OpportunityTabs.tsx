@@ -46,7 +46,7 @@ export function OpportunityTabs({
             "grid w-full p-0 h-auto bg-transparent border-border border ",
             opportunity.jobPosts !== null && opportunity.jobPosts.length > 0
               ? "grid-cols-3"
-              : "grid-cols-2"
+              : "grid-cols-3"
           )}
         >
           <TabsTrigger
@@ -61,14 +61,13 @@ export function OpportunityTabs({
           >
             Points of contact
           </TabsTrigger>
-          {opportunity.jobPosts !== null && opportunity.jobPosts.length > 0 && (
-            <TabsTrigger
-              value="evidence"
-              className="data-[state=active]:bg-popover"
-            >
-              Evidence
-            </TabsTrigger>
-          )}
+
+          <TabsTrigger
+            value="evidence"
+            className="data-[state=active]:bg-popover"
+          >
+            Evidence
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="account">
           <OpportunityPropList
@@ -80,12 +79,20 @@ export function OpportunityTabs({
           {" "}
           <OpportunityContacts opportunity={opportunity} />
         </TabsContent>
-        {opportunity.jobPosts !== null && opportunity.jobPosts.length > 0 && (
-          <TabsContent value="evidence">
-            {" "}
+
+        <TabsContent value="evidence">
+          {opportunity.jobPosts !== null && opportunity.jobPosts.length > 0 ? (
             <OpportunityJobPost opportunity={opportunity} />
-          </TabsContent>
-        )}
+          ) : (
+            <>
+              <div className="flex flex-col py-6">
+                <div className="bg-card dark:bg-popover p-3 border border-border rounded-lg text-white text-sm text-center">
+                  Not applicable
+                </div>
+              </div>
+            </>
+          )}
+        </TabsContent>
       </Tabs>
     </>
   );

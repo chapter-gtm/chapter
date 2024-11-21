@@ -21,6 +21,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import { Checkbox } from "@/components/ui/checkbox";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -39,7 +41,7 @@ const agentFormSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Add ICP should have a unique name." })
-    .max(20, { message: "ICP name cannot exceed 20 characters." }),
+    .max(30, { message: "ICP name cannot exceed 30 characters." }),
   company: z
     .object({
       funding: z.array(z.string()),
@@ -292,6 +294,32 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
     }
   }, [icp]);
 
+  const checkBoxItemsOff = [
+    {
+      id: "Public Docs / APIs",
+      label: "Public Docs / APIs",
+      status: false,
+    },
+    {
+      id: "Public Changelog",
+      label: "Public Changelog",
+      status: false,
+    },
+  ];
+
+  const checkBoxItemsOn = [
+    {
+      id: "Public Docs / APIs",
+      label: "Public Docs / APIs",
+      status: true,
+    },
+    {
+      id: "Public Changelog",
+      label: "Public Changelog",
+      status: false,
+    },
+  ];
+
   return (
     <>
       {icp !== null && (
@@ -329,7 +357,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           <Input
                             {...form.register("name")}
                             placeholder="ICP name"
-                            maxLength={20}
+                            maxLength={30}
                             className="text-base"
                           />
                         </div>
@@ -549,6 +577,75 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           placeholder="Select stack"
                           variant="default"
                         />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+                <FormField
+                  control={form.control}
+                  name="tool.include"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex flex-col gap-y-3 justify-between w-full">
+                        <div className="flex flex-col gap-y-2">
+                          <FormLabel className="text-lg">Filters</FormLabel>
+                          <FormDescription>
+                            Filter for the following items
+                          </FormDescription>
+                        </div>
+                        <div className="flex flex-col items-start">
+                          {icp.id === "70ecb62c-3367-4545-adc6-43050026b2e2"
+                            ? checkBoxItemsOff.map(
+                                (item: {
+                                  id: string;
+                                  label: string;
+                                  status: boolean;
+                                }) => (
+                                  <div
+                                    key={item.id}
+                                    className="flex flex-row items-center py-1.5 gap-x-2"
+                                  >
+                                    <Checkbox
+                                      id={item.id}
+                                      checked={item.status}
+                                    />
+                                    <label
+                                      htmlFor={item.id}
+                                      className="text-sm font-medium"
+                                    >
+                                      {item.label}
+                                    </label>
+                                  </div>
+                                )
+                              )
+                            : checkBoxItemsOn.map(
+                                (item: {
+                                  id: string;
+                                  label: string;
+                                  status: boolean;
+                                }) => (
+                                  <div
+                                    key={item.id}
+                                    className="flex flex-row items-center py-1.5 gap-x-2"
+                                  >
+                                    <Checkbox
+                                      id={item.id}
+                                      checked={item.status}
+                                    />
+                                    <label
+                                      htmlFor={item.id}
+                                      className="text-sm font-medium"
+                                    >
+                                      {item.label}
+                                    </label>
+                                  </div>
+                                )
+                              )}
+                        </div>
                       </div>
                       <FormMessage />
                     </FormItem>
