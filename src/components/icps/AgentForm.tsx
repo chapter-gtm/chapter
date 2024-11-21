@@ -132,6 +132,7 @@ const stackList = [
   { value: "HuggingFace", label: "HuggingFace" },
   { value: "OpenAI", label: "OpenAI" },
   { value: "APIs", label: "APIs" },
+  { value: "SDKs", label: "SDKs" },
   { value: "REST APIs", label: "REST APIs" },
   { value: "GraphQL", label: "GraphQL" },
   { value: "OpenAPI", label: "OpenAPI" },
