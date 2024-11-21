@@ -125,15 +125,18 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         obj.ios_app_url = await get_ios_app_url(obj.url)
         obj.android_app_url = await get_android_app_url(obj.name, obj.url)
 
-        company_homepage_html_content = await extract_url_content(obj.url, render=True)
-        company_homepage_data = await extract_data_from_page(company_homepage_html_content)
-        obj.docs_url = company_homepage_data.get("docs_url")
-        obj.blog_url = company_homepage_data.get("blog_url")
-        obj.changelog_url = company_homepage_data.get("changelog_url")
-        obj.github_url = company_homepage_data.get("github_url")
-        obj.discord_url = company_homepage_data.get("discord_url")
-        obj.slack_url = company_homepage_data.get("slack_url")
-        obj.twitter_url = company_homepage_data.get("twitter_url")
+        try:
+            company_homepage_html_content = await extract_url_content(obj.url, render=True)
+            company_homepage_data = await extract_data_from_page(company_homepage_html_content)
+            obj.docs_url = company_homepage_data.get("docs_url")
+            obj.blog_url = company_homepage_data.get("blog_url")
+            obj.changelog_url = company_homepage_data.get("changelog_url")
+            obj.github_url = company_homepage_data.get("github_url")
+            obj.discord_url = company_homepage_data.get("discord_url")
+            obj.slack_url = company_homepage_data.get("slack_url")
+            obj.twitter_url = company_homepage_data.get("twitter_url")
+        except Exception as e:
+            await logger.awarn("Failed to extract links from company homepage", url=obj.url, exc_info=e)
 
         # TODO: Fix upsert
         return await super().upsert(
