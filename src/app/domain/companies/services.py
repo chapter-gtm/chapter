@@ -122,8 +122,11 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             obj.last_funding = Funding()
             await logger.awarn("Failed to get company funding data", url=obj.url, exc_info=e)
 
-        obj.ios_app_url = await get_ios_app_url(obj.url)
-        obj.android_app_url = await get_android_app_url(obj.name, obj.url)
+        try:
+            obj.ios_app_url = await get_ios_app_url(obj.url)
+            obj.android_app_url = await get_android_app_url(obj.name, obj.url)
+        except Exception as e:
+            await logger.awarn("Failed to get app store data", url=obj.url, exc_info=e)
 
         try:
             company_homepage_html_content = await extract_url_content(obj.url, render=True)
