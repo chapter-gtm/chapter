@@ -336,7 +336,7 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Calendar width={18} />
-            <p>Date</p>
+            <p>Last Funding Date</p>
           </div>
           <p className="font-medium">
             {opportunity.company?.lastFunding?.announcedDate
@@ -352,7 +352,7 @@ export function OpportunityPropList({
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <DollarSign width={18} />
-            <p>Amount</p>
+            <p>Amount Raised</p>
           </div>
           <p className="font-medium">
             {opportunity.company?.lastFunding?.moneyRaised !== null
