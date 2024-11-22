@@ -74,6 +74,8 @@ class SystemController(Controller):
 
         return Response(
             content=SystemHealth(database_status=db_status, cache_status=cache_status, worker_status=worker_status),  # type: ignore
-            status_code=200 if db_ping and cache_ping and worker_ping else 500,
+            # status_code=200 if db_ping and cache_ping and worker_ping else 500,
+            # TODO: Switch worker ping back into the health check
+            status_code=200 if db_ping and cache_ping else 500,
             media_type=MediaType.JSON,
         )
