@@ -3,94 +3,94 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --background: 0 0% 98%;
-        --foreground: 222.2 84% 4.9%;
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 222.2 84% 4.9%;
 
-        --card: 240 5% 96%;
-        --card-foreground: 222.2 84% 4.9%;
+    --card: 240 5% 96%;
+    --card-foreground: 222.2 84% 4.9%;
 
-        --popover: 240 6% 90%;
-        --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 6% 90%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-        --muted: 240 5% 84%;
-        --muted-foreground: 240 5% 64%%;
+    --muted: 240 5% 84%;
+    --muted-foreground: 240 5% 64%%;
 
-        --primary: 222.2 47.4% 11.2%;
-        --primary-foreground: 0 0% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 0 0% 98%;
 
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 240 5% 65%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 240 4% 45%;
 
-        --accent: 240 5% 96%;
-        --accent-hover: 40 5% 97%;
+    --accent: 240 5% 96%;
+    --accent-hover: 40 5% 97%;
 
-        --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-        --border: 240 5% 84%;
+    --border: 240 5% 84%;
 
-        --input: 214.3 31.8% 91.4%;
-        --ring: 258 90% 66%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 258 90% 66%;
 
-        --radius: 0.5rem;
-        --color-paragraph: 240 4% 46%;
-        --color-header: 240 4% 16%;
+    --radius: 0.5rem;
+    --color-paragraph: 240 4% 46%;
+    --color-header: 240 4% 16%;
 
-        --chart: 261 87% 60%;
-    }
+    --chart: 261 87% 60%;
+  }
 
-    .dark {
-        --background: 240 10% 4%;
-        --foreground: 210 40% 98%;
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 210 40% 98%;
 
-        --card: 240 6% 10%;
-        --card-foreground: 210 40% 98%;
+    --card: 240 6% 10%;
+    --card-foreground: 210 40% 98%;
 
-        --popover: 240 4% 16%;
-        --popover-foreground: 210 40% 98%;
+    --popover: 240 4% 16%;
+    --popover-foreground: 210 40% 98%;
 
-        --muted: 240 5% 26%;
-        --muted-foreground: 240 5% 65%;
+    --muted: 240 5% 26%;
+    --muted-foreground: 240 5% 65%;
 
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
 
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 240 4% 46%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 240 4% 46%;
 
-        --accent: 240 4% 16%;
-        --accent-foreground: 210 40% 98%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 210 40% 98%;
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-        --border: 240 5% 26%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 258 90% 66%;
+    --border: 240 5% 26%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 258 90% 66%;
 
-        --color-paragraph: 240 4% 46%;
+    --color-paragraph: 240 4% 46%;
 
-        --color-header: 240 6% 90%;
+    --color-header: 240 6% 90%;
 
-        --chart: 261 87% 60%;
-    }
-    .card {
-        background-color: var(--card);
-    }
+    --chart: 261 87% 60%;
+  }
+  .card {
+    background-color: var(--card);
+  }
 
-    .button {
-        background-color: var(--destructive);
-        color: var(--badge-text);
-    }
-    .border {
-        border-color: var(--border);
-    }
+  .button {
+    background-color: var(--destructive);
+    color: var(--badge-text);
+  }
+  .border {
+    border-color: var(--border);
+  }
 }
 @layer components {
-    .select-content {
-        background-color: red;
-    }
+  .select-content {
+    background-color: red;
+  }
 }

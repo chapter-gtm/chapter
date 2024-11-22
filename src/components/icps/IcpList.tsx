@@ -62,7 +62,7 @@ export function IcpList() {
                         <TabsTrigger
                           key={index}
                           value={icp.id}
-                          className="py-3 w-full bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
+                          className="py-3 w-full bg-transparent data-[state=active]:bg-zinc-200 dark:data-[state=active]:bg-zinc-700/20"
                         >
                           <div className="flex w-full text-base">
                             {icp.name}

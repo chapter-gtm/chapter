@@ -10,6 +10,14 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 
 import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
+
+import { InfoIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -326,20 +334,20 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit, onError)}>
             <div className="flex flex-col gap-y-8">
-              <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
+              <div className="flex flex-col border border-border/80 rounded-lg p-6 gap-y-6">
                 {/* Start of header */}
-                <div className="flex flex-col rounded-xl justify-center items-center bg-popover py-8">
+                <div className="flex flex-col rounded-xl justify-center items-center py-8">
                   <Image
                     src="/images/customIcons/agent.svg"
-                    width={70}
-                    height={70}
+                    width={90}
+                    height={90}
                     alt="Inbox"
                     className="hidden dark:block"
                   />
                   <Image
                     src="/images/customIcons/agent-light.svg"
-                    width={70}
-                    height={70}
+                    width={90}
+                    height={90}
                     alt="Inbox"
                     className="dark:hidden"
                   />
@@ -358,7 +366,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                             {...form.register("name")}
                             placeholder="ICP name"
                             maxLength={30}
-                            className="text-base"
+                            className="font-medium"
                           />
                         </div>
                         <FormMessage />
@@ -375,15 +383,28 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                     <FormItem>
                       <div className="flex flex-col gap-y-3 justify-between w-full">
                         <div className="flex flex-col gap-y-2">
-                          <FormLabel className="text-lg">
-                            Your value proposition
-                          </FormLabel>
-                          <FormDescription>
-                            The value you bring, use-case or problem you&apos;re
-                            solving for this specific ICP. This information will
-                            be used to identify relevant highlights from
-                            evidence, such as job postings.
-                          </FormDescription>
+                          <div className="flex flex-row gap-x-2 items-center">
+                            <FormLabel className="text-lg">
+                              Your value-prop
+                            </FormLabel>
+
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span>
+                                    <InfoIcon className="w-4" />
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>
+                                    This information will be used to identify
+                                    relevant highlights from evidence, such as
+                                    job postings.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
                         </div>
 
                         <Textarea
