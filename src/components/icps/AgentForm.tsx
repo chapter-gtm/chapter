@@ -85,6 +85,8 @@ const agentFormSchema = z.object({
           path: ["engineeringMax"],
         }),
       countries: z.array(z.string()),
+      docs: z.boolean(),
+      changelog: z.boolean(),
     })
     .refine((data) => data.headcountMax > data.headcountMin, {
       message: "Max must be greater than Min",
@@ -239,6 +241,8 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
           engineeringMin: 5,
           engineeringMax: 100,
         },
+        docs: false,
+        changelog: false,
       },
       tool: {
         include: ["Docker", "Kubernetes"],
@@ -466,7 +470,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           <FormItem className="flex flex-col flex-grow">
                             <div className="flex flex-col items-start gap-1.5">
                               <Label
-                                htmlFor="email"
+                                htmlFor="company.headcountMin"
                                 className="text-muted-foreground"
                               >
                                 Min
@@ -489,7 +493,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           <FormItem className="flex flex-col flex-grow">
                             <div className="flex flex-col  items-start gap-1.5">
                               <Label
-                                htmlFor="email"
+                                htmlFor="company.headcountMax"
                                 className="text-muted-foreground"
                               >
                                 Max
@@ -525,7 +529,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           <FormItem className="flex flex-col flex-grow">
                             <div className="flex flex-col items-start gap-1.5">
                               <Label
-                                htmlFor="email"
+                                htmlFor="company.orgSize.engineeringMin"
                                 className="text-muted-foreground"
                               >
                                 Min
@@ -551,7 +555,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                           <FormItem className="flex flex-col flex-grow">
                             <div className="flex flex-col items-start gap-1.5">
                               <Label
-                                htmlFor="email"
+                                htmlFor="company.orgSize.engineeringMax"
                                 className="text-muted-foreground"
                               >
                                 Max
@@ -606,72 +610,66 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
               </div>
 
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-                <FormField
-                  control={form.control}
-                  name="tool.include"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-col gap-y-3 justify-between w-full">
-                        <div className="flex flex-col gap-y-2">
-                          <FormLabel className="text-lg">Filters</FormLabel>
-                          <FormDescription>
-                            Filter for the following items
-                          </FormDescription>
+                <div className="flex flex-col gap-y-3 justify-between w-full">
+                  <div className="flex flex-col gap-y-2">
+                    <FormLabel className="text-lg">Filters</FormLabel>
+                    <FormDescription>
+                      Filter for the following items
+                    </FormDescription>
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="company.docs"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col items-start">
+                        <div className="flex flex-row items-center py-1.5 gap-x-2">
+                          <Checkbox
+                            id="company.docs"
+                            checked={form.watch("company.docs")}
+                            onCheckedChange={(checked: boolean) =>
+                              form.setValue("company.docs", checked ?? false)
+                            }
+                          />
+                          <label
+                            htmlFor="company.docs"
+                            className="text-sm font-medium"
+                          >
+                            Public Docs / APIs
+                          </label>
                         </div>
-                        <div className="flex flex-col items-start">
-                          {icp.id === "70ecb62c-3367-4545-adc6-43050026b2e2"
-                            ? checkBoxItemsOff.map(
-                                (item: {
-                                  id: string;
-                                  label: string;
-                                  status: boolean;
-                                }) => (
-                                  <div
-                                    key={item.id}
-                                    className="flex flex-row items-center py-1.5 gap-x-2"
-                                  >
-                                    <Checkbox
-                                      id={item.id}
-                                      checked={item.status}
-                                    />
-                                    <label
-                                      htmlFor={item.id}
-                                      className="text-sm font-medium"
-                                    >
-                                      {item.label}
-                                    </label>
-                                  </div>
-                                )
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="company.changelog"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col items-start">
+                        <div className="flex flex-row items-center py-1.5 gap-x-2">
+                          <Checkbox
+                            id="company.changelog"
+                            checked={form.watch("company.changelog")}
+                            onCheckedChange={(checked: boolean) =>
+                              form.setValue(
+                                "company.changelog",
+                                checked ?? false
                               )
-                            : checkBoxItemsOn.map(
-                                (item: {
-                                  id: string;
-                                  label: string;
-                                  status: boolean;
-                                }) => (
-                                  <div
-                                    key={item.id}
-                                    className="flex flex-row items-center py-1.5 gap-x-2"
-                                  >
-                                    <Checkbox
-                                      id={item.id}
-                                      checked={item.status}
-                                    />
-                                    <label
-                                      htmlFor={item.id}
-                                      className="text-sm font-medium"
-                                    >
-                                      {item.label}
-                                    </label>
-                                  </div>
-                                )
-                              )}
+                            }
+                          />
+                          <label
+                            htmlFor="company.changelog"
+                            className="text-sm font-medium"
+                          >
+                            Public Changelog
+                          </label>
                         </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">

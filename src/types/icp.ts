@@ -11,6 +11,8 @@ export type CompanyCriteria = {
     orgSize: OrgSizeCriteria;
     funding: FundingRound[];
     countries: string[];
+    docs: boolean;
+    changelog: boolean;
 };
 
 export type ToolCriteria = {
