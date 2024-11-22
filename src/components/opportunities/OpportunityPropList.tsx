@@ -246,9 +246,10 @@ export function OpportunityPropList({
 
           {icp &&
             opportunity &&
-            opportunity.jobPosts &&
+            Array.isArray(opportunity.jobPosts) &&
             opportunity.jobPosts.length > 0 &&
-            opportunity.jobPosts[0].tools?.length > 0 && (
+            opportunity.jobPosts[0]?.tools &&
+            opportunity.jobPosts[0]?.tools?.length > 0 && (
               <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
