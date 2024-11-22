@@ -94,7 +94,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
               <div className="flex flex-col ">
                 <div className="flex flex-row sticky top-0 bg-card justify-between items-center px-3 py-3.5">
                   <div className="text-sm text-zinc-400">
-                    {opportunity.slug}kj kj
+                    {opportunity.slug}
                   </div>
                   <OpportunityStageList
                     opportunity={opportunity}

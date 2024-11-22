@@ -314,9 +314,7 @@ export function OpportunitiesMain() {
 
                         <div className="text-sm">
                           <span className="text-zinc-500 dark:text-zinc-400">
-                            {selectedRow !== null && (
-                              <>{selectedRow.company?.slug}</>
-                            )}
+                            {selectedRow !== null && <>{selectedRow.slug}</>}
                           </span>
                         </div>
                       </div>
