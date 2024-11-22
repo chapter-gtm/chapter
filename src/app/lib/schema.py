@@ -117,6 +117,30 @@ class OrgSize(CamelizedBaseStruct):
     """Org size data."""
 
     engineering: int | None = None
+    advisory: int | None = None
+    analyst: int | None = None
+    creative: int | None = None
+    education: int | None = None
+    finance: int | None = None
+    fulfillment: int | None = None
+    health: int | None = None
+    hospitality: int | None = None
+    human_resources: int | None = None
+    legal: int | None = None
+    manufacturing: int | None = None
+    marketing: int | None = None
+    operations: int | None = None
+    partnerships: int | None = None
+    product: int | None = None
+    professional_service: int | None = None
+    public_service: int | None = None
+    research: int | None = None
+    sales: int | None = None
+    sales_engineering: int | None = None
+    support: int | None = None
+    trade: int | None = None
+    unemployed: int | None = None
+    other_uncategorized: int | None = None
 
 
 class Scale(enum.Enum):
@@ -150,6 +174,8 @@ class CompanyCriteria(CamelizedBaseStruct):
     org_size: OrgSizeCriteria | None = None
     funding: list[FundingRound] | None = None
     countries: list[str] | None = None
+    docs: bool = False
+    changelog: bool = False
 
 
 class ToolCriteria(CamelizedBaseStruct):
