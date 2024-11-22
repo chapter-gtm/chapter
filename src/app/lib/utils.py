@@ -1,6 +1,6 @@
 import os
 import structlog
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 
 
 logger = structlog.get_logger()
@@ -30,3 +30,16 @@ def get_logo_dev_link(url: str) -> str | None:
         return f"https://img.logo.dev/{domain}?token={logo_dev_token}"
     except Exception as e:
         logger.warn("Failed to build logo.dev link", url=url, exc_info=e)
+
+
+def get_fully_qualified_url(domain_or_url):
+    """Return fully qualified from domain or url."""
+
+    parsed_url = urlparse(domain_or_url.strip())
+    if not parsed_url.netloc and not parsed_url.path:
+        raise ValueError("Invalid URL or domain")
+
+    if not parsed_url.scheme:
+        return f"https://{domain_or_url.strip()}"
+
+    return urlunparse(parsed_url)

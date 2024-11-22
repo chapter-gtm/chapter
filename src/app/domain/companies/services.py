@@ -19,7 +19,7 @@ from app.lib.scraperapi import extract_url_content
 from app.db.models import Company
 
 from .repositories import CompanyRepository
-from .utils import extract_data_from_page
+from .utils import extract_links_from_page
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -130,7 +130,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
 
         try:
             company_homepage_html_content = await extract_url_content(obj.url, render=True)
-            company_homepage_data = await extract_data_from_page(company_homepage_html_content)
+            company_homepage_data = await extract_links_from_page(obj.url, company_homepage_html_content)
             obj.docs_url = company_homepage_data.get("docs_url")
             obj.blog_url = company_homepage_data.get("blog_url")
             obj.changelog_url = company_homepage_data.get("changelog_url")
