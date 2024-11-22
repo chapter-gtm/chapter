@@ -148,6 +148,8 @@ const stackList = [
   { value: "REST APIs", label: "REST APIs" },
   { value: "GraphQL", label: "GraphQL" },
   { value: "OpenAPI", label: "OpenAPI" },
+  { value: "Markdown", label: "Markdown" },
+  { value: "MDX", label: "MDX" },
 ];
 
 const jobTitlesList = [
