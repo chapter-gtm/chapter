@@ -53,7 +53,18 @@ saq = SAQConfig(
     web_enabled=settings.saq.WEB_ENABLED,
     worker_processes=settings.saq.PROCESSES,
     use_server_lifespan=settings.saq.USE_SERVER_LIFESPAN,
-    queue_configs=[],
+    queue_configs=[
+        QueueConfig(
+            name="system-tasks",
+            tasks=["app.domain.system.tasks.system_task", "app.domain.system.tasks.system_upkeep"],
+            scheduled_tasks=[],
+        ),
+        QueueConfig(
+            name="background-tasks",
+            tasks=["app.domain.system.tasks.background_worker_task"],
+            scheduled_tasks=[],
+        ),
+    ],
 )
 
 log = StructlogConfig(
