@@ -24,20 +24,23 @@ import {
   Mail,
 } from "lucide-react";
 
-import { Opportunity } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
+import { type Opportunity } from "@/types/opportunity";
 import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityJobPost } from "./OpportunityJobPost";
 import { OpportunityContacts } from "./OpportunityContacts";
 
-interface OpportunityDrawerProps {
+interface OpportunityTabsProps {
   opportunity: Opportunity;
   updateOpportunity: (updatedOpportunity: Opportunity) => void;
+  icp: Icp | null;
 }
 
 export function OpportunityTabs({
   opportunity,
   updateOpportunity,
-}: OpportunityDrawerProps) {
+  icp,
+}: OpportunityTabsProps) {
   return (
     <>
       <Tabs defaultValue="account" className="p-5">
@@ -77,7 +80,7 @@ export function OpportunityTabs({
         </TabsContent>
         <TabsContent value="people">
           {" "}
-          <OpportunityContacts opportunity={opportunity} />
+          <OpportunityContacts opportunity={opportunity} icp={icp} />
         </TabsContent>
 
         <TabsContent value="evidence">

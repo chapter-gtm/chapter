@@ -1,15 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Icon } from "@radix-ui/react-select";
-import { Building2 } from "lucide-react";
 
 import TextEditor from "@/components/editor/editor";
-import { Opportunity } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
+import { type Opportunity } from "@/types/opportunity";
 import { getOpportunity } from "@/utils/chapter/opportunity";
-import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityBrand } from "./OpportunityBrand";
-import { OpportunityJobPost } from "./OpportunityJobPost";
-import { OpportunityContacts } from "./OpportunityContacts";
+import { getIcps } from "@/utils/chapter/icp";
 import {
   getUserProfile,
   addOpportunityToRecentlyViewed,
@@ -31,12 +28,19 @@ interface OpportunityFullProps {
 }
 
 export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
+  const [icp, setIcp] = useState<Icp | null>(null);
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [endType, setEndType] = useState<Boolean | null>(null);
 
   useEffect(() => {
     const fetchOpportunity = async () => {
       try {
+        const currentUserIcps = await getIcps();
+        if (currentUserIcps === null || currentUserIcps.length <= 0) {
+          throw new Error("Failed to fetch ICP");
+        }
+        setIcp(currentUserIcps[0]);
+
         const opp = await getOpportunity(opportunityId);
         setOpportunity(opp);
 
@@ -107,6 +111,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                 <OpportunityTabs
                   opportunity={opportunity}
                   updateOpportunity={updateOpportunity}
+                  icp={icp}
                 />
               </div>
             </div>

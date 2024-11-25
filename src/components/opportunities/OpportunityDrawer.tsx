@@ -23,7 +23,8 @@ import {
   Mail,
 } from "lucide-react";
 
-import { Opportunity } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
+import { type Opportunity } from "@/types/opportunity";
 import { OpportunityBrand } from "./OpportunityBrand";
 import { OpportunityTabs } from "./OpportunityTabs";
 
@@ -32,11 +33,13 @@ import { Separator } from "@/components/ui/separator";
 interface OpportunityDrawerProps {
   opportunity: Opportunity;
   updateOpportunity: (updatedOpportunity: Opportunity) => void;
+  icp: Icp | null;
 }
 
 export function OpportunityDrawer({
   opportunity,
   updateOpportunity,
+  icp,
 }: OpportunityDrawerProps) {
   return (
     <>
@@ -47,6 +50,7 @@ export function OpportunityDrawer({
           <OpportunityTabs
             opportunity={opportunity}
             updateOpportunity={updateOpportunity}
+            icp={icp}
           />
         </div>
       </div>

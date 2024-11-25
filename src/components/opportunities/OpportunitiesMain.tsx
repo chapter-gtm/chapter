@@ -2,8 +2,6 @@
 
 import { type Icp } from "@/types/icp";
 import { type Opportunity } from "@/types/opportunity";
-import { FundingRound } from "@/types/company";
-import { type Location } from "@/types/location";
 import { getIcps } from "@/utils/chapter/icp";
 import { getOpportunities } from "@/utils/chapter/opportunity";
 import {
@@ -22,7 +20,6 @@ import { OpportunityDrawer } from "./OpportunityDrawer";
 
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -30,21 +27,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import {
-  ChevronsRight,
-  ExternalLink,
-  LinkIcon,
-  Building2,
-  Landmark,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
 
 import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 import { useEffect, useState, useCallback, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Icon } from "@radix-ui/react-select";
 
 import { OpportunityStageList } from "./OpportunityStageList";
 
@@ -332,6 +320,7 @@ export function OpportunitiesMain() {
                       <OpportunityDrawer
                         opportunity={selectedRow}
                         updateOpportunity={updateOpportunityCallback}
+                        icp={icp}
                       />
                     )}
                   </div>

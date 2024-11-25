@@ -35,7 +35,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { Opportunity } from "@/types/opportunity";
+import { type Icp } from "@/types/icp";
+import { type Opportunity } from "@/types/opportunity";
 import { OpportunityPropList } from "./OpportunityPropList";
 import { OpportunityBrand } from "./OpportunityBrand";
 import { OpportunityJobPost } from "./OpportunityJobPost";
@@ -45,8 +46,9 @@ import { Investor } from "@/types/company";
 import posthog from "posthog-js";
 import { PersonIcon } from "@radix-ui/react-icons";
 
-interface OpportunityDrawerProps {
+interface OpportunityContactsProps {
   opportunity: Opportunity;
+  icp: Icp | null;
 }
 
 const handleCopyEmail = async (email: string | null) => {
@@ -73,7 +75,10 @@ const handleCopyPhone = async (email: string | null) => {
   }
 };
 
-export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
+export function OpportunityContacts({
+  icp,
+  opportunity,
+}: OpportunityContactsProps) {
   return (
     <>
       <div className="flex flex-col py-6 gap-y-4">
@@ -121,7 +126,21 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                       <TooltipTrigger asChild>
                         <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md flex-1">
                           {contact.skills && contact.skills.length > 0
-                            ? contact.skills.join(" · ")
+                            ? icp
+                              ? contact.skills
+                                  .filter((item) =>
+                                    icp.tool.include.some(
+                                      (el) =>
+                                        el.toLowerCase() === item.toLowerCase()
+                                    )
+                                  )
+                                  .concat(
+                                    contact.skills.filter(
+                                      (item) => !icp.tool.include.includes(item)
+                                    )
+                                  )
+                                  .join(" · ")
+                              : contact.skills.join(" . ")
                             : "Empty"}
                         </p>
                       </TooltipTrigger>
