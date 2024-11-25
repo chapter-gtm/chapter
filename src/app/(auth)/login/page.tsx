@@ -75,8 +75,8 @@ export default function AuthenticationPage() {
         <div className="flex flex-1 h-full items-center justify-center">
           {showLogin ? (
             <div className="flex">
-              <div className="grid grid-cols-4 gap-x-24 border-border border rounded-3xl p-6">
-                <div className="col-span-2">
+              <div className="grid grid-cols-3 gap-x-24 border-border border rounded-3xl p-6">
+                <div className="col-span-3">
                   {" "}
                   <div className="lg:p-8">
                     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -144,23 +144,6 @@ export default function AuthenticationPage() {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-span-2 py-8 space-y-3 sm:w-[350px]">
-                  <h2 className="font-semibold text-xl pb-6">
-                    Welcome to Chapter
-                  </h2>
-                  <p className="text-base text-color-paragraph">
-                    Chapter is a purpose-built sales tool for technical
-                    founders. Get weekly high quality leads based on your search
-                    criteria without the need to search, enrich, and stitch
-                    prospect data manually.
-                  </p>
-                  <p className="text-base text-color-paragraph">
-                    Chapter just works, and gets out of your way.
-                  </p>
-                  <p className="text-base text-color-paragraph">
-                    Let&apos;s begin.
-                  </p>
                 </div>
               </div>
             </div>
