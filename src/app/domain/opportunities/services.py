@@ -180,7 +180,13 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 continue
 
             if not icp.tool.include:
-                logger.debug("Skipping icp as tools include list is empty", icp=icp)
+                logger.debug(
+                    "Skipping icp as tools include list is empty",
+                    tenant_id=icp.tenant_id,
+                    icp_id=icp.id,
+                    icp_name=icp.name,
+                )
+                continue
 
             date_n_days_ago = datetime.now(timezone.utc) - timedelta(days=last_n_days)
             and_conditions = [
