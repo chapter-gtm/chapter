@@ -113,7 +113,7 @@ class PersonController(Controller):
             person_details = await get_person_details(data.url)
         except Exception as e:
             logger.aerror("Error extracting person details", exc_info=e)
-            raise Exception("Error extracting person details")
+            raise Exception("Error extracting person details") from e
 
         linkedin_profile_url = None
         twitter_profile_url = None
@@ -173,7 +173,9 @@ class PersonController(Controller):
             first_name=person_details.get("first_name"),
             last_name=person_details.get("last_name"),
             full_name=person_details.get("full_name"),
+            headline=person_details.get("headline") or person_details.get("summary"),
             title=person_details.get("job_title"),
+            summary=person_details.get("job_summary"),
             occupation=person_details.get("job_title_role"),
             industry=person_details.get("industry"),
             linkedin_profile_url=linkedin_profile_url,
