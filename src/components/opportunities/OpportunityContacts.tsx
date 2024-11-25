@@ -24,32 +24,14 @@ import {
 } from "@/components/ui/accordion";
 
 import {
-  Divide,
-  ExternalLink,
-  Maximize2,
-  Users,
-  User,
-  Factory,
-  MapPin,
-  Landmark,
-  Banknote,
-  Target,
-  Loader,
-  StickyNote,
-  ChevronRight,
-  CircleUserIcon,
   Linkedin,
-  Clipboard,
   Twitter,
   Mail,
-  PencilLine,
-  CircleUserRoundIcon,
   Github,
-  ChevronDown,
-  Heart,
   GraduationCap,
   Send,
   Phone,
+  BriefcaseBusiness,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -105,6 +87,9 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     {contact.fullName}
                   </div>
                 </div>
+                <div className="text-sm text-primary font-small">
+                  {contact.headline}
+                </div>
                 <Separator />
 
                 <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
@@ -113,6 +98,16 @@ export function OpportunityContacts({ opportunity }: OpportunityDrawerProps) {
                     <p>Role</p>
                   </div>
                   <p className="font-medium">{contact.title}</p>
+                </div>
+
+                <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                  <div className="flex gap-x-2 items-center w-44 min-w-44 max-w-44 text-zinc-500 dark:text-zinc-400">
+                    <BriefcaseBusiness width={18} />
+                    <p>Summary</p>
+                  </div>
+                  <p className="font-medium">
+                    {contact.summary ? contact.summary : "Empty"}
+                  </p>
                 </div>
 
                 <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
