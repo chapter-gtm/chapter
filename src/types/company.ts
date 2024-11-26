@@ -42,15 +42,6 @@ export enum Industry {
     SaaS = "SaaS",
 }
 
-export enum ToolStack {
-    GithubActions = "Github Actions",
-    Cypress = "Cypress",
-    Kubernetes = "Kubernetes",
-    Docker = "Docker",
-    Playwright = "Playwright",
-    Rust = "Rust",
-}
-
 export type Funding = {
     roundName: FundingRound;
     moneyRaised: number | null;
