@@ -149,7 +149,17 @@ const stackList = [
   { value: "GraphQL", label: "GraphQL" },
   { value: "OpenAPI", label: "OpenAPI" },
   { value: "Markdown", label: "Markdown" },
-  { value: "MDX", label: "MDX" },
+  { value: "Authorization", label: "Authorization" },
+  { value: "Access Management", label: "Access Management" },
+  { value: "AWS IAM", label: "AWS IAM" },
+  { value: "Django", label: "Django" },
+  { value: "Spring Boot", label: "Spring Boot" },
+  { value: "Flask", label: "Flask" },
+  { value: "Express", label: "Express" },
+  { value: "Ruby on Rails", label: "Ruby on Rails" },
+  { value: "SailPoint", label: "SailPoint" },
+  { value: "Okta", label: "Okta" },
+  { value: "Auth0", label: "Auth0" },
 ];
 
 const jobTitlesList = [
