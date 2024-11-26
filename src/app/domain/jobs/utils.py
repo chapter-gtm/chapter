@@ -27,6 +27,7 @@ canonical_tech_names = [
     "Cypress",
     "Playwright",
     "Rust",
+    "Go",
     "Python",
     "TensorFlow",
     "PyTorch",
@@ -55,12 +56,7 @@ canonical_tech_names = [
     "Auth0",
 ]
 
-special_cases = {
-    "k8s": "Kubernetes",
-    "js": "Javascript",
-    "ts": "Typescript",
-    "node": "Node.js",
-}
+special_cases = {"k8s": "Kubernetes", "js": "Javascript", "ts": "Typescript", "node": "Node.js", "golang": "Go"}
 
 model = os.environ["OPENAI_MODEL_NAME"]
 client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
