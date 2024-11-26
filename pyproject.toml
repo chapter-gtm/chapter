@@ -30,6 +30,7 @@ dependencies = [
     "boto3>=1.35.10",
     "google-play-scraper>=1.2.7",
     "bs4>=0.0.2",
+    "rapidfuzz>=3.10.1",
 ]
 description = "Opinionated template for a Litestar application."
 keywords = ["litestar", "sqlalchemy", "alembic", "api", "asgi", "litestar", "spa"]
