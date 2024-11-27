@@ -35,7 +35,7 @@ class Person(UUIDAuditBase, SlugKey):
     first_name: Mapped[str] = mapped_column(nullable=True, default=None)
     last_name: Mapped[str] = mapped_column(nullable=True, default=None)
     full_name: Mapped[str] = mapped_column(nullable=True, default=None)
-    headline: Mapped[str | None] = mapped_column(String(length=500), nullable=True, default=None, index=True)
+    headline: Mapped[str | None] = mapped_column(String(length=2000), nullable=True, default=None, index=True)
     title: Mapped[str | None] = mapped_column(String(length=500), nullable=True, default=None, index=True)
     summary: Mapped[str | None] = mapped_column(String(length=2000), nullable=True, default=None)
     occupation: Mapped[str] = mapped_column(nullable=True, default=None)
