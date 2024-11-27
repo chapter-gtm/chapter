@@ -66,7 +66,7 @@ tool_name_special_cases = {
 
 
 canonical_process_names = ["Code Review", "Documentation", "CI/CD"]
-tool_name_special_cases = {
+process_name_special_cases = {
     "ci/cd pipelines": "CI/CD",
 }
 
@@ -113,15 +113,15 @@ prompt = """
 """
 
 
-def normalise_names(items):
+def normalise_names(items, canonical_names, special_cases):
     def normalise_name(name):
         # Check case-insensitive special cases
         lower_name = name.lower()
-        if lower_name in tool_name_special_cases:
-            return tool_name_special_cases[lower_name]
+        if lower_name in special_cases:
+            return special_cases[lower_name]
 
         # Fuzzy matching for general cases
-        result = process.extractOne(name, canonical_tech_names, scorer=fuzz.ratio)
+        result = process.extractOne(name, canonical_names, scorer=fuzz.ratio)
         if result:
             match, score = result[0], result[1]
             return match if score > 80 else name
@@ -162,12 +162,14 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
 
     # Normalise tools
     try:
-        job_details["tools"] = normalise_names(job_details["tools"])
+        job_details["tools"] = normalise_names(job_details["tools"], canonical_tech_names, tool_name_special_cases)
     except Exception as e:
         logger.warn("Failed to normalise tool stack", job_details=job_details, exc_info=e)
 
     try:
-        job_details["processes"] = normalise_names(job_details["processes"])
+        job_details["processes"] = normalise_names(
+            job_details["processes"], canonical_process_names, process_name_special_cases
+        )
     except Exception as e:
         logger.warn("Failed to normalise processes", job_details=job_details, exc_info=e)
 
