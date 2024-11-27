@@ -93,7 +93,20 @@ export function OpportunityContacts({
                   </div>
                 </div>
                 <div className="text-sm text-primary font-small">
-                  {contact.headline}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md flex-1">
+                          {contact.headline}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs whitespace-normal break-words p-2 text-sm">
+                          {contact.headline}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <Separator />
 
