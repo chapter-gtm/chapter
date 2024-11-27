@@ -65,9 +65,9 @@ tool_name_special_cases = {
 }
 
 
-canonical_process_names = ["Code Review", "CI / CD", "Observability", "ETL", "Documentation"]
+canonical_process_names = ["Code Review", "Documentation", "CI/CD"]
 tool_name_special_cases = {
-    "ci/cd pipelines": "CI / CD",
+    "ci/cd pipelines": "CI/CD",
 }
 
 model = os.environ["OPENAI_MODEL_NAME"]

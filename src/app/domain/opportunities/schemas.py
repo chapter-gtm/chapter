@@ -16,6 +16,7 @@ from app.lib.schema import (
     OpportunityContext,
     CompanyCriteria,
     ToolCriteria,
+    ProcessCriteria,
     PersonCriteria,
 )
 
@@ -84,6 +85,7 @@ class ICP(CamelizedBaseStruct):
     name: str
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
+    process: ProcessCriteria | None = None
     person: PersonCriteria | None = None
     pitch: str | None = None
 
@@ -94,6 +96,7 @@ class ICPCreate(CamelizedBaseStruct):
     name: str
     company: CompanyCriteria | None = None
     tool: ToolCriteria | None = None
+    process: ProcessCriteria | None = None
     person: PersonCriteria | None = None
     pitch: str | None = None
 
@@ -104,5 +107,6 @@ class ICPUpdate(CamelizedBaseStruct):
     name: str | None | msgspec.UnsetType = msgspec.UNSET
     company: CompanyCriteria | None | msgspec.UnsetType = msgspec.UNSET
     tool: ToolCriteria | None | msgspec.UnsetType = msgspec.UNSET
+    process: ProcessCriteria | None | msgspec.UnsetType = msgspec.UNSET
     person: PersonCriteria | None | msgspec.UnsetType = msgspec.UNSET
     pitch: str | None | msgspec.UnsetType = msgspec.UNSET

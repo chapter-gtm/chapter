@@ -167,6 +167,13 @@ class ToolCriteria(CamelizedBaseStruct):
     exclude: list[str] | None = None
 
 
+class ProcessCriteria(CamelizedBaseStruct):
+    """Process criteria."""
+
+    include: list[str] | None = None
+    exclude: list[str] | None = None
+
+
 class PersonCriteria(CamelizedBaseStruct):
     """Person criteria."""
 

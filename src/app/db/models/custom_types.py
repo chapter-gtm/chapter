@@ -20,6 +20,7 @@ from app.lib.schema import (
     OrgSizeCriteria,
     CompanyCriteria,
     ToolCriteria,
+    ProcessCriteria,
     PersonCriteria,
 )
 
@@ -144,6 +145,14 @@ class ToolCriteriaType(JSONBType):
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return ToolCriteria.from_dict(value)
+        return None
+
+
+class ProcessCriteriaType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return ProcessCriteria.from_dict(value)
         return None
 
 
