@@ -96,6 +96,11 @@ const agentFormSchema = z.object({
     include: z.array(z.string()),
     exclude: z.array(z.string()),
   }),
+  // process didn't work, may be it's a special keyword
+  process_: z.object({
+    include: z.array(z.string()),
+    exclude: z.array(z.string()),
+  }),
   person: z.object({
     titles: z.array(z.string()),
     subRoles: z.array(z.string()),
@@ -160,6 +165,12 @@ const stackList = [
   { value: "SailPoint", label: "SailPoint" },
   { value: "Okta", label: "Okta" },
   { value: "Auth0", label: "Auth0" },
+];
+
+const processList = [
+  { value: "Code Review", label: "Code Review" },
+  { value: "CI/CD", label: "CI/CD" },
+  { value: "Documentation", label: "Documentation" },
 ];
 
 const jobTitlesList = [
@@ -257,7 +268,11 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         changelog: false,
       },
       tool: {
-        include: ["Docker", "Kubernetes"],
+        include: [],
+        exclude: [],
+      },
+      process_: {
+        include: [],
         exclude: [],
       },
       person: { titles: ["Founder", "CTO"], subRoles: [] },
@@ -277,7 +292,14 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       if (icp === null) {
         throw new Error("ICP not found");
       }
-      const updatedIcp = await updateIcp(icp.id, data as Icp);
+      const updatedIcp = await updateIcp(icp.id, {
+        name: data.name,
+        company: data.company,
+        tool: data.tool,
+        process: data.process_,
+        person: data.person,
+        pitch: data.pitch,
+      } as Icp);
       refreshIcp(updatedIcp);
       toast.success("ICP Saved!");
     } catch (error: any) {
@@ -314,7 +336,14 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       });
 
       icp.person.titles = Array.from(titleKeys);
-      form.reset(icp);
+      form.reset({
+        name: icp.name,
+        company: icp.company,
+        tool: icp.tool,
+        process_: icp.process,
+        person: icp.person,
+        pitch: icp.pitch,
+      });
     }
   }, [icp]);
 
@@ -592,33 +621,60 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
               </div>
 
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
-                <FormField
-                  control={form.control}
-                  name="tool.include"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex flex-col gap-y-3 justify-between w-full">
-                        <div className="flex flex-col gap-y-2">
-                          <FormLabel className="text-lg">Tool Stack</FormLabel>
-                          <FormDescription>
-                            Tools, libraries or frameworks that can be used as
-                            proxy, e.g. Docker, Kubernetes, etc.
-                          </FormDescription>
-                        </div>
+                <FormItem>
+                  <div className="flex flex-col gap-y-3 justify-between w-full">
+                    <div className="flex flex-col gap-y-2">
+                      <FormLabel className="text-lg">
+                        Stack and Processes
+                      </FormLabel>
+                    </div>
 
-                        <MultiSelect
-                          className="w-full"
-                          options={stackList}
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                          placeholder="Select stack"
-                          variant="default"
-                        />
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <div className="flex flex-col gap-y-2">
+                      <FormDescription>
+                        Tools, libraries or frameworks that can be used as
+                        proxy, e.g. Docker, Kubernetes, etc.
+                      </FormDescription>
+
+                      <FormField
+                        control={form.control}
+                        name="tool.include"
+                        render={({ field }) => (
+                          <MultiSelect
+                            className="w-full"
+                            options={stackList}
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            placeholder="Select stack"
+                            variant="default"
+                          />
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-y-2">
+                      <FormDescription>
+                        Processes that can be used as proxy, e.g. Code Review,
+                        Documentation, etc.
+                      </FormDescription>
+
+                      <FormField
+                        control={form.control}
+                        name="process_.include"
+                        render={({ field }) => (
+                          <MultiSelect
+                            className="w-full"
+                            options={processList}
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            placeholder="Select processes"
+                            variant="default"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <FormMessage />
+                </FormItem>
               </div>
 
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
