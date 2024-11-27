@@ -13,7 +13,7 @@ import {
   TableRecord,
   getFilters,
   getRecordColumns,
-  defaultColumnVisibility,
+  getDefaultColumnVisibility,
 } from "./columns";
 import { DataTable } from "@/components/data-table/data-table";
 import { OpportunityDrawer } from "./OpportunityDrawer";
@@ -89,6 +89,7 @@ export function OpportunitiesMain() {
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
               tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
+              processes: rec.jobPosts?.flatMap((jobPost) => jobPost.processes),
               investors: rec.company?.lastFunding?.investors,
             };
             return record;
@@ -253,7 +254,7 @@ export function OpportunitiesMain() {
                   data={records}
                   filters={getFilters(icp)}
                   preSelectedFilters={preSelectedFilters}
-                  defaultColumnVisibility={defaultColumnVisibility}
+                  defaultColumnVisibility={getDefaultColumnVisibility(icp)}
                   enableRowSelection={true}
                   onSelectedRowsChange={handleRowSelection}
                   stickyColumnCount={1}

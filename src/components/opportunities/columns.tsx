@@ -36,7 +36,7 @@ import { type Opportunity, OpportunityStage } from "@/types/opportunity";
 import { type Icp } from "@/types/icp";
 import { type Company, FundingRound, OrgSize } from "@/types/company";
 import { type Location } from "@/types/location";
-import { type Tool } from "@/types/job_post";
+import { type Tool, type Process } from "@/types/job_post";
 import { type Scale, ScaleLabel } from "@/types/scale";
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
 import { updateOpportunityStage } from "@/utils/chapter/opportunity";
@@ -249,12 +249,20 @@ export function getFilters(icp: Icp) {
       ],
     },
     {
-      tableColumnName: "tools",
+      tableColumnName: "stack",
       label: "Relevant Stack",
-      // TODO: Build filters based on tenant ICP
       filterOptions: icp.tool.include.map((tool: string) => ({
         value: tool,
         label: tool,
+        icon: undefined,
+      })),
+    },
+    {
+      tableColumnName: "processes",
+      label: "Relevant Processes",
+      filterOptions: icp.process.include.map((process: string) => ({
+        value: process,
+        label: process,
         icon: undefined,
       })),
     },
@@ -376,16 +384,26 @@ function getLocationFromCountry(icp: Icp, country: string) {
   return location;
 }
 
-export const defaultColumnVisibility: VisibilityState = {
-  id: false,
-  date: true,
-  stage: true,
-  companyName: true,
-  companySize: true,
-  fundingRound: true,
-  companyLocation: true,
-  industry: true,
-};
+export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
+  const defaultColumnVisibility: VisibilityState = {
+    id: false,
+    date: true,
+    stage: true,
+    companyName: true,
+    companySize: true,
+    fundingRound: true,
+    companyLocation: true,
+    industry: true,
+    stack: true,
+    processes: true,
+  };
+
+  defaultColumnVisibility.stack = icp.tool.include.length > 0 ? true : false;
+  defaultColumnVisibility.processes =
+    icp.process.include.length > 0 ? true : false;
+
+  return defaultColumnVisibility;
+}
 
 export function getFixedColumns(
   icp: Icp,
@@ -664,13 +682,13 @@ export function getFixedColumns(
       },
     },
     {
-      accessorKey: "tools",
+      accessorKey: "stack",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Relevant Stack" />
       ),
       accessorFn: (row) => {
-        const tools: Tool[] = row.tools;
-        return tools.map((tool) => tool.name).join(", ");
+        const tools: Tool[] = row.tools || [];
+        return tools.map((tool) => (tool ? tool.name : "")).join(", ");
       },
       cell: ({ row }) => {
         const tools: Tool[] = row.original.tools;
@@ -695,8 +713,45 @@ export function getFixedColumns(
         );
       },
       filterFn: (row, id, value) => {
-        const tools: Tool[] = row.original["tools"] || [];
+        const tools: Tool[] = row.original.tools || [];
         return tools.some((tool: Tool) => value.includes(tool.name));
+      },
+    },
+    {
+      accessorKey: "processes",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Relevant Processes" />
+      ),
+      accessorFn: (row) => {
+        const processes: Process[] = row.processes || [];
+        return processes
+          .map((process) => (process ? process.name : ""))
+          .join(", ");
+      },
+      cell: ({ row }) => {
+        const processes: Process[] = row.original.processes;
+        return (
+          <div className="flex items-center gap-2">
+            {processes
+              .filter((process) => {
+                return icp.process.include.includes(process.name);
+              })
+              .map((process, index) => (
+                <div
+                  key={index}
+                  className="bg-popover dark:bg-muted/80 text-primary font-medium px-2 py-1 text-xs rounded-md"
+                >
+                  {process.name}
+                </div>
+              ))}
+          </div>
+        );
+      },
+      filterFn: (row, id, value) => {
+        const processes: Process[] = row.original.processes || [];
+        return processes.some((process: Process) =>
+          value.includes(process.name)
+        );
       },
     },
     {
