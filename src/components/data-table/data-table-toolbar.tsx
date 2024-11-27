@@ -54,14 +54,16 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {filters.map((item, index) => (
-          <DataTableFacetedFilter
-            key={index}
-            column={table.getColumn(item.tableColumnName)}
-            title={item.label}
-            options={item.filterOptions}
-          />
-        ))}
+        {filters
+          .filter((item) => item.filterOptions.length > 0)
+          .map((item, index) => (
+            <DataTableFacetedFilter
+              key={index}
+              column={table.getColumn(item.tableColumnName)}
+              title={item.label}
+              options={item.filterOptions}
+            />
+          ))}
         {isFiltered && (
           <Button
             variant="ghost"
