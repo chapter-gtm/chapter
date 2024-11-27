@@ -1,28 +1,16 @@
 import {
-  Loader,
-  InfoIcon,
   Factory,
   Users,
   Banknote,
   Landmark,
-  Target,
-  CircleUserIcon,
-  Link,
-  LinkedinIcon,
-  Dot,
-  Map,
   ExternalLink,
-  Heart,
-  ChevronDown,
-  CalendarFold,
-  Hash,
-  Star,
   DollarSign,
   Calendar,
   FileText,
   Newspaper,
   Triangle,
   Layers,
+  CircleCheckBig,
 } from "lucide-react";
 
 import {
@@ -213,31 +201,67 @@ export function OpportunityPropList({
             </>
           )}
         <Separator />
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-            <Layers width={18} />
-            <p>Relevant Stack</p>
+
+        {icp && icp.tool.include.length > 0 && (
+          <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+            <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+              <Layers width={18} />
+              <p>Relevant Stack</p>
+            </div>
+            <div className="flex flex-row gap-x-2">
+              {icp &&
+                opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .filter(
+                    (tool) => tool && icp.tool.include.includes(tool.name)
+                  )
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <div
+                          key={index}
+                          className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
+                        >
+                          {tool.name}
+                        </div>
+                      )}
+                    </>
+                  ))}
+            </div>
           </div>
-          <div className="flex flex-row gap-x-2">
-            {icp &&
-              opportunity.jobPosts
-                ?.flatMap((jobPost) => jobPost.tools)
-                .filter((tool) => tool && icp.tool.include.includes(tool.name))
-                .map((tool, index) => (
+        )}
+
+        {icp && icp.process.include.length > 0 && (
+          <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+            <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+              <CircleCheckBig width={18} />
+              <p>Relevant Processes</p>
+            </div>
+            <div className="flex flex-row gap-x-2">
+              {opportunity.jobPosts
+                ?.flatMap((jobPost) => jobPost.processes)
+                .filter(
+                  (process) =>
+                    process && icp.process.include.includes(process.name)
+                )
+                .map((process, index) => (
                   <>
-                    {tool && (
+                    {process && (
                       <div
                         key={index}
                         className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
                       >
-                        {tool.name}
+                        {process.name}
                       </div>
                     )}
                   </>
                 ))}
+            </div>
           </div>
-        </div>
+        )}
+
         <Separator />
+
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
             <Layers width={18} />
@@ -294,6 +318,65 @@ export function OpportunityPropList({
               </TooltipProvider>
             )}
         </div>
+
+        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
+            <CircleCheckBig width={18} />
+            <p>Additional processes</p>
+          </div>
+
+          {icp &&
+            opportunity &&
+            Array.isArray(opportunity.jobPosts) &&
+            opportunity.jobPosts.length > 0 &&
+            opportunity.jobPosts[0]?.processes &&
+            opportunity.jobPosts[0]?.processes?.length > 0 && (
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
+                      See all
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
+                    {icp
+                      ? opportunity.jobPosts
+                          ?.flatMap((jobPost) => jobPost.processes)
+                          .filter(
+                            (process) =>
+                              process &&
+                              !icp.process.include.includes(process.name)
+                          )
+                          .map((process, index) => (
+                            <>
+                              {process && (
+                                <Badge
+                                  key={index}
+                                  variant={"outline"}
+                                  className="border-border"
+                                >
+                                  {process.name}
+                                </Badge>
+                              )}
+                            </>
+                          ))
+                      : opportunity.jobPosts
+                          ?.flatMap((jobPost) => jobPost.processes)
+                          .map((process, index) => (
+                            <>
+                              {process && (
+                                <Badge key={index} variant={"outline"}>
+                                  {process.name}
+                                </Badge>
+                              )}
+                            </>
+                          ))}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+        </div>
+
         <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
