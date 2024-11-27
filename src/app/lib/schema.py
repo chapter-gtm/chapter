@@ -135,6 +135,12 @@ class Tool(CamelizedBaseStruct):
     certainty: Scale = Scale.LOW
 
 
+class Process(CamelizedBaseStruct):
+    """Process data."""
+
+    name: str
+
+
 class OrgSizeCriteria(CamelizedBaseStruct):
     """Org size data."""
 

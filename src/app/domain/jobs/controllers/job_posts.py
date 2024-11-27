@@ -17,7 +17,7 @@ from litestar.response import Response
 from litestar.exceptions import NotFoundException
 
 from app.config import constants
-from app.lib.schema import Location, Tool
+from app.lib.schema import Location, Tool, Process
 from app.lib.utils import get_domain
 from app.lib.scraperapi import extract_url_content
 from app.db.models import User as UserModel
@@ -151,6 +151,9 @@ class JobPostController(Controller):
                 Tool(name=tool["name"], certainty=tool.get("certainty", "Low"))
                 for tool in job_details.get("tools", [])
                 if tool.get("name")
+            ],
+            processes=[
+                Process(name=process["name"]) for process in job_details.get("processes", []) if process.get("name")
             ],
             company_id=company_db_obj.id,
         )

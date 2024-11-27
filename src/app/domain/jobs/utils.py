@@ -56,7 +56,19 @@ canonical_tech_names = [
     "Auth0",
 ]
 
-special_cases = {"k8s": "Kubernetes", "js": "Javascript", "ts": "Typescript", "node": "Node.js", "golang": "Go"}
+tool_name_special_cases = {
+    "k8s": "Kubernetes",
+    "js": "Javascript",
+    "ts": "Typescript",
+    "node": "Node.js",
+    "golang": "Go",
+}
+
+
+canonical_process_names = ["Code Review", "CI / CD", "Observability", "ETL", "Documentation"]
+tool_name_special_cases = {
+    "ci/cd pipelines": "CI / CD",
+}
 
 model = os.environ["OPENAI_MODEL_NAME"]
 client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
@@ -69,6 +81,7 @@ prompt = """
     - Job title
     - Job Location
     - Tech stack such as tools, programming languages, frameworks, and technologies, along with the certainty(Low, Medium or High) that the company is likely using the tool
+    - Mentions of engineering processes / practices that the team and company are following or want to follow
 
    Tips:
    - If a company url is not found directly, try to determine company name from the post and match against
@@ -89,7 +102,8 @@ prompt = """
         }}
         title: "Job title",
         location: {{"country": "country name", "region": "state or provience name", "city": "city name"}},
-        tools: [ {{"name": "tool name 1", "certainty": "High"}}, {{"name": "tool name 2", "certainty": "Medium"}} ]
+        tools: [ {{"name": "tool name 1", "certainty": "High"}}, {{"name": "tool name 2", "certainty": "Medium"}} ],
+        processes: [{{"name": "process 1"}}, {{"name": "process 2"}}]
     }}
 
     Note: Do NOT include anything that's not part of the post and use null if you're unable to extract any information.
@@ -99,12 +113,12 @@ prompt = """
 """
 
 
-def normalise_tool_stack(tool_stack):
+def normalise_names(items):
     def normalise_name(name):
         # Check case-insensitive special cases
         lower_name = name.lower()
-        if lower_name in special_cases:
-            return special_cases[lower_name]
+        if lower_name in tool_name_special_cases:
+            return tool_name_special_cases[lower_name]
 
         # Fuzzy matching for general cases
         result = process.extractOne(name, canonical_tech_names, scorer=fuzz.ratio)
@@ -115,10 +129,10 @@ def normalise_tool_stack(tool_stack):
         return name
 
     # Normalize each item's name in the tech stack
-    for item in tool_stack:
+    for item in items:
         if "name" in item:
             item["name"] = normalise_name(item["name"].strip())
-    return tool_stack
+    return items
 
 
 async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
@@ -148,8 +162,13 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
 
     # Normalise tools
     try:
-        job_details["tools"] = normalise_tool_stack(job_details["tools"])
+        job_details["tools"] = normalise_names(job_details["tools"])
     except Exception as e:
         logger.warn("Failed to normalise tool stack", job_details=job_details, exc_info=e)
+
+    try:
+        job_details["processes"] = normalise_names(job_details["processes"])
+    except Exception as e:
+        logger.warn("Failed to normalise processes", job_details=job_details, exc_info=e)
 
     return job_details

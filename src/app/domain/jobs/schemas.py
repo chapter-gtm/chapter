@@ -6,7 +6,7 @@ from datetime import datetime
 import msgspec
 
 from app.db.models.job_post import JobPost
-from app.lib.schema import CamelizedBaseStruct, Location, Tool
+from app.lib.schema import CamelizedBaseStruct, Location, Tool, Process
 from app.domain.companies.schemas import Company, CompanyCreate
 
 
@@ -26,6 +26,7 @@ class JobPost(CamelizedBaseStruct):
     total_applicants: int | None = None
     external_id: str | None = None
     tools: list[Tool] | None = None
+    processes: list[Process] | None = None
     company: Company | None = None
 
 
@@ -43,6 +44,7 @@ class JobPostCreate(CamelizedBaseStruct):
     total_applicants: int | None = None
     external_id: str | None = None
     tools: list[Tool] | None = None
+    processes: list[Process] | None = None
     company_id: str | None = None
 
 
