@@ -7,6 +7,10 @@ export type Tool = {
     certainty: Scale;
 };
 
+export type Process = {
+    name: string;
+};
+
 export type JobPost = {
     id: string;
     title: number | null;
@@ -19,6 +23,7 @@ export type JobPost = {
     total_applicants: number | null;
     external_id: string | null;
     tools: Tool[] | null | null;
+    processes: Process[] | null | null;
     company: Company | null;
     createdAt: Date | null;
     updatedAt: Date | null;

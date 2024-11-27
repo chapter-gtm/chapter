@@ -20,6 +20,11 @@ export type ToolCriteria = {
     exclude: string[];
 };
 
+export type ProcessCriteria = {
+    include: string[];
+    exclude: string[];
+};
+
 export type PersonCriteria = {
     titles: string[];
     subRoles: string[];
@@ -30,6 +35,7 @@ export type Icp = {
     name: string;
     company: CompanyCriteria;
     tool: ToolCriteria;
+    process: ProcessCriteria;
     person: PersonCriteria;
     pitch: string;
 };
