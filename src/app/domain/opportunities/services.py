@@ -179,9 +179,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             if tenant_ids and str(icp.tenant_id) not in tenant_ids:
                 continue
 
-            if not icp.tool.include:
+            if not icp.tool.include and not icp.process.include:
                 logger.debug(
-                    "Skipping icp as tools include list is empty",
+                    "Skipping icp as tool and process include lists are both empty",
                     tenant_id=icp.tenant_id,
                     icp_id=icp.id,
                     icp_name=icp.name,
@@ -194,8 +194,9 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 Opportunity.id.is_(None),
             ]
 
-            # TODO: Case-insensetive match and filter on tool certainty
+            # TODO: Filter on tool certainty?
             tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
+            process_or_conditions = [JobPost.processes.contains([{"name": name}]) for name in icp.process.include]
 
             if icp.tool.exclude:
                 tool_stack_not_conditions = [
@@ -212,9 +213,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 )
                 .where(
                     and_(
-                        or_(
-                            *tool_stack_or_conditions,
-                        ),
+                        or_(*tool_stack_or_conditions, *process_or_conditions),
                         *and_conditions,
                     )
                 )
