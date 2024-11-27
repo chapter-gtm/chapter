@@ -16,6 +16,7 @@ from app.lib.schema import (
     OpportunityContext,
     OrgSize,
     Tool,
+    Process,
     Scale,
     OrgSizeCriteria,
     CompanyCriteria,
@@ -119,6 +120,21 @@ class ToolType(JSONBType):
             for item in value:
                 obj = Tool.from_dict(item)
                 obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
+                objs.append(obj)
+            return objs
+        return None
+
+
+class ProcessType(JSONBType):
+    def process_result_value(self, value, dialect):
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            obj = Process.from_dict(value)
+            return obj
+        elif value and isinstance(value, list):
+            objs = []
+            for item in value:
+                obj = Process.from_dict(item)
                 objs.append(obj)
             return objs
         return None

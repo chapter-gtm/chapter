@@ -8,8 +8,8 @@ from sqlalchemy import String, Text, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship, deferred
 
-from app.lib.schema import Location, Funding, Tool
-from .custom_types import LocationType, FundingType, ToolType
+from app.lib.schema import Location, Funding, Tool, Process
+from .custom_types import LocationType, FundingType, ToolType, ProcessType
 from .company import Company
 
 
@@ -30,6 +30,7 @@ class JobPost(UUIDAuditBase):
     apply_url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     external_id: Mapped[str | None] = mapped_column(nullable=True, default=None)
     tools: Mapped[list[Tool] | None] = mapped_column(ToolType, nullable=True, default=None)
+    processes: Mapped[list[Process] | None] = mapped_column(ProcessType, nullable=True, default=None)
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, index=True)
     # -----------
     # ORM Relationships
