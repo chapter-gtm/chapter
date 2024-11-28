@@ -65,7 +65,7 @@ tool_name_special_cases = {
 }
 
 
-canonical_process_names = ["Code Review", "Documentation", "CI/CD"]
+canonical_process_names = ["Code Review", "Testing", "Documentation", "CI/CD"]
 process_name_special_cases = {
     "ci/cd pipelines": "CI/CD",
 }
