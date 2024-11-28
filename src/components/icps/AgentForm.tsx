@@ -169,6 +169,7 @@ const stackList = [
 
 const processList = [
   { value: "Code Review", label: "Code Review" },
+  { value: "Testing", label: "Testing" },
   { value: "CI/CD", label: "CI/CD" },
   { value: "Documentation", label: "Documentation" },
 ];
