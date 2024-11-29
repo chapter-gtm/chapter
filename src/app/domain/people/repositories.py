@@ -12,9 +12,7 @@ from app.db.models import Person
 if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
 
-__all__ = (
-    "PersonRepository",
-)
+__all__ = ("PersonRepository",)
 
 
 class PersonRepository(SQLAlchemyAsyncSlugRepository[Person]):

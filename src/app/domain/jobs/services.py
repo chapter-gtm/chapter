@@ -21,9 +21,7 @@ if TYPE_CHECKING:
     from msgspec import Struct
     from sqlalchemy.orm import InstrumentedAttribute
 
-__all__ = (
-    "JobPostService",
-)
+__all__ = ("JobPostService",)
 
 
 class JobPostService(SQLAlchemyAsyncRepositoryService[JobPost]):

@@ -12,9 +12,7 @@ from app.db.models import Company
 if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
 
-__all__ = (
-    "CompanyRepository",
-)
+__all__ = ("CompanyRepository",)
 
 
 class CompanyRepository(SQLAlchemyAsyncSlugRepository[Company]):

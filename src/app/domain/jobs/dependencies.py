@@ -9,7 +9,7 @@ from sqlalchemy.orm import joinedload, noload, selectinload
 from app.db.models import JobPost
 from app.domain.jobs.services import JobPostService
 
-__all__ = ("provide_job_posts_service", )
+__all__ = ("provide_job_posts_service",)
 
 
 if TYPE_CHECKING:

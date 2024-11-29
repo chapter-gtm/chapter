@@ -148,6 +148,7 @@ class DatabaseSettings:
                         format="binary",
                     ),
                 )
+
         elif self.URL.startswith("sqlite+aiosqlite"):
             engine = create_async_engine(
                 url=self.URL,
@@ -173,6 +174,7 @@ class DatabaseSettings:
             def _sqla_on_begin(dbapi_connection: Any) -> Any:  # pragma: no cover
                 """Emits a custom begin"""
                 dbapi_connection.exec_driver_sql("BEGIN")
+
         else:
             engine = create_async_engine(
                 url=self.URL,

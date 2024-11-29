@@ -9,7 +9,7 @@ from sqlalchemy.orm import joinedload, noload, selectinload
 from app.db.models import Company
 from app.domain.companies.services import CompanyService
 
-__all__ = ("provide_companies_service", )
+__all__ = ("provide_companies_service",)
 
 
 if TYPE_CHECKING:

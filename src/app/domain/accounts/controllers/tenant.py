@@ -58,7 +58,6 @@ class TenantController(Controller):
         db_obj = await tenants_service.create(obj)
         return tenants_service.to_schema(schema_type=Tenant, data=db_obj)
 
-
     @get(
         operation_id="GetTenant",
         name="tenant:get",
