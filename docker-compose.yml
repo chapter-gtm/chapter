@@ -23,14 +23,14 @@ services:
       timeout: 3s
       retries: 30
   db:
-    image: postgres:latest
+    image: postgres:16
     ports:
       - "15432:5432"
     hostname: db
     environment:
-      POSTGRES_PASSWORD: "app"
-      POSTGRES_USER: "app"
-      POSTGRES_DB: "app"
+      POSTGRES_PASSWORD: "app_password"
+      POSTGRES_USER: "app_user"
+      POSTGRES_DB: "chapter-app-db"
     volumes:
       - db-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -43,7 +43,9 @@ services:
         - CMD
         - pg_isready
         - -U
-        - app
+        - app_user
+        - -d
+        - chapter-app-db
       interval: 2s
       timeout: 3s
       retries: 40
@@ -63,7 +65,13 @@ services:
     environment:
       SAQ_USE_SERVER_LIFESPAN: "false"
     env_file:
-      - .env.docker.example
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
   worker:
     image: app:latest
     command: litestar workers run
@@ -74,18 +82,31 @@ services:
       cache:
         condition: service_healthy
     env_file:
-      - .env.docker.example
+      - .env
   migrator:
     image: app:latest
     restart: "no"
     command: litestar database upgrade --no-prompt
     env_file:
-      - .env.docker.example
+      - .env
     depends_on:
       db:
         condition: service_healthy
       cache:
         condition: service_healthy
+  frontend:
+    build:
+      context: .
+      dockerfile: deploy/docker/run/Dockerfile.frontend
+    image: frontend:latest
+    restart: always
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
 volumes:
   db-data: {}
   cache-data: {}
