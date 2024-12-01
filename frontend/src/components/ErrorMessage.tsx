@@ -1,4 +1,4 @@
-import { ServerCrash } from "lucide-react";
+import { ServerCrash } from "lucide-react"
 
 export function ErrorMessage() {
   return (
@@ -11,5 +11,5 @@ export function ErrorMessage() {
         </p>
       </div>
     </div>
-  );
+  )
 }

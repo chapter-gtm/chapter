@@ -1,26 +1,26 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { PHProvider } from "./providers";
-import { ThemeProvider } from "@/components/theme-provider";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { PHProvider } from "./providers"
+import { ThemeProvider } from "@/components/theme-provider"
 
-import dynamic from "next/dynamic";
-import "./globals.css";
+import dynamic from "next/dynamic"
+import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 const PostHogPageView = dynamic(() => import("./PostHogPageView"), {
   ssr: false,
-});
+})
 
 export const metadata: Metadata = {
   title: "Chapter",
   description: "Lead gen for founders.",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
@@ -41,5 +41,5 @@ export default function RootLayout({
         </body>
       </PHProvider>
     </html>
-  );
+  )
 }

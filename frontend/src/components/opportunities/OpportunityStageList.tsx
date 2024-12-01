@@ -14,14 +14,14 @@ import {
   Heart,
   ChevronDown,
   ChevronRight,
-} from "lucide-react";
+} from "lucide-react"
 
-import { AppleLogo } from "../icons";
-import { GooglePlayLogo } from "../icons";
+import { AppleLogo } from "../icons"
+import { GooglePlayLogo } from "../icons"
 
-import { getIcp } from "@/utils/chapter/icp";
+import { getIcp } from "@/utils/chapter/icp"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,27 +30,27 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Opportunity } from "@/types/opportunity";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+} from "@/components/ui/dropdown-menu"
+import { Opportunity } from "@/types/opportunity"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import { OpportunityStage } from "@/types/opportunity";
-import { updateOpportunityStage } from "@/utils/chapter/opportunity";
+import { OpportunityStage } from "@/types/opportunity"
+import { updateOpportunityStage } from "@/utils/chapter/opportunity"
 
-import { stageColors } from "@/types/opportunity";
+import { stageColors } from "@/types/opportunity"
 
-import Image from "next/image";
+import Image from "next/image"
 
 interface OpportunityStageProps {
-  opportunity: Opportunity;
-  updateOpportunity: (updatedOpportunity: Opportunity) => void;
+  opportunity: Opportunity
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
 }
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ")
 }
 
 export function OpportunityStageList({
@@ -59,41 +59,41 @@ export function OpportunityStageList({
 }: OpportunityStageProps) {
   const [currentStage, setCurrentStage] = useState<OpportunityStage>(
     opportunity.stage
-  );
-  const stages = Object.values(OpportunityStage);
+  )
+  const stages = Object.values(OpportunityStage)
 
   const handleStageChange = async (newStage: string) => {
     try {
       if (!stages.includes(newStage as OpportunityStage)) {
-        toast.error("Failed to set stage.");
-        return;
+        toast.error("Failed to set stage.")
+        return
       }
 
       opportunity = await updateOpportunityStage(
         opportunity.id,
         newStage as OpportunityStage
-      );
-      setCurrentStage(opportunity.stage);
-      updateOpportunity(opportunity);
+      )
+      setCurrentStage(opportunity.stage)
+      updateOpportunity(opportunity)
     } catch (error: any) {
-      toast.error("Failed to update stage.");
+      toast.error("Failed to update stage.")
     }
-  };
+  }
 
   useEffect(() => {
-    setCurrentStage(opportunity.stage);
-  }, [opportunity]);
+    setCurrentStage(opportunity.stage)
+  }, [opportunity])
 
   useEffect(() => {
     const fetchIcp = async () => {
       try {
       } catch (error) {
-        toast.error("Failed to get ICP.");
+        toast.error("Failed to get ICP.")
       }
-    };
+    }
 
-    fetchIcp();
-  }, []);
+    fetchIcp()
+  }, [])
 
   return (
     <>
@@ -136,5 +136,5 @@ export function OpportunityStageList({
         </DropdownMenu>
       </div>
     </>
-  );
+  )
 }

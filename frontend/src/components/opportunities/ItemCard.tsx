@@ -1,27 +1,27 @@
-import type { UniqueIdentifier } from "@dnd-kit/core";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { cva } from "class-variance-authority";
-import { GripVertical } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Opportunity, OpportunityStage } from "@/types/opportunity";
+import type { UniqueIdentifier } from "@dnd-kit/core"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { cva } from "class-variance-authority"
+import { GripVertical } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Opportunity, OpportunityStage } from "@/types/opportunity"
 
 export interface Item extends Opportunity {
-  itemId: UniqueIdentifier;
+  itemId: UniqueIdentifier
 }
 
 interface ItemCardProps {
-  item: Item;
-  isOverlay?: boolean;
+  item: Item
+  isOverlay?: boolean
 }
 
-export type ItemType = "Item";
+export type ItemType = "Item"
 
 export interface ItemDragData {
-  type: ItemType;
-  item: Item;
+  type: ItemType
+  item: Item
 }
 
 export function ItemCard({ item, isOverlay }: ItemCardProps) {
@@ -41,12 +41,12 @@ export function ItemCard({ item, isOverlay }: ItemCardProps) {
     attributes: {
       roleDescription: "Item",
     },
-  });
+  })
 
   const style = {
     transition,
     transform: CSS.Translate.toString(transform),
-  };
+  }
 
   const variants = cva("", {
     variants: {
@@ -55,7 +55,7 @@ export function ItemCard({ item, isOverlay }: ItemCardProps) {
         overlay: "ring-2 ring-primary",
       },
     },
-  });
+  })
 
   return (
     <Card
@@ -83,5 +83,5 @@ export function ItemCard({ item, isOverlay }: ItemCardProps) {
         {item.name}
       </CardContent>
     </Card>
-  );
+  )
 }

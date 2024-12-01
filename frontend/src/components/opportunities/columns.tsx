@@ -1,7 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons";
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
+import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons"
 import {
   PhoneCall,
   StarHalf,
@@ -12,7 +12,7 @@ import {
   CircleUser,
   Dot,
   ChevronDown,
-} from "lucide-react";
+} from "lucide-react"
 
 import {
   DropdownMenu,
@@ -23,29 +23,29 @@ import {
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
 
-import { ColumnDef, VisibilityState } from "@tanstack/react-table";
-import { z } from "zod";
+import { ColumnDef, VisibilityState } from "@tanstack/react-table"
+import { z } from "zod"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import { type Opportunity, OpportunityStage } from "@/types/opportunity";
-import { type Icp } from "@/types/icp";
-import { type Company, FundingRound, OrgSize } from "@/types/company";
-import { type Location } from "@/types/location";
-import { type Tool, type Process } from "@/types/job_post";
-import { type Scale, ScaleLabel } from "@/types/scale";
-import { humanDate, titleCaseToCamelCase } from "@/utils/misc";
-import { updateOpportunityStage } from "@/utils/chapter/opportunity";
-import { toTitleCase, truncateString } from "@/utils/misc";
+import { type Opportunity, OpportunityStage } from "@/types/opportunity"
+import { type Icp } from "@/types/icp"
+import { type Company, FundingRound, OrgSize } from "@/types/company"
+import { type Location } from "@/types/location"
+import { type Tool, type Process } from "@/types/job_post"
+import { type Scale, ScaleLabel } from "@/types/scale"
+import { humanDate, titleCaseToCamelCase } from "@/utils/misc"
+import { updateOpportunityStage } from "@/utils/chapter/opportunity"
+import { toTitleCase, truncateString } from "@/utils/misc"
 
-export const TableRecord = z.record(z.any());
-export type RecordSchema = z.infer<typeof TableRecord>;
+export const TableRecord = z.record(z.any())
+export type RecordSchema = z.infer<typeof TableRecord>
 
-import { stageColors } from "@/types/opportunity";
+import { stageColors } from "@/types/opportunity"
 
 export function getFilters(icp: Icp) {
   const filters = [
@@ -308,80 +308,80 @@ export function getFilters(icp: Icp) {
         },
       ],
     },
-  ];
+  ]
 
-  return filters;
+  return filters
 }
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ")
 }
 
 function getStageFromStage(icp: Icp, stage: OpportunityStage) {
-  const filters = getFilters(icp);
-  const stageLabel: string = stage;
+  const filters = getFilters(icp)
+  const stageLabel: string = stage
   const opportunityStage = filters[0].filterOptions.find(
     (opportunityStage) => opportunityStage.value === stageLabel
-  );
+  )
 
-  return opportunityStage;
+  return opportunityStage
 }
 
 function getCompanySizeFromHeadcount(icp: Icp, headcount: number) {
-  const filters = getFilters(icp);
-  let companySizeLabel = "Unknown";
+  const filters = getFilters(icp)
+  let companySizeLabel = "Unknown"
   if (headcount <= 10) {
-    companySizeLabel = "1-10";
+    companySizeLabel = "1-10"
   } else if (headcount <= 50) {
-    companySizeLabel = "11-50";
+    companySizeLabel = "11-50"
   } else if (headcount <= 200) {
-    companySizeLabel = "51-200";
+    companySizeLabel = "51-200"
   } else if (headcount <= 500) {
-    companySizeLabel = "201-500";
+    companySizeLabel = "201-500"
   } else if (headcount <= 1000) {
-    companySizeLabel = "501-1000";
+    companySizeLabel = "501-1000"
   } else {
-    companySizeLabel = "1000+";
+    companySizeLabel = "1000+"
   }
   const companySize = filters[1].filterOptions.find(
     (companySize) => companySize.value === companySizeLabel
-  );
+  )
 
-  return companySize;
+  return companySize
 }
 
 function getFundingFromFundingRound(icp: Icp, fundingRound: FundingRound) {
-  const filters = getFilters(icp);
-  const fundingRoundLabel: string = fundingRound;
+  const filters = getFilters(icp)
+  const fundingRoundLabel: string = fundingRound
 
   const funding = filters[2].filterOptions.find(
     (funding) => funding.value === fundingRoundLabel
-  );
+  )
 
-  return funding;
+  return funding
 }
 
 function getLocationFromCountry(icp: Icp, country: string) {
-  const filters = getFilters(icp);
-  let locationLabel = "Rest of the World";
+  const filters = getFilters(icp)
+  let locationLabel = "Rest of the World"
   if (country == "Canada") {
-    locationLabel = "Canada";
+    locationLabel = "Canada"
   } else if (country == "France") {
-    locationLabel = "France";
+    locationLabel = "France"
   } else if (country == "Germany") {
-    locationLabel = "Germany";
+    locationLabel = "Germany"
   } else if (country == "UK" || country == "United Kingdom") {
-    locationLabel = "United Kingdom";
+    locationLabel = "United Kingdom"
   } else if (country == "US" || country == "United States") {
-    locationLabel = "United States";
+    locationLabel = "United States"
   } else {
-    locationLabel = "Rest of the World";
+    locationLabel = "Rest of the World"
   }
   const location = filters[3].filterOptions.find(
     (location) => location.value === locationLabel
-  );
+  )
 
-  return location;
+  return location
 }
 
 export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
@@ -396,13 +396,13 @@ export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
     industry: true,
     stack: true,
     processes: true,
-  };
+  }
 
-  defaultColumnVisibility.stack = icp.tool.include.length > 0 ? true : false;
+  defaultColumnVisibility.stack = icp.tool.include.length > 0 ? true : false
   defaultColumnVisibility.processes =
-    icp.process.include.length > 0 ? true : false;
+    icp.process.include.length > 0 ? true : false
 
-  return defaultColumnVisibility;
+  return defaultColumnVisibility
 }
 
 export function getFixedColumns(
@@ -418,7 +418,7 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Id" />
       ),
       cell: ({ row }) => {
-        return <div className="flex">{row.getValue("id")}</div>;
+        return <div className="flex">{row.getValue("id")}</div>
       },
       enableSorting: false,
       enableHiding: false,
@@ -431,20 +431,20 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Company" />
       ),
       cell: ({ row }) => {
-        const id: string = row.getValue("id");
+        const id: string = row.getValue("id")
         return (
           <div className="flex flex-row justify-between items-center pe-2">
             <div>{row.getValue("companyName")}</div>
             <Button
               className="text-light px-2 max-h-8 py-0.5 rounded-md curser border border-border bg-popover dark:bg-muted/60 hover:bg-popover/20 hover:text-foreground"
               onClick={async () => {
-                await handleOpenDrawer(id);
+                await handleOpenDrawer(id)
               }}
             >
               Open
             </Button>
           </div>
-        );
+        )
       },
       enableSorting: true,
       enableHiding: false,
@@ -455,31 +455,31 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Stage" />
       ),
       cell: ({ row }) => {
-        const id: string = row.getValue("id");
+        const id: string = row.getValue("id")
         const stage: OpportunityStage = row.getValue(
           "stage"
-        ) as OpportunityStage;
-        const opportunityStage = getStageFromStage(icp, stage);
-        const stages = Object.values(OpportunityStage);
+        ) as OpportunityStage
+        const opportunityStage = getStageFromStage(icp, stage)
+        const stages = Object.values(OpportunityStage)
         const handleStageChange = async (newStage: string) => {
           try {
             if (!stages.includes(newStage as OpportunityStage)) {
-              toast.error("Failed to set stage.");
-              return;
+              toast.error("Failed to set stage.")
+              return
             }
 
             const opportunity = await updateOpportunityStage(
               id,
               newStage as OpportunityStage
-            );
-            await updateOpportunity(opportunity);
+            )
+            await updateOpportunity(opportunity)
           } catch (error: any) {
-            toast.error("Failed to set stage.");
+            toast.error("Failed to set stage.")
           }
-        };
+        }
 
         if (!opportunityStage) {
-          return null;
+          return null
         }
 
         return (
@@ -521,20 +521,20 @@ export function getFixedColumns(
               </DropdownMenuContent>
             </DropdownMenu>
           </>
-        );
+        )
       },
       filterFn: (row, id, value) => {
-        const stage: OpportunityStage = row.getValue(id);
+        const stage: OpportunityStage = row.getValue(id)
         if (!stage) {
-          return false;
+          return false
         }
 
-        const opportunityStage = getStageFromStage(icp, stage);
+        const opportunityStage = getStageFromStage(icp, stage)
         if (!opportunityStage) {
-          return false;
+          return false
         }
 
-        return value.includes(opportunityStage.value);
+        return value.includes(opportunityStage.value)
       },
     },
     {
@@ -543,10 +543,10 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Date" />
       ),
       cell: ({ row }) => {
-        const createdAt: Date = row.getValue("date");
+        const createdAt: Date = row.getValue("date")
         return (
           <div className="flex">{humanDate(createdAt, false, true, false)}</div>
-        );
+        )
       },
     },
     {
@@ -558,9 +558,9 @@ export function getFixedColumns(
         const companySize = getCompanySizeFromHeadcount(
           icp,
           row.getValue("companySize")
-        );
+        )
         if (!companySize) {
-          return null;
+          return null
         }
 
         return (
@@ -570,16 +570,16 @@ export function getFixedColumns(
             )}
             <span>{companySize.label}</span>
           </div>
-        );
+        )
       },
       filterFn: (row, id, value) => {
-        const headcount: number = row.getValue(id);
-        const companySize = getCompanySizeFromHeadcount(icp, headcount);
+        const headcount: number = row.getValue(id)
+        const companySize = getCompanySizeFromHeadcount(icp, headcount)
         if (!companySize) {
-          return false;
+          return false
         }
 
-        return value.includes(companySize.value);
+        return value.includes(companySize.value)
       },
     },
     {
@@ -588,21 +588,21 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Engineering Size" />
       ),
       cell: ({ row }) => {
-        const orgSize: OrgSize = row.getValue("orgSize");
-        return <div className="flex">{orgSize.engineering}</div>;
+        const orgSize: OrgSize = row.getValue("orgSize")
+        return <div className="flex">{orgSize.engineering}</div>
       },
       sortingFn: (rowA, rowB, columnId) => {
-        const valueA: OrgSize = rowA.getValue(columnId);
-        const valueB: OrgSize = rowB.getValue(columnId);
+        const valueA: OrgSize = rowA.getValue(columnId)
+        const valueB: OrgSize = rowB.getValue(columnId)
         return valueA.engineering !== null &&
           valueB.engineering !== null &&
           valueA.engineering > valueB.engineering
           ? 1
           : valueA.engineering !== null &&
-            valueB.engineering !== null &&
-            valueA.engineering < valueB.engineering
-          ? -1
-          : 0;
+              valueB.engineering !== null &&
+              valueA.engineering < valueB.engineering
+            ? -1
+            : 0
       },
       enableHiding: true,
       enableSorting: true,
@@ -616,9 +616,9 @@ export function getFixedColumns(
         const funding = getFundingFromFundingRound(
           icp,
           row.getValue("fundingRound")
-        );
+        )
         if (!funding) {
-          return null;
+          return null
         }
 
         return (
@@ -628,16 +628,16 @@ export function getFixedColumns(
             )}
             <span>{funding.label}</span>
           </div>
-        );
+        )
       },
       filterFn: (row, id, value) => {
-        const fundingRound: FundingRound = row.getValue(id);
-        const funding = getFundingFromFundingRound(icp, fundingRound);
+        const fundingRound: FundingRound = row.getValue(id)
+        const funding = getFundingFromFundingRound(icp, fundingRound)
         if (!funding) {
-          return false;
+          return false
         }
 
-        return value.includes(funding.value);
+        return value.includes(funding.value)
       },
     },
     {
@@ -646,25 +646,25 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Location" />
       ),
       accessorFn: (row) => {
-        const location: Location = row.companyLocation;
-        return location?.country;
+        const location: Location = row.companyLocation
+        return location?.country
       },
       cell: ({ row }) => {
-        const location: Location = row.original.companyLocation;
-        return <div className="flex">{`${location?.country}`}</div>;
+        const location: Location = row.original.companyLocation
+        return <div className="flex">{`${location?.country}`}</div>
       },
       filterFn: (row, id, value) => {
-        const location: Location = row.original[id];
+        const location: Location = row.original[id]
         if (!location?.country) {
-          return false;
+          return false
         }
 
-        const companyLocation = getLocationFromCountry(icp, location.country);
+        const companyLocation = getLocationFromCountry(icp, location.country)
         if (!companyLocation) {
-          return false;
+          return false
         }
 
-        return value.includes(companyLocation.value);
+        return value.includes(companyLocation.value)
       },
       enableSorting: true,
       enableHiding: true,
@@ -672,13 +672,13 @@ export function getFixedColumns(
     {
       accessorKey: "industry",
       accessorFn: (row) => {
-        return row.industry || "";
+        return row.industry || ""
       },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Industry" />
       ),
       cell: ({ row }) => {
-        return <div className="flex">{row.original.industry}</div>;
+        return <div className="flex">{row.original.industry}</div>
       },
     },
     {
@@ -687,16 +687,16 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Relevant Stack" />
       ),
       accessorFn: (row) => {
-        const tools: Tool[] = row.tools || [];
-        return tools.map((tool) => (tool ? tool.name : "")).join(", ");
+        const tools: Tool[] = row.tools || []
+        return tools.map((tool) => (tool ? tool.name : "")).join(", ")
       },
       cell: ({ row }) => {
-        const tools: Tool[] = row.original.tools;
+        const tools: Tool[] = row.original.tools
         return (
           <div className="flex items-center gap-2">
             {tools
               .filter((tool) => {
-                return icp.tool.include.includes(tool.name);
+                return icp.tool.include.includes(tool.name)
               })
               .map((tool, index) => (
                 <div
@@ -710,11 +710,11 @@ export function getFixedColumns(
                 </div>
               ))}
           </div>
-        );
+        )
       },
       filterFn: (row, id, value) => {
-        const tools: Tool[] = row.original.tools || [];
-        return tools.some((tool: Tool) => value.includes(tool.name));
+        const tools: Tool[] = row.original.tools || []
+        return tools.some((tool: Tool) => value.includes(tool.name))
       },
     },
     {
@@ -723,18 +723,18 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Relevant Processes" />
       ),
       accessorFn: (row) => {
-        const processes: Process[] = row.processes || [];
+        const processes: Process[] = row.processes || []
         return processes
           .map((process) => (process ? process.name : ""))
-          .join(", ");
+          .join(", ")
       },
       cell: ({ row }) => {
-        const processes: Process[] = row.original.processes;
+        const processes: Process[] = row.original.processes
         return (
           <div className="flex items-center gap-2">
             {processes
               .filter((process) => {
-                return icp.process.include.includes(process.name);
+                return icp.process.include.includes(process.name)
               })
               .map((process, index) => (
                 <div
@@ -745,13 +745,13 @@ export function getFixedColumns(
                 </div>
               ))}
           </div>
-        );
+        )
       },
       filterFn: (row, id, value) => {
-        const processes: Process[] = row.original.processes || [];
+        const processes: Process[] = row.original.processes || []
         return processes.some((process: Process) =>
           value.includes(process.name)
-        );
+        )
       },
     },
     {
@@ -760,21 +760,21 @@ export function getFixedColumns(
         <DataTableColumnHeader column={column} title="Investors" />
       ),
       accessorFn: (row) => {
-        const investors: string[] = row.investors || [];
-        return truncateString(investors.join(", "));
+        const investors: string[] = row.investors || []
+        return truncateString(investors.join(", "))
       },
       cell: ({ row }) => {
-        const investors: string[] = row.original.investors || [];
-        const investorList: string = truncateString(investors.join(", "));
-        return <div className="flex items-center gap-2">{investorList}</div>;
+        const investors: string[] = row.original.investors || []
+        const investorList: string = truncateString(investors.join(", "))
+        return <div className="flex items-center gap-2">{investorList}</div>
       },
       filterFn: (row, id, value) => {
-        const investors: string[] = row.original["investors"] || [];
-        return investors.some((investor: string) => value.includes(investor));
+        const investors: string[] = row.original["investors"] || []
+        return investors.some((investor: string) => value.includes(investor))
       },
     },
-  ];
-  return fixedRecordColumns;
+  ]
+  return fixedRecordColumns
 }
 
 export function getRecordColumns(
@@ -786,6 +786,6 @@ export function getRecordColumns(
     icp,
     updateOpportunity,
     handleOpenDrawer
-  );
-  return finalColumns;
+  )
+  return finalColumns
 }

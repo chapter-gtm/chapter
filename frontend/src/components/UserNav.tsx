@@ -1,7 +1,7 @@
-"use client";
-import { logout } from "@/utils/chapter/access";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+"use client"
+import { logout } from "@/utils/chapter/access"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,42 +9,42 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { User } from "@/types/user";
-import { getNameInitials } from "@/utils/misc";
-import { getUserProfile } from "@/utils/chapter/users";
-import { ChevronDown } from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
+import { User } from "@/types/user"
+import { getNameInitials } from "@/utils/misc"
+import { getUserProfile } from "@/utils/chapter/users"
+import { ChevronDown } from "lucide-react"
+import React, { useEffect, useState } from "react"
 
-import { LucideIcon, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { LucideIcon, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 
-type UserNavProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>;
+type UserNavProps = React.ComponentPropsWithoutRef<typeof DropdownMenuTrigger>
 
 export function UserNav({ className }: UserNavProps) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const user = await getUserProfile();
-        setCurrentUser(user);
+        const user = await getUserProfile()
+        setCurrentUser(user)
       } catch (error) {}
-    };
-    fetchCurrentUser();
-  }, []);
+    }
+    fetchCurrentUser()
+  }, [])
 
   const onLogout = async () => {
-    await logout();
-  };
+    await logout()
+  }
 
-  const { resolvedTheme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme()
 
   const toggleTheme = () => {
-    const newTheme = resolvedTheme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-  };
+    const newTheme = resolvedTheme === "light" ? "dark" : "light"
+    setTheme(newTheme)
+  }
 
   return (
     <>
@@ -113,5 +113,5 @@ export function UserNav({ className }: UserNavProps) {
         </Button>
       )}
     </>
-  );
+  )
 }

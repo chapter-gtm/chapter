@@ -11,22 +11,22 @@ import {
   Triangle,
   Layers,
   CircleCheckBig,
-} from "lucide-react";
+} from "lucide-react"
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
-import { AppleLogo } from "../icons";
-import { GooglePlayLogo } from "../icons";
+import { AppleLogo } from "../icons"
+import { GooglePlayLogo } from "../icons"
 
-import { humanDate } from "@/utils/misc";
-import { getIcps } from "@/utils/chapter/icp";
+import { humanDate } from "@/utils/misc"
+import { getIcps } from "@/utils/chapter/icp"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,32 +35,32 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
-import { Opportunity } from "@/types/opportunity";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+} from "@/components/ui/dropdown-menu"
+import { Separator } from "@/components/ui/separator"
+import { Opportunity } from "@/types/opportunity"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-import { Investor } from "@/types/company";
-import { OpportunityStage } from "@/types/opportunity";
+import { Investor } from "@/types/company"
+import { OpportunityStage } from "@/types/opportunity"
 
-import { updateOpportunityStage } from "@/utils/chapter/opportunity";
+import { updateOpportunityStage } from "@/utils/chapter/opportunity"
 
-import { stageColors } from "@/types/opportunity";
-import { type Icp } from "@/types/icp";
+import { stageColors } from "@/types/opportunity"
+import { type Icp } from "@/types/icp"
 
-import Image from "next/image";
+import Image from "next/image"
 
 interface OpportunityPropListProps {
-  opportunity: Opportunity;
-  updateOpportunity: (updatedOpportunity: Opportunity) => void;
+  opportunity: Opportunity
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
 }
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(" ")
 }
 
 export function OpportunityPropList({
@@ -69,54 +69,54 @@ export function OpportunityPropList({
 }: OpportunityPropListProps) {
   const [currentStage, setCurrentStage] = useState<OpportunityStage>(
     opportunity.stage
-  );
-  const [icp, setIcp] = useState<Icp | null>(null);
-  const stages = Object.values(OpportunityStage);
+  )
+  const [icp, setIcp] = useState<Icp | null>(null)
+  const stages = Object.values(OpportunityStage)
 
   const handleDocLink = async (url: string | undefined | null) => {
     if (url === undefined || url === null) {
-      return;
+      return
     }
-    window.open(url);
-  };
+    window.open(url)
+  }
 
   const handleStageChange = async (newStage: string) => {
     try {
       if (!stages.includes(newStage as OpportunityStage)) {
-        toast.error("Failed to set stage.");
-        return;
+        toast.error("Failed to set stage.")
+        return
       }
 
       opportunity = await updateOpportunityStage(
         opportunity.id,
         newStage as OpportunityStage
-      );
-      setCurrentStage(opportunity.stage);
-      updateOpportunity(opportunity);
+      )
+      setCurrentStage(opportunity.stage)
+      updateOpportunity(opportunity)
     } catch (error: any) {
-      toast.error("Failed to update stage.");
+      toast.error("Failed to update stage.")
     }
-  };
+  }
 
   useEffect(() => {
-    setCurrentStage(opportunity.stage);
-  }, [opportunity]);
+    setCurrentStage(opportunity.stage)
+  }, [opportunity])
 
   useEffect(() => {
     const fetchIcp = async () => {
       try {
-        const currentUserIcps = await getIcps();
+        const currentUserIcps = await getIcps()
         if (currentUserIcps === null || currentUserIcps.length <= 0) {
-          throw new Error("Failed to fetch ICP");
+          throw new Error("Failed to fetch ICP")
         }
-        setIcp(currentUserIcps[0]);
+        setIcp(currentUserIcps[0])
       } catch (error) {
-        toast.error("Failed to get ICP.");
+        toast.error("Failed to get ICP.")
       }
-    };
+    }
 
-    fetchIcp();
-  }, []);
+    fetchIcp()
+  }, [])
 
   return (
     <>
@@ -452,5 +452,5 @@ export function OpportunityPropList({
         </div>
       </div>
     </>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { timeAgo } from "@/utils/misc";
-import { type Person } from "@/types/person";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import { timeAgo } from "@/utils/misc"
+import { type Person } from "@/types/person"
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 
 import {
   Divide,
@@ -21,19 +21,19 @@ import {
   CircleUserIcon,
   Linkedin,
   Mail,
-} from "lucide-react";
+} from "lucide-react"
 
-import { type Icp } from "@/types/icp";
-import { type Opportunity } from "@/types/opportunity";
-import { OpportunityBrand } from "./OpportunityBrand";
-import { OpportunityTabs } from "./OpportunityTabs";
+import { type Icp } from "@/types/icp"
+import { type Opportunity } from "@/types/opportunity"
+import { OpportunityBrand } from "./OpportunityBrand"
+import { OpportunityTabs } from "./OpportunityTabs"
 
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator"
 
 interface OpportunityDrawerProps {
-  opportunity: Opportunity;
-  updateOpportunity: (updatedOpportunity: Opportunity) => void;
-  icp: Icp | null;
+  opportunity: Opportunity
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
+  icp: Icp | null
 }
 
 export function OpportunityDrawer({
@@ -55,5 +55,5 @@ export function OpportunityDrawer({
         </div>
       </div>
     </>
-  );
+  )
 }

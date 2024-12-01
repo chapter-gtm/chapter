@@ -1,50 +1,50 @@
-"use client";
+"use client"
 
-import { login } from "@/utils/chapter/access";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { login } from "@/utils/chapter/access"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function AuthenticationPage() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [message, setMessage] = useState("");
-  const [showLogin, setShowLogin] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [messageType, setMessageType] = useState("");
+  const [message, setMessage] = useState("")
+  const [showLogin, setShowLogin] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [messageType, setMessageType] = useState("")
 
   const onLogin = async (formData: FormData) => {
     try {
       const data = {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
-      };
-      await login(data.email, data.password);
-      return router.push("/");
+      }
+      await login(data.email, data.password)
+      return router.push("/")
     } catch (error: any) {
-      setMessageType("error");
-      setMessage("Login failed! Please check your credentials and try again.");
-      setLoading(false);
+      setMessageType("error")
+      setMessage("Login failed! Please check your credentials and try again.")
+      setLoading(false)
     }
-  };
+  }
 
   const onResetPassword = async (formData: FormData) => {
     try {
       const data = {
         email: formData.get("email") as string,
-      };
-      const currentDomain = window.location.host;
-      setMessage("Password reset link sent to email!");
-      setMessageType("reset");
+      }
+      const currentDomain = window.location.host
+      setMessage("Password reset link sent to email!")
+      setMessageType("reset")
     } catch (error: any) {
-      setMessage(error.toString());
+      setMessage(error.toString())
     }
-    setLoading(false);
-  };
+    setLoading(false)
+  }
   return (
     <>
       <div className="md:hidden">
@@ -110,7 +110,7 @@ export default function AuthenticationPage() {
                             />
                             <Button
                               onClick={() => {
-                                setLoading(true);
+                                setLoading(true)
                               }}
                               formAction={onLogin}
                             >
@@ -118,8 +118,8 @@ export default function AuthenticationPage() {
                             </Button>
                             <Button
                               onClick={() => {
-                                setShowLogin(false);
-                                setMessage("");
+                                setShowLogin(false)
+                                setMessage("")
                               }}
                               variant="link"
                             >
@@ -133,8 +133,8 @@ export default function AuthenticationPage() {
                               messageType === "error"
                                 ? "border-rose-200 bg-rose-50"
                                 : messageType === "reset"
-                                ? "border-indigo-200 bg-zinc-100"
-                                : "border-zinc-200 bg-white"
+                                  ? "border-indigo-200 bg-zinc-100"
+                                  : "border-zinc-200 bg-white"
                             }`}
                           >
                             {" "}
@@ -175,7 +175,7 @@ export default function AuthenticationPage() {
                       </div>
                       <Button
                         onClick={() => {
-                          setLoading(true);
+                          setLoading(true)
                         }}
                         formAction={onResetPassword}
                       >
@@ -185,8 +185,8 @@ export default function AuthenticationPage() {
                       </Button>
                       <Button
                         onClick={() => {
-                          setShowLogin(true);
-                          setMessage("");
+                          setShowLogin(true)
+                          setMessage("")
                         }}
                         variant="link"
                       >
@@ -201,8 +201,8 @@ export default function AuthenticationPage() {
                         messageType === "error"
                           ? "border-rose-200 bg-rose-50"
                           : messageType === "reset"
-                          ? "border-indigo-200 bg-indigo-100"
-                          : "border-zinc-200 bg-white"
+                            ? "border-indigo-200 bg-indigo-100"
+                            : "border-zinc-200 bg-white"
                       }`}
                     >
                       {" "}
@@ -221,5 +221,5 @@ export default function AuthenticationPage() {
         </div>
       </div>
     </>
-  );
+  )
 }

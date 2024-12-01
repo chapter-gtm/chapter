@@ -1,44 +1,44 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
+import { useEffect, useState } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
 
-import { AgentForm } from "./AgentForm";
-import { type Icp } from "@/types/icp";
-import { getIcps } from "@/utils/chapter/icp";
+import { AgentForm } from "./AgentForm"
+import { type Icp } from "@/types/icp"
+import { getIcps } from "@/utils/chapter/icp"
 
 export function IcpList() {
-  const [icps, setIcps] = useState<Icp[]>([]);
-  const [selectedTab, setSelectedTab] = useState<string>();
+  const [icps, setIcps] = useState<Icp[]>([])
+  const [selectedTab, setSelectedTab] = useState<string>()
 
   useEffect(() => {
     const fetchIcp = async () => {
-      const currentUserIcps = await getIcps();
+      const currentUserIcps = await getIcps()
       if (currentUserIcps === null || currentUserIcps.length <= 0) {
-        toast.success("Failed to fetch ICP");
+        toast.success("Failed to fetch ICP")
       } else {
-        setIcps(currentUserIcps);
+        setIcps(currentUserIcps)
         if (currentUserIcps && currentUserIcps.length > 0) {
-          setSelectedTab(currentUserIcps[0].id);
+          setSelectedTab(currentUserIcps[0].id)
         }
       }
-    };
-    fetchIcp();
-  }, []);
+    }
+    fetchIcp()
+  }, [])
 
   const handleUpdateIcp = (updatedIcp: Icp) => {
     setIcps((prev) =>
       prev.map((icp: Icp) =>
         icp.id === updatedIcp.id ? { ...icp, ...updatedIcp } : icp
       )
-    );
-  };
+    )
+  }
 
   const handleTabChange = (newValue: string) => {
-    setSelectedTab(newValue);
-  };
+    setSelectedTab(newValue)
+  }
 
   return (
     <>
@@ -86,5 +86,5 @@ export function IcpList() {
         </div>
       )}
     </>
-  );
+  )
 }

@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { timeAgo } from "@/utils/misc";
-import { type Person } from "@/types/person";
-import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import { timeAgo } from "@/utils/misc"
+import { type Person } from "@/types/person"
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 
 import {
   Divide,
@@ -22,18 +22,18 @@ import {
   CircleUserIcon,
   Linkedin,
   Mail,
-} from "lucide-react";
+} from "lucide-react"
 
-import { type Icp } from "@/types/icp";
-import { type Opportunity } from "@/types/opportunity";
-import { OpportunityPropList } from "./OpportunityPropList";
-import { OpportunityJobPost } from "./OpportunityJobPost";
-import { OpportunityContacts } from "./OpportunityContacts";
+import { type Icp } from "@/types/icp"
+import { type Opportunity } from "@/types/opportunity"
+import { OpportunityPropList } from "./OpportunityPropList"
+import { OpportunityJobPost } from "./OpportunityJobPost"
+import { OpportunityContacts } from "./OpportunityContacts"
 
 interface OpportunityTabsProps {
-  opportunity: Opportunity;
-  updateOpportunity: (updatedOpportunity: Opportunity) => void;
-  icp: Icp | null;
+  opportunity: Opportunity
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
+  icp: Icp | null
 }
 
 export function OpportunityTabs({
@@ -98,5 +98,5 @@ export function OpportunityTabs({
         </TabsContent>
       </Tabs>
     </>
-  );
+  )
 }

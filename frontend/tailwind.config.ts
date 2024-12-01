@@ -1,7 +1,7 @@
-import { SelectContent } from "@radix-ui/react-select";
-import type { Config } from "tailwindcss";
+import { SelectContent } from "@radix-ui/react-select"
+import type { Config } from "tailwindcss"
 
-const defaultTheme = require("tailwindcss/colors");
+const defaultTheme = require("tailwindcss/colors")
 
 const config = {
   darkMode: ["class"],
@@ -97,6 +97,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config;
+} satisfies Config
 
-export default config;
+export default config

@@ -1,92 +1,92 @@
-"use client";
-import { useEffect, useState } from "react";
+"use client"
+import { useEffect, useState } from "react"
 
-import TextEditor from "@/components/editor/editor";
-import { type Icp } from "@/types/icp";
-import { type Opportunity } from "@/types/opportunity";
-import { getOpportunity } from "@/utils/chapter/opportunity";
-import { OpportunityBrand } from "./OpportunityBrand";
-import { getIcps } from "@/utils/chapter/icp";
+import TextEditor from "@/components/editor/editor"
+import { type Icp } from "@/types/icp"
+import { type Opportunity } from "@/types/opportunity"
+import { getOpportunity } from "@/utils/chapter/opportunity"
+import { OpportunityBrand } from "./OpportunityBrand"
+import { getIcps } from "@/utils/chapter/icp"
 import {
   getUserProfile,
   addOpportunityToRecentlyViewed,
-} from "@/utils/chapter/users";
-import { updateOpportunityNotes } from "@/utils/chapter/opportunity";
+} from "@/utils/chapter/users"
+import { updateOpportunityNotes } from "@/utils/chapter/opportunity"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
 
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator"
 
-import { OpportunityStageList } from "./OpportunityStageList";
-import { OpportunityTabs } from "./OpportunityTabs";
+import { OpportunityStageList } from "./OpportunityStageList"
+import { OpportunityTabs } from "./OpportunityTabs"
 
 interface OpportunityFullProps {
-  opportunityId: string;
+  opportunityId: string
 }
 
 export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
-  const [icp, setIcp] = useState<Icp | null>(null);
-  const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
-  const [endType, setEndType] = useState<Boolean | null>(null);
+  const [icp, setIcp] = useState<Icp | null>(null)
+  const [opportunity, setOpportunity] = useState<Opportunity | null>(null)
+  const [endType, setEndType] = useState<Boolean | null>(null)
 
   useEffect(() => {
     const fetchOpportunity = async () => {
       try {
-        const currentUserIcps = await getIcps();
+        const currentUserIcps = await getIcps()
         if (currentUserIcps === null || currentUserIcps.length <= 0) {
-          throw new Error("Failed to fetch ICP");
+          throw new Error("Failed to fetch ICP")
         }
-        setIcp(currentUserIcps[0]);
+        setIcp(currentUserIcps[0])
 
-        const opp = await getOpportunity(opportunityId);
-        setOpportunity(opp);
+        const opp = await getOpportunity(opportunityId)
+        setOpportunity(opp)
 
         // Add opportunity to recently viewed list for user
-        const user = await getUserProfile();
-        await addOpportunityToRecentlyViewed(user, opp.id);
+        const user = await getUserProfile()
+        await addOpportunityToRecentlyViewed(user, opp.id)
       } catch (error: any) {
         toast.error("Failed to fetch opportunity", {
           description: error.toString(),
-        });
+        })
       }
-    };
-    fetchOpportunity();
-  }, [opportunityId]);
+    }
+    fetchOpportunity()
+  }, [opportunityId])
 
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(
         `${process.env
           .NEXT_PUBLIC_OPPORTUNITY_APP_URL!}/opportunitys/${opportunityId}`
-      );
-      toast.success("Opportunity link copied!");
+      )
+      toast.success("Opportunity link copied!")
     } catch (error: any) {
       toast.error("Copy opportunity link to clipboard failed", {
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
 
   const updateOpportunity = (updatedOpportunity: Opportunity) => {
-    setOpportunity(updatedOpportunity);
-  };
+    setOpportunity(updatedOpportunity)
+  }
 
   const onEditorContentChange = async (richText: string) => {
-    if (opportunity === null) return;
-    const op = await updateOpportunityNotes(opportunity.id, richText);
-    setOpportunity(op);
+    if (opportunity === null) return
+    const op = await updateOpportunityNotes(opportunity.id, richText)
+    setOpportunity(op)
 
-    const newContentLength = richText.length - (opportunity.notes?.length || 0);
+    const newContentLength = richText.length - (opportunity.notes?.length || 0)
     if (newContentLength >= 6) {
-      setEndType(true);
+      setEndType(true)
       setTimeout(() => {
-        setEndType(false);
-      }, 3000);
+        setEndType(false)
+      }, 3000)
     }
-  };
+  }
 
   return (
     <>
@@ -148,5 +148,5 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
         </div>
       )}
     </>
-  );
+  )
 }

@@ -1,66 +1,66 @@
-"use client";
+"use client"
 
-import { type Icp } from "@/types/icp";
-import { type Opportunity } from "@/types/opportunity";
-import { getIcps } from "@/utils/chapter/icp";
-import { getOpportunities } from "@/utils/chapter/opportunity";
+import { type Icp } from "@/types/icp"
+import { type Opportunity } from "@/types/opportunity"
+import { getIcps } from "@/utils/chapter/icp"
+import { getOpportunities } from "@/utils/chapter/opportunity"
 import {
   getUserProfile,
   addOpportunityToRecentlyViewed,
-} from "@/utils/chapter/users";
+} from "@/utils/chapter/users"
 import {
   RecordSchema,
   TableRecord,
   getFilters,
   getRecordColumns,
   getDefaultColumnVisibility,
-} from "./columns";
-import { DataTable } from "@/components/data-table/data-table";
-import { OpportunityDrawer } from "./OpportunityDrawer";
+} from "./columns"
+import { DataTable } from "@/components/data-table/data-table"
+import { OpportunityDrawer } from "./OpportunityDrawer"
 
 import {
   Tooltip,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react";
+} from "@/components/ui/tooltip"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet"
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+import { ChevronsRight, ExternalLink, LinkIcon, Building2 } from "lucide-react"
 
-import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table";
-import { z } from "zod";
-import { useEffect, useState, useCallback, useRef } from "react";
-import Link from "next/link";
+import { ColumnFiltersState, ColumnDef } from "@tanstack/react-table"
+import { z } from "zod"
+import { useEffect, useState, useCallback, useRef } from "react"
+import Link from "next/link"
 
-import { OpportunityStageList } from "./OpportunityStageList";
+import { OpportunityStageList } from "./OpportunityStageList"
 
 export function OpportunitiesMain() {
-  const [isPopulated, setIsPopulated] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [icp, setIcp] = useState<Icp | null>(null);
-  const icpRef = useRef(icp);
-  const [records, setRecords] = useState<RecordSchema[]>([]);
+  const [isPopulated, setIsPopulated] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [icp, setIcp] = useState<Icp | null>(null)
+  const icpRef = useRef(icp)
+  const [records, setRecords] = useState<RecordSchema[]>([])
   const [recordColumns, setRecordColumns] = useState<ColumnDef<RecordSchema>[]>(
     []
-  );
+  )
   const [opportunityMap, setOpportunityMap] = useState<
     Map<string, Opportunity>
-  >(new Map());
-  const opportunityMapRef = useRef(opportunityMap);
+  >(new Map())
+  const opportunityMapRef = useRef(opportunityMap)
 
-  const [selectedRow, setSelectedRow] = useState<Opportunity | null>(null);
-  const [selectedRows, setSelectedRows] = useState<Opportunity[]>([]);
+  const [selectedRow, setSelectedRow] = useState<Opportunity | null>(null)
+  const [selectedRows, setSelectedRows] = useState<Opportunity[]>([])
   const [preSelectedFilters, setPreSelectedFilters] =
-    useState<ColumnFiltersState>([]);
+    useState<ColumnFiltersState>([])
 
   useEffect(() => {
     const fetchIcpAndOpportunities = async () => {
       try {
-        const currentUserIcps = await getIcps();
+        const currentUserIcps = await getIcps()
         if (currentUserIcps === null || currentUserIcps.length <= 0) {
-          throw new Error("Failed to fetch ICP");
+          throw new Error("Failed to fetch ICP")
         }
 
         const opportunities = await getOpportunities(
@@ -71,10 +71,10 @@ export function OpportunitiesMain() {
           "",
           "",
           true
-        );
+        )
 
-        const oppMap = new Map<string, Opportunity>();
-        opportunities.forEach((r) => oppMap.set(r.id, r));
+        const oppMap = new Map<string, Opportunity>()
+        opportunities.forEach((r) => oppMap.set(r.id, r))
 
         const tableRecords = z.array(TableRecord).parse(
           opportunities.map((rec: Opportunity) => {
@@ -91,14 +91,14 @@ export function OpportunitiesMain() {
               tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
               processes: rec.jobPosts?.flatMap((jobPost) => jobPost.processes),
               investors: rec.company?.lastFunding?.investors,
-            };
-            return record;
+            }
+            return record
           })
-        );
-        setIcp(currentUserIcps[0]);
-        setOpportunityMap(oppMap);
-        setRecords(tableRecords);
-        setIsPopulated(true);
+        )
+        setIcp(currentUserIcps[0])
+        setOpportunityMap(oppMap)
+        setRecords(tableRecords)
+        setIsPopulated(true)
 
         // Populate columns
         setRecordColumns(
@@ -107,93 +107,93 @@ export function OpportunitiesMain() {
             updateOpportunityCallback,
             handleOpenDrawerCallback
           )
-        );
+        )
       } catch (error: any) {
-        toast.error("Failed to load data.", { description: error.toString() });
+        toast.error("Failed to load data.", { description: error.toString() })
       }
-    };
-    fetchIcpAndOpportunities();
-  }, []);
+    }
+    fetchIcpAndOpportunities()
+  }, [])
 
   useEffect(() => {
-    opportunityMapRef.current = opportunityMap;
-  }, [opportunityMap]);
+    opportunityMapRef.current = opportunityMap
+  }, [opportunityMap])
 
   useEffect(() => {
-    icpRef.current = icp;
-  }, [icp]);
+    icpRef.current = icp
+  }, [icp])
 
   const handleRowClick = function <TData>(data: TData) {
-    const record: RecordSchema = data as RecordSchema;
-    const opportunity: Opportunity | undefined = opportunityMap.get(record.id);
+    const record: RecordSchema = data as RecordSchema
+    const opportunity: Opportunity | undefined = opportunityMap.get(record.id)
     if (opportunity === undefined) {
-      return;
+      return
     }
-    setSelectedRow(opportunity);
-  };
+    setSelectedRow(opportunity)
+  }
 
   const handleRowSelection = function <TData>(selectedTableRows: TData[]) {
-    const rows: RecordSchema[] = selectedTableRows as RecordSchema[];
-    const opportunities: Opportunity[] = [];
+    const rows: RecordSchema[] = selectedTableRows as RecordSchema[]
+    const opportunities: Opportunity[] = []
     for (let i = 0; i < rows.length; i++) {
       const opportunity: Opportunity | undefined = opportunityMap.get(
         rows[i].id
-      );
+      )
       if (opportunity === undefined) {
-        continue;
+        continue
       }
-      opportunities.push(opportunity);
+      opportunities.push(opportunity)
     }
-    setSelectedRows(opportunities);
-  };
+    setSelectedRows(opportunities)
+  }
 
   const handleCopyRecordLink = async (recordId: string | undefined) => {
     try {
-      const currentDomain = window.location.host;
+      const currentDomain = window.location.host
       await navigator.clipboard.writeText(
         `https://${currentDomain}/opportunities/${recordId}`
-      );
-      toast.success("Opportunity link copied!");
+      )
+      toast.success("Opportunity link copied!")
     } catch (error: any) {
       toast.error("Failed to copy opportunity link.", {
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
 
   const handleOpenSheetCallback = function <TData>(data: TData) {
-    const record: RecordSchema = data as RecordSchema;
+    const record: RecordSchema = data as RecordSchema
     const opportunity: Opportunity | undefined = opportunityMapRef.current.get(
       record.id
-    );
+    )
     if (opportunity !== undefined) {
-      setSelectedRow(opportunity);
+      setSelectedRow(opportunity)
     }
     if (!sheetOpen) {
-      setSheetOpen(true);
+      setSheetOpen(true)
     }
-  };
+  }
 
   const handleOpenDrawerCallback = useCallback(async (id: string) => {
     const opportunity: Opportunity | undefined =
-      opportunityMapRef.current.get(id);
+      opportunityMapRef.current.get(id)
     if (!opportunity) {
-      toast.error("Failed to load opportunity");
-      return;
+      toast.error("Failed to load opportunity")
+      return
     }
-    setSelectedRow(opportunity);
+    setSelectedRow(opportunity)
     if (!sheetOpen) {
-      setSheetOpen(true);
+      setSheetOpen(true)
     }
 
     // Add opportunity to recently viewed list for user
-    const user = await getUserProfile();
-    await addOpportunityToRecentlyViewed(user, opportunity.id);
-  }, []);
+    const user = await getUserProfile()
+    await addOpportunityToRecentlyViewed(user, opportunity.id)
+  }, [])
 
   const handleCloseSheet = function () {
-    setSheetOpen(false);
-  };
+    setSheetOpen(false)
+  }
 
   const updateOpportunityCallback = useCallback(
     async (updatedOpportunity: Opportunity) => {
@@ -204,17 +204,17 @@ export function OpportunitiesMain() {
             ? { ...item, ...updatedOpportunity }
             : item
         )
-      );
+      )
 
       // Update selected row
-      setSelectedRow(updatedOpportunity);
+      setSelectedRow(updatedOpportunity)
 
       // Update map (which will be used to set selectedRow on the next row click)
       const updatedOpportunityMap = new Map<string, Opportunity>(
         opportunityMapRef.current
-      );
-      updatedOpportunityMap.set(updatedOpportunity.id, updatedOpportunity);
-      setOpportunityMap(updatedOpportunityMap);
+      )
+      updatedOpportunityMap.set(updatedOpportunity.id, updatedOpportunity)
+      setOpportunityMap(updatedOpportunityMap)
 
       // Repopulate columns
       if (icpRef.current) {
@@ -224,13 +224,13 @@ export function OpportunitiesMain() {
             updateOpportunityCallback,
             handleOpenDrawerCallback
           )
-        );
+        )
       } else {
-        toast.error("Failed to refresh table, please reload.");
+        toast.error("Failed to refresh table, please reload.")
       }
     },
     []
-  );
+  )
 
   return (
     <>
@@ -334,5 +334,5 @@ export function OpportunitiesMain() {
         </div>
       </div>
     </>
-  );
+  )
 }

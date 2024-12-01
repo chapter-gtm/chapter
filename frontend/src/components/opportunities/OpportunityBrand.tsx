@@ -1,21 +1,21 @@
-import Image from "next/image";
-import { type Person } from "@/types/person";
+import Image from "next/image"
+import { type Person } from "@/types/person"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Linkedin, Globe, Twitter, Slack, Github } from "lucide-react";
-import { SiCrunchbase } from "react-icons/si";
+} from "@/components/ui/tooltip"
+import { Linkedin, Globe, Twitter, Slack, Github } from "lucide-react"
+import { SiCrunchbase } from "react-icons/si"
 
-import Link from "next/link";
-import { timeAgo } from "@/utils/misc";
+import Link from "next/link"
+import { timeAgo } from "@/utils/misc"
 
-import { Opportunity } from "@/types/opportunity";
+import { Opportunity } from "@/types/opportunity"
 
 interface OpportunityDrawerProps {
-  opportunity: Opportunity;
+  opportunity: Opportunity
 }
 
 export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
@@ -226,5 +226,5 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
         </div>
       </div>
     </>
-  );
+  )
 }

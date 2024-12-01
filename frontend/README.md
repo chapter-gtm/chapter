@@ -1,6 +1,5 @@
 # Chapter Console App
 
-
 ## Getting Started
 
 First, run the development server:

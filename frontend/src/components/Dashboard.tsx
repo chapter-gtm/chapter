@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   LayoutDashboard,
@@ -8,73 +8,73 @@ import {
   LineChart,
   Inbox,
   Users,
-} from "lucide-react";
-import { getIcps } from "@/utils/chapter/icp";
+} from "lucide-react"
+import { getIcps } from "@/utils/chapter/icp"
 
-import { TrendingUp, BellDot } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import { TrendingUp, BellDot } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/components/ui/chart"
 
-import { EmptySelectionCard } from "@/components/EmptySelectionCard";
-import { PageHeaderRow } from "@/components/PageHeaderRow";
-import { Card } from "./ui/card";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import Image from "next/image";
-import { timeAgo, isDateInLastNHours } from "@/utils/misc";
-import { Button } from "@/components/ui/button";
+import { EmptySelectionCard } from "@/components/EmptySelectionCard"
+import { PageHeaderRow } from "@/components/PageHeaderRow"
+import { Card } from "./ui/card"
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+import Image from "next/image"
+import { timeAgo, isDateInLastNHours } from "@/utils/misc"
+import { Button } from "@/components/ui/button"
 
-import { User } from "@/types/user";
-import { type Opportunity, OpportunityStage } from "@/types/opportunity";
-import { getOpportunities } from "@/utils/chapter/opportunity";
-import { getUserProfile } from "@/utils/chapter/users";
+import { User } from "@/types/user"
+import { type Opportunity, OpportunityStage } from "@/types/opportunity"
+import { getOpportunities } from "@/utils/chapter/opportunity"
+import { getUserProfile } from "@/utils/chapter/users"
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react"
+import Link from "next/link"
 
-import { title } from "process";
-import { type Icp } from "@/types/icp";
+import { title } from "process"
+import { type Icp } from "@/types/icp"
 
 export function Dashboard() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([])
   const [recentlyViewedOpportunities, setRecentlyViewedOpportunities] =
-    useState<Opportunity[]>([]);
+    useState<Opportunity[]>([])
   const [opportunityCountByStageChartData, setOpportunityByStageChartData] =
-    useState<object[]>([{ x: 1, y: 0 }]);
+    useState<object[]>([{ x: 1, y: 0 }])
 
-  const [icp, setIcp] = useState<Icp | null>(null);
+  const [icp, setIcp] = useState<Icp | null>(null)
 
-  const [newOpportunities, setNewOpportunities] = useState<Boolean>(false);
-  const [newOpportunityCount, setNewOpportunityCount] = useState<number>(0);
+  const [newOpportunities, setNewOpportunities] = useState<Boolean>(false)
+  const [newOpportunityCount, setNewOpportunityCount] = useState<number>(0)
 
   const chartConfig = {
     x: {
       label: "Desktop",
       color: "rgb(var(--chart))",
     },
-  } satisfies ChartConfig;
+  } satisfies ChartConfig
 
   useEffect(() => {
     const fetchIcp = async () => {
-      const currentUserIcps = await getIcps();
+      const currentUserIcps = await getIcps()
 
       if (currentUserIcps === null || currentUserIcps.length <= 0) {
-        toast.success("Failed to fetch ICP");
+        toast.success("Failed to fetch ICP")
       } else {
-        setIcp(currentUserIcps[0]);
+        setIcp(currentUserIcps[0])
       }
-    };
+    }
 
     const fetchOpportunities = async () => {
       try {
-        const user = await getUserProfile();
+        const user = await getUserProfile()
         const opportunities = await getOpportunities(
           1000,
           1,
@@ -83,54 +83,54 @@ export function Dashboard() {
           "",
           "",
           true
-        );
-        setCurrentUser(user);
-        setOpportunities(opportunities);
+        )
+        setCurrentUser(user)
+        setOpportunities(opportunities)
         const filteredOpportunities = opportunities.filter((op) =>
           user.recentlyViewedOpportunityIds.includes(op.id)
-        );
+        )
         const orderedOpportunities = user.recentlyViewedOpportunityIds
           .map((id) => filteredOpportunities.find((op) => op.id === id))
-          .filter((op) => op !== undefined);
-        setRecentlyViewedOpportunities(orderedOpportunities);
+          .filter((op) => op !== undefined)
+        setRecentlyViewedOpportunities(orderedOpportunities)
       } catch (error: any) {
-        toast.error("Failed to load data.", { description: error.toString() });
+        toast.error("Failed to load data.", { description: error.toString() })
       }
-    };
+    }
 
     const gatherRecentlyViewedOpportunities = async (
       user: User,
       opportunities: Opportunity[]
-    ) => {};
+    ) => {}
 
-    fetchIcp();
-    fetchOpportunities();
-  }, []);
+    fetchIcp()
+    fetchOpportunities()
+  }, [])
 
   useEffect(() => {
     const calculateOpportunitiesCountByStage = async () => {
       try {
-        const opportunityCountByStage = new Map<string, number>();
+        const opportunityCountByStage = new Map<string, number>()
 
         for (const value of Object.values(OpportunityStage)) {
-          opportunityCountByStage.set(value.toString(), 0);
+          opportunityCountByStage.set(value.toString(), 0)
         }
 
-        let count = 0;
+        let count = 0
 
         const hasNewOpportunities = opportunities.filter((op) => {
           const matchesCondition =
             op.stage === OpportunityStage.IDENTIFIED &&
-            isDateInLastNHours(new Date(op.createdAt), 72);
+            isDateInLastNHours(new Date(op.createdAt), 72)
 
           if (matchesCondition) {
-            count++; // Increment count for each match
-            setNewOpportunities(true);
+            count++ // Increment count for each match
+            setNewOpportunities(true)
           }
-          return matchesCondition; // Keep only matching opportunities
-        });
+          return matchesCondition // Keep only matching opportunities
+        })
 
-        setNewOpportunityCount(count);
+        setNewOpportunityCount(count)
 
         for (const opportunity of opportunities) {
           if (
@@ -141,18 +141,18 @@ export function Dashboard() {
             opportunityCountByStage.set(
               opportunity.stage,
               opportunityCountByStage.get(opportunity.stage)! + 1
-            );
+            )
           }
         }
 
-        const chartData: object[] = [];
-        let previousValue: number | null = null;
-        let p = 100;
+        const chartData: object[] = []
+        let previousValue: number | null = null
+        let p = 100
 
         for (const value of Object.values(OpportunityStage)) {
-          let yValue = opportunityCountByStage.get(value.toString());
+          let yValue = opportunityCountByStage.get(value.toString())
           if (yValue === undefined || yValue === null) {
-            yValue = 0;
+            yValue = 0
           }
 
           if (
@@ -160,27 +160,27 @@ export function Dashboard() {
             previousValue !== 0 &&
             yValue !== null
           ) {
-            p = ((yValue ?? 0) / previousValue) * 100;
+            p = ((yValue ?? 0) / previousValue) * 100
           } else if (previousValue === null) {
-            p = 100;
+            p = 100
           } else {
-            p = 0;
+            p = 0
           }
 
           chartData.push({
             x: value,
             y: yValue,
-          });
+          })
 
-          previousValue = yValue;
+          previousValue = yValue
         }
 
-        setOpportunityByStageChartData(chartData);
+        setOpportunityByStageChartData(chartData)
       } catch (error: any) {}
-    };
+    }
 
-    calculateOpportunitiesCountByStage();
-  }, [opportunities]);
+    calculateOpportunitiesCountByStage()
+  }, [opportunities])
 
   return (
     <div className="overflow-auto w-full p-32 bg-background">
@@ -275,7 +275,7 @@ export function Dashboard() {
                         key={i}
                         className="basis-1/2 sm:basis-1/4 h-60 bg-card rounded-xl border border-border animate-pulse"
                       ></div>
-                    );
+                    )
                   })}
                 </>
               )}
@@ -368,7 +368,7 @@ export function Dashboard() {
                         key={i}
                         className="basis-1/2 sm:basis-1/4 h-60 bg-card rounded-xl border border-border animate-pulse"
                       ></div>
-                    );
+                    )
                   })}
                 </>
               )}
@@ -419,5 +419,5 @@ export function Dashboard() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link"
 
 import {
   Construction,
@@ -6,13 +6,13 @@ import {
   LucideIcon,
   CheckCircleIcon,
   Car,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface EmptySelectionProps {
-  title?: string;
-  description?: string;
-  action?: string;
+  title?: string
+  description?: string
+  action?: string
 }
 
 export function EmptySelectionCard({
@@ -30,5 +30,5 @@ export function EmptySelectionCard({
         </Button>
       )}
     </div>
-  );
+  )
 }

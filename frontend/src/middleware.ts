@@ -1,16 +1,16 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
-  const publicUrls = ["/reset-password"];
+  const publicUrls = ["/reset-password"]
 
-  const token = request.cookies.get("token");
+  const token = request.cookies.get("token")
   if (!token) {
-    return NextResponse.rewrite(new URL("/login", request.url));
+    return NextResponse.rewrite(new URL("/login", request.url))
   }
 
   if (request.nextUrl.pathname === "/") {
     // Redirect to /opportunities
-    return NextResponse.rewrite(new URL("/dashboard", request.url));
+    return NextResponse.rewrite(new URL("/dashboard", request.url))
   }
 }
 
@@ -25,4 +25,4 @@ export const config = {
      */
     "/((?!_next/static|_next/image|favicon.ico|error|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-};
+}

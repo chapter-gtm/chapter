@@ -1,9 +1,9 @@
-import { IcpList } from "@/components/icps/IcpList";
+import { IcpList } from "@/components/icps/IcpList"
 
 export default function ICPCriteria() {
   return (
     <>
       <IcpList />
     </>
-  );
+  )
 }

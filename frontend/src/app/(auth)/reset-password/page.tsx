@@ -1,43 +1,43 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createClient } from "@/utils/supabase/client";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+"use client"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { createClient } from "@/utils/supabase/client"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function ResetPasswordPage() {
-  const router = useRouter();
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const router = useRouter()
+  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
   const handleUpdatePassword = async (formData: FormData) => {
     try {
       const record = {
         password: formData.get("password") as string,
         confirmedPassword: formData.get("password") as string,
-      };
-
-      if (record.password != record.confirmedPassword) {
-        setMessage("Passwords don't match!");
-        return;
       }
 
-      const supabase = createClient();
+      if (record.password != record.confirmedPassword) {
+        setMessage("Passwords don't match!")
+        return
+      }
+
+      const supabase = createClient()
       const { data, error } = await supabase.auth.updateUser({
         password: record.password,
-      });
-      if (!data || error) throw Error((error as Error).message);
-      setMessage("Password updated successfully!");
-      await sleep(1000);
-      router.push("/");
+      })
+      if (!data || error) throw Error((error as Error).message)
+      setMessage("Password updated successfully!")
+      await sleep(1000)
+      router.push("/")
     } catch (error: any) {
-      setMessage(error.toString());
-      setLoading(false);
+      setMessage(error.toString())
+      setLoading(false)
     }
-  };
+  }
   return (
     <>
       <div className="md:hidden">
@@ -111,7 +111,7 @@ export default function ResetPasswordPage() {
                   />
                   <Button
                     onClick={() => {
-                      setLoading(true);
+                      setLoading(true)
                     }}
                     formAction={handleUpdatePassword}
                   >
@@ -124,5 +124,5 @@ export default function ResetPasswordPage() {
         </div>
       </div>
     </>
-  );
+  )
 }

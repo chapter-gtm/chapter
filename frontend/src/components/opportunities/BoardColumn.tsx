@@ -1,36 +1,36 @@
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { useDndContext, type UniqueIdentifier } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
-import { useMemo } from "react";
-import { Item, ItemCard } from "./ItemCard";
-import { cva } from "class-variance-authority";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { GripVertical } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { SortableContext, useSortable } from "@dnd-kit/sortable"
+import { useDndContext, type UniqueIdentifier } from "@dnd-kit/core"
+import { CSS } from "@dnd-kit/utilities"
+import { useMemo } from "react"
+import { Item, ItemCard } from "./ItemCard"
+import { cva } from "class-variance-authority"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { GripVertical } from "lucide-react"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 export interface Column {
-  id: UniqueIdentifier;
-  title: string;
+  id: UniqueIdentifier
+  title: string
 }
 
-export type ColumnType = "Column";
+export type ColumnType = "Column"
 
 export interface ColumnDragData {
-  type: ColumnType;
-  column: Column;
+  type: ColumnType
+  column: Column
 }
 
 interface BoardColumnProps {
-  column: Column;
-  items: Item[];
-  isOverlay?: boolean;
+  column: Column
+  items: Item[]
+  isOverlay?: boolean
 }
 
 export function BoardColumn({ column, items, isOverlay }: BoardColumnProps) {
   const itemsIds = useMemo(() => {
-    return items.map((item) => item.id);
-  }, [items]);
+    return items.map((item) => item.id)
+  }, [items])
 
   const {
     setNodeRef,
@@ -48,12 +48,12 @@ export function BoardColumn({ column, items, isOverlay }: BoardColumnProps) {
     attributes: {
       roleDescription: `Column: ${column.title}`,
     },
-  });
+  })
 
   const style = {
     transition,
     transform: CSS.Translate.toString(transform),
-  };
+  }
 
   const variants = cva(
     "h-[500px] max-h-[500px] w-[350px] max-w-full bg-primary-foreground flex flex-col flex-shrink-0 snap-center",
@@ -66,7 +66,7 @@ export function BoardColumn({ column, items, isOverlay }: BoardColumnProps) {
         },
       },
     }
-  );
+  )
 
   return (
     <Card
@@ -98,11 +98,11 @@ export function BoardColumn({ column, items, isOverlay }: BoardColumnProps) {
         </CardContent>
       </ScrollArea>
     </Card>
-  );
+  )
 }
 
 export function BoardContainer({ children }: { children: React.ReactNode }) {
-  const dndContext = useDndContext();
+  const dndContext = useDndContext()
 
   const variations = cva("px-2 md:px-0 flex lg:justify-center pb-4", {
     variants: {
@@ -111,7 +111,7 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
         active: "snap-none",
       },
     },
-  });
+  })
 
   return (
     <ScrollArea
@@ -124,5 +124,5 @@ export function BoardContainer({ children }: { children: React.ReactNode }) {
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
-  );
+  )
 }

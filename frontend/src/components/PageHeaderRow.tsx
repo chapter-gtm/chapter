@@ -1,12 +1,12 @@
-import React from "react";
+import React from "react"
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import * as LucideIcons from "lucide-react";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import * as LucideIcons from "lucide-react"
 
 interface PageHeaderProps {
-  title?: string;
-  action?: string;
+  title?: string
+  action?: string
 }
 
 export function PageHeaderRow({ title, action }: PageHeaderProps) {
@@ -15,5 +15,5 @@ export function PageHeaderRow({ title, action }: PageHeaderProps) {
       <h2 className="text-sm font-semibold tracking-normal">{title}</h2>
       {action && <Button>{action}</Button>}
     </div>
-  );
+  )
 }

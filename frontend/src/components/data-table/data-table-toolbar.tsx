@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import React from "react";
+import React from "react"
 
-import { Cross2Icon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+import { Cross2Icon, ChevronRightIcon } from "@radix-ui/react-icons"
+import { Table } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options"
 import {
   DataTableFacetedFilter,
   FilterOptions,
-} from "@/components/data-table/data-table-faceted-filter";
+} from "@/components/data-table/data-table-faceted-filter"
 
 import {
   Dialog,
@@ -23,26 +23,26 @@ import {
   DialogTrigger,
   DialogPortal,
   DialogOverlay,
-} from "@/components/ui/dialog";
-import { Overlay } from "@radix-ui/react-dialog";
-import { Label } from "@radix-ui/react-label";
+} from "@/components/ui/dialog"
+import { Overlay } from "@radix-ui/react-dialog"
+import { Label } from "@radix-ui/react-label"
 
 export interface ToolbarFilter {
-  tableColumnName: string;
-  label: string;
-  filterOptions: FilterOptions[];
+  tableColumnName: string
+  label: string
+  filterOptions: FilterOptions[]
 }
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>;
-  filters: ToolbarFilter[];
+  table: Table<TData>
+  filters: ToolbarFilter[]
 }
 
 export function DataTableToolbar<TData>({
   table,
   filters,
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const isFiltered = table.getState().columnFilters.length > 0
 
   return (
     <div className="flex items-center justify-between relative space-x-3 px-4 h-14">
@@ -77,5 +77,5 @@ export function DataTableToolbar<TData>({
       </div>
       <DataTableViewOptions table={table} />
     </div>
-  );
+  )
 }

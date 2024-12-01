@@ -1,20 +1,20 @@
-import "@/app/globals.css";
-import { TopNavbar } from "@/components/TopNavbar";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { UserNav } from "@/components/UserNav";
+import "@/app/globals.css"
+import { TopNavbar } from "@/components/TopNavbar"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { UserNav } from "@/components/UserNav"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Chapter App",
   description: "Lead gen for founders",
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="h-dvh flex flex-col relative overflow-hidden">
@@ -29,5 +29,5 @@ export default function RootLayout({
       </div>
       <>{children}</>
     </div>
-  );
+  )
 }

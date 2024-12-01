@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,9 +13,9 @@ import {
   getSortedRowModel,
   useReactTable,
   FilterFn,
-} from "@tanstack/react-table";
-import { rankItem } from "@tanstack/match-sorter-utils";
-import { cn } from "@/lib/utils";
+} from "@tanstack/react-table"
+import { rankItem } from "@tanstack/match-sorter-utils"
+import { cn } from "@/lib/utils"
 
 import {
   Table,
@@ -24,53 +24,53 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"
 
-import { DataTablePagination } from "@/components/data-table/data-table-pagination";
+import { DataTablePagination } from "@/components/data-table/data-table-pagination"
 import {
   DataTableToolbar,
   ToolbarFilter,
-} from "@/components/data-table/data-table-toolbar";
+} from "@/components/data-table/data-table-toolbar"
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  filters: ToolbarFilter[];
-  preSelectedFilters?: ColumnFiltersState;
-  defaultColumnVisibility?: VisibilityState;
-  onRowClick?: <TData>(data: TData) => void;
-  enableRowSelection: boolean;
-  onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void;
-  stickyColumnCount: number;
-  nonClickableColumns: string[];
-  defaultPageSize?: number;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  filters: ToolbarFilter[]
+  preSelectedFilters?: ColumnFiltersState
+  defaultColumnVisibility?: VisibilityState
+  onRowClick?: <TData>(data: TData) => void
+  enableRowSelection: boolean
+  onSelectedRowsChange?: <TData>(selectedRows: TData[]) => void
+  stickyColumnCount: number
+  nonClickableColumns: string[]
+  defaultPageSize?: number
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  const cellValue = String(row.getValue(columnId));
-  const tokens = cellValue.split(",").map((token) => token.trim());
+  const cellValue = String(row.getValue(columnId))
+  const tokens = cellValue.split(",").map((token) => token.trim())
 
-  let highestRank: any = null;
-  let anyPassed = false;
+  let highestRank: any = null
+  let anyPassed = false
 
   // Tokens between commas are considered for fuzzy match because
   // complex objects are expected to be separated by commas
   // This conversion happens in accessorFn in column defini9tion
   tokens.forEach((token) => {
-    const itemRank = rankItem(token, value);
+    const itemRank = rankItem(token, value)
 
     if (!highestRank || itemRank.rank < highestRank.rank) {
-      highestRank = itemRank;
+      highestRank = itemRank
     }
 
     if (itemRank.passed) {
-      anyPassed = true;
+      anyPassed = true
     }
-  });
-  addMeta({ highestRank });
+  })
+  addMeta({ highestRank })
 
-  return anyPassed;
-};
+  return anyPassed
+}
 
 export function DataTable<TData, TValue>({
   columns,
@@ -85,14 +85,14 @@ export function DataTable<TData, TValue>({
   nonClickableColumns = [],
   defaultPageSize = 20,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [selectedRow, setSelectedRow] = React.useState(0);
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [selectedRow, setSelectedRow] = React.useState(0)
 
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(defaultColumnVisibility);
+    React.useState<VisibilityState>(defaultColumnVisibility)
   const [columnFilters, setColumnFilters] =
-    React.useState<ColumnFiltersState>(preSelectedFilters);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+    React.useState<ColumnFiltersState>(preSelectedFilters)
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const table = useReactTable({
     data,
     columns,
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
         pageSize: defaultPageSize,
       },
     },
-  });
+  })
 
   React.useEffect(() => {
     function handleKeyDown(event: { keyCode: number }) {
@@ -130,23 +130,23 @@ export function DataTable<TData, TValue>({
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [table.getRowModel().rows?.length]);
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [table.getRowModel().rows?.length])
 
   React.useEffect(() => {
     if (onSelectedRowsChange === undefined) {
-      return;
+      return
     }
 
     onSelectedRowsChange(
       table.getSelectedRowModel().flatRows.map((row) => row.original)
-    );
-  }, [rowSelection]);
+    )
+  }, [rowSelection])
 
   React.useEffect(() => {
-    setColumnFilters(preSelectedFilters);
-  }, [preSelectedFilters]);
+    setColumnFilters(preSelectedFilters)
+  }, [preSelectedFilters])
 
   return (
     <>
@@ -176,7 +176,7 @@ export function DataTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -212,9 +212,9 @@ export function DataTable<TData, TValue>({
                           // Don't call row click handler when checkbox field(must has id="select") is clicked.
                           if (!nonClickableColumns.includes(cell.column.id)) {
                             if (onRowClick) {
-                              onRowClick(row.original);
+                              onRowClick(row.original)
                             }
-                            setSelectedRow(row.index);
+                            setSelectedRow(row.index)
                           }
                         }}
                       >
@@ -223,7 +223,7 @@ export function DataTable<TData, TValue>({
                           cell.getContext()
                         )}
                       </TableCell>
-                    );
+                    )
                   })}
                 </TableRow>
               ))
@@ -242,5 +242,5 @@ export function DataTable<TData, TValue>({
       </div>
       <DataTablePagination table={table} />
     </>
-  );
+  )
 }

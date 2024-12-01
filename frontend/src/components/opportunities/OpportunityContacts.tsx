@@ -1,27 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { timeAgo, formatPhoneNumber } from "@/utils/misc";
-import { type Person } from "@/types/person";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import { timeAgo, formatPhoneNumber } from "@/utils/misc"
+import { type Person } from "@/types/person"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
 
-import { usePostHog } from "posthog-js/react";
+import { usePostHog } from "posthog-js/react"
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/accordion"
 
 import {
   Linkedin,
@@ -32,48 +32,48 @@ import {
   Send,
   Phone,
   BriefcaseBusiness,
-} from "lucide-react";
-import Link from "next/link";
+} from "lucide-react"
+import Link from "next/link"
 
-import { type Icp } from "@/types/icp";
-import { type Opportunity } from "@/types/opportunity";
-import { OpportunityPropList } from "./OpportunityPropList";
-import { OpportunityBrand } from "./OpportunityBrand";
-import { OpportunityJobPost } from "./OpportunityJobPost";
+import { type Icp } from "@/types/icp"
+import { type Opportunity } from "@/types/opportunity"
+import { OpportunityPropList } from "./OpportunityPropList"
+import { OpportunityBrand } from "./OpportunityBrand"
+import { OpportunityJobPost } from "./OpportunityJobPost"
 
-import { Separator } from "@/components/ui/separator";
-import { Investor } from "@/types/company";
-import posthog from "posthog-js";
-import { PersonIcon } from "@radix-ui/react-icons";
+import { Separator } from "@/components/ui/separator"
+import { Investor } from "@/types/company"
+import posthog from "posthog-js"
+import { PersonIcon } from "@radix-ui/react-icons"
 
 interface OpportunityContactsProps {
-  opportunity: Opportunity;
-  icp: Icp | null;
+  opportunity: Opportunity
+  icp: Icp | null
 }
 
 const handleCopyEmail = async (email: string | null) => {
   try {
-    const currentDomain = window.location.host;
-    await navigator.clipboard.writeText(`${email}`);
-    toast.success("Email copied to clipboard");
+    const currentDomain = window.location.host
+    await navigator.clipboard.writeText(`${email}`)
+    toast.success("Email copied to clipboard")
   } catch (error: any) {
     toast.error("Failed to copy email.", {
       description: error.toString(),
-    });
+    })
   }
-};
+}
 
 const handleCopyPhone = async (email: string | null) => {
   try {
-    const currentDomain = window.location.host;
-    await navigator.clipboard.writeText(`${email}`);
-    toast.success("Phone copied to clipboard");
+    const currentDomain = window.location.host
+    await navigator.clipboard.writeText(`${email}`)
+    toast.success("Phone copied to clipboard")
   } catch (error: any) {
     toast.error("Failed to copy phone.", {
       description: error.toString(),
-    });
+    })
   }
-};
+}
 
 export function OpportunityContacts({
   icp,
@@ -288,5 +288,5 @@ export function OpportunityContacts({
           ))}
       </div>
     </>
-  );
+  )
 }

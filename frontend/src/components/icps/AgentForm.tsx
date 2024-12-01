@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FieldValues } from "react-hook-form";
-import { z } from "zod";
+import { useEffect, useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm, FieldValues } from "react-hook-form"
+import { z } from "zod"
 
-import * as React from "react";
+import * as React from "react"
 
-import { cva } from "class-variance-authority";
+import { cva } from "class-variance-authority"
 
-import Image from "next/image";
+import Image from "next/image"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
-import { InfoIcon } from "lucide-react";
+import { InfoIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormDescription,
@@ -27,23 +27,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/components/ui/form"
 
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox"
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 
-import { MultiSelect } from "@/components/ui/multi-select";
+import { MultiSelect } from "@/components/ui/multi-select"
 
-import { toast } from "sonner";
-import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner"
+import { Separator } from "@/components/ui/separator"
 
-import { type Icp } from "@/types/icp";
-import { updateIcp } from "@/utils/chapter/icp";
+import { type Icp } from "@/types/icp"
+import { updateIcp } from "@/utils/chapter/icp"
 
-import { FundingRound } from "@/types/company";
+import { FundingRound } from "@/types/company"
 
 const agentFormSchema = z.object({
   name: z
@@ -108,7 +108,7 @@ const agentFormSchema = z.object({
   pitch: z
     .string()
     .max(200, { message: "Pitch cannot exceed 150 characters." }),
-});
+})
 
 const multiSelectVariants = cva(
   "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
@@ -128,7 +128,7 @@ const multiSelectVariants = cva(
       variant: "default",
     },
   }
-);
+)
 
 const stackList = [
   { value: "GitHub Actions", label: "GitHub Actions" },
@@ -165,14 +165,14 @@ const stackList = [
   { value: "SailPoint", label: "SailPoint" },
   { value: "Okta", label: "Okta" },
   { value: "Auth0", label: "Auth0" },
-];
+]
 
 const processList = [
   { value: "Code Review", label: "Code Review" },
   { value: "Testing", label: "Testing" },
   { value: "CI/CD", label: "CI/CD" },
   { value: "Documentation", label: "Documentation" },
-];
+]
 
 const jobTitlesList = [
   { value: "Founder", label: "Founder / Co-founder" },
@@ -204,7 +204,7 @@ const jobTitlesList = [
   },
   { value: "Platform Engineer", label: "Platform Engineer" },
   { value: "DevOps Engineer", label: "DevOps Engineer" },
-];
+]
 
 const jobTitlesAliasMap: Record<string, string[]> = {
   "Head / Director / VP of Engineering": [
@@ -242,13 +242,13 @@ const jobTitlesAliasMap: Record<string, string[]> = {
   ],
   CTO: ["CTO", "Chief Technology Officer"],
   CPO: ["CPO", "Chief Product Officer"],
-};
+}
 
-type AgentFormValues = z.infer<typeof agentFormSchema>;
+type AgentFormValues = z.infer<typeof agentFormSchema>
 
 interface AgentFormProps {
-  icp: Icp;
-  refreshIcp: (updatedIcp: Icp) => void;
+  icp: Icp
+  refreshIcp: (updatedIcp: Icp) => void
 }
 
 export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
@@ -279,7 +279,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       person: { titles: ["Founder", "CTO"], subRoles: [] },
       pitch: "",
     },
-  });
+  })
 
   const onSubmit = async (data: AgentFormValues) => {
     try {
@@ -288,10 +288,10 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         .map((key) =>
           key in jobTitlesAliasMap ? jobTitlesAliasMap[key] : [key]
         )
-        .flat();
+        .flat()
 
       if (icp === null) {
-        throw new Error("ICP not found");
+        throw new Error("ICP not found")
       }
       const updatedIcp = await updateIcp(icp.id, {
         name: data.name,
@@ -300,43 +300,43 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         process: data.process_,
         person: data.person,
         pitch: data.pitch,
-      } as Icp);
-      refreshIcp(updatedIcp);
-      toast.success("ICP Saved!");
+      } as Icp)
+      refreshIcp(updatedIcp)
+      toast.success("ICP Saved!")
     } catch (error: any) {
-      toast.error("Failed to save ICP.", { description: error.toString() });
+      toast.error("Failed to save ICP.", { description: error.toString() })
     }
-  };
+  }
 
   const onError = (errors: FieldValues) => {
-    toast.error("Failed to validate data.");
-  };
+    toast.error("Failed to validate data.")
+  }
 
   useEffect(() => {
     if (icp !== null) {
       // Aggregate titles to reduce noise
-      const titleKeys = new Set<string>();
-      const foundTitles = new Set<string>();
+      const titleKeys = new Set<string>()
+      const foundTitles = new Set<string>()
       for (const [key, values] of Object.entries(jobTitlesAliasMap)) {
         if (icp.person.titles.some((title) => values.includes(title))) {
-          titleKeys.add(key);
+          titleKeys.add(key)
 
           icp.person.titles.forEach((title) => {
             if (values.includes(title)) {
-              foundTitles.add(title);
+              foundTitles.add(title)
             }
-          });
+          })
         }
       }
 
       // Add missing search terms to the matchingKeys array
       icp.person.titles.forEach((title) => {
         if (!foundTitles.has(title)) {
-          titleKeys.add(title);
+          titleKeys.add(title)
         }
-      });
+      })
 
-      icp.person.titles = Array.from(titleKeys);
+      icp.person.titles = Array.from(titleKeys)
       form.reset({
         name: icp.name,
         company: icp.company,
@@ -344,9 +344,9 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         process_: icp.process,
         person: icp.person,
         pitch: icp.pitch,
-      });
+      })
     }
-  }, [icp]);
+  }, [icp])
 
   const checkBoxItemsOff = [
     {
@@ -359,7 +359,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       label: "Public Changelog",
       status: false,
     },
-  ];
+  ]
 
   const checkBoxItemsOn = [
     {
@@ -372,7 +372,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       label: "Public Changelog",
       status: false,
     },
-  ];
+  ]
 
   return (
     <>
@@ -784,5 +784,5 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         </Form>
       )}
     </>
-  );
+  )
 }

@@ -1,43 +1,43 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useState } from "react";
+import Link from "next/link"
+import { useState } from "react"
 
-import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation"
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { LucideIcon } from "lucide-react";
+} from "@/components/ui/dropdown-menu"
+import { LucideIcon } from "lucide-react"
 
 export interface NavPropsLink {
-  title: string;
-  route: string;
-  variant: "default" | "secondary" | "ghost";
-  icon?: null | LucideIcon;
-  label?: string;
+  title: string
+  route: string
+  variant: "default" | "secondary" | "ghost"
+  icon?: null | LucideIcon
+  label?: string
 }
 
 interface NavProps {
-  links: NavPropsLink[];
+  links: NavPropsLink[]
 }
 
 export function MainNav({ links }: NavProps) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <nav className="flex items-center space-x-2 lg:space-x-3 relative">
@@ -58,5 +58,5 @@ export function MainNav({ links }: NavProps) {
         </Link>
       ))}
     </nav>
-  );
+  )
 }

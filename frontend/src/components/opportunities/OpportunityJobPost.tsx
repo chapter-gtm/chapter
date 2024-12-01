@@ -5,17 +5,17 @@ import {
   Mail,
   Download,
   EyeIcon,
-} from "lucide-react";
-import { Separator } from "@radix-ui/react-select";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+} from "lucide-react"
+import { Separator } from "@radix-ui/react-select"
+import { toast } from "sonner"
+import { Button } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { timeAgo } from "@/utils/misc";
+} from "@/components/ui/tooltip"
+import { timeAgo } from "@/utils/misc"
 
 import {
   Dialog,
@@ -26,25 +26,25 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
 import {
   Opportunity,
   OpportunityJobPostContext,
   OpportunityContext,
-} from "@/types/opportunity";
-import { downloadJobPostPdf, getJobPostPdf } from "@/utils/chapter/job_post";
+} from "@/types/opportunity"
+import { downloadJobPostPdf, getJobPostPdf } from "@/utils/chapter/job_post"
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link"
+import Image from "next/image"
+import { useState } from "react"
 
 interface OpportunityDrawerProps {
-  opportunity: Opportunity;
+  opportunity: Opportunity
 }
 
 export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
-  const [jobPostPdfUrl, setJobPostPdfUrl] = useState("");
+  const [jobPostPdfUrl, setJobPostPdfUrl] = useState("")
 
   const handleDownload = async () => {
     if (
@@ -52,40 +52,40 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
       opportunity.jobPosts === null ||
       opportunity.jobPosts.length <= 0
     ) {
-      toast.error("Failed to find job post");
-      return;
+      toast.error("Failed to find job post")
+      return
     }
     try {
       if (!opportunity?.jobPosts?.[0]?.id) {
-        throw new Error("No job post found!");
+        throw new Error("No job post found!")
       }
-      await downloadJobPostPdf(opportunity.jobPosts[0].id);
+      await downloadJobPostPdf(opportunity.jobPosts[0].id)
     } catch (error: any) {
       toast.error("Failed to fetch job post pdf", {
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
 
   const openJobPostModal = async () => {
     try {
       if (!opportunity?.jobPosts?.[0]?.id) {
-        throw new Error("No job post found!");
+        throw new Error("No job post found!")
       }
-      const url = await getJobPostPdf(opportunity.jobPosts[0].id);
-      setJobPostPdfUrl(url);
+      const url = await getJobPostPdf(opportunity.jobPosts[0].id)
+      setJobPostPdfUrl(url)
     } catch (error: any) {
       toast.error("Failed to fetch job post pdf", {
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
 
   const closeJobPostModal = () => {
     // Cleanup URL when closing the modal
-    URL.revokeObjectURL(jobPostPdfUrl);
-    setJobPostPdfUrl("");
-  };
+    URL.revokeObjectURL(jobPostPdfUrl)
+    setJobPostPdfUrl("")
+  }
 
   return (
     <>
@@ -168,5 +168,5 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
           )}
       </div>
     </>
-  );
+  )
 }

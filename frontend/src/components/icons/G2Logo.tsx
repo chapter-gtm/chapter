@@ -1,5 +1,5 @@
-import * as React from "react";
-import type { SVGProps } from "react";
+import * as React from "react"
+import type { SVGProps } from "react"
 const SvgG2Logo = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -22,5 +22,5 @@ const SvgG2Logo = (props: SVGProps<SVGSVGElement>) => (
       </g>
     </g>
   </svg>
-);
-export default SvgG2Logo;
+)
+export default SvgG2Logo

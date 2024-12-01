@@ -1,5 +1,5 @@
-import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
+import { Separator } from "@/components/ui/separator"
+import Image from "next/image"
 
 export default function AccountSettings() {
   return (
@@ -17,5 +17,5 @@ export default function AccountSettings() {
         </div>
       </div>
     </div>
-  );
+  )
 }
