@@ -1,6 +1,8 @@
 # Chapter
 
-This is the chapter app.
+Chapter is a lead research app purpose-build for developer tools. 
+
+Note: This project is under ongoing development.
 
 ## Quick Start
 
@@ -28,6 +30,8 @@ pdm run stop-infra
 ```bash
 docker compose up
 ```
+
+Note: This project integrates with third-party APIs. You will need to obtain the necessary API keys for these services and update them in your `.env` file. For example, see the provided `.env.docker.example` file for the required format.
 
 ### Details
 
