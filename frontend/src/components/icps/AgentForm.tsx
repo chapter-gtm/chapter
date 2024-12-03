@@ -132,6 +132,7 @@ const multiSelectVariants = cva(
 
 const stackList = [
   { value: "GitHub Actions", label: "GitHub Actions" },
+  { value: "GitLab", label: "GitLab" },
   { value: "Docker", label: "Docker" },
   { value: "Kubernetes", label: "Kubernetes" },
   { value: "GitOps", label: "GitOps" },
@@ -166,6 +167,7 @@ const stackList = [
   { value: "Okta", label: "Okta" },
   { value: "Auth0", label: "Auth0" },
 ]
+stackList.sort((a, b) => a.label.localeCompare(b.label))
 
 const processList = [
   { value: "Code Review", label: "Code Review" },
