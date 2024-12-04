@@ -20,6 +20,7 @@
 <br />
 
 </p>
+
 > [!IMPORTANT]
 > Chapter is under active development, and is currently in public beta. This repository is updated regularly with new features and overall improvements.
 
