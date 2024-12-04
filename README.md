@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/chapter-gtm/chapter">
-   <img src="https://github.com/chapter-gtm/chapter/assets/images/github-cover.png" alt="Logo">
+   <img src="https://github.com/chapter-gtm/chapter/blob/main/assets/images/github-cover.png" alt="Logo">
   </a>
 
   <h3 align="center">Chapter</h3>
@@ -20,14 +20,15 @@
 <br />
 
 </p>
-> NOTE: Chapter is under active development, and is currently in public beta. This repository is updated regularly with changes, improvements to repo, and new releases.
+> [!IMPORTANT]
+> Chapter is under active development, and is currently in public beta. This repository is updated regularly with new features and overall improvements.
 
 <br />
 Chapter is the 1st open source GTM tool designed for developer tool companies. We beleive that developer tools need a new kind of sales tool when selling to mid-market and enterprise. One that requires zero click or manual work AND provides a broad combination of niche data points that you can trust to have high confidence that a lead is relevant. Only that way can you trust that a lead is relevant to your business and can reach out in a geniune way. The future is relevancy.
 
 ## About the Project
 
-<img width="100%" alt="booking-screen" src="https://github.com/chapter-gtm/chapter/assets/images/github-chapter-screenshots.png">
+<img width="100%" alt="booking-screen" src="https://github.com/chapter-gtm/chapter/blob/main/assets/images/github-chapter-screenshots.png">
 
 # Chapter - Lead research, purpose-built for developer tools
 
