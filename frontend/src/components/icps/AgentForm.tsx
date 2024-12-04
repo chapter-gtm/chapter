@@ -132,6 +132,8 @@ const multiSelectVariants = cva(
 
 const stackList = [
   { value: "GitHub Actions", label: "GitHub Actions" },
+  { value: "Jenkins", label: "Jenkins" },
+  { value: "Buildkite", label: "Buildkite" },
   { value: "GitLab", label: "GitLab" },
   { value: "Docker", label: "Docker" },
   { value: "Kubernetes", label: "Kubernetes" },

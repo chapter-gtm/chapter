@@ -1,10 +1,10 @@
-import os
 import json
-import structlog
+import os
 from typing import Any
-from openai import AsyncOpenAI
-from rapidfuzz import process, fuzz
 
+import structlog
+from openai import AsyncOpenAI
+from rapidfuzz import fuzz, process
 
 logger = structlog.get_logger()
 
@@ -21,6 +21,7 @@ canonical_tech_names = [
     "CircleCI",
     "GitLab",
     "GitLab CI",
+    "Buildkite",
     "Docker",
     "GitOps",
     "Argo CD",
@@ -113,17 +114,21 @@ prompt = """
 """
 
 
-def normalise_names(items, canonical_names, special_cases):
-    def normalise_name(name):
+def normalise_names(
+    items: list[dict[str, str]],
+    canonical_names: list[str],
+    special_cases: dict[str, str],
+) -> list[dict[str, str]]:
+    def normalise_name(name: str) -> str:
         # Check case-insensitive special cases
         lower_name = name.lower()
         if lower_name in special_cases:
             return special_cases[lower_name]
 
         # Fuzzy matching for general cases
-        result = process.extractOne(name, canonical_names, scorer=fuzz.ratio)
+        result: tuple[str, int] | None = process.extractOne(name, canonical_names, scorer=fuzz.ratio)
         if result:
-            match, score = result[0], result[1]
+            match, score = result
             return match if score > 80 else name
 
         return name
@@ -141,7 +146,7 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
         {
             "role": "user",
             "content": prompt.format(html_content=html_content),
-        }
+        },
     ]
     chat_response = await client.chat.completions.create(
         model=model,
@@ -152,25 +157,35 @@ async def extract_job_details_from_html(html_content: str) -> dict[str, Any]:
         },
     )
 
-    job_details = json.loads(chat_response.choices[0].message.content)
+    job_details: dict[str, Any] = {}
+    try:
+        job_details = json.loads(chat_response.choices[0].message.content)
+    except (ValueError, TypeError, KeyError, json.JSONDecodeError) as e:
+        await logger.awarn("Failed to extract data from job details", response=chat_response, exc_info=e)
+
     if (
-        not "title" in job_details
-        or "name" not in job_details.get("company")
-        and ("url" not in job_details.get("company") or "linkedin_url" not in job_details.get("company"))
+        "title" not in job_details
+        or "company" not in job_details
+        or not job_details.get("company")
+        or "name" not in job_details["company"]
+        or "url" not in job_details["company"]
+        or "linkedin_url" not in job_details["company"]
     ):
-        logger.warn("Failed to extract necessary information from job post", job_details=job_details)
+        await logger.awarn("Failed to extract necessary information from job post", job_details=job_details)
 
     # Normalise tools
     try:
         job_details["tools"] = normalise_names(job_details["tools"], canonical_tech_names, tool_name_special_cases)
-    except Exception as e:
-        logger.warn("Failed to normalise tool stack", job_details=job_details, exc_info=e)
+    except (ValueError, TypeError, KeyError) as e:
+        await logger.awarn("Failed to normalise tool stack", job_details=job_details, exc_info=e)
 
     try:
         job_details["processes"] = normalise_names(
-            job_details["processes"], canonical_process_names, process_name_special_cases
+            job_details["processes"],
+            canonical_process_names,
+            process_name_special_cases,
         )
-    except Exception as e:
-        logger.warn("Failed to normalise processes", job_details=job_details, exc_info=e)
+    except (ValueError, TypeError, KeyError) as e:
+        await logger.awarn("Failed to normalise processes", job_details=job_details, exc_info=e)
 
     return job_details
