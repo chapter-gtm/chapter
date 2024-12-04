@@ -1,13 +1,10 @@
-import os
-import json
-import httpx
 import asyncio
-import structlog
-from typing import Any, Dict
+import os
 from datetime import date
+from typing import Any
 
-from app.lib.schema import Investor
-
+import httpx
+import structlog
 
 logger = structlog.get_logger()
 pb_api_key = os.environ["PB_API_KEY"]
@@ -26,25 +23,33 @@ pitchbook_round_map = {
 }
 
 
-async def fetch_url(client: httpx.AsyncClient, url: str, headers: Dict[str, Any] = None, params: Dict[str, Any] = None):
+async def fetch_url(
+    client: httpx.AsyncClient,
+    url: str,
+    headers: dict[str, Any] | None = None,
+    params: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Fetch url."""
     try:
         if not headers:
-            headers = []
+            headers = {}
         if not params:
-            params = []
+            params = {}
         response = await client.get(url, headers=headers)
         if response.status_code != 200 or not response.text:
             return {}
-        return response.json()
+        response_json = response.json()
+        return response_json if isinstance(response_json, dict) else {}
     except httpx.RequestError as e:
         await logger.awarn("Error while fetching data.", exc_info=e)
+    return {}
 
 
-async def get_company_funding_data(url: str) -> list[str]:
+async def get_company_funding_data(url: str) -> dict[str, Any]:
     """Get company investors."""
     if not url:
-        raise Exception("url is required")
+        error_msg = "url is required"
+        raise ValueError(error_msg)
 
     headers = {
         "accept": "application/json",
@@ -60,10 +65,11 @@ async def get_company_funding_data(url: str) -> list[str]:
         try:
             pb_company_id = data["items"][0]["companyId"]
         except (KeyError, TypeError, IndexError) as e:
-            await logger.awarn("Company not found.", response=data, url=url, exc_info=e)
-            raise Exception("Company not found.")
+            error_msg = "Company not found."
+            await logger.awarn(error_msg, response=data, url=url, exc_info=e)
+            raise LookupError(error_msg) from e
 
-        results = []
+        results: list[Any] = []
         try:
             urls = [
                 f"https://api.pitchbook.com/companies/{pb_company_id}/active-investors",
@@ -74,9 +80,6 @@ async def get_company_funding_data(url: str) -> list[str]:
             results = await asyncio.gather(*tasks)
 
             # Get funding round name (Awesome API design Pitchbook!)
-            print(results[1]["lastFinancingDealType3"])
-            print(results[1]["lastFinancingDealType2"])
-            print(results[1]["lastFinancingDealType"])
             try:
                 round_name = pitchbook_round_map[results[1]["lastFinancingDealType3"]["code"]]
             except (KeyError, TypeError):
@@ -90,12 +93,12 @@ async def get_company_funding_data(url: str) -> list[str]:
 
             try:
                 announced_date = date.fromisoformat(results[1]["lastFinancingDate"])
-            except:
+            except ValueError:
                 announced_date = None
 
             try:
                 money_raised = results[1]["lastFinancingSize"]["amount"]
-            except:
+            except ValueError:
                 money_raised = None
 
             return {
@@ -109,5 +112,6 @@ async def get_company_funding_data(url: str) -> list[str]:
                 "money_raised": money_raised,
             }
         except (KeyError, TypeError, IndexError) as e:
-            await logger.awarn("Failed to get round and investors", response=results, url=url, exc_info=e)
-            raise Exception("Failed to get round and investors.")
+            error_msg = "Failed to get round and investors"
+            await logger.awarn(error_msg, response=results, url=url, exc_info=e)
+            raise

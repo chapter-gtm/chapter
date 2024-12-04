@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import binascii
+import enum
 import json
 import os
-import enum
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final
-from datetime import datetime, date
 
 from advanced_alchemy.utils.text import slugify
 from litestar.serialization import decode_json, encode_json
@@ -27,11 +27,9 @@ BASE_DIR: Final[Path] = module_to_os_path(DEFAULT_MODULE_NAME)
 TRUE_VALUES = {"True", "true", "1", "yes", "Y", "T"}
 
 
-def custom_json_serializer(obj):
+def custom_json_serializer(obj: Any) -> str | dict | list | Any:
     """Serialise python obj to json."""
-    if isinstance(obj, date):
-        return obj.isoformat()
-    if isinstance(obj, datetime):
+    if isinstance(obj, date | datetime):
         return obj.isoformat()
     if isinstance(obj, enum.Enum):
         return obj.value

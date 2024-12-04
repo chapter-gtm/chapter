@@ -13,7 +13,7 @@ from litestar.config.csrf import CSRFConfig
 from litestar.logging.config import LoggingConfig, StructLoggingConfig
 from litestar.middleware.logging import LoggingMiddlewareConfig
 from litestar.plugins.structlog import StructlogConfig
-from litestar_saq import CronJob, QueueConfig, SAQConfig
+from litestar_saq import QueueConfig, SAQConfig
 from litestar_vite import ViteConfig
 
 from .base import get_settings

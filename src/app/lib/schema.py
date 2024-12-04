@@ -1,6 +1,6 @@
-from typing import Any
-from datetime import date, datetime
 import enum
+from datetime import date, datetime
+from typing import Any, Self
 
 import msgspec
 
@@ -13,7 +13,7 @@ class BaseStruct(msgspec.Struct):
         return {f: getattr(self, f) for f in self.__struct_fields__ if getattr(self, f, None) != msgspec.UNSET}
 
     @classmethod
-    def from_dict(cls, data):
+    def from_dict(cls, data: dict[str, Any]) -> Self:
         """Create an instance from a dictionary."""
         return cls(**data)
 
@@ -85,7 +85,7 @@ class WorkExperience(CamelizedBaseStruct):
     description: str | None = None
     location: Location | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Build a profile pic url from company url."""
         if self.company_url:
             self.company_profile_pic_url = get_logo_dev_link(self.company_url)

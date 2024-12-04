@@ -1,7 +1,7 @@
 import os
-import structlog
 from urllib.parse import urlparse, urlunparse
 
+import structlog
 
 logger = structlog.get_logger()
 
@@ -17,7 +17,7 @@ def get_domain(url: str) -> str:
     return parsed_url.netloc.replace("www.", "")
 
 
-def get_domain_from_email(email: str) -> str:
+def get_domain_from_email(email: str) -> str | None:
     """Extract domain from email."""
     parsed_url = urlparse("mailto://" + email)
     return parsed_url.hostname
@@ -27,17 +27,21 @@ def get_logo_dev_link(url: str) -> str | None:
     """Construct a logo.dev url."""
     try:
         domain = get_domain(url)
+    except (ValueError, TypeError) as e:
+        error_msg = "Failed to build logo.dev link"
+        logger.warning(error_msg, url=url, exc_info=e)
+        return None
+    else:
         return f"https://img.logo.dev/{domain}?token={logo_dev_token}"
-    except Exception as e:
-        logger.warn("Failed to build logo.dev link", url=url, exc_info=e)
 
 
-def get_fully_qualified_url(domain_or_url):
+def get_fully_qualified_url(domain_or_url: str) -> str:
     """Return fully qualified from domain or url."""
 
     parsed_url = urlparse(domain_or_url.strip())
     if not parsed_url.netloc and not parsed_url.path:
-        raise ValueError("Invalid URL or domain")
+        error_msg = "Invalid URL or domain"
+        raise ValueError(error_msg)
 
     if not parsed_url.scheme:
         return f"https://{domain_or_url.strip()}"
