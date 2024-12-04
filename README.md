@@ -25,7 +25,7 @@
 > Chapter is under active development, and is currently in public beta. This repository is updated regularly with new features and overall improvements.
 
 <br />
-Chapter is the 1st open source GTM tool designed for developer tool companies. We beleive that developer tools need a new kind of sales tool when selling to mid-market and enterprise. One that requires zero click or manual work AND provides a broad combination of niche data points that you can trust to have high confidence that a lead is relevant. Only that way can you trust that a lead is relevant to your business and can reach out in a geniune way. The future is relevancy.
+Chapter is the 1st open source GTM tool designed for developer tool companies. We believe that developer tools need a new kind of sales tool when selling to mid-market and enterprise. One that requires zero click or manual work AND provides a broad combination of niche data points that you can trust to have high confidence that a lead is relevant. Only that way can you trust that a lead is relevant to your business and can reach out in a genuine way. The future is relevancy.
 
 ## About the Project
 
