@@ -1,8 +1,48 @@
-# Chapter - Lead research. Purpose-built for developer tools
+<!-- PROJECT LOGO -->
+<p align="center">
+  <a href="https://github.com/chapter-gtm/chapter">
+   <img src="https://github.com/chapter-gtm/chapter/assets/images/github-cover.png" alt="Logo">
+  </a>
 
-Chapter builds lead pipelines for founders and GTM teams at developer tool companies, identifying who to talk to and providing evidence on why they need their product.
+  <h3 align="center">Chapter</h3>
 
-Note: This project is under ongoing development.
+  <p align="center">
+    The open-source GTM tool for developer tools.
+    <br />
+    <a href="https://chapter.show"><strong>Learn more »</strong></a>
+    <br />
+    <a href="https://github.com/chapter-gtm/chapter/issues">Issues</a>
+    <br />
+    <a href="https://cal.com/robing/open-source-gtm">Talk to founders</a>
+    <br />
+  </p>
+
+<br />
+
+</p>
+> NOTE: Chapter is under active development, and is currently in public beta. This repository is updated regularly with changes, improvements to repo, and new releases.
+
+<br />
+Chapter is the 1st open source GTM tool designed for developer tool companies. We beleive that developer tools need a new kind of sales tool when selling to mid-market and enterprise. One that requires zero click or manual work AND provides a broad combination of niche data points that you can trust to have high confidence that a lead is relevant. Only that way can you trust that a lead is relevant to your business and can reach out in a geniune way. The future is relevancy.
+
+## About the Project
+
+<img width="100%" alt="booking-screen" src="https://github.com/chapter-gtm/chapter/assets/images/github-chapter-screenshots.png">
+
+# Chapter - Lead research, purpose-built for developer tools
+
+It takes 1 minute to create an AI agent that researches for relevant leads matching your exact search criteria around the clock. Get daily leads in real-time based on a wide variety of triggers, and evidence on why they matter.
+
+### Built With
+
+- [Next.js](https://nextjs.org/?ref=chapter.show)
+- [React.js](https://reactjs.org/?ref=chapter.show)
+- [Tailwind CSS](https://tailwindcss.com/?ref=chapter.show)
+- [shadcn/ui](https://ui.shadcn.com/?ref=chapter.show)
+- [Tiptap](https://tiptap.dev/?ref=chapter.show)
+- [Litestar](https://litestar.dev)
+- [SQLAlchemy](https://sqlalchemy.org/?ref=chapter.show)
+- [PostgreSQL](https://postgresql.org/?ref=chapter.show)
 
 ## Quick Start
 
