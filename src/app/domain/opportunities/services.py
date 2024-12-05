@@ -1,43 +1,44 @@
 from __future__ import annotations
 
 import difflib
-import structlog
-from datetime import datetime, timedelta, timezone
+from contextlib import suppress
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
-from sqlalchemy import ColumnElement, insert, select, or_, and_, not_, func, text
-from sqlalchemy.orm import InstrumentedAttribute, selectinload, undefer
-from advanced_alchemy.filters import SearchFilter, LimitOffset
-from advanced_alchemy.exceptions import RepositoryError
+import structlog
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
-from advanced_alchemy.filters import CollectionFilter
-from uuid_utils.compat import uuid4
-
-from app.lib.utils import get_domain, get_domain_from_email
-from app.lib.schema import CamelizedBaseStruct, OpportunityStage, Location, WorkExperience
-from app.lib.pdl import search_person_details
-from app.db.models import Opportunity, OpportunityAuditLog, JobPost, Person
-from .repositories import OpportunityRepository, OpportunityAuditLogRepository, ICPRepository
-from .utils import extract_context_from_job_post
+from sqlalchemy import and_, insert, not_, or_, select, text
+from sqlalchemy.exc import (
+    DataError,
+    IntegrityError,
+    InvalidRequestError,
+    OperationalError,
+    PendingRollbackError,
+    StatementError,
+)
+from sqlalchemy.orm import InstrumentedAttribute, selectinload, undefer
 
 from app.db.models import (
-    Opportunity,
-    OpportunityAuditLog,
-    opportunity_person_relation,
-    opportunity_job_post_relation,
     ICP,
+    JobPost,
+    Opportunity,
     Person,
+    opportunity_job_post_relation,
+    opportunity_person_relation,
 )
-
 from app.domain.people.schemas import PersonCreate
 from app.domain.people.services import PersonService
+from app.lib.pdl import search_person_details
+from app.lib.schema import FundingRound, Location, OpportunityStage, WorkExperience
+from app.lib.utils import get_domain, get_domain_from_email
+
+from .repositories import ICPRepository, OpportunityAuditLogRepository, OpportunityRepository
+from .utils import extract_context_from_job_post
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
     from uuid import UUID
 
-    from advanced_alchemy.repository._util import LoadSpec
-    from advanced_alchemy.service import ModelDictT
     from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.repository._util import LoadSpec
     from advanced_alchemy.service import ModelDictT
@@ -105,7 +106,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         Returns:
             Updated representation.
         """
-        obj = await super().update(
+        return await super().update(
             data=data,
             item_id=item_id,
             attribute_names=attribute_names,
@@ -117,7 +118,6 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
         )
-        return obj
 
     async def create(
         self,
@@ -148,14 +148,18 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         # Add associated contacts
         for contact_id in contact_ids:
             stmt = insert(opportunity_person_relation).values(
-                opportunity_id=obj.id, person_id=contact_id, tenant_id=obj.tenant_id
+                opportunity_id=obj.id,
+                person_id=contact_id,
+                tenant_id=obj.tenant_id,
             )
             await self.repository.session.execute(stmt)
 
         # Add associated job posts
         for job_post_id in job_post_ids:
             stmt = insert(opportunity_job_post_relation).values(
-                opportunity_id=obj.id, job_post_id=job_post_id, tenant_id=obj.tenant_id
+                opportunity_id=obj.id,
+                job_post_id=job_post_id,
+                tenant_id=obj.tenant_id,
             )
             await self.repository.session.execute(stmt)
 
@@ -180,7 +184,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 continue
 
             if not icp.tool.include and not icp.process.include:
-                logger.debug(
+                await logger.ainfo(
                     "Skipping icp as tool and process include lists are both empty",
                     tenant_id=icp.tenant_id,
                     icp_id=icp.id,
@@ -188,7 +192,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 )
                 continue
 
-            date_n_days_ago = datetime.now(timezone.utc) - timedelta(days=last_n_days)
+            date_n_days_ago = datetime.now(UTC) - timedelta(days=last_n_days)
             and_conditions = [
                 JobPost.created_at > date_n_days_ago,
                 Opportunity.id.is_(None),
@@ -200,7 +204,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
             if icp.tool.exclude:
                 tool_stack_not_conditions = [
-                    not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude]))
+                    not_(JobPost.tools.contains([{"name": name} for name in icp.tool.exclude])),
                 ]
                 and_conditions.extend(tool_stack_not_conditions)
 
@@ -215,7 +219,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     and_(
                         or_(*tool_stack_or_conditions, *process_or_conditions),
                         *and_conditions,
-                    )
+                    ),
                 )
                 .execution_options(populate_existing=True)
                 .options(selectinload(JobPost.company), undefer(JobPost.body))
@@ -230,7 +234,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                 job_post = result[0]
                 try:
                     if not job_post.company:
-                        logger.warn(
+                        await logger.ainfo(
                             "Skipping job because no company associated with job post",
                             job_post_id=job_post.id,
                             tenant_id=icp.tenant_id,
@@ -241,7 +245,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     if icp.company.headcount_min and (
                         not job_post.company.headcount or job_post.company.headcount < icp.company.headcount_min
                     ):
-                        logger.info(
+                        await logger.ainfo(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
@@ -254,7 +258,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     if icp.company.headcount_max and (
                         not job_post.company.headcount or job_post.company.headcount > icp.company.headcount_max
                     ):
-                        logger.info(
+                        await logger.ainfo(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
@@ -270,7 +274,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         or not job_post.company.org_size.engineering
                         or job_post.company.org_size.engineering < icp.company.org_size.engineering_min
                     ):
-                        logger.info(
+                        await logger.ainfo(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
@@ -285,7 +289,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         or not job_post.company.org_size.engineering
                         or job_post.company.org_size.engineering > icp.company.org_size.engineering_max
                     ):
-                        logger.info(
+                        await logger.ainfo(
                             "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
@@ -296,18 +300,21 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         continue
 
                     # Filter for funding stage but don't skip if the information is missing
-                    if icp.company.funding and (
-                        job_post.company.last_funding
-                        and job_post.company.last_funding.round_name.value not in icp.company.funding
+                    if (
+                        icp.company.funding
+                        and job_post.company.last_funding
+                        and job_post.company.last_funding.round_name != FundingRound.SERIES_UNKNOWN
+                        and job_post.company.last_funding.round_name not in icp.company.funding
                     ):
-                        logger.info(
-                            "Job because criteria does not match, but continuing further",
+                        await logger.ainfo(
+                            "Skipping job because criteria does not match",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
                             company_url=job_post.company.url,
                             funding_round=job_post.company.last_funding,
                             tenant_id=icp.tenant_id,
                         )
+                        continue
 
                     # Filter for country but don't skip if the information is missing
                     if icp.company.countries and (
@@ -315,7 +322,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         and job_post.company.hq_location.country
                         and job_post.company.hq_location.country not in icp.company.countries
                     ):
-                        logger.info(
+                        await logger.ainfo(
                             "Job because criteria does not match, but continuing further",
                             job_post_id=job_post.id,
                             company_id=job_post.company.id,
@@ -342,11 +349,11 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                                 titles=icp.person.titles,
                                 sub_roles=icp.person.sub_roles,
                             )
-                        except:
+                        except (ValueError, TypeError, LookupError):
                             persons = []
 
                         if not persons:
-                            logger.warn(
+                            await logger.ainfo(
                                 "Skipping new opportunity because no appropriate contact found",
                                 job_post_id=job_post.id,
                                 company_id=job_post.company.id,
@@ -358,7 +365,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         for person_details in persons:
 
                             if not difflib.get_close_matches(person_details.get("job_title", ""), icp.person.titles):
-                                logger.warn(
+                                await logger.ainfo(
                                     "Skipping person because title doesn't match ICP",
                                     job_post_id=job_post.id,
                                     company_id=job_post.company.id,
@@ -383,37 +390,44 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                                 github_profile_url = "https://" + person_details.get("github_url").rstrip("/")
                             if person_details.get("birth_date"):
                                 try:
-                                    birth_date = datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d").date()
-                                except Exception as e:
-                                    logger.warn(
+                                    birth_date = (
+                                        datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d")
+                                        .replace(tzinfo=UTC)
+                                        .date()
+                                    )
+                                except (AttributeError, ValueError, NameError) as e:
+                                    await logger.ainfo(
                                         "Failed to parse birth date for a person",
                                         person_details=person_details,
                                         exc_info=e,
                                     )
 
-                            if person_details.get("work_email"):
-                                if get_domain_from_email(person_details.get("work_email", "")) == get_domain(
-                                    job_post.company.url
-                                ):
-                                    work_email = person_details.get("work_email")
+                            if person_details.get("work_email") and get_domain_from_email(
+                                person_details.get("work_email", ""),
+                            ) == get_domain(
+                                job_post.company.url,
+                            ):
+                                work_email = person_details.get("work_email")
 
                             work_experiences = []
                             for work_ex in person_details.get("experience", []):
-                                try:
+                                with suppress(Exception):
                                     work_experiences.append(
                                         WorkExperience(
-                                            starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
+                                            starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m")
+                                            .replace(tzinfo=UTC)
+                                            .date(),
                                             title=work_ex.get("title", {}).get("name", "Unknown"),
                                             company_name=work_ex.get("company", {}).get("name", "Unknown"),
                                             company_url=work_ex.get("company", {}).get("website"),
                                             company_linkedin_profile_url=work_ex.get("linkedin_url"),
-                                            ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
+                                            ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m")
+                                            .replace(tzinfo=UTC)
+                                            .date()
                                             if work_ex.get("end_date")
                                             else None,
-                                        )
+                                        ),
                                     )
-                                except Exception:
-                                    pass
 
                             obj = PersonCreate(
                                 first_name=person_details.get("first_name"),
@@ -440,7 +454,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             person_objects.append(obj.to_dict())
 
                         if not person_objects:
-                            logger.warn(
+                            await logger.ainfo(
                                 "Skipping new opportunity because no relevant people found",
                                 job_post_id=job_post.id,
                                 company_id=job_post.company.id,
@@ -458,7 +472,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                     if job_post.body and icp.pitch:
                         context["job_post"] = await extract_context_from_job_post(job_post.body, icp.pitch)
                     else:
-                        logger.warn(
+                        await logger.awarn(
                             "Cannot generate opportunity highlight, job post body or icp pitch missing",
                             job_post_id=job_post.id,
                             icp=icp.id,
@@ -473,7 +487,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "contact_ids": person_ids,
                             "job_post_ids": [job_post.id],
                             "tenant_id": icp.tenant_id,
-                        }
+                        },
                     )
 
                     await opportunities_audit_log_service.create(
@@ -482,16 +496,27 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "diff": {"new": opportunity},
                             "tenant_id": icp.tenant_id,
                             "opportunity_id": opportunity.id,
-                        }
+                        },
                     )
                     await self.repository.session.commit()
                     opportunities_found += 1
 
-                except Exception as e:
-                    logger.error("Error processing job post or person", job_post_id=job_post.id, exc_info=e)
+                except (ValueError, AttributeError, TypeError) as e:
+                    error_msg = "Error processing job post or person"
+                    await logger.aerror(error_msg, job_post_id=job_post.id, exc_info=e)
+                except (
+                    IntegrityError,
+                    OperationalError,
+                    DataError,
+                    PendingRollbackError,
+                    InvalidRequestError,
+                    StatementError,
+                ) as e:
+                    error_msg = "Error inserting / updating opportunity"
+                    await logger.aerror(error_msg, job_post_id=job_post.id, exc_info=e)
                     await self.repository.session.rollback()
 
-            logger.info(
+            await logger.ainfo(
                 "Searched for new jobs matching tool stack and date range",
                 tools_include=icp.tool.include,
                 tools_exclude=icp.tool.exclude,
