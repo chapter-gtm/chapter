@@ -28,7 +28,7 @@ async def fetch_url(
     url: str,
     headers: dict[str, Any] | None = None,
     params: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+) -> Any:
     """Fetch url."""
     try:
         if not headers:
@@ -38,8 +38,7 @@ async def fetch_url(
         response = await client.get(url, headers=headers)
         if response.status_code != 200 or not response.text:
             return {}
-        response_json = response.json()
-        return response_json if isinstance(response_json, dict) else {}
+        return response.json()
     except httpx.RequestError as e:
         await logger.awarn("Error while fetching data.", exc_info=e)
     return {}
