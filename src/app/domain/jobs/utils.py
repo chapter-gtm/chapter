@@ -55,6 +55,10 @@ canonical_tech_names = [
     "SailPoint",
     "Okta",
     "Auth0",
+    "AWS",
+    "Grafana",
+    "Prometheuse",
+    "Sentry",
 ]
 
 tool_name_special_cases = {

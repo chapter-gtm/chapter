@@ -168,6 +168,10 @@ const stackList = [
   { value: "SailPoint", label: "SailPoint" },
   { value: "Okta", label: "Okta" },
   { value: "Auth0", label: "Auth0" },
+  { value: "AWS", label: "AWS" },
+  { value: "Grafana", label: "Grafana" },
+  { value: "Prometheus", label: "Prometheus" },
+  { value: "Sentry", label: "Sentry" },
 ]
 stackList.sort((a, b) => a.label.localeCompare(b.label))
 
