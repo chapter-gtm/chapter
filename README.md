@@ -31,7 +31,7 @@ Chapter finds highly relevant leads based on your exact "niche" search criteria,
 
 <img width="100%" alt="flow-chart" src="https://github.com/chapter-gtm/chapter/blob/main/assets/images/chapter-agent-flowchart.png">
 
-Chapter is the 1st open source GTM tool designed for developer tool companies. We believe that developer tools should have a new kind of sales tool that enables them to sell to mid-market and enterprise. One that requires zero clicks or manual work AND provides a broad combination of niche data points that you can trust and identify the perfect lead. With relevant data, you can do relevant outbound–your recipients will thank you.
+Chapter is the 1st open source GTM tool designed for developer tool companies. We believe that developer tools should have a new kind of sales tool that enables them to sell to mid-market and enterprise–one that requires no additional research, and provides a broad set of niche data points (specific to developer tools, e.g. tool stack, libraries, github activity, etc). Finally you can scale relevant outbound with trustworthy and relevant data. Your recipients will thank you.
 
 ## About the Project
 
