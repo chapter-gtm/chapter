@@ -25,7 +25,7 @@
 > Chapter is under active development, and is currently in public beta. This repository is updated regularly with new features and overall improvements.
 
 <br />
-Chapter finds highly relevant leads based on your exact "niche" search criteria, and delivers contacts and evidence on why they are relevant.
+Chapter finds highly relevant leads based on your exact "niche" search criteria (e.g. OpenAPI, REST API, SDKs, release frequency, engineering team size, public facing developer docs, etc), and delivers contacts and evidence on why they are relevant.
 <br />
 <br />
 
