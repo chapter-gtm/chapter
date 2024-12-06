@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from uuid import UUID
+from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import UUIDAuditBase
-from sqlalchemy import String, ForeignKey, Index, UniqueConstraint, asc
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Index, String, UniqueConstraint, asc
+from sqlalchemy.orm import Mapped, mapped_column
 
-from app.lib.schema import CompanyCriteria, ToolCriteria, PersonCriteria, ProcessCriteria
-from .custom_types import CompanyCriteriaType, ToolCriteriaType, PersonCriteriaType, ProcessCriteriaType
+from app.lib.schema import CompanyCriteria, PersonCriteria, ProcessCriteria, ToolCriteria  # noqa: TCH001
+
+from .custom_types import CompanyCriteriaType, PersonCriteriaType, ProcessCriteriaType, ToolCriteriaType
 
 
 class ICP(UUIDAuditBase):

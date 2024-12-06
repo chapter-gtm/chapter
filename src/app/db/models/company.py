@@ -1,15 +1,15 @@
 from __future__ import annotations
 
+from datetime import date  # noqa: TCH003
 from typing import TYPE_CHECKING
-from uuid import UUID
-from datetime import date
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.lib.schema import Location, Funding, OrgSize
-from .custom_types import LocationType, FundingType, OrgSizeType
+from app.lib.schema import Funding, Location, OrgSize  # noqa: TCH001
+
+from .custom_types import FundingType, LocationType, OrgSizeType
 
 if TYPE_CHECKING:
     from .person import Person
@@ -28,7 +28,10 @@ class Company(UUIDAuditBase, SlugKey):
     founded_year: Mapped[int | None] = mapped_column(nullable=True, default=None)
     url: Mapped[str | None] = mapped_column(String(length=2083), nullable=True, default=None, unique=True)
     linkedin_profile_url: Mapped[str | None] = mapped_column(
-        String(length=2083), nullable=True, default=None, unique=True
+        String(length=2083),
+        nullable=True,
+        default=None,
+        unique=True,
     )
     hq_location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)
     last_funding: Mapped[Funding | None] = mapped_column(FundingType, nullable=True, default=None)

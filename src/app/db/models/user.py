@@ -5,15 +5,15 @@ from typing import TYPE_CHECKING
 from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import UUIDAuditBase
-from sqlalchemy import String, ForeignKey, Index
+from sqlalchemy import ForeignKey, Index, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from .oauth_account import UserOauthAccount
     from .team_member import TeamMember
-    from .user_role import UserRole
     from .tenant import Tenant
+    from .user_role import UserRole
 
 
 class User(UUIDAuditBase):

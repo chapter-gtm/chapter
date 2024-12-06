@@ -1,19 +1,19 @@
 from __future__ import annotations
 
-from uuid import UUID
-from datetime import date
-from typing import Any, Final, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
+from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.base import SlugKey, UUIDAuditBase, orm_registry
-from sqlalchemy import String, Text, ForeignKey, Index, Column, Table, UniqueConstraint, desc
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, ForeignKey, Index, Table, Text, UniqueConstraint, desc
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.lib.schema import OpportunityStage, OpportunityContext
-from .company import Company
-from .person import Person
-from .job_post import JobPost
-from .custom_types import OpportunityStageType, OpportunityContextType
+from app.lib.schema import OpportunityContext, OpportunityStage  # noqa: TCH001
+
+from .company import Company  # noqa: TCH001
+from .custom_types import OpportunityContextType, OpportunityStageType
+from .job_post import JobPost  # noqa: TCH001
+from .person import Person  # noqa: TCH001
 
 if TYPE_CHECKING:
     from .user import User
@@ -59,17 +59,19 @@ class Opportunity(UUIDAuditBase, SlugKey):
     """An opportunity."""
 
     __tablename__ = "opportunity"
-    __pii_columns__ = {}
     __table_args__ = (
         Index("ix_opportunity_id", "id"),
         Index("ix_opportunity_id_tenant_id", "id", "tenant_id"),
         Index("idx_opportunity_created_at", "tenant_id", desc("created_at")),
         Index("idx_opportunity_tenant_id_created_at", "tenant_id", desc("created_at")),
         UniqueConstraint("tenant_id", "company_id"),
-    )
+    )  # type: ignore[assignment]
     name: Mapped[str] = mapped_column(nullable=False, index=True)
     stage: Mapped[OpportunityStage] = mapped_column(
-        OpportunityStageType, nullable=False, default="identified", index=True
+        OpportunityStageType,
+        nullable=False,
+        default="identified",
+        index=True,
     )
     notes: Mapped[str] = mapped_column(Text, nullable=False, default="")
     context: Mapped[OpportunityContext | None] = mapped_column(OpportunityContextType, nullable=True, default={})

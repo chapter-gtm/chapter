@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from uuid import UUID  # noqa: TCH003
 
-from uuid import UUID
-from advanced_alchemy.base import SlugKey, UUIDAuditBase
-from sqlalchemy import String, Text, ForeignKey, Index
+from advanced_alchemy.base import UUIDAuditBase
+from sqlalchemy import ForeignKey, Index, String, Text
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column, relationship, deferred
+from sqlalchemy.orm import Mapped, deferred, mapped_column, relationship
 
-from app.lib.schema import Location, Funding, Tool, Process
-from .custom_types import LocationType, FundingType, ToolType, ProcessType
-from .company import Company
+from app.lib.schema import Location, Process, Tool  # noqa: TCH001
+
+from .company import Company  # noqa: TCH001
+from .custom_types import LocationType, ProcessType, ToolType
 
 
 class JobPost(UUIDAuditBase):
@@ -18,7 +18,6 @@ class JobPost(UUIDAuditBase):
 
     __tablename__ = "job_post"
     __table_args__ = (Index("ix_job_post_id", "id"),)
-    __pii_columns__ = {}
     title: Mapped[str] = mapped_column(nullable=False, index=True)
     body: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
     location: Mapped[Location | None] = mapped_column(LocationType, nullable=True, default=None)

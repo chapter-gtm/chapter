@@ -1,43 +1,46 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, asdict
+from contextlib import suppress
+from typing import Any
 
-from sqlalchemy.types import TypeDecorator, String
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.types import String, TypeDecorator
 
 from app.lib.schema import (
-    Location,
-    FundingRound,
-    Funding,
-    WorkExperience,
-    SocialActivity,
-    OpportunityStage,
-    OpportunityContext,
-    OrgSize,
-    Tool,
-    Process,
-    Scale,
-    OrgSizeCriteria,
     CompanyCriteria,
-    ToolCriteria,
-    ProcessCriteria,
+    Funding,
+    FundingRound,
+    Location,
+    OpportunityContext,
+    OpportunityStage,
+    OrgSize,
+    OrgSizeCriteria,
     PersonCriteria,
+    Process,
+    ProcessCriteria,
+    Scale,
+    SocialActivity,
+    Tool,
+    ToolCriteria,
+    WorkExperience,
 )
 
 
 class JSONBType(TypeDecorator):
+    """Base JSON Type."""
+
     impl = JSONB  # Use the PostgreSQL JSONB type as base
 
-    def process_bind_param(self, value, dialect):
+    def process_bind_param(self, value: Any, dialect: Any) -> Any:
         """Convert Python object to JSON format before storing it in the database."""
         if isinstance(value, dict):
             return value
-        elif hasattr(value, "to_dict"):
+        if hasattr(value, "to_dict"):
             return value.to_dict()
         return value
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value:
             return json.loads(value)
@@ -45,7 +48,9 @@ class JSONBType(TypeDecorator):
 
 
 class LocationType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Location Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return Location.from_dict(value)
@@ -53,7 +58,9 @@ class LocationType(JSONBType):
 
 
 class FundingType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Funding Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             obj = Funding.from_dict(value)
@@ -66,20 +73,21 @@ class FundingType(JSONBType):
 
 
 class WorkExperienceType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Work Experience Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return WorkExperience.from_dict(value)
-        elif value and isinstance(value, list):
-            objs = []
-            for item in value:
-                objs.append(WorkExperience.from_dict(item))
-            return objs
+        if value and isinstance(value, list):
+            return [WorkExperience.from_dict(item) for item in value]
         return None
 
 
 class SocialActivityType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Social Activity Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return SocialActivity.from_dict(value)
@@ -87,21 +95,27 @@ class SocialActivityType(JSONBType):
 
 
 class OpportunityStageType(TypeDecorator):
+    """Opportunity Stage Type."""
+
     impl = String
 
-    def process_bind_param(self, value, dialect):
+    def process_bind_param(self, value: Any, dialect: Any) -> Any:
+        """Convert Python object to JSON format before storing it in the database."""
         if isinstance(value, OpportunityStage):
             return value.value
         return value
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
+        """Convert JSON format to Python object when reading from the database."""
         if value is not None:
             return OpportunityStage(value)
         return value
 
 
 class OrgSizeType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Org Size Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return OrgSize.from_dict(value)
@@ -109,13 +123,15 @@ class OrgSizeType(JSONBType):
 
 
 class ToolType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Tool Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             obj = Tool.from_dict(value)
             obj.certainty = Scale(obj.certainty) if obj.certainty else Scale.LOW
             return obj
-        elif value and isinstance(value, list):
+        if value and isinstance(value, list):
             objs = []
             for item in value:
                 obj = Tool.from_dict(item)
@@ -126,12 +142,13 @@ class ToolType(JSONBType):
 
 
 class ProcessType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Process Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
-            obj = Process.from_dict(value)
-            return obj
-        elif value and isinstance(value, list):
+            return Process.from_dict(value)
+        if value and isinstance(value, list):
             objs = []
             for item in value:
                 obj = Process.from_dict(item)
@@ -141,7 +158,9 @@ class ProcessType(JSONBType):
 
 
 class OrgSizeCriteriaType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Org Size Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return OrgSizeCriteria.from_dict(value)
@@ -149,7 +168,9 @@ class OrgSizeCriteriaType(JSONBType):
 
 
 class PersonCriteriaType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Process Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return PersonCriteria.from_dict(value)
@@ -157,7 +178,9 @@ class PersonCriteriaType(JSONBType):
 
 
 class ToolCriteriaType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Tool Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return ToolCriteria.from_dict(value)
@@ -165,7 +188,9 @@ class ToolCriteriaType(JSONBType):
 
 
 class ProcessCriteriaType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Process Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return ProcessCriteria.from_dict(value)
@@ -173,24 +198,27 @@ class ProcessCriteriaType(JSONBType):
 
 
 class CompanyCriteriaType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Company Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             obj = CompanyCriteria.from_dict(value)
+            if not obj.funding or not isinstance(obj.funding, list):
+                return None
             funding_rounds = []
             for funding_round in obj.funding:
-                try:
+                with suppress(ValueError):
                     funding_rounds.append(FundingRound(funding_round))
-                except ValueError:
-                    pass
             obj.funding = funding_rounds
-            obj.org_size = OrgSizeCriteria.from_dict(obj.org_size)
             return obj
         return None
 
 
 class OpportunityContextType(JSONBType):
-    def process_result_value(self, value, dialect):
+    """Opportunity Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any | None:
         """Convert JSON format to Python object when reading from the database."""
         if value and isinstance(value, dict):
             return OpportunityContext.from_dict(value)
