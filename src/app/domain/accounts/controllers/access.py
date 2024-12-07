@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Annotated
 from datetime import timedelta
+from typing import Annotated
 
 from advanced_alchemy.utils.text import slugify
-from litestar import Controller, Request, Response, get, post, patch
+from litestar import Controller, Request, Response, get, patch, post
 from litestar.di import Provide
 from litestar.enums import RequestEncodingType
 from litestar.params import Body

@@ -1,16 +1,14 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
-from uuid import UUID
+from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository, SQLAlchemyAsyncSlugRepository
-from advanced_alchemy.repository import SQLAlchemyAsyncSlugRepository
-from sqlalchemy import ColumnElement, select
-from sqlalchemy.orm import joinedload, InstrumentedAttribute
+from sqlalchemy import select
 
-from app.db.models import Role, User, UserRole, Tenant
+from app.db.models import Role, Tenant, User, UserRole
 
 if TYPE_CHECKING:
-    from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.repository._util import LoadSpec
 
 

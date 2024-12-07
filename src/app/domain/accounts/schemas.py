@@ -6,8 +6,8 @@ from uuid import UUID  # noqa: TCH003
 import msgspec
 
 from app.db.models.team_roles import TeamRoles
-from app.lib.schema import CamelizedBaseStruct
 from app.domain.accounts.utils import get_signed_user_profile_pic_url
+from app.lib.schema import CamelizedBaseStruct
 
 __all__ = (
     "AccountLogin",
@@ -74,7 +74,7 @@ class User(CamelizedBaseStruct):
     avatar_url: str | None = None
     recently_viewed_opportunity_ids: list[UUID] = []
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Build a profile pic url from company url."""
         self.avatar_url = get_signed_user_profile_pic_url(self.id)
 

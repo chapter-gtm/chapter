@@ -2,29 +2,24 @@
 
 from __future__ import annotations
 
-from typing import Annotated, TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated
 
-from advanced_alchemy.utils.text import slugify
-from litestar import Controller, Request, Response, get, post, patch, delete
+from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 from litestar.enums import RequestEncodingType
 from litestar.params import Body
-from litestar.security.jwt import OAuth2Login
 
-from app.db.models import User as UserModel  # noqa: TCH001
 from app.domain.accounts import urls
 from app.domain.accounts.dependencies import provide_tenants_service
-from app.domain.accounts.guards import auth, requires_active_user, requires_superuser
+from app.domain.accounts.guards import requires_active_user, requires_superuser
 from app.domain.accounts.schemas import Tenant, TenantCreate, TenantUpdate
 from app.domain.accounts.services import TenantService
 
 if TYPE_CHECKING:
     from uuid import UUID
 
-    from advanced_alchemy.service.pagination import OffsetPagination
-    from litestar.params import Dependency, Parameter
+    from litestar.params import Parameter
 
-    from app.lib.dependencies import FilterTypes
 
 
 class TenantController(Controller):

@@ -14,15 +14,14 @@ from advanced_alchemy.service import (
 from litestar.exceptions import PermissionDeniedException
 
 from app.config import constants
-from app.db.models import Role, User, UserRole, Tenant
+from app.db.models import Role, Tenant, User, UserRole
 from app.lib import crypt
 
-from .repositories import RoleRepository, UserRepository, UserRoleRepository, TenantRepository
+from .repositories import RoleRepository, TenantRepository, UserRepository, UserRoleRepository
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from advanced_alchemy.repository._util import LoadSpec
     from sqlalchemy.orm import InstrumentedAttribute
 
 
@@ -41,7 +40,7 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         user_id: UUID,
         tenant_id: UUID,
         **kwargs: Any,
-    ) -> tuple[list[User], int]:
+    ) -> User:
         """Get user details."""
         return await self.repository.get_user(user_id=user_id, tenant_id=tenant_id, **kwargs)
 
@@ -49,8 +48,6 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         self,
         data: ModelDictT[User],
         *,
-        load: LoadSpec | None = None,
-        execution_options: dict[str, Any] | None = None,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
@@ -63,8 +60,6 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
                 data.roles.append(UserRole(role_id=role_id, assigned_at=datetime.now(timezone.utc)))  # noqa: UP017
         return await super().create(
             data=data,
-            load=load,
-            execution_options=execution_options,
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
@@ -76,13 +71,12 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         item_id: Any | None = None,
         *,
         id_attribute: str | InstrumentedAttribute[Any] | None = None,
-        load: LoadSpec | None = None,
-        execution_options: dict[str, Any] | None = None,
         attribute_names: Iterable[str] | None = None,
         with_for_update: bool | None = None,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
+        execution_options: dict[str, Any] | None = None,
     ) -> User:
         if isinstance(data, dict):
             role_id: UUID | None = data.pop("role_id", None)
@@ -98,7 +92,6 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
             id_attribute=id_attribute,
-            load=load,
             execution_options=execution_options,
         )
 
