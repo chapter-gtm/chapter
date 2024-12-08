@@ -35,7 +35,7 @@ import { useEffect, useState, useCallback, useRef } from "react"
 import Link from "next/link"
 
 import { OpportunityStageList } from "./OpportunityStageList"
-
+import { OpportunityOwner } from "./OpportunityOwner"
 export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -307,11 +307,17 @@ export function OpportunitiesMain() {
                           </span>
                         </div>
                       </div>
+
                       {selectedRow !== null && (
-                        <OpportunityStageList
-                          opportunity={selectedRow}
-                          updateOpportunity={updateOpportunityCallback}
-                        />
+                        <>
+                          <div className="flex flex-row items-center gap-2">
+                            <OpportunityOwner opportunityId={selectedRow.id} />
+                            <OpportunityStageList
+                              opportunity={selectedRow}
+                              updateOpportunity={updateOpportunityCallback}
+                            />
+                          </div>
+                        </>
                       )}
                     </div>
                   </TooltipProvider>

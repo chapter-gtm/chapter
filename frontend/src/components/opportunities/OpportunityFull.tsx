@@ -1,6 +1,11 @@
 "use client"
 import { useEffect, useState } from "react"
 
+import { CircleUserRound, Check, UserCircleIcon } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+import { getNameInitials } from "@/utils/misc"
+
 import TextEditor from "@/components/editor/editor"
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
@@ -15,6 +20,7 @@ import { updateOpportunityNotes } from "@/utils/chapter/opportunity"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import Image from "next/image"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 
@@ -22,6 +28,18 @@ import { Separator } from "@/components/ui/separator"
 
 import { OpportunityStageList } from "./OpportunityStageList"
 import { OpportunityTabs } from "./OpportunityTabs"
+import { OpportunityOwner } from "./OpportunityOwner"
+import { Button } from "../ui/button"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu"
 
 interface OpportunityFullProps {
   opportunityId: string
@@ -88,6 +106,15 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     }
   }
 
+  // Create an array of users
+  const users = [
+    { name: "Robin", url: "" },
+    { name: "Dennis", url: "" },
+    { name: "Johan", url: "" },
+  ]
+  // Create a selected owner state, and make default empty
+  const [selectedOwner, setSelectedOwner] = useState("")
+
   return (
     <>
       <Toaster theme="light" />
@@ -100,10 +127,13 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   <div className="text-sm text-zinc-400">
                     {opportunity.slug}
                   </div>
-                  <OpportunityStageList
-                    opportunity={opportunity}
-                    updateOpportunity={updateOpportunity}
-                  />
+                  <div className="flex flex-row gap-x-1 items-center">
+                    <OpportunityOwner opportunityId={opportunityId} />
+                    <OpportunityStageList
+                      opportunity={opportunity}
+                      updateOpportunity={updateOpportunity}
+                    />
+                  </div>
                 </div>
                 <Separator />
                 <OpportunityBrand opportunity={opportunity} />
