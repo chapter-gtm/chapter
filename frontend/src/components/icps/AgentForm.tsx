@@ -56,12 +56,12 @@ const agentFormSchema = z.object({
       headcountMin: z
         .number({ invalid_type_error: "Min must be a number" })
         .min(1, "Min must be greater than 0")
-        .max(10000, "Max must not be greater than 10,000")
+        .max(10000, "Min must not be greater than 10,000")
         .int()
         .default(1),
       headcountMax: z
         .number({ invalid_type_error: "Max must be a number" })
-        .min(1, "Max must be greater than 0 and min")
+        .min(1, "Max must be greater than 0")
         .max(10000, "Max must not be greater than 10,000")
         .int()
         .default(10000),
@@ -70,13 +70,13 @@ const agentFormSchema = z.object({
           engineeringMin: z
             .number({ invalid_type_error: "Min must be a number" })
             .min(1, "Min must be greater than 0")
-            .max(2000, "Max must not be greater than 1000")
+            .max(2000, "Min must not be greater than 2000")
             .int()
             .default(1),
           engineeringMax: z
             .number({ invalid_type_error: "Max must be a number" })
-            .min(1, "Max must be greater than 0 and min")
-            .max(2000, "Max must not be greater than 1000")
+            .min(1, "Max must be greater than 0")
+            .max(2000, "Max must not be greater than 2000")
             .int()
             .default(100),
         })
