@@ -70,6 +70,8 @@ canonical_tech_names = [
     "ComfyUI",
     "ONNX",
     "OpenVINO",
+    "WebSocket",
+    "gRPC",
 ]
 
 tool_name_special_cases = {
