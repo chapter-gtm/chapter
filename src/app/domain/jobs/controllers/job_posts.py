@@ -3,34 +3,31 @@
 from __future__ import annotations
 
 import os
-import structlog
 from typing import TYPE_CHECKING, Annotated
 
 import boto3
-from advanced_alchemy.filters import SearchFilter, LimitOffset
-from litestar.datastructures import UploadFile
-from litestar.enums import RequestEncodingType
-from litestar.params import Body
-from litestar import Controller, delete, get, patch, put, post, MediaType
+import structlog
+from advanced_alchemy.filters import LimitOffset, SearchFilter
+from litestar import Controller, MediaType, delete, get, patch, post, put
+from litestar.datastructures import UploadFile  # noqa: TCH002
 from litestar.di import Provide
-from litestar.response import Response
+from litestar.enums import RequestEncodingType  # noqa: TCH002
 from litestar.exceptions import NotFoundException
+from litestar.params import Body  # noqa: TCH002
+from litestar.response import Response
 
-from app.config import constants
-from app.lib.schema import Location, Tool, Process
-from app.lib.utils import get_domain
-from app.lib.scraperapi import extract_url_content
-from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies.dependencies import provide_companies_service
 from app.domain.companies.schemas import CompanyCreate
-from app.domain.companies.services import CompanyService
+from app.domain.companies.services import CompanyService  # noqa: TCH001
 from app.domain.jobs import urls
 from app.domain.jobs.dependencies import provide_job_posts_service
 from app.domain.jobs.schemas import JobPost, JobPostCreate, JobPostCreateFromURL, JobPostUpdate
 from app.domain.jobs.services import JobPostService
 from app.domain.jobs.utils import extract_job_details_from_html
-
+from app.lib.schema import Location, Process, Tool
+from app.lib.scraperapi import extract_url_content
+from app.lib.utils import get_domain
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -111,7 +108,7 @@ class JobPostController(Controller):
         results, count = await job_posts_service.list_and_count(*filters)
 
         if count > 0:
-            await logger.ainfo("Job post already exists", person=results[0])
+            await logger.ainfo("Job post already exists", job_post=results[0].to_schema())
             return job_posts_service.to_schema(schema_type=JobPost, data=results[0])
 
         # Extract job post from URL
@@ -119,7 +116,7 @@ class JobPostController(Controller):
 
         # Some ur;s require a rendering javascript(done using headless browser)
         job_link_domain = get_domain(data.url)
-        if job_link_domain.endswith("workable.com") or job_link_domain.endswith("linkedin.com"):
+        if job_link_domain.endswith(("workable.com", "linkedin.com")):
             render = True
 
         html_content = await extract_url_content(data.url, render=render, timeout=data.timeout)
@@ -129,11 +126,14 @@ class JobPostController(Controller):
         company_linkedin_url = job_details.get("company", {}).get("linkedin_url")
 
         if not company_url and not company_linkedin_url:
-            raise Exception("Cannot determine company url or company linkedin url from job post")
+            error_msg = "Cannot determine company url or company linkedin url from job post"
+            raise ValueError(error_msg)
 
         # Add or update company
         company = CompanyCreate(
-            name=job_details.get("company", {}).get("name"), url=company_url, linkedin_profile_url=company_linkedin_url
+            name=job_details.get("company", {}).get("name"),
+            url=company_url,
+            linkedin_profile_url=company_linkedin_url,
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
@@ -215,8 +215,8 @@ class JobPostController(Controller):
                     "Content-Type": content_type,
                 },
             )
-        except s3_client.exceptions.NoSuchKey:
-            raise NotFoundException(detail=f"Job post PDF not found.")
+        except s3_client.exceptions.NoSuchKey as e:
+            raise NotFoundException(detail="Job post PDF not found.") from e
 
     @put(
         operation_id="UpdateJobPostAddPDF",
@@ -240,13 +240,11 @@ class JobPostController(Controller):
         """Update job post with pdf."""
         file_content = await data.read()
 
-        db_obj = await job_posts_service.get(job_post_id)
+        await job_posts_service.get(job_post_id)
 
         # Upload the file to S3
         s3_client = boto3.client("s3")
         s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{job_post_id}.pdf", Body=file_content)
-
-        return None
 
     @patch(
         operation_id="UpdateJobPost",
