@@ -66,6 +66,8 @@ canonical_tech_names = [
     "fastText",
     "Llama",
     "T5",
+    "Stable Diffusion",
+    "ComfyUI",
 ]
 
 tool_name_special_cases = {

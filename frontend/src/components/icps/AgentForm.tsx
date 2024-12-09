@@ -178,7 +178,8 @@ const stackList = [
   { value: "ELMo", label: "ELMo" },
   { value: "fastText", label: "fastText" },
   { value: "Llama", label: "Llama" },
-  { value: "T5", label: "T5" },
+  { value: "Stable Diffusion", label: "Stable Diffusion" },
+  { value: "ComfyUI", label: "ComfyUI" },
 ]
 stackList.sort((a, b) => a.label.localeCompare(b.label))
 
