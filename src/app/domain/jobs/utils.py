@@ -59,6 +59,12 @@ canonical_tech_names = [
     "Grafana",
     "Prometheuse",
     "Sentry",
+    "Word2Vec",
+    "GloVe",
+    "BERT",
+    "ELMo",
+    "fastText",
+    "Llama",
 ]
 
 tool_name_special_cases = {
