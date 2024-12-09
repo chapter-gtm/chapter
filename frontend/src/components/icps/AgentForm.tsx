@@ -147,7 +147,7 @@ const stackList = [
   { value: "PyTorch", label: "PyTorch" },
   { value: "LlamaIndex", label: "LlamaIndex" },
   { value: "LangChain", label: "LangChain" },
-  { value: "LLMs", label: "LLMs" },
+  { value: "LLM", label: "LLM" },
   { value: "RAG", label: "RAG" },
   { value: "HuggingFace", label: "HuggingFace" },
   { value: "OpenAI", label: "OpenAI" },

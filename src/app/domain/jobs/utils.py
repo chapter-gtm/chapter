@@ -34,7 +34,7 @@ canonical_tech_names = [
     "PyTorch",
     "LlamaIndex",
     "LangCHain",
-    "LLMs",
+    "LLM",
     "RAG",
     "HuggingFace",
     "OpenAI",
