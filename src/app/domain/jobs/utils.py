@@ -65,6 +65,7 @@ canonical_tech_names = [
     "ELMo",
     "fastText",
     "Llama",
+    "T5",
 ]
 
 tool_name_special_cases = {
