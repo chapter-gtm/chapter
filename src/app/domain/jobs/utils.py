@@ -136,9 +136,14 @@ def normalise_names(
             return special_cases[lower_name]
 
         # Fuzzy matching for general cases
-        result: tuple[str, int] | None = process.extractOne(name, canonical_names, scorer=fuzz.ratio)
+        result: tuple[str, float, int] | None = process.extractOne(
+            name,
+            canonical_names,
+            scorer=fuzz.token_set_ratio,
+            processor=str.lower,
+        )
         if result:
-            match, score = result
+            match, score, _ = result
             return match if score > 80 else name
 
         return name
