@@ -180,6 +180,8 @@ const stackList = [
   { value: "Llama", label: "Llama" },
   { value: "Stable Diffusion", label: "Stable Diffusion" },
   { value: "ComfyUI", label: "ComfyUI" },
+  { value: "ONNX", label: "ONNX" },
+  { value: "OpenVINO", label: "OpenVINO" },
 ]
 stackList.sort((a, b) => a.label.localeCompare(b.label))
 

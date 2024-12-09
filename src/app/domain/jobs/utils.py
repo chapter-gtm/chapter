@@ -68,6 +68,8 @@ canonical_tech_names = [
     "T5",
     "Stable Diffusion",
     "ComfyUI",
+    "ONNX",
+    "OpenVINO",
 ]
 
 tool_name_special_cases = {
