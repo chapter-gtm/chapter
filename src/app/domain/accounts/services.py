@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from sqlalchemy.orm import InstrumentedAttribute
+    from advanced_alchemy.filters import FilterTypes
 
 
 class UserService(SQLAlchemyAsyncRepositoryService[User]):
@@ -34,6 +35,15 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
     def __init__(self, **repo_kwargs: Any) -> None:
         self.repository: UserRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
+
+    async def get_users(
+        self,
+        *filters: FilterTypes,
+        tenant_id: UUID,
+        **kwargs: Any,
+    ) -> tuple[list[User], int]:
+        """Get all users in a tenant."""
+        return await self.repository.get_users(*filters, tenant_id=tenant_id, **kwargs)
 
     async def get_user(
         self,
@@ -71,6 +81,10 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         item_id: Any | None = None,
         *,
         id_attribute: str | InstrumentedAttribute[Any] | None = None,
+<<<<<<< Updated upstream
+=======
+        execution_options: dict[str, Any] | None = None,
+>>>>>>> Stashed changes
         attribute_names: Iterable[str] | None = None,
         with_for_update: bool | None = None,
         auto_commit: bool | None = None,

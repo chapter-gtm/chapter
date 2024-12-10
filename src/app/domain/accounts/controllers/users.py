@@ -10,15 +10,18 @@ from litestar.params import Dependency, Parameter
 
 from app.domain.accounts import urls
 from app.domain.accounts.dependencies import provide_users_service
-from app.domain.accounts.guards import requires_superuser
-from app.domain.accounts.schemas import User, UserCreate, UserUpdate
+from app.domain.accounts.guards import requires_active_user, requires_superuser
+from app.domain.accounts.schemas import User, UserCreate, UserLite, UserUpdate
 from app.domain.accounts.services import UserService
+from app.domain.accounts.utils import get_signed_user_profile_pic_url
 
 if TYPE_CHECKING:
     from uuid import UUID
 
     from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.service import OffsetPagination
+
+    from app.db.models import User as UserModel
 
 
 class UserController(Controller):
@@ -37,16 +40,26 @@ class UserController(Controller):
         summary="List Users",
         description="Retrieve the users.",
         path=urls.ACCOUNT_LIST,
-        cache=60,
+        guards=[requires_active_user],
+        cache=300,
     )
     async def list_users(
         self,
         users_service: UserService,
+        current_user: UserModel,
         filters: Annotated[list[FilterTypes], Dependency(skip_validation=True)],
-    ) -> OffsetPagination[User]:
+    ) -> OffsetPagination[UserLite]:
         """List users."""
-        results, total = await users_service.list_and_count(*filters)
-        return users_service.to_schema(data=results, total=total, schema_type=User, filters=filters)
+        results, total = await users_service.list_and_count(*filters, tenant_id=current_user.tenant_id)
+        paginated_response = users_service.to_schema(data=results, total=total, schema_type=UserLite, filters=filters)
+
+        # Workaround due to https://github.com/jcrist/msgspec/issues/673
+        # advanced alchemy to_schema uses `cast` to convert dict to schema
+        # object, which does not call `__post_init__`
+        for user in paginated_response.items:
+            user.avatar_url = get_signed_user_profile_pic_url(user.id)
+
+        return paginated_response
 
     @get(
         operation_id="GetUser",
@@ -57,6 +70,7 @@ class UserController(Controller):
     async def get_user(
         self,
         users_service: UserService,
+        current_user: UserModel,
         user_id: Annotated[
             UUID,
             Parameter(
