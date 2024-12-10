@@ -28,7 +28,7 @@ class UserController(Controller):
     """User Account Controller."""
 
     tags = ["User Accounts"]
-    guards = [requires_superuser]
+    guards = [requires_active_user]
     dependencies = {"users_service": Provide(provide_users_service)}
     signature_namespace = {"UserService": UserService}
     dto = None
@@ -40,7 +40,6 @@ class UserController(Controller):
         summary="List Users",
         description="Retrieve the users.",
         path=urls.ACCOUNT_LIST,
-        guards=[requires_active_user],
         cache=300,
     )
     async def list_users(
@@ -64,6 +63,7 @@ class UserController(Controller):
     @get(
         operation_id="GetUser",
         name="users:get",
+        guards=[requires_superuser],
         path=urls.ACCOUNT_DETAIL,
         summary="Retrieve the details of a user.",
     )
@@ -86,6 +86,7 @@ class UserController(Controller):
     @post(
         operation_id="CreateUser",
         name="users:create",
+        guards=[requires_superuser],
         summary="Create a new user.",
         cache_control=None,
         description="A user who can login and use the system.",
@@ -103,6 +104,7 @@ class UserController(Controller):
     @patch(
         operation_id="UpdateUser",
         name="users:update",
+        guards=[requires_superuser],
         path=urls.ACCOUNT_UPDATE,
     )
     async def update_user(
@@ -121,6 +123,7 @@ class UserController(Controller):
     @delete(
         operation_id="DeleteUser",
         name="users:delete",
+        guards=[requires_superuser],
         path=urls.ACCOUNT_DELETE,
         summary="Remove User",
         description="Removes a user and all associated data from the system.",
