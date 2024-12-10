@@ -1,11 +1,5 @@
 "use client"
 import { useEffect, useState } from "react"
-
-import { CircleUserRound, Check, UserCircleIcon } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-import { getNameInitials } from "@/utils/misc"
-
 import TextEditor from "@/components/editor/editor"
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
@@ -20,7 +14,6 @@ import { updateOpportunityNotes } from "@/utils/chapter/opportunity"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import Image from "next/image"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 
@@ -29,17 +22,6 @@ import { Separator } from "@/components/ui/separator"
 import { OpportunityStageList } from "./OpportunityStageList"
 import { OpportunityTabs } from "./OpportunityTabs"
 import { OpportunityOwner } from "./OpportunityOwner"
-import { Button } from "../ui/button"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu"
 
 interface OpportunityFullProps {
   opportunityId: string
@@ -132,11 +114,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                 <Separator />
                 <OpportunityBrand opportunity={opportunity} />
                 <Separator />
-                <OpportunityTabs
-                  opportunity={opportunity}
-                  updateOpportunity={updateOpportunity}
-                  icp={icp}
-                />
+                <OpportunityTabs opportunity={opportunity} icp={icp} />
               </div>
             </div>
 

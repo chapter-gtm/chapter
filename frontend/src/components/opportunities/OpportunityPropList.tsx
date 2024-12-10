@@ -20,56 +20,23 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { AppleLogo } from "../icons"
-import { GooglePlayLogo } from "../icons"
-
 import { humanDate } from "@/utils/misc"
 import { getIcps } from "@/utils/chapter/icp"
 
 import { useState, useEffect } from "react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
 import { Opportunity } from "@/types/opportunity"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
-
-import { cn } from "@/lib/utils"
-
-import { Investor } from "@/types/company"
 import { OpportunityStage } from "@/types/opportunity"
-
-import { updateOpportunityStage } from "@/utils/chapter/opportunity"
-
-import { stageColors } from "@/types/opportunity"
 import { type Icp } from "@/types/icp"
-
-import Image from "next/image"
 
 interface OpportunityPropListProps {
   opportunity: Opportunity
-  updateOpportunity: (updatedOpportunity: Opportunity) => void
 }
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ")
-}
-
-export function OpportunityPropList({
-  opportunity,
-  updateOpportunity,
-}: OpportunityPropListProps) {
-  const [currentStage, setCurrentStage] = useState<OpportunityStage>(
-    opportunity.stage
-  )
+export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
   const [icp, setIcp] = useState<Icp | null>(null)
   const stages = Object.values(OpportunityStage)
 
@@ -79,28 +46,6 @@ export function OpportunityPropList({
     }
     window.open(url)
   }
-
-  const handleStageChange = async (newStage: string) => {
-    try {
-      if (!stages.includes(newStage as OpportunityStage)) {
-        toast.error("Failed to set stage.")
-        return
-      }
-
-      opportunity = await updateOpportunityStage(
-        opportunity.id,
-        newStage as OpportunityStage
-      )
-      setCurrentStage(opportunity.stage)
-      updateOpportunity(opportunity)
-    } catch (error: any) {
-      toast.error("Failed to update stage.")
-    }
-  }
-
-  useEffect(() => {
-    setCurrentStage(opportunity.stage)
-  }, [opportunity])
 
   useEffect(() => {
     const fetchIcp = async () => {

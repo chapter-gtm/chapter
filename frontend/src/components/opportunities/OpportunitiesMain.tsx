@@ -54,7 +54,6 @@ export function OpportunitiesMain() {
   const opportunityMapRef = useRef(opportunityMap)
 
   const [selectedRow, setSelectedRow] = useState<Opportunity | null>(null)
-  const [selectedRows, setSelectedRows] = useState<Opportunity[]>([])
   const [preSelectedFilters, setPreSelectedFilters] =
     useState<ColumnFiltersState>([])
 
@@ -152,7 +151,6 @@ export function OpportunitiesMain() {
       }
       opportunities.push(opportunity)
     }
-    setSelectedRows(opportunities)
   }
 
   const handleCopyRecordLink = async (recordId: string | undefined) => {
@@ -336,11 +334,7 @@ export function OpportunitiesMain() {
 
                   <div className="flex-1 overflow-y-auto card">
                     {selectedRow !== null && (
-                      <OpportunityDrawer
-                        opportunity={selectedRow}
-                        updateOpportunity={updateOpportunityCallback}
-                        icp={icp}
-                      />
+                      <OpportunityDrawer opportunity={selectedRow} icp={icp} />
                     )}
                   </div>
                 </SheetContent>
