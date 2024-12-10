@@ -22,8 +22,8 @@ from .repositories import RoleRepository, TenantRepository, UserRepository, User
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from sqlalchemy.orm import InstrumentedAttribute
     from advanced_alchemy.filters import FilterTypes
+    from sqlalchemy.orm import InstrumentedAttribute
 
 
 class UserService(SQLAlchemyAsyncRepositoryService[User]):
@@ -81,10 +81,6 @@ class UserService(SQLAlchemyAsyncRepositoryService[User]):
         item_id: Any | None = None,
         *,
         id_attribute: str | InstrumentedAttribute[Any] | None = None,
-<<<<<<< Updated upstream
-=======
-        execution_options: dict[str, Any] | None = None,
->>>>>>> Stashed changes
         attribute_names: Iterable[str] | None = None,
         with_for_update: bool | None = None,
         auto_commit: bool | None = None,

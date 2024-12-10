@@ -4,18 +4,13 @@ from typing import TYPE_CHECKING, Any
 from uuid import UUID  # noqa: TCH003
 
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository, SQLAlchemyAsyncSlugRepository
-<<<<<<< Updated upstream
-from sqlalchemy import select
-=======
 from sqlalchemy import ColumnElement, select
-from sqlalchemy.orm import joinedload, InstrumentedAttribute
->>>>>>> Stashed changes
 
 from app.db.models import Role, Tenant, User, UserRole
 
 if TYPE_CHECKING:
-    from advanced_alchemy.repository._util import LoadSpec
     from advanced_alchemy.filters import FilterTypes
+    from advanced_alchemy.repository._util import LoadSpec
 
 
 class UserRepository(SQLAlchemyAsyncRepository[User]):

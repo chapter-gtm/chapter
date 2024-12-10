@@ -75,8 +75,6 @@ class User(CamelizedBaseStruct):
     recently_viewed_opportunity_ids: list[UUID] = []
 
     def __post_init__(self) -> None:
-<<<<<<< Updated upstream
-=======
         """Build a profile pic url from company url."""
         self.avatar_url = get_signed_user_profile_pic_url(self.id)
 
@@ -90,7 +88,6 @@ class UserLite(CamelizedBaseStruct):
     avatar_url: str | None = None
 
     def __post_init__(self) -> None:
->>>>>>> Stashed changes
         """Build a profile pic url from company url."""
         self.avatar_url = get_signed_user_profile_pic_url(self.id)
 
