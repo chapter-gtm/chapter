@@ -80,3 +80,9 @@ docker compose up
 ```
 
 Note: This project integrates with third-party APIs. You will need to obtain the necessary API keys for these services and update them in your `.env` file. For example, see the provided `.env.docker.example` file for the required format.
+
+## Contributing
+
+We <3 contributions big and small:
+
+- Submit a [feature request](https://github.com/chapter-gtm/chapter/issues/new?assignees=&labels=&projects=&template=feature_request.md&title=) or [bug report](https://github.com/chapter-gtm/chapter/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=)
