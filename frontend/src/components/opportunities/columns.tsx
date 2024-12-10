@@ -12,6 +12,7 @@ import {
   CircleUser,
   Dot,
   ChevronDown,
+  CircleUserRound,
 } from "lucide-react"
 
 import {
@@ -25,6 +26,7 @@ import {
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toast } from "sonner"
 
 import { ColumnDef, VisibilityState } from "@tanstack/react-table"
@@ -32,22 +34,24 @@ import { z } from "zod"
 
 import { cn } from "@/lib/utils"
 
-import { type Opportunity, OpportunityStage } from "@/types/opportunity"
+import { type User } from "@/types/user"
 import { type Icp } from "@/types/icp"
 import { type Company, FundingRound, OrgSize } from "@/types/company"
 import { type Location } from "@/types/location"
 import { type Tool, type Process } from "@/types/job_post"
 import { type Scale, ScaleLabel } from "@/types/scale"
+import { type Opportunity, OpportunityStage } from "@/types/opportunity"
 import { humanDate, titleCaseToCamelCase } from "@/utils/misc"
 import { updateOpportunityStage } from "@/utils/chapter/opportunity"
 import { toTitleCase, truncateString } from "@/utils/misc"
+import { getNameInitials } from "@/utils/misc"
 
 export const TableRecord = z.record(z.any())
 export type RecordSchema = z.infer<typeof TableRecord>
 
 import { stageColors } from "@/types/opportunity"
 
-export function getFilters(icp: Icp) {
+export function getFilters(icp: Icp, users: User[]) {
   const filters = [
     {
       tableColumnName: "stage",
@@ -308,6 +312,22 @@ export function getFilters(icp: Icp) {
         },
       ],
     },
+    {
+      tableColumnName: "owner",
+      label: "Owner",
+      filterOptions: [
+        {
+          value: "",
+          label: "No asignee",
+          icon: CircleUser,
+        },
+        ...users.map((user: User) => ({
+          value: user.id,
+          label: user.name,
+          icon: CircleUser,
+        })),
+      ],
+    },
   ]
 
   return filters
@@ -317,8 +337,8 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
 }
 
-function getStageFromStage(icp: Icp, stage: OpportunityStage) {
-  const filters = getFilters(icp)
+function getStageFromStage(icp: Icp, users: User[], stage: OpportunityStage) {
+  const filters = getFilters(icp, users)
   const stageLabel: string = stage
   const opportunityStage = filters[0].filterOptions.find(
     (opportunityStage) => opportunityStage.value === stageLabel
@@ -327,8 +347,12 @@ function getStageFromStage(icp: Icp, stage: OpportunityStage) {
   return opportunityStage
 }
 
-function getCompanySizeFromHeadcount(icp: Icp, headcount: number) {
-  const filters = getFilters(icp)
+function getCompanySizeFromHeadcount(
+  icp: Icp,
+  users: User[],
+  headcount: number
+) {
+  const filters = getFilters(icp, users)
   let companySizeLabel = "Unknown"
   if (headcount <= 10) {
     companySizeLabel = "1-10"
@@ -350,8 +374,12 @@ function getCompanySizeFromHeadcount(icp: Icp, headcount: number) {
   return companySize
 }
 
-function getFundingFromFundingRound(icp: Icp, fundingRound: FundingRound) {
-  const filters = getFilters(icp)
+function getFundingFromFundingRound(
+  icp: Icp,
+  users: User[],
+  fundingRound: FundingRound
+) {
+  const filters = getFilters(icp, users)
   const fundingRoundLabel: string = fundingRound
 
   const funding = filters[2].filterOptions.find(
@@ -361,8 +389,8 @@ function getFundingFromFundingRound(icp: Icp, fundingRound: FundingRound) {
   return funding
 }
 
-function getLocationFromCountry(icp: Icp, country: string) {
-  const filters = getFilters(icp)
+function getLocationFromCountry(icp: Icp, users: User[], country: string) {
+  const filters = getFilters(icp, users)
   let locationLabel = "Rest of the World"
   if (country == "Canada") {
     locationLabel = "Canada"
@@ -407,6 +435,7 @@ export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
 
 export function getFixedColumns(
   icp: Icp,
+  users: User[],
   updateOpportunity: (updatedOpportunity: Opportunity) => void,
   handleOpenDrawer: (id: string) => void
 ) {
@@ -459,7 +488,7 @@ export function getFixedColumns(
         const stage: OpportunityStage = row.getValue(
           "stage"
         ) as OpportunityStage
-        const opportunityStage = getStageFromStage(icp, stage)
+        const opportunityStage = getStageFromStage(icp, users, stage)
         const stages = Object.values(OpportunityStage)
         const handleStageChange = async (newStage: string) => {
           try {
@@ -529,7 +558,7 @@ export function getFixedColumns(
           return false
         }
 
-        const opportunityStage = getStageFromStage(icp, stage)
+        const opportunityStage = getStageFromStage(icp, users, stage)
         if (!opportunityStage) {
           return false
         }
@@ -557,6 +586,7 @@ export function getFixedColumns(
       cell: ({ row }) => {
         const companySize = getCompanySizeFromHeadcount(
           icp,
+          users,
           row.getValue("companySize")
         )
         if (!companySize) {
@@ -574,7 +604,7 @@ export function getFixedColumns(
       },
       filterFn: (row, id, value) => {
         const headcount: number = row.getValue(id)
-        const companySize = getCompanySizeFromHeadcount(icp, headcount)
+        const companySize = getCompanySizeFromHeadcount(icp, users, headcount)
         if (!companySize) {
           return false
         }
@@ -615,6 +645,7 @@ export function getFixedColumns(
       cell: ({ row }) => {
         const funding = getFundingFromFundingRound(
           icp,
+          users,
           row.getValue("fundingRound")
         )
         if (!funding) {
@@ -632,7 +663,7 @@ export function getFixedColumns(
       },
       filterFn: (row, id, value) => {
         const fundingRound: FundingRound = row.getValue(id)
-        const funding = getFundingFromFundingRound(icp, fundingRound)
+        const funding = getFundingFromFundingRound(icp, users, fundingRound)
         if (!funding) {
           return false
         }
@@ -659,7 +690,11 @@ export function getFixedColumns(
           return false
         }
 
-        const companyLocation = getLocationFromCountry(icp, location.country)
+        const companyLocation = getLocationFromCountry(
+          icp,
+          users,
+          location.country
+        )
         if (!companyLocation) {
           return false
         }
@@ -773,17 +808,53 @@ export function getFixedColumns(
         return investors.some((investor: string) => value.includes(investor))
       },
     },
+    {
+      accessorKey: "owner",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Owner" />
+      ),
+      cell: ({ row }) => {
+        const owner: User | null = row.original.owner
+        return (
+          <>
+            {owner ? (
+              <>
+                <Avatar className="h-[15px] w-[15px] mr-1.5 rounded-lg">
+                  <AvatarImage src={owner.avatarUrl} alt={owner.name} />
+                  <AvatarFallback className="text-[8px]">
+                    {getNameInitials(owner.name)}
+                  </AvatarFallback>
+                </Avatar>
+                {owner.name}
+              </>
+            ) : (
+              <>
+                <CircleUserRound size={15} className="mr-1.5" />
+                No asignee
+              </>
+            )}
+          </>
+        )
+      },
+      filterFn: (row, id, value) => {
+        const owner: User | null = row.original["owner"]
+        const ownerId: string = owner ? owner.id : ""
+        return value.includes(ownerId)
+      },
+    },
   ]
   return fixedRecordColumns
 }
 
 export function getRecordColumns(
   icp: Icp,
+  users: User[],
   updateOpportunity: (updatedOpportunity: Opportunity) => void,
   handleOpenDrawer: (id: string) => void
 ) {
   const finalColumns: ColumnDef<RecordSchema>[] = getFixedColumns(
     icp,
+    users,
     updateOpportunity,
     handleOpenDrawer
   )

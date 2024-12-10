@@ -1,7 +1,9 @@
 "use client"
 
+import { type User } from "@/types/user"
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
+import { getUsers } from "@/utils/chapter/users"
 import { getIcps } from "@/utils/chapter/icp"
 import { getOpportunities } from "@/utils/chapter/opportunity"
 import {
@@ -40,6 +42,7 @@ export function OpportunitiesMain() {
   const [isPopulated, setIsPopulated] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [icp, setIcp] = useState<Icp | null>(null)
+  const [allUsers, setAllUsers] = useState<User[]>([])
   const icpRef = useRef(icp)
   const [records, setRecords] = useState<RecordSchema[]>([])
   const [recordColumns, setRecordColumns] = useState<ColumnDef<RecordSchema>[]>(
@@ -58,6 +61,8 @@ export function OpportunitiesMain() {
   useEffect(() => {
     const fetchIcpAndOpportunities = async () => {
       try {
+        const users = await getUsers()
+
         const currentUserIcps = await getIcps()
         if (currentUserIcps === null || currentUserIcps.length <= 0) {
           throw new Error("Failed to fetch ICP")
@@ -91,10 +96,12 @@ export function OpportunitiesMain() {
               tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
               processes: rec.jobPosts?.flatMap((jobPost) => jobPost.processes),
               investors: rec.company?.lastFunding?.investors,
+              owner: rec.owner,
             }
             return record
           })
         )
+        setAllUsers(users)
         setIcp(currentUserIcps[0])
         setOpportunityMap(oppMap)
         setRecords(tableRecords)
@@ -104,6 +111,7 @@ export function OpportunitiesMain() {
         setRecordColumns(
           getRecordColumns(
             currentUserIcps[0],
+            allUsers,
             updateOpportunityCallback,
             handleOpenDrawerCallback
           )
@@ -221,6 +229,7 @@ export function OpportunitiesMain() {
         setRecordColumns(
           getRecordColumns(
             icpRef.current,
+            allUsers,
             updateOpportunityCallback,
             handleOpenDrawerCallback
           )
@@ -246,13 +255,13 @@ export function OpportunitiesMain() {
         </div>
 
         <div className="flex flex-col flex-1 overflow-hidden bg-white dark:bg-card rounded-lg border border-border">
-          {isPopulated && icp ? (
+          {isPopulated && icp && allUsers ? (
             <>
               <Sheet modal={false} open={sheetOpen}>
                 <DataTable
                   columns={recordColumns}
                   data={records}
-                  filters={getFilters(icp)}
+                  filters={getFilters(icp, allUsers)}
                   preSelectedFilters={preSelectedFilters}
                   defaultColumnVisibility={getDefaultColumnVisibility(icp)}
                   enableRowSelection={true}
@@ -311,7 +320,10 @@ export function OpportunitiesMain() {
                       {selectedRow !== null && (
                         <>
                           <div className="flex flex-row items-center gap-2">
-                            <OpportunityOwner opportunityId={selectedRow.id} />
+                            <OpportunityOwner
+                              opportunity={selectedRow}
+                              updateOpportunity={updateOpportunityCallback}
+                            />
                             <OpportunityStageList
                               opportunity={selectedRow}
                               updateOpportunity={updateOpportunityCallback}

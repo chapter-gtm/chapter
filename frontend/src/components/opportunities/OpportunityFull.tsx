@@ -106,15 +106,6 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
     }
   }
 
-  // Create an array of users
-  const users = [
-    { name: "Robin", url: "" },
-    { name: "Dennis", url: "" },
-    { name: "Johan", url: "" },
-  ]
-  // Create a selected owner state, and make default empty
-  const [selectedOwner, setSelectedOwner] = useState("")
-
   return (
     <>
       <Toaster theme="light" />
@@ -128,7 +119,10 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                     {opportunity.slug}
                   </div>
                   <div className="flex flex-row gap-x-1 items-center">
-                    <OpportunityOwner opportunityId={opportunityId} />
+                    <OpportunityOwner
+                      opportunity={opportunity}
+                      updateOpportunity={updateOpportunity}
+                    />
                     <OpportunityStageList
                       opportunity={opportunity}
                       updateOpportunity={updateOpportunity}

@@ -3,9 +3,16 @@ import { useEffect, useState } from "react"
 
 import { CircleUserRound, Check, UserCircleIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toast } from "sonner"
 
+import { User } from "@/types/user"
+import { Opportunity } from "@/types/opportunity"
 import { getNameInitials } from "@/utils/misc"
-import { getOpportunity } from "@/utils/chapter/opportunity"
+import { getUsers } from "@/utils/chapter/users"
+import {
+  getOpportunity,
+  updateOpportunityOwner,
+} from "@/utils/chapter/opportunity"
 
 import {
   DropdownMenu,
@@ -18,18 +25,58 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 interface OpportunityOwnerProps {
-  opportunityId: string
+  opportunity: Opportunity
+  updateOpportunity: (updatedOpportunity: Opportunity) => void
 }
 
-export function OpportunityOwner({ opportunityId }: OpportunityOwnerProps) {
-  // Create an array of users
-  const users = [
-    { name: "Robin", url: "" },
-    { name: "Dennis", url: "" },
-    { name: "Johan", url: "" },
-  ]
-  // Create a selected owner state, and make default empty
-  const [selectedOwner, setSelectedOwner] = useState("")
+export function OpportunityOwner({
+  opportunity,
+  updateOpportunity,
+}: OpportunityOwnerProps) {
+  const [allUsers, setAllUsers] = useState<User[]>([])
+  const [selectedOwner, setSelectedOwner] = useState<User | null>(
+    opportunity.owner
+  )
+
+  const handleOwnerChange = async (newOwner: User | null) => {
+    try {
+      let newOwnerId: string | null = null
+
+      if (newOwner !== null) {
+        const user = allUsers.find((u) => u.id === newOwner.id)
+        if (!user) {
+          toast.error("Failed to set owner.")
+          return
+        }
+        newOwnerId = newOwner.id
+      }
+
+      const updatedOpportunity = await updateOpportunityOwner(
+        opportunity.id,
+        newOwnerId
+      )
+      setSelectedOwner(newOwner)
+      updateOpportunity(updatedOpportunity)
+    } catch (error: any) {
+      toast.error("Failed to update owner.", { description: error.toString() })
+    }
+  }
+
+  useEffect(() => {
+    setSelectedOwner(opportunity.owner)
+  }, [opportunity])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await getUsers()
+        setAllUsers(users)
+      } catch (error: any) {
+        toast.error("Failed to load users.", { description: error.toString() })
+      }
+    }
+    fetchUsers()
+  }, [])
 
   return (
     <>
@@ -39,14 +86,14 @@ export function OpportunityOwner({ opportunityId }: OpportunityOwnerProps) {
             <>
               <Avatar className="h-[15px] w-[15px] mr-1.5 rounded-lg">
                 <AvatarImage
-                  src={users.find((u) => u.name === selectedOwner)?.url}
-                  alt={selectedOwner}
+                  src={selectedOwner.avatarUrl}
+                  alt={selectedOwner.name}
                 />
                 <AvatarFallback className="text-[8px]">
-                  {getNameInitials(selectedOwner)}
+                  {getNameInitials(selectedOwner.name)}
                 </AvatarFallback>
               </Avatar>
-              {selectedOwner}
+              {selectedOwner.name}
             </>
           ) : (
             <>
@@ -64,7 +111,7 @@ export function OpportunityOwner({ opportunityId }: OpportunityOwnerProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuCheckboxItem
-            onClick={() => setSelectedOwner("")}
+            onClick={() => handleOwnerChange(null)}
             className=""
           >
             <div className="flex h-6 w-6 me-2 items-center justify-center">
@@ -75,15 +122,15 @@ export function OpportunityOwner({ opportunityId }: OpportunityOwnerProps) {
             <span className="opacity-50">No assignee</span>
           </DropdownMenuCheckboxItem>
 
-          {users.map((user) => (
+          {allUsers.map((user) => (
             <DropdownMenuCheckboxItem
-              key={user.name}
-              onSelect={() => setSelectedOwner(user.name)}
-              checked={selectedOwner === user.name}
+              key={user.id}
+              onSelect={() => handleOwnerChange(user)}
+              checked={selectedOwner ? selectedOwner.id === user.id : false}
               className="hover:bg-red-400 cursor-pointer"
             >
               <Avatar className="mr-2 h-6 w-6 rounded-lg">
-                <AvatarImage src={user.url} alt={user.name} />
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
                 <AvatarFallback className="text-xs bg-muted">
                   {getNameInitials(user.name)}
                 </AvatarFallback>

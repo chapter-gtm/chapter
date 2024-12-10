@@ -3,6 +3,49 @@
 import { getUserToken } from "@/utils/auth"
 import { type User } from "@/types/user"
 
+export async function getUsers(
+  pageSize: number = 20,
+  currentPage: number = 1,
+  orderBy: string = "name",
+  sortOrder: string = "asc",
+  searchField: string = "",
+  searchString: string = "",
+  searchIgnoreCase: boolean = false
+) {
+  const token = await getUserToken()
+  const searchParams: { [key: string]: any } = {
+    pageSize: pageSize.toString(),
+    currentPage: currentPage.toString(),
+    orderBy: orderBy,
+    sortOrder: sortOrder,
+  }
+
+  if (!!searchField && searchField.trim().length > 0) {
+    searchParams["searchField"] = searchField
+    searchParams["searchString"] = searchString
+    searchParams["searchIgnoreCase"] = searchIgnoreCase ? "true" : "false"
+  }
+
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_CHAPTER_API_URL! +
+      "/users?" +
+      new URLSearchParams(searchParams),
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    }
+  )
+  if (!response.ok) {
+    const msg = await response.json()
+    return []
+  }
+  const data = await response.json()
+  const users = "items" in data ? (data["items"] as User[]) : []
+  return users
+}
+
 export async function getUserProfile() {
   const token = await getUserToken()
   const response = await fetch(

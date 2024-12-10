@@ -114,3 +114,29 @@ export async function updateOpportunityNotes(id: string, notes: string) {
   const opportunity = data as Opportunity
   return opportunity
 }
+
+export async function updateOpportunityOwner(
+  id: string,
+  ownerId: string | null
+) {
+  const token = await getUserToken()
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_CHAPTER_API_URL! + "/opportunities/" + id,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: JSON.stringify({
+        ownerId: ownerId,
+      }),
+    }
+  )
+  if (!response.ok) {
+    const msg = await response.json()
+    throw new Error(msg?.detail)
+  }
+  const data = await response.json()
+  const opportunity = data as Opportunity
+  return opportunity
+}
