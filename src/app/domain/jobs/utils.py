@@ -72,6 +72,7 @@ canonical_tech_names = [
     "OpenVINO",
     "WebSocket",
     "gRPC",
+    "PostgreSQL",
 ]
 
 tool_name_special_cases = {
@@ -80,6 +81,7 @@ tool_name_special_cases = {
     "ts": "Typescript",
     "node": "Node.js",
     "golang": "Go",
+    "postgres": "PostgreSQL",
 }
 
 
