@@ -123,9 +123,22 @@ export function OpportunityContacts({
                     <BriefcaseBusiness width={18} />
                     <p>Summary</p>
                   </div>
-                  <p className="font-medium">
-                    {contact.summary ? contact.summary : "Empty"}
-                  </p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="-ms-1.5 line-clamp-2 hover:bg-background/50 px-1.5 rounded-md flex-1">
+                          {contact.summary ? contact.summary : "Empty"}
+                        </p>
+                      </TooltipTrigger>
+                      {contact.summary && (
+                        <TooltipContent>
+                          <p className="max-w-xs whitespace-normal break-words p-2 text-sm">
+                            {contact.headline}
+                          </p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
 
                 <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
