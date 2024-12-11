@@ -3,11 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 from uuid import UUID  # noqa: TCH003
 
-from advanced_alchemy.repository import SQLAlchemyAsyncSlugRepository, SQLAlchemyAsyncRepository
+from advanced_alchemy.repository import SQLAlchemyAsyncRepository, SQLAlchemyAsyncSlugRepository
 from sqlalchemy import ColumnElement, select
-from sqlalchemy.orm import joinedload, InstrumentedAttribute
 
-from app.db.models import Opportunity, OpportunityAuditLog, ICP
+from app.db.models import ICP, Opportunity, OpportunityAuditLog
 
 if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes

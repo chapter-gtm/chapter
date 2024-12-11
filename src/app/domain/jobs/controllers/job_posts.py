@@ -108,8 +108,9 @@ class JobPostController(Controller):
         results, count = await job_posts_service.list_and_count(*filters)
 
         if count > 0:
-            await logger.ainfo("Job post already exists", job_post=results[0].to_schema())
-            return job_posts_service.to_schema(schema_type=JobPost, data=results[0])
+            jp = job_posts_service.to_schema(schema_type=JobPost, data=results[0])
+            await logger.ainfo("Job post already exists", job_post=jp)
+            return jp
 
         # Extract job post from URL
         render = False
@@ -156,7 +157,7 @@ class JobPostController(Controller):
                 Process(name=process["name"]) for process in job_details.get("processes", []) if process.get("name")
             ],
             team_name=job_details.get("team_name"),
-            company_id=company_db_obj.id,
+            company_id=str(company_db_obj.id),
         )
         db_obj = await job_posts_service.create(job_post.to_dict())
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)

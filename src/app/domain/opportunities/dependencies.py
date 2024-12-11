@@ -4,10 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import joinedload, noload, selectinload
-
-from app.db.models import Opportunity, OpportunityAuditLog, ICP
-from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService, ICPService
+from app.domain.opportunities.services import ICPService, OpportunityAuditLogService, OpportunityService
 
 __all__ = ("provide_opportunities_service", "provide_opportunities_audit_log_service", "provide_icp_service")
 

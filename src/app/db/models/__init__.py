@@ -31,7 +31,7 @@ __all__ = (
     "JobPost",
     "Person",
     "Opportunity",
-    "OpprtunityAuditLog",
+    "OpportunityAuditLog",
     "opportunity_person_relation",
     "opportunity_job_post_relation",
     "ICP",

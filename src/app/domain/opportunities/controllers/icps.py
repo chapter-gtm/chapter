@@ -3,14 +3,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from litestar import Controller, delete, get, post, put
+from litestar import Controller, get, post, put
 from litestar.di import Provide
 from litestar.exceptions import ValidationException
 
-from app.config import constants
 from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
-from app.domain.accounts.services import UserService
 from app.domain.opportunities import urls
 from app.domain.opportunities.dependencies import provide_icp_service
 from app.domain.opportunities.schemas import ICP, ICPCreate, ICPUpdate
@@ -18,9 +16,11 @@ from app.domain.opportunities.services import ICPService
 
 if TYPE_CHECKING:
     from uuid import UUID
-    from litestar.params import Dependency, Parameter
-    from app.lib.dependencies import FilterTypes
+
     from advanced_alchemy.service.pagination import OffsetPagination
+    from litestar.params import Dependency, Parameter
+
+    from app.lib.dependencies import FilterTypes
 
 
 class ICPController(Controller):
@@ -90,8 +90,7 @@ class ICPController(Controller):
     ) -> ICP:
         """Create a new ICP."""
         obj = data.to_dict()
-        icp = await icp_service.get_by_tenant_id(current_user.tenant_id)
-        db_obj = await icp_service.create(obj, item_id=icp.id)
+        db_obj = await icp_service.create(obj)
         return icp_service.to_schema(schema_type=ICP, data=db_obj)
 
     @put(
@@ -117,10 +116,12 @@ class ICPController(Controller):
         obj = data.to_dict()
         icp = await icp_service.get_icp(icp_id=icp_id, tenant_id=current_user.tenant_id)
         if not icp:
-            raise ValidationException("ICP does not exist")
+            error_msg = "ICP does not exist"
+            raise ValidationException(error_msg)
 
         if icp.tenant_id != current_user.tenant_id:
-            raise ValidationException("ICP does not exist")
+            error_msg = "ICP does not exist"
+            raise ValidationException(error_msg)
 
         db_obj = await icp_service.update(obj, item_id=icp.id)
         return icp_service.to_schema(schema_type=ICP, data=db_obj)

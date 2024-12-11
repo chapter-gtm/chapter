@@ -1,23 +1,23 @@
 from __future__ import annotations
 
-from uuid import UUID  # noqa: TCH003
+from datetime import datetime  # noqa: TCH003
 from typing import Any
-from datetime import datetime
+from uuid import UUID  # noqa: TCH003
 
 import msgspec
 
-from app.domain.accounts.schemas import User
-from app.domain.companies.schemas import Company
-from app.domain.people.schemas import Person
-from app.domain.jobs.schemas import JobPost
+from app.domain.accounts.schemas import User  # noqa: TCH001
+from app.domain.companies.schemas import Company  # noqa: TCH001
+from app.domain.jobs.schemas import JobPost  # noqa: TCH001
+from app.domain.people.schemas import Person  # noqa: TCH001
 from app.lib.schema import (
     CamelizedBaseStruct,
-    OpportunityStage,
-    OpportunityContext,
     CompanyCriteria,
-    ToolCriteria,
-    ProcessCriteria,
+    OpportunityContext,
+    OpportunityStage,
     PersonCriteria,
+    ProcessCriteria,
+    ToolCriteria,
 )
 
 
@@ -42,9 +42,9 @@ class Opportunity(CamelizedBaseStruct):
     updated_at: datetime
     stage: OpportunityStage
     notes: str
+    company: Company
     context: OpportunityContext | None = None
     owner: User | None = None
-    company: Company | None = None
     contacts: list[Person] | None = None
     job_posts: list[JobPost] | None = None
     logs: list[OpportunityAuditLog] | None = None

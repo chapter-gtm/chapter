@@ -2,30 +2,29 @@
 
 from __future__ import annotations
 
-import structlog
 from typing import TYPE_CHECKING, Annotated
 
+import structlog
 from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
 from litestar.exceptions import ValidationException
 
-from app.config import constants
-from app.lib.schema import AppDetails
-from app.lib.utils import get_logo_dev_link
-from app.lib.app_store import get_ios_app_details, get_android_app_details
 from app.db.models import User as UserModel
-from app.domain.accounts.guards import requires_active_user, requires_superuser
 from app.domain.accounts.dependencies import provide_users_service
-from app.domain.accounts.services import UserService
+from app.domain.accounts.guards import requires_active_user, requires_superuser
+from app.domain.accounts.services import UserService  # noqa: TCH001
 from app.domain.opportunities import urls
-from app.domain.opportunities.dependencies import provide_opportunities_service, provide_opportunities_audit_log_service
+from app.domain.opportunities.dependencies import provide_opportunities_audit_log_service, provide_opportunities_service
 from app.domain.opportunities.schemas import (
     Opportunity,
     OpportunityCreate,
-    OpportunityUpdate,
     OpportunityScanFor,
+    OpportunityUpdate,
 )
-from app.domain.opportunities.services import OpportunityService, OpportunityAuditLogService
+from app.domain.opportunities.services import OpportunityAuditLogService, OpportunityService
+from app.lib.app_store import get_android_app_details, get_ios_app_details
+from app.lib.schema import AppDetails
+from app.lib.utils import get_logo_dev_link
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -71,7 +70,10 @@ class OpportunityController(Controller):
         """List opportunities that your account can access.."""
         results, total = await opportunities_service.get_opportunities(*filters, tenant_id=current_user.tenant_id)
         paginated_response = opportunities_service.to_schema(
-            data=results, total=total, schema_type=Opportunity, filters=filters
+            data=results,
+            total=total,
+            schema_type=Opportunity,
+            filters=filters,
         )
 
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
@@ -105,7 +107,7 @@ class OpportunityController(Controller):
         users_service: UserService,
         current_user: UserModel,
         data: OpportunityCreate,
-    ) -> OpportunityCreate:
+    ) -> Opportunity:
         """Create a new opportunity."""
         obj = data.to_dict()
 
@@ -114,10 +116,11 @@ class OpportunityController(Controller):
         if owner_id:
             db_obj = await users_service.get_user(owner_id, tenant_id=current_user.tenant_id)
             if not db_obj:
-                raise ValidationException("Owner does not exist")
+                error_msg = "Owner does not exist"
+                raise ValidationException(error_msg)
 
         obj["tenant_id"] = current_user.tenant_id
-        db_obj = await opportunities_service.create(obj)
+        db_obj_opp = await opportunities_service.create(obj)
 
         await opportunities_audit_log_service.create(
             {
@@ -125,8 +128,8 @@ class OpportunityController(Controller):
                 "diff": {"new": obj},
                 "user_id": current_user.id,
                 "tenant_id": current_user.tenant_id,
-                "opportunity_id": db_obj.id,
-            }
+                "opportunity_id": db_obj_opp.id,
+            },
         )
 
         return opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
@@ -142,7 +145,7 @@ class OpportunityController(Controller):
         self,
         opportunities_service: OpportunityService,
         data: OpportunityScanFor,
-    ) -> None:
+    ) -> int:
         """Create a new opportunity."""
         # TODO: Run as a backgound job
         return await opportunities_service.scan(data.tenant_ids, data.last_n_days)
@@ -211,17 +214,20 @@ class OpportunityController(Controller):
         if owner_id:
             db_obj = await users_service.get_user(owner_id, tenant_id=current_user.tenant_id)
             if not db_obj:
-                raise ValidationException("Owner does not exist")
+                error_msg = "Owner does not exist"
+                raise ValidationException(error_msg)
 
         # Verify if the user is part of the same tenant as the opportunity
         opportunity = await opportunities_service.get_opportunity(opportunity_id, tenant_id=current_user.tenant_id)
         if not opportunity:
-            raise ValidationException("Opportunity does not exist")
+            error_msg = "Opportunity does not exist"
+            raise ValidationException(error_msg)
 
         if opportunity.tenant_id != current_user.tenant_id:
-            raise ValidationException("Opportunity does not exist")
+            error_msg = "Opportunity does not exist"
+            raise ValidationException(error_msg)
 
-        db_obj = await opportunities_service.update(
+        db_obj_opp = await opportunities_service.update(
             item_id=opportunity_id,
             data=obj,
         )
@@ -232,8 +238,8 @@ class OpportunityController(Controller):
                 "diff": {"new": obj},
                 "user_id": current_user.id,
                 "tenant_id": current_user.tenant_id,
-                "opportunity_id": db_obj.id,
-            }
+                "opportunity_id": db_obj_opp.id,
+            },
         )
 
         schema_obj = opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)

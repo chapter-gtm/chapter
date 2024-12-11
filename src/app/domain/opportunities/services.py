@@ -22,6 +22,7 @@ from app.db.models import (
     ICP,
     JobPost,
     Opportunity,
+    OpportunityAuditLog,
     Person,
     opportunity_job_post_relation,
     opportunity_person_relation,
@@ -48,14 +49,14 @@ __all__ = ("OpportunityService", "OpportunityAuditLogService", "ICPService")
 logger = structlog.get_logger()
 
 
-class OpportunityAuditLogService(SQLAlchemyAsyncRepositoryService[Opportunity]):
+class OpportunityAuditLogService(SQLAlchemyAsyncRepositoryService[OpportunityAuditLog]):
     """OpportunityAuditLog Service."""
 
     repository_type = OpportunityAuditLogRepository
     match_fields = ["id"]
 
     def __init__(self, **repo_kwargs: Any) -> None:
-        self.repository: OpportunityRepository = self.repository_type(**repo_kwargs)
+        self.repository: OpportunityAuditLogRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
 
@@ -83,7 +84,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         opportunity_id: UUID,
         tenant_id: UUID,
         **kwargs: Any,
-    ) -> tuple[list[Opportunity], int]:
+    ) -> Opportunity:
         """Get opportunity details."""
         return await self.repository.get_opportunity(opportunity_id=opportunity_id, tenant_id=tenant_id, **kwargs)
 
@@ -123,8 +124,6 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         self,
         data: ModelDictT[Opportunity],
         *,
-        load: LoadSpec | None = None,
-        execution_options: dict[str, Any] | None = None,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
@@ -135,11 +134,15 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         if isinstance(data, dict):
             contact_ids = data.pop("contact_ids", [])
             job_post_ids = data.pop("job_post_ids", [])
-        data = await self.to_model(data, "create")
+            data = await self.to_model(data, "create")
+        elif isinstance(data, Opportunity):
+            pass
+        else:
+            error_msg = "OpportunityService.create.create can only take a dict or Company object."
+            raise TypeError(error_msg)
+
         obj = await super().create(
             data=data,
-            load=load,
-            execution_options=execution_options,
             auto_commit=auto_commit,
             auto_expunge=True,
             auto_refresh=False,
@@ -165,14 +168,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
         return data
 
-    async def scan(
+    async def scan(  # noqa: C901, PLR0912, PLR0915
         self,
         tenant_ids: list[str] | None = None,
         last_n_days: int = 7,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
-    ) -> Opportunity:
+    ) -> int:
         """Generate opportunity from criteria."""
         icp_service = ICPService(session=self.repository.session)
         # TDOD: Filter for tenant_ids
@@ -199,8 +202,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
             ]
 
             # TODO: Filter on tool certainty?
-            tool_stack_or_conditions = [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include]
-            process_or_conditions = [JobPost.processes.contains([{"name": name}]) for name in icp.process.include]
+            tool_stack_or_conditions = (
+                [JobPost.tools.contains([{"name": name}]) for name in icp.tool.include] if icp.tool.include else []
+            )
+            process_or_conditions = (
+                [JobPost.processes.contains([{"name": name}]) for name in icp.process.include]
+                if icp.process.include
+                else []
+            )
 
             if icp.tool.exclude:
                 tool_stack_not_conditions = [
@@ -269,10 +278,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         continue
 
                     # Filter for org size but skip if the information is missing
-                    if icp.company.org_size.engineering_min and (
-                        not job_post.company.org_size
-                        or not job_post.company.org_size.engineering
-                        or job_post.company.org_size.engineering < icp.company.org_size.engineering_min
+                    if (
+                        icp.company.org_size
+                        and icp.company.org_size.engineering_min
+                        and (
+                            not job_post.company.org_size
+                            or not job_post.company.org_size.engineering
+                            or job_post.company.org_size.engineering < icp.company.org_size.engineering_min
+                        )
                     ):
                         await logger.ainfo(
                             "Skipping job because criteria does not match",
@@ -284,10 +297,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         )
                         continue
 
-                    if icp.company.org_size.engineering_max and (
-                        not job_post.company.org_size
-                        or not job_post.company.org_size.engineering
-                        or job_post.company.org_size.engineering > icp.company.org_size.engineering_max
+                    if (
+                        icp.company.org_size
+                        and icp.company.org_size.engineering_max
+                        and (
+                            not job_post.company.org_size
+                            or not job_post.company.org_size.engineering
+                            or job_post.company.org_size.engineering > icp.company.org_size.engineering_max
+                        )
                     ):
                         await logger.ainfo(
                             "Skipping job because criteria does not match",
@@ -364,7 +381,10 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                         person_objects = []
                         for person_details in persons:
 
-                            if not difflib.get_close_matches(person_details.get("job_title", ""), icp.person.titles):
+                            if not icp.person.titles or not difflib.get_close_matches(
+                                person_details.get("job_title", ""),
+                                icp.person.titles,
+                            ):
                                 await logger.ainfo(
                                     "Skipping person because title doesn't match ICP",
                                     job_post_id=job_post.id,
@@ -383,24 +403,18 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             work_email = None
 
                             if person_details.get("linkedin_url"):
-                                linkedin_profile_url = "https://" + person_details.get("linkedin_url").rstrip("/")
+                                linkedin_profile_url = "https://" + person_details.get("linkedin_url", "").rstrip("/")
                             if person_details.get("twitter_url"):
-                                twitter_profile_url = "https://" + person_details.get("twitter_url").rstrip("/")
+                                twitter_profile_url = "https://" + person_details.get("twitter_url", "").rstrip("/")
                             if person_details.get("github_url"):
-                                github_profile_url = "https://" + person_details.get("github_url").rstrip("/")
-                            if person_details.get("birth_date"):
-                                try:
-                                    birth_date = (
-                                        datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d")
-                                        .replace(tzinfo=UTC)
-                                        .date()
-                                    )
-                                except (AttributeError, ValueError, NameError) as e:
-                                    await logger.ainfo(
-                                        "Failed to parse birth date for a person",
-                                        person_details=person_details,
-                                        exc_info=e,
-                                    )
+                                github_profile_url = "https://" + person_details.get("github_url", "").rstrip("/")
+
+                            with suppress(Exception):
+                                birth_date = (
+                                    datetime.strptime(person_details.get("birth_date", ""), "%Y-%m-%d")
+                                    .replace(tzinfo=UTC)
+                                    .date()
+                                )
 
                             if person_details.get("work_email") and get_domain_from_email(
                                 person_details.get("work_email", ""),
@@ -414,14 +428,14 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                                 with suppress(Exception):
                                     work_experiences.append(
                                         WorkExperience(
-                                            starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m")
+                                            starts_at=datetime.strptime(work_ex.get("start_date", ""), "%Y-%m")
                                             .replace(tzinfo=UTC)
                                             .date(),
                                             title=work_ex.get("title", {}).get("name", "Unknown"),
                                             company_name=work_ex.get("company", {}).get("name", "Unknown"),
                                             company_url=work_ex.get("company", {}).get("website"),
                                             company_linkedin_profile_url=work_ex.get("linkedin_url"),
-                                            ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m")
+                                            ends_at=datetime.strptime(work_ex.get("end_date", ""), "%Y-%m")
                                             .replace(tzinfo=UTC)
                                             .date()
                                             if work_ex.get("end_date")
@@ -464,8 +478,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             continue
 
                         person_service = PersonService(session=self.repository.session)
-                        persons = await person_service.upsert_many(person_objects)
-                        person_ids = [person.id for person in persons]
+                        inserted_persons = await person_service.upsert_many(person_objects)
+                        person_ids = [person.id for person in inserted_persons]
 
                     # Fetch context from job post
                     context = {}

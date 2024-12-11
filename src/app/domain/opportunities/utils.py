@@ -1,9 +1,8 @@
-import os
 import json
-import structlog
-from typing import Any
-from openai import AsyncOpenAI
+import os
 
+import structlog
+from openai import AsyncOpenAI
 
 logger = structlog.get_logger()
 
@@ -25,13 +24,13 @@ context_prompt = """
 """
 
 
-async def extract_context_from_job_post(html_content: str, product_pitch: str) -> dict[str, Any]:
+async def extract_context_from_job_post(html_content: str, product_pitch: str) -> list[dict[str, str]]:
     """Extracts context from html job post using an LLM."""
     messages = [
         {
             "role": "user",
             "content": context_prompt.format(html_content=html_content, product_pitch=product_pitch),
-        }
+        },
     ]
     chat_response = await client.chat.completions.create(
         model=model,
@@ -44,4 +43,8 @@ async def extract_context_from_job_post(html_content: str, product_pitch: str) -
 
     context = json.loads(chat_response.choices[0].message.content)
     logger.debug("Context extracted from job post", context=context)
-    return context.get("result", [])
+    return [
+        {"sentence": str(item["sentence"]), "reason": str(item["reason"])}
+        for item in context.get("result", [])
+        if "sentense" in item
+    ]
