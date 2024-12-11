@@ -26,6 +26,7 @@ class JobPost(CamelizedBaseStruct):
     external_id: str | None = None
     tools: list[Tool] | None = None
     processes: list[Process] | None = None
+    team_name: str | None = None
     company: Company | None = None
 
 
@@ -44,6 +45,7 @@ class JobPostCreate(CamelizedBaseStruct):
     external_id: str | None = None
     tools: list[Tool] | None = None
     processes: list[Process] | None = None
+    team_name: str | None = None
     company_id: str | None = None
 
 
