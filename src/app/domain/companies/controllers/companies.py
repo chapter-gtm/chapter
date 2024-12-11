@@ -10,9 +10,10 @@ from litestar.di import Provide
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies import urls
 from app.domain.companies.dependencies import provide_companies_service
-from app.domain.companies.schemas import AppDetails, Company, CompanyCreate, CompanyUpdate
+from app.domain.companies.schemas import Company, CompanyCreate, CompanyUpdate
 from app.domain.companies.services import CompanyService
 from app.lib.app_store import get_android_app_details, get_ios_app_details
+from app.lib.schema import AppDetails
 from app.lib.utils import get_logo_dev_link
 
 if TYPE_CHECKING:

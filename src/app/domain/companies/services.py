@@ -54,9 +54,15 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         auto_refresh: bool | None = None,
     ) -> Company:
         """Create a new company."""
-        obj = await self.to_model(data, "create")
-        filters = []
+        obj = None
+        if isinstance(data, dict):
+            obj = await self.to_model(data, "create")
+        elif isinstance(data, Company):
+            obj = data
+        else:
+            raise ValueError("CompanyService.create can only take a dict or Company object.")
 
+        filters = []
         if obj.url:
             obj.url = get_domain(obj.url)
             filters.append(SearchFilter(field_name="url", value=obj.url, ignore_case=True))
@@ -104,42 +110,41 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         obj.hq_location = location
         # TODO: Enable Premium field
         # obj.org_size = OrgSize(**company_details.get("employee_count_by_role", {}))
-        if company_details.get("funding_stages"):
-            last_round_name = company_details.get("funding_stages")[0]
-            words = last_round_name.split("_")
-            words = [word.capitalize() for word in words]
 
-        # Get investor names and last funding round name
-        try:
-            funding_data = await get_company_funding_data(obj.url)
-            obj.last_funding = Funding(
-                round_name=funding_data["round_name"],
-                money_raised=funding_data["money_raised"],
-                announced_date=funding_data["announced_date"],
-                investors=funding_data["investors"],
-            )
-        except Exception as e:
-            obj.last_funding = Funding()
-            await logger.awarn("Failed to get company funding data", url=obj.url, exc_info=e)
+        if obj.url:
+            # Get investor names and last funding round name
+            try:
+                funding_data = await get_company_funding_data(obj.url)
+                obj.last_funding = Funding(
+                    round_name=funding_data["round_name"],
+                    money_raised=funding_data["money_raised"],
+                    announced_date=funding_data["announced_date"],
+                    investors=funding_data["investors"],
+                )
+            except Exception as e:
+                obj.last_funding = Funding()
+                await logger.awarn("Failed to get company funding data", url=obj.url, exc_info=e)
 
-        try:
-            obj.ios_app_url = await get_ios_app_url(obj.url)
-            obj.android_app_url = await get_android_app_url(obj.name, obj.url)
-        except Exception as e:
-            await logger.awarn("Failed to get app store data", url=obj.url, exc_info=e)
+            # Get app store urls
+            try:
+                obj.ios_app_url = await get_ios_app_url(obj.url)
+                obj.android_app_url = await get_android_app_url(obj.name, obj.url)
+            except Exception as e:
+                await logger.awarn("Failed to get app store data", url=obj.url, exc_info=e)
 
-        try:
-            company_homepage_html_content = await extract_url_content(obj.url, render=True)
-            company_homepage_data = await extract_links_from_page(obj.url, company_homepage_html_content)
-            obj.docs_url = company_homepage_data.get("docs_url")
-            obj.blog_url = company_homepage_data.get("blog_url")
-            obj.changelog_url = company_homepage_data.get("changelog_url")
-            obj.github_url = company_homepage_data.get("github_url")
-            obj.discord_url = company_homepage_data.get("discord_url")
-            obj.slack_url = company_homepage_data.get("slack_url")
-            obj.twitter_url = company_homepage_data.get("twitter_url")
-        except Exception as e:
-            await logger.awarn("Failed to extract links from company homepage", url=obj.url, exc_info=e)
+            # Get data from company homepage
+            try:
+                company_homepage_html_content = await extract_url_content(obj.url, render=True)
+                company_homepage_data = await extract_links_from_page(obj.url, company_homepage_html_content)
+                obj.docs_url = company_homepage_data.get("docs_url")
+                obj.blog_url = company_homepage_data.get("blog_url")
+                obj.changelog_url = company_homepage_data.get("changelog_url")
+                obj.github_url = company_homepage_data.get("github_url")
+                obj.discord_url = company_homepage_data.get("discord_url")
+                obj.slack_url = company_homepage_data.get("slack_url")
+                obj.twitter_url = company_homepage_data.get("twitter_url")
+            except Exception as e:
+                await logger.awarn("Failed to extract links from company homepage", url=obj.url, exc_info=e)
 
         # TODO: Fix upsert
         return await super().upsert(
@@ -150,7 +155,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             auto_refresh=auto_refresh,
         )
 
-    async def to_model(self, data: Company | dict[str, Any] | Struct, operation: str | None = None) -> Company:
+    async def to_model(self, data: ModelDictT[Company], operation: str | None = None) -> Company:
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]

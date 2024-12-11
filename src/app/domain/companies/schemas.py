@@ -5,7 +5,6 @@ from datetime import datetime, date
 
 import msgspec
 
-from app.db.models.company import Company
 from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize, AppDetails
 from app.lib.utils import get_logo_dev_link
 from app.lib.app_store import get_ios_app_details, get_android_app_details
@@ -43,7 +42,7 @@ class Company(CamelizedBaseStruct):
     android_app_details: AppDetails | None = None
     product_last_released_at: date | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Build a profile pic url from company url."""
         if self.url:
             self.profile_pic_url = get_logo_dev_link(self.url)
