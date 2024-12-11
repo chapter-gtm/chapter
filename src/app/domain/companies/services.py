@@ -1,35 +1,26 @@
 from __future__ import annotations
 
-import structlog
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Any
-from datetime import datetime, timezone, timedelta
 
-from sqlalchemy.exc import IntegrityError
-from advanced_alchemy.filters import SearchFilter, LimitOffset
-from advanced_alchemy.exceptions import RepositoryError
+import structlog
+from advanced_alchemy.filters import LimitOffset, SearchFilter
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
-from uuid_utils.compat import uuid4
 
+from app.db.models import Company
+from app.lib.app_store import get_android_app_url, get_ios_app_url
 from app.lib.pdl import get_company_details
 from app.lib.pitchbook import get_company_funding_data
-from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize
-from app.lib.utils import get_domain
-from app.lib.app_store import get_ios_app_url, get_android_app_url
+from app.lib.schema import Funding, Location
 from app.lib.scraperapi import extract_url_content
-from app.db.models import Company
+from app.lib.utils import get_domain
 
 from .repositories import CompanyRepository
 from .utils import extract_links_from_page
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-    from uuid import UUID
 
-    from advanced_alchemy.filters import FilterTypes
-    from advanced_alchemy.repository._util import LoadSpec
     from advanced_alchemy.service import ModelDictT
-    from msgspec import Struct
-    from sqlalchemy.orm import InstrumentedAttribute
 
 __all__ = ("CompanyService",)
 logger = structlog.get_logger()
@@ -69,7 +60,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         if obj.linkedin_profile_url:
             obj.linkedin_profile_url = get_domain(obj.linkedin_profile_url)
             filters.append(
-                SearchFilter(field_name="linkedin_profile_url", value=obj.linkedin_profile_url, ignore_case=True)
+                SearchFilter(field_name="linkedin_profile_url", value=obj.linkedin_profile_url, ignore_case=True),
             )
 
         if not filters:
@@ -78,7 +69,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         filters.append(LimitOffset(limit=1, offset=0))
         results, count = await self.list_and_count(*filters)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         fiftytwo_weeks_ago = now - timedelta(weeks=52)
 
         if count > 0:

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+from datetime import date, datetime
 from uuid import UUID  # noqa: TCH003
-from datetime import datetime, date
 
 import msgspec
 
-from app.lib.schema import CamelizedBaseStruct, Location, Funding, OrgSize, AppDetails
+from app.lib.schema import AppDetails, CamelizedBaseStruct, Funding, Location, OrgSize
 from app.lib.utils import get_logo_dev_link
-from app.lib.app_store import get_ios_app_details, get_android_app_details
 
 
 class Company(CamelizedBaseStruct):
