@@ -149,10 +149,15 @@ class PersonController(Controller):
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
-        if company_db_obj.url and get_domain_from_email(person_details.get("work_email", "")) == get_domain(
-            company_db_obj.url,
+        if (
+            company_db_obj.url
+            and person_details.get("work_email")
+            and get_domain_from_email(person_details["work_email"])
+            == get_domain(
+                company_db_obj.url,
+            )
         ):
-            work_email = person_details.get("work_email")
+            work_email = person_details["work_email"]
 
         work_experiences = []
         for work_ex in person_details.get("experience", []):
