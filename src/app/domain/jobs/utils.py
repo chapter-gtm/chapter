@@ -81,6 +81,7 @@ prompt = """
     Only extract the following information directly from the given job post(which is in the form of HTML/JS code)
     without adding any outside knowledge or assumptions:
     - Company Name
+    - Hiring Team Name
     - Company URL
     - Company LinkedIn URL
     - Job title
@@ -106,6 +107,7 @@ prompt = """
             "linkedin_url": "https://company/linkedin/url",
         }}
         title: "Job title",
+        team_name: "Hiring Team Name",
         location: {{"country": "country name", "region": "state or provience name", "city": "city name"}},
         tools: [ {{"name": "tool name 1", "certainty": "High"}}, {{"name": "tool name 2", "certainty": "Medium"}} ],
         processes: [{{"name": "process 1"}}, {{"name": "process 2"}}]

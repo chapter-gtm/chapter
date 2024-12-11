@@ -3,24 +3,19 @@
 from __future__ import annotations
 
 import os
-import structlog
 from typing import TYPE_CHECKING, Annotated
 
 import boto3
-from advanced_alchemy.filters import SearchFilter, LimitOffset
+import structlog
+from advanced_alchemy.filters import LimitOffset, SearchFilter
+from litestar import Controller, MediaType, delete, get, patch, post, put
 from litestar.datastructures import UploadFile
-from litestar.enums import RequestEncodingType
-from litestar.params import Body
-from litestar import Controller, delete, get, patch, put, post, MediaType
 from litestar.di import Provide
-from litestar.response import Response
+from litestar.enums import RequestEncodingType
 from litestar.exceptions import NotFoundException
+from litestar.params import Body
+from litestar.response import Response
 
-from app.config import constants
-from app.lib.schema import Location, Tool, Process
-from app.lib.utils import get_domain
-from app.lib.scraperapi import extract_url_content
-from app.db.models import User as UserModel
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies.dependencies import provide_companies_service
 from app.domain.companies.schemas import CompanyCreate
@@ -30,7 +25,9 @@ from app.domain.jobs.dependencies import provide_job_posts_service
 from app.domain.jobs.schemas import JobPost, JobPostCreate, JobPostCreateFromURL, JobPostUpdate
 from app.domain.jobs.services import JobPostService
 from app.domain.jobs.utils import extract_job_details_from_html
-
+from app.lib.schema import Location, Process, Tool
+from app.lib.scraperapi import extract_url_content
+from app.lib.utils import get_domain
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -133,7 +130,7 @@ class JobPostController(Controller):
 
         # Add or update company
         company = CompanyCreate(
-            name=job_details.get("company", {}).get("name"), url=company_url, linkedin_profile_url=company_linkedin_url
+            name=job_details.get("company", {}).get("name"), url=company_url, linkedin_profile_url=company_linkedin_url,
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
@@ -155,6 +152,7 @@ class JobPostController(Controller):
             processes=[
                 Process(name=process["name"]) for process in job_details.get("processes", []) if process.get("name")
             ],
+            team_name=job_details.get("team_name"),
             company_id=company_db_obj.id,
         )
         db_obj = await job_posts_service.create(job_post.to_dict())
@@ -216,7 +214,7 @@ class JobPostController(Controller):
                 },
             )
         except s3_client.exceptions.NoSuchKey:
-            raise NotFoundException(detail=f"Job post PDF not found.")
+            raise NotFoundException(detail="Job post PDF not found.")
 
     @put(
         operation_id="UpdateJobPostAddPDF",
@@ -246,7 +244,6 @@ class JobPostController(Controller):
         s3_client = boto3.client("s3")
         s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{job_post_id}.pdf", Body=file_content)
 
-        return None
 
     @patch(
         operation_id="UpdateJobPost",
