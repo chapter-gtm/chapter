@@ -34,7 +34,7 @@ class PersonService(SQLAlchemyAsyncRepositoryService[Person]):
         self.repository: PersonRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
-    async def to_model(self, data: Person | dict[str, Any] | Struct, operation: str | None = None) -> Person:
+    async def to_model(self, data: ModelDictT[Person], operation: str | None = None) -> Person:
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]

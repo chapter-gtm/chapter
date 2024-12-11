@@ -5,7 +5,6 @@ from datetime import date, datetime
 
 import msgspec
 
-from app.db.models.person import Person
 from app.lib.schema import CamelizedBaseStruct, Location, WorkExperience, SocialActivity
 
 

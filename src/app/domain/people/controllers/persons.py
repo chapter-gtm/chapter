@@ -2,26 +2,27 @@
 
 from __future__ import annotations
 
-import structlog
-from datetime import date, datetime, timezone, timedelta
+import contextlib
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Annotated
 
-from advanced_alchemy.filters import SearchFilter, LimitOffset
+import structlog
+from advanced_alchemy.filters import LimitOffset, SearchFilter
 from litestar import Controller, delete, get, patch, post
 from litestar.di import Provide
+from litestar.exceptions import HTTPException
 
-from app.config import constants
-from app.lib.schema import Location, WorkExperience, SocialActivity
-from app.lib.utils import get_domain, get_domain_from_email
-from app.lib.pdl import get_person_details
 from app.domain.accounts.guards import requires_active_user
 from app.domain.companies.dependencies import provide_companies_service
 from app.domain.companies.schemas import CompanyCreate
-from app.domain.companies.services import CompanyService
+from app.domain.companies.services import CompanyService  # noqa: TCH001
 from app.domain.people import urls
 from app.domain.people.dependencies import provide_persons_service
 from app.domain.people.schemas import Person, PersonCreate, PersonCreateFromURL, PersonUpdate
 from app.domain.people.services import PersonService
+from app.lib.pdl import get_person_details
+from app.lib.schema import Location, WorkExperience
+from app.lib.utils import get_domain, get_domain_from_email
 
 if TYPE_CHECKING:
     from uuid import UUID
@@ -100,7 +101,7 @@ class PersonController(Controller):
         ]
         results, count = await persons_service.list_and_count(*filters)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         four_weeks_ago = now - timedelta(weeks=4)
 
         if count > 0 and results[0].updated_at > four_weeks_ago:
@@ -112,30 +113,33 @@ class PersonController(Controller):
         try:
             person_details = await get_person_details(data.url)
         except Exception as e:
-            logger.aerror("Error extracting person details", exc_info=e)
-            raise Exception("Error extracting person details") from e
+            error_msg = "Error extracting person details"
+            logger.aerror(error_msg, exc_info=e)
+            raise HTTPException(status_code=500, detail="An unexpected error occurred.") from e
 
         linkedin_profile_url = None
         twitter_profile_url = None
         github_profile_url = None
         birth_date = None
         work_email = None
-        person_company_name = person_details.get("job_company_name")
-        person_company_url = person_details.get("job_company_website")
-        person_company_linkedin_url = person_details.get("job_company_linkedin_url")
+        person_company_name = str(person_details.get("job_company_name", ""))
+        person_company_url = str(person_details.get("job_company_website", ""))
+        person_company_linkedin_url = str(person_details.get("job_company_linkedin_url"))
 
         if not person_company_name and not person_company_url and not person_company_linkedin_url:
-            await logger.aerror("Company not found in person details", person_details=person_details)
-            raise Exception("Company not present in person details")
+            error_msg = "Company not found in person details"
+            await logger.aerror(error_msg, person_details=person_details)
+            raise ValueError(error_msg)
 
         if person_details.get("linkedin_url"):
-            linkedin_profile_url = "https://" + person_details.get("linkedin_url").rstrip("/")
+            linkedin_profile_url = "https://" + person_details.get("linkedin_url", "").rstrip("/")
         if person_details.get("twitter_url"):
-            twitter_profile_url = "https://" + person_details.get("twitter_url").rstrip("/")
+            twitter_profile_url = "https://" + person_details.get("twitter_url", "").rstrip("/")
         if person_details.get("github_url"):
-            github_profile_url = "https://" + person_details.get("github_url").rstrip("/")
-        if person_details.get("birth_date"):
-            birth_date = datetime.strptime(person_details.get("birth_date"), "%Y-%m-%d").date()
+            github_profile_url = "https://" + person_details.get("github_url", "").rstrip("/")
+
+        with contextlib.suppress(Exception):
+            birth_date = datetime.strptime(person_details.get("birth_date", ""), "%Y-%m-%d").replace(tzinfo=UTC).date()
 
         # Add or update company
         company = CompanyCreate(
@@ -145,27 +149,26 @@ class PersonController(Controller):
         )
         company_db_obj = await companies_service.create(company.to_dict())
 
-        if person_details.get("work_email"):
-            if get_domain_from_email(person_details.get("work_email", "")) == get_domain(company_db_obj.url):
-                work_email = person_details.get("work_email")
+        if company_db_obj.url and get_domain_from_email(person_details.get("work_email", "")) == get_domain(
+            company_db_obj.url,
+        ):
+            work_email = person_details.get("work_email")
 
         work_experiences = []
         for work_ex in person_details.get("experience", []):
-            try:
+            with contextlib.suppress(Exception):
                 work_experiences.append(
                     WorkExperience(
-                        starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").date(),
+                        starts_at=datetime.strptime(work_ex.get("start_date"), "%Y-%m").replace(tzinfo=UTC).date(),
                         title=work_ex.get("title", {}).get("name", "Unknown"),
                         company_name=work_ex.get("company", {}).get("name", "Unknown"),
                         company_url=work_ex.get("company", {}).get("website"),
                         company_linkedin_profile_url=work_ex.get("linkedin_url"),
-                        ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").date()
+                        ends_at=datetime.strptime(work_ex.get("end_date"), "%Y-%m").replace(tzinfo=UTC).date()
                         if work_ex.get("end_date")
                         else None,
-                    )
+                    ),
                 )
-            except Exception:
-                pass
 
         # Add person
         # TODO: Move this code into a provider specific code
@@ -192,7 +195,7 @@ class PersonController(Controller):
             birth_date=birth_date,
             work_experiences=work_experiences,
             skills=person_details.get("skills"),
-            company_id=company_db_obj.id,
+            company_id=str(company_db_obj.id),
         )
         db_obj = await persons_service.upsert(obj.to_dict(), item_id=results[0].id if count > 0 else None)
         return persons_service.to_schema(schema_type=Person, data=db_obj)
