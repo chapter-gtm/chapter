@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from "react"
-
 import TextEditor from "@/components/editor/editor"
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
@@ -22,6 +21,7 @@ import { Separator } from "@/components/ui/separator"
 
 import { OpportunityStageList } from "./OpportunityStageList"
 import { OpportunityTabs } from "./OpportunityTabs"
+import { OpportunityOwner } from "./OpportunityOwner"
 
 interface OpportunityFullProps {
   opportunityId: string
@@ -100,19 +100,21 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   <div className="text-sm text-zinc-400">
                     {opportunity.slug}
                   </div>
-                  <OpportunityStageList
-                    opportunity={opportunity}
-                    updateOpportunity={updateOpportunity}
-                  />
+                  <div className="flex flex-row gap-x-1 items-center">
+                    <OpportunityOwner
+                      opportunity={opportunity}
+                      updateOpportunity={updateOpportunity}
+                    />
+                    <OpportunityStageList
+                      opportunity={opportunity}
+                      updateOpportunity={updateOpportunity}
+                    />
+                  </div>
                 </div>
                 <Separator />
                 <OpportunityBrand opportunity={opportunity} />
                 <Separator />
-                <OpportunityTabs
-                  opportunity={opportunity}
-                  updateOpportunity={updateOpportunity}
-                  icp={icp}
-                />
+                <OpportunityTabs opportunity={opportunity} icp={icp} />
               </div>
             </div>
 

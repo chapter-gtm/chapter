@@ -1,29 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Image from "next/image"
-import { timeAgo } from "@/utils/misc"
-import { type Person } from "@/types/person"
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
-
-import {
-  Divide,
-  ExternalLink,
-  Maximize2,
-  Users,
-  Factory,
-  MapPin,
-  Landmark,
-  Banknote,
-  Target,
-  Loader,
-  StickyNote,
-  ChevronRight,
-  CircleUserIcon,
-  Linkedin,
-  Mail,
-} from "lucide-react"
-
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
 import { OpportunityPropList } from "./OpportunityPropList"
@@ -32,15 +8,10 @@ import { OpportunityContacts } from "./OpportunityContacts"
 
 interface OpportunityTabsProps {
   opportunity: Opportunity
-  updateOpportunity: (updatedOpportunity: Opportunity) => void
   icp: Icp | null
 }
 
-export function OpportunityTabs({
-  opportunity,
-  updateOpportunity,
-  icp,
-}: OpportunityTabsProps) {
+export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
   return (
     <>
       <Tabs defaultValue="account" className="p-5">
@@ -73,10 +44,7 @@ export function OpportunityTabs({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="account">
-          <OpportunityPropList
-            opportunity={opportunity}
-            updateOpportunity={updateOpportunity}
-          />
+          <OpportunityPropList opportunity={opportunity} />
         </TabsContent>
         <TabsContent value="people">
           {" "}
