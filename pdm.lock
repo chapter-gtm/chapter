@@ -5,7 +5,7 @@
 groups = ["default", "dev", "docs", "linting", "test"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:b5d84cb598bd4ed572b8a219f0dfeefb45151b996356f73e287631cbcc705392"
+content_hash = "sha256:b8a7075f6b328f25ce303ed0caab65b9934635fed524079a66079dfe1ba26296"
 
 [[package]]
 name = "accessible-pygments"
@@ -23,7 +23,7 @@ files = [
 
 [[package]]
 name = "advanced-alchemy"
-version = "0.17.1"
+version = "0.19.0"
 requires_python = ">=3.8"
 summary = "Ready-to-go SQLAlchemy concoctions."
 groups = ["default"]
@@ -34,24 +34,24 @@ dependencies = [
     "typing-extensions>=4.0.0",
 ]
 files = [
-    {file = "advanced_alchemy-0.17.1-py3-none-any.whl", hash = "sha256:a48d2702e430febd277dc66c0959ce0fbd85eb475a625ec5999b88688bb36167"},
-    {file = "advanced_alchemy-0.17.1.tar.gz", hash = "sha256:3bee29096c1b9cea4102e7366c6d8685a51030d078778a6748f8e4c43013ab81"},
+    {file = "advanced_alchemy-0.19.0-py3-none-any.whl", hash = "sha256:94ee04b8c6f14a985ca744bf82646f3356caf5a40de2a9fa78d223628d315b37"},
+    {file = "advanced_alchemy-0.19.0.tar.gz", hash = "sha256:ad26a68e434a6762bde589a95704547d5611e3ef9c06d5208c411eb30b8df644"},
 ]
 
 [[package]]
 name = "advanced-alchemy"
-version = "0.17.1"
+version = "0.19.0"
 extras = ["uuid"]
 requires_python = ">=3.8"
 summary = "Ready-to-go SQLAlchemy concoctions."
 groups = ["default"]
 dependencies = [
-    "advanced-alchemy==0.17.1",
+    "advanced-alchemy==0.19.0",
     "uuid-utils>=0.6.1",
 ]
 files = [
-    {file = "advanced_alchemy-0.17.1-py3-none-any.whl", hash = "sha256:a48d2702e430febd277dc66c0959ce0fbd85eb475a625ec5999b88688bb36167"},
-    {file = "advanced_alchemy-0.17.1.tar.gz", hash = "sha256:3bee29096c1b9cea4102e7366c6d8685a51030d078778a6748f8e4c43013ab81"},
+    {file = "advanced_alchemy-0.19.0-py3-none-any.whl", hash = "sha256:94ee04b8c6f14a985ca744bf82646f3356caf5a40de2a9fa78d223628d315b37"},
+    {file = "advanced_alchemy-0.19.0.tar.gz", hash = "sha256:ad26a68e434a6762bde589a95704547d5611e3ef9c06d5208c411eb30b8df644"},
 ]
 
 [[package]]

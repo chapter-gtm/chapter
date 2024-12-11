@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
-from uuid import UUID  # noqa: TCH003
 
-from advanced_alchemy.repository import SQLAlchemyAsyncRepository, SQLAlchemyAsyncSlugRepository
+from advanced_alchemy.repository import SQLAlchemyAsyncRepository
 from sqlalchemy import ColumnElement, select
-from sqlalchemy.orm import joinedload, selectinload
 
 from app.db.models import JobPost
 

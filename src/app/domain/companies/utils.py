@@ -1,11 +1,12 @@
-import os
 import json
-import structlog
-from openai import AsyncOpenAI
+import os
 from urllib.parse import urljoin
-from bs4 import BeautifulSoup
-from app.lib.utils import get_fully_qualified_url
 
+import structlog
+from bs4 import BeautifulSoup
+from openai import AsyncOpenAI
+
+from app.lib.utils import get_fully_qualified_url
 
 logger = structlog.get_logger()
 
@@ -51,7 +52,7 @@ async def extract_links_from_page(base_url: str, html_content: str) -> dict[str,
         {
             "role": "user",
             "content": prompt.format(links=links),
-        }
+        },
     ]
     chat_response = await client.chat.completions.create(
         model=model,
@@ -64,6 +65,6 @@ async def extract_links_from_page(base_url: str, html_content: str) -> dict[str,
 
     data = json.loads(chat_response.choices[0].message.content)
     if not data:
-        logger.warn("Failed to extract necessary information from page")
+        logger.warning("Failed to extract necessary information from page")
 
     return {k: urljoin(get_fully_qualified_url(base_url), v) for k, v in data.items() if v}

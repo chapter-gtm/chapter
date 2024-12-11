@@ -3,8 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import structlog
+from advanced_alchemy.exceptions import ErrorMessages  # noqa: TCH002
 from advanced_alchemy.filters import LimitOffset, SearchFilter
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
+from advanced_alchemy.utils.dataclass import Empty, EmptyType
 
 from app.db.models import Company
 from app.lib.app_store import get_android_app_url, get_ios_app_url
@@ -42,6 +44,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
+        error_messages: ErrorMessages | None | EmptyType = Empty,
     ) -> Company:
         """Create a new company."""
         obj = None
@@ -53,21 +56,19 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             error_msg = "CompanyService.create can only take a dict or Company object."
             raise TypeError(error_msg)
 
-        filters = []
         if obj.url:
             obj.url = get_domain(obj.url)
-            filters.append(SearchFilter(field_name="url", value=obj.url, ignore_case=True))
-        if obj.linkedin_profile_url:
+            filters = [SearchFilter(field_name="url", value=obj.url, ignore_case=True), LimitOffset(limit=1, offset=0)]
+        elif obj.linkedin_profile_url:
             obj.linkedin_profile_url = get_domain(obj.linkedin_profile_url)
-            filters.append(
+            filters = [
                 SearchFilter(field_name="linkedin_profile_url", value=obj.linkedin_profile_url, ignore_case=True),
-            )
-
-        if not filters:
+                LimitOffset(limit=1, offset=0),
+            ]
+        else:
             error_msg = "Unable to find company without url or linkedin_profile_url."
             raise ValueError(error_msg)
 
-        filters.append(LimitOffset(limit=1, offset=0))
         results, count = await self.list_and_count(*filters)
 
         if count > 0:
@@ -140,6 +141,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,
+            error_messages=error_messages,
         )
 
     async def to_model(self, data: ModelDictT[Company], operation: str | None = None) -> Company:

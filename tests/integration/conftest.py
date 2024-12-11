@@ -5,8 +5,8 @@ from typing import Any
 import pytest
 from advanced_alchemy.base import UUIDAuditBase
 from advanced_alchemy.utils.fixtures import open_fixture_async
-from httpx import AsyncClient
 from litestar import Litestar
+from litestar.testing import AsyncTestClient
 from litestar_saq.cli import get_saq_plugin
 from redis.asyncio import Redis
 from sqlalchemy.engine import URL
@@ -142,14 +142,14 @@ def _patch_redis(app: "Litestar", redis: Redis, monkeypatch: pytest.MonkeyPatch)
 
 
 @pytest.fixture(name="client")
-async def fx_client(app: Litestar) -> AsyncIterator[AsyncClient]:
+async def fx_client(app: Litestar) -> AsyncIterator[AsyncTestClient]:
     """Async client that calls requests on the app.
 
     ```text
     ValueError: The future belongs to a different loop than the one specified as the loop argument
     ```
     """
-    async with AsyncClient(app=app, base_url="http://testserver") as client:
+    async with AsyncTestClient(app=app, base_url="http://testserver") as client:
         yield client
 
 

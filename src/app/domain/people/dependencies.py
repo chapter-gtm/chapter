@@ -4,9 +4,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import joinedload, noload, selectinload
-
-from app.db.models import Person
 from app.domain.people.services import PersonService
 
 __all__ = ("provide_persons_service",)
