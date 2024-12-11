@@ -40,7 +40,6 @@ alchemy = SQLAlchemyAsyncConfig(
 vite = ViteConfig(
     bundle_dir=settings.vite.BUNDLE_DIR,
     resource_dir=settings.vite.RESOURCE_DIR,
-    template_dir=settings.vite.TEMPLATE_DIR,
     use_server_lifespan=settings.vite.USE_SERVER_LIFESPAN,
     dev_mode=settings.vite.DEV_MODE,
     hot_reload=settings.vite.HOT_RELOAD,

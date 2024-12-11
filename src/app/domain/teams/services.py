@@ -20,7 +20,6 @@ if TYPE_CHECKING:
     from advanced_alchemy.filters import FilterTypes
     from advanced_alchemy.repository._util import LoadSpec
     from advanced_alchemy.service import ModelDictT
-    from msgspec import Struct
     from sqlalchemy.orm import InstrumentedAttribute
 
 __all__ = (
@@ -53,8 +52,6 @@ class TeamService(SQLAlchemyAsyncRepositoryService[Team]):
         self,
         data: ModelDictT[Team],
         *,
-        load: LoadSpec | None = None,
-        execution_options: dict[str, Any] | None = None,
         auto_commit: bool | None = None,
         auto_expunge: bool | None = None,
         auto_refresh: bool | None = None,
@@ -71,7 +68,13 @@ class TeamService(SQLAlchemyAsyncRepositoryService[Team]):
                 msg = "'owner_id' is required to create a team."
                 raise RepositoryError(msg)
             tags_added = data.pop("tags", [])
-        data = await self.to_model(data, "create")
+            data = await self.to_model(data, "create")
+        elif isinstance(data, Team):
+            pass
+        else:
+            error_msg = "TeamService.create.create can only take a dict or Team object."
+            raise TypeError(error_msg)
+
         if owner:
             data.members.append(TeamMember(user=owner, role=TeamRoles.ADMIN, is_owner=True))
         elif owner_id:
@@ -85,8 +88,6 @@ class TeamService(SQLAlchemyAsyncRepositoryService[Team]):
             )
         await super().create(
             data=data,
-            load=load,
-            execution_options=execution_options,
             auto_commit=auto_commit,
             auto_expunge=True,
             auto_refresh=False,
@@ -141,7 +142,7 @@ class TeamService(SQLAlchemyAsyncRepositoryService[Team]):
             auto_refresh=auto_refresh,
         )
 
-    async def to_model(self, data: Team | dict[str, Any] | Struct, operation: str | None = None) -> Team:
+    async def to_model(self, data: ModelDictT[Team], operation: str | None = None) -> Team:
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]

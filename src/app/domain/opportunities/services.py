@@ -138,7 +138,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         elif isinstance(data, Opportunity):
             pass
         else:
-            error_msg = "OpportunityService.create.create can only take a dict or Company object."
+            error_msg = "OpportunityService.create.create can only take a dict or Opportunity object."
             raise TypeError(error_msg)
 
         obj = await super().create(
@@ -541,7 +541,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
 
         return opportunities_found
 
-    async def to_model(self, data: Opportunity | dict[str, Any] | Struct, operation: str | None = None) -> Opportunity:
+    async def to_model(self, data: ModelDictT[Opportunity], operation: str | None = None) -> Opportunity:
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "create" and data.slug is None:  # type: ignore[union-attr]
             data.slug = await self.repository.get_available_slug(data.name)  # type: ignore[union-attr]
         if (is_msgspec_model(data) or is_pydantic_model(data)) and operation == "update" and data.slug is None:  # type: ignore[union-attr]

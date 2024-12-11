@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, cast
 
 import pytest
-from httpx import AsyncClient
 from litestar import get
+from litestar.testing import AsyncTestClient
 
 from app.config import app as config
 
@@ -52,6 +52,6 @@ async def test_db_session_dependency(app: "Litestar", engine: "AsyncEngine") -> 
 
     app.register(db_session_dependency_patched)
     # can't use test client as it always starts its own event loop
-    async with AsyncClient(app=app, base_url="http://testserver") as client:
+    async with AsyncTestClient(app=app, base_url="http://testserver") as client:
         response = await client.get("/db-session-test")
         assert response.json()["result"] == "db_session.bind is engine = True"

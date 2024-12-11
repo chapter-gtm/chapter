@@ -65,6 +65,7 @@ def http_scope(app: Litestar) -> HTTPScope:
         "extensions": None,
         "http_version": "3",
         "path": "/wherever",
+        "path_template": "/{variable}",
         "path_params": {},
         "query_string": b"",
         "raw_path": b"/wherever",
