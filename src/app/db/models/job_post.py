@@ -30,6 +30,7 @@ class JobPost(UUIDAuditBase):
     external_id: Mapped[str | None] = mapped_column(nullable=True, default=None)
     tools: Mapped[list[Tool] | None] = mapped_column(ToolType, nullable=True, default=None)
     processes: Mapped[list[Process] | None] = mapped_column(ProcessType, nullable=True, default=None)
+    team_name: Mapped[str | None] = mapped_column(nullable=True)
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company.id"), nullable=True, index=True)
     # -----------
     # ORM Relationships

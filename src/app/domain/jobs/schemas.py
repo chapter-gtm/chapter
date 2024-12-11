@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+from datetime import datetime  # noqa: TCH003
 from uuid import UUID  # noqa: TCH003
-from datetime import datetime
 
 import msgspec
 
-from app.db.models.job_post import JobPost
-from app.lib.schema import CamelizedBaseStruct, Location, Tool, Process
-from app.domain.companies.schemas import Company, CompanyCreate
+from app.domain.companies.schemas import Company  # noqa: TCH001
+from app.lib.schema import CamelizedBaseStruct, Location, Process, Tool
 
 
 class JobPost(CamelizedBaseStruct):

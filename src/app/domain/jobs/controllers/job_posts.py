@@ -155,6 +155,7 @@ class JobPostController(Controller):
             processes=[
                 Process(name=process["name"]) for process in job_details.get("processes", []) if process.get("name")
             ],
+            team_name=job_details.get("team_name"),
             company_id=company_db_obj.id,
         )
         db_obj = await job_posts_service.create(job_post.to_dict())
