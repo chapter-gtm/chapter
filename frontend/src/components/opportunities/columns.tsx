@@ -615,7 +615,7 @@ export function getFixedColumns(
     {
       accessorKey: "orgSize",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Engineering Size" />
+        <DataTableColumnHeader column={column} title="Eng Size" />
       ),
       cell: ({ row }) => {
         const orgSize: OrgSize = row.getValue("orgSize")
@@ -818,20 +818,20 @@ export function getFixedColumns(
         return (
           <>
             {owner ? (
-              <>
+              <div className="flex items-center space-x-1.5">
                 <Avatar className="h-[15px] w-[15px] mr-1.5 rounded-lg">
                   <AvatarImage src={owner.avatarUrl} alt={owner.name} />
                   <AvatarFallback className="text-[8px]">
                     {getNameInitials(owner.name)}
                   </AvatarFallback>
                 </Avatar>
-                {owner.name}
-              </>
+                <span>{owner.name}</span>
+              </div>
             ) : (
-              <>
+              <div className="flex items-center space-x-1.5">
                 <CircleUserRound size={15} className="mr-1.5" />
-                No asignee
-              </>
+                <span>No asignee</span>
+              </div>
             )}
           </>
         )
