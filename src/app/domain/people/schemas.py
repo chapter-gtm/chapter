@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+from datetime import date, datetime  # noqa: TCH003
 from uuid import UUID  # noqa: TCH003
-from datetime import date, datetime
 
 import msgspec
 
-from app.lib.schema import CamelizedBaseStruct, Location, WorkExperience, SocialActivity
+from app.lib.schema import CamelizedBaseStruct, Location, SocialActivity, WorkExperience
 
 
 class Person(CamelizedBaseStruct):

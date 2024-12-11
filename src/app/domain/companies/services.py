@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
 import structlog
@@ -36,7 +35,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         self.repository: CompanyRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
-    async def create(
+    async def create(  # noqa: PLR0915
         self,
         data: ModelDictT[Company],
         *,
@@ -51,7 +50,8 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         elif isinstance(data, Company):
             obj = data
         else:
-            raise ValueError("CompanyService.create can only take a dict or Company object.")
+            error_msg = "CompanyService.create can only take a dict or Company object."
+            raise TypeError(error_msg)
 
         filters = []
         if obj.url:
@@ -64,17 +64,14 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             )
 
         if not filters:
-            raise Exception("Unable to find company without url or linkedin_profile_url.")
+            error_msg = "Unable to find company without url or linkedin_profile_url."
+            raise ValueError(error_msg)
 
         filters.append(LimitOffset(limit=1, offset=0))
         results, count = await self.list_and_count(*filters)
 
-        now = datetime.now(UTC)
-        fiftytwo_weeks_ago = now - timedelta(weeks=52)
-
         if count > 0:
-            # TODO: Uncomment after upsert is fixed
-            # if count > 0 and results[0].updated_at > fiftytwo_weeks_ago:
+            # TODO: Check the record is older than 4 weeks, refetch
             await logger.ainfo("Company already exists", id=results[0].id, url=results[0].url)
             return results[0]
 
@@ -85,7 +82,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
                 region=company_details.get("location", {}).get("region"),
                 city=company_details.get("location", {}).get("locality"),
             )
-        except Exception as e:
+        except (KeyError, TypeError, IndexError, LookupError) as e:
             await logger.awarn("Error getting company details", exc_info=e)
             company_details = {}
             location = None
@@ -99,8 +96,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         obj.url = company_details.get("website") or obj.url
         obj.linkedin_profile_url = company_details.get("linkedin_url") or obj.linkedin_profile_url
         obj.hq_location = location
-        # TODO: Enable Premium field
-        # obj.org_size = OrgSize(**company_details.get("employee_count_by_role", {}))
+        # TODO: Fetch and set org size
 
         if obj.url:
             # Get investor names and last funding round name
@@ -112,7 +108,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
                     announced_date=funding_data["announced_date"],
                     investors=funding_data["investors"],
                 )
-            except Exception as e:
+            except (KeyError, TypeError, IndexError, LookupError) as e:
                 obj.last_funding = Funding()
                 await logger.awarn("Failed to get company funding data", url=obj.url, exc_info=e)
 
@@ -120,7 +116,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             try:
                 obj.ios_app_url = await get_ios_app_url(obj.url)
                 obj.android_app_url = await get_android_app_url(obj.name, obj.url)
-            except Exception as e:
+            except (KeyError, TypeError, IndexError, LookupError) as e:
                 await logger.awarn("Failed to get app store data", url=obj.url, exc_info=e)
 
             # Get data from company homepage
@@ -134,7 +130,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
                 obj.discord_url = company_homepage_data.get("discord_url")
                 obj.slack_url = company_homepage_data.get("slack_url")
                 obj.twitter_url = company_homepage_data.get("twitter_url")
-            except Exception as e:
+            except (KeyError, TypeError, IndexError, LookupError) as e:
                 await logger.awarn("Failed to extract links from company homepage", url=obj.url, exc_info=e)
 
         # TODO: Fix upsert
