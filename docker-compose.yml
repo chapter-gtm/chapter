@@ -52,7 +52,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: deploy/docker/run/Dockerfile
+      dockerfile: deploy/docker/run/Dockerfile.backend
     image: app:latest
     restart: always
     depends_on:
