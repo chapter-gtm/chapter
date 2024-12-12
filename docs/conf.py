@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)  # RemovedInSphin
 
 # -- Project information -----------------------------------------------------
 project = importlib.metadata.metadata("app")["Name"]
-copyright = "2023, Litestar Organization"
+copyright = "2024, Nectar Labs UG"
 author = "Cody Fincher"
 release = importlib.metadata.version("app")
 
@@ -78,38 +78,27 @@ todo_include_todos = True
 html_theme = "litestar_sphinx_theme"
 html_static_path = ["_static"]
 html_show_sourcelink = True
-html_title = "Litestar Fullstack Docs"
+html_title = "Chapter Docs"
 html_context = {
-    "github_user": "litestar-org",
-    "github_repo": "litestar-fullstack",
+    "github_user": "chapter-gtm",
+    "github_repo": "chapter",
     "github_version": "main",
     "doc_path": "docs",
 }
 html_theme_options = {
     "use_page_nav": False,
     "use_edit_page_button": True,
-    "github_repo_name": "litestar-fullstack",
+    "github_repo_name": "chapter",
     "logo": {
-        "link": "https://docs.fullstack.litestar.dev",
+        "link": "https://chapter.show",
     },
     "extra_navbar_items": {
         "Documentation": "index",
-        "Community": {
-            "Contributing": {
-                "description": "Learn how to contribute to Litestar Fullstack",
-                "link": "contribution-guide",
-                "icon": "contributing",
-            },
-            "Code of Conduct": {
-                "description": "Review the etiquette for interacting with the Litestar community",
-                "link": "https://github.com/litestar-org/.github/blob/main/CODE_OF_CONDUCT.md",
-                "icon": "coc",
-            },
-        },
+        "Community": {},
         "About": {
-            "Litestar Organization": {
-                "description": "About the Litestar organization",
-                "link": "https://litestar.dev/about/organization.html",
+            "Chapter Organization": {
+                "description": "About the Chapter organization",
+                "link": "https://chapter.show/",
                 "icon": "org",
             },
         },
