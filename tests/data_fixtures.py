@@ -4,11 +4,13 @@ from typing import TYPE_CHECKING, Any
 
 import pytest
 
+from app.asgi import create_app
+
 if TYPE_CHECKING:
     from litestar import Litestar
     from pytest import MonkeyPatch
 
-    from app.db.models import Team, User
+    from app.db.models import Team, Tenant, User
 
 pytestmark = pytest.mark.anyio
 
@@ -20,9 +22,30 @@ def fx_app(pytestconfig: pytest.Config, monkeypatch: MonkeyPatch) -> Litestar:
     Returns:
         An application instance, configured via plugin.
     """
-    from app.asgi import create_app
+    app: Litestar = create_app()
+    return app
 
-    return create_app()
+
+@pytest.fixture(name="raw_tenants")
+def fx_raw_tenants() -> list[Tenant | dict[str, Any]]:
+    """Unstructured tenant representations."""
+
+    return [
+        {
+            "id": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
+            "name": "Example",
+            "description": "Example Org",
+            "url": "https://example.com",
+            "is_active": True,
+        },
+        {
+            "id": "620358d6-937e-481b-a5d7-3b5dac1df69f",
+            "name": "Test",
+            "description": "Test Org",
+            "url": "https://test.com",
+            "is_active": True,
+        },
+    ]
 
 
 @pytest.fixture(name="raw_users")
@@ -37,6 +60,7 @@ def fx_raw_users() -> list[User | dict[str, Any]]:
             "password": "Test_Password1!",
             "is_superuser": True,
             "is_active": True,
+            "tenant_id": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
         },
         {
             "id": "5ef29f3c-3560-4d15-ba6b-a2e5c721e4d2",
@@ -45,6 +69,7 @@ def fx_raw_users() -> list[User | dict[str, Any]]:
             "password": "Test_Password2!",
             "is_superuser": False,
             "is_active": True,
+            "tenant_id": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
         },
         {
             "id": "5ef29f3c-3560-4d15-ba6b-a2e5c721e999",
@@ -53,6 +78,7 @@ def fx_raw_users() -> list[User | dict[str, Any]]:
             "password": "Test_Password3!",
             "is_superuser": False,
             "is_active": True,
+            "tenant_id": "620358d6-937e-481b-a5d7-3b5dac1df69f",
         },
         {
             "id": "6ef29f3c-3560-4d15-ba6b-a2e5c721e4d3",
@@ -61,6 +87,7 @@ def fx_raw_users() -> list[User | dict[str, Any]]:
             "password": "Test_Password3!",
             "is_superuser": False,
             "is_active": True,
+            "tenant_id": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
         },
         {
             "id": "7ef29f3c-3560-4d15-ba6b-a2e5c721e4e1",
@@ -69,6 +96,7 @@ def fx_raw_users() -> list[User | dict[str, Any]]:
             "password": "Old_Password2!",
             "is_superuser": False,
             "is_active": False,
+            "tenant_id": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
         },
     ]
 

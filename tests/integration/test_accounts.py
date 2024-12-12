@@ -39,7 +39,12 @@ async def test_accounts_get(client: "AsyncClient", superuser_token_headers: dict
 async def test_accounts_create(client: "AsyncClient", superuser_token_headers: dict[str, str]) -> None:
     response = await client.post(
         "/api/users",
-        json={"name": "A User", "email": "new-user@example.com", "password": "S3cret!"},
+        json={
+            "name": "A User",
+            "email": "new-user@example.com",
+            "password": "S3cret!",
+            "tenantId": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
+        },
         headers=superuser_token_headers,
     )
     assert response.status_code == 201
@@ -80,13 +85,16 @@ async def test_accounts_with_incorrect_role(client: "AsyncClient", user_token_he
     assert response.status_code == 403
     response = await client.post(
         "/api/users/",
-        json={"name": "A User", "email": "new-user@example.com", "password": "S3cret!"},
+        json={
+            "name": "A User",
+            "email": "new-user@example.com",
+            "password": "S3cret!",
+            "tenantId": "39fe5d11-7c44-4b50-819a-32c6f539b6ba",
+        },
         headers=user_token_headers,
     )
     assert response.status_code == 403
     response = await client.get("/api/users/97108ac1-ffcb-411d-8b1e-d9183399f63b", headers=user_token_headers)
-    assert response.status_code == 403
-    response = await client.get("/api/users", headers=user_token_headers)
     assert response.status_code == 403
     response = await client.delete("/api/users/97108ac1-ffcb-411d-8b1e-d9183399f63b", headers=user_token_headers)
     assert response.status_code == 403

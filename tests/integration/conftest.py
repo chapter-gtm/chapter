@@ -1,6 +1,6 @@
 from collections.abc import AsyncGenerator, AsyncIterator
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from advanced_alchemy.base import UUIDAuditBase
@@ -14,12 +14,15 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from sqlalchemy.pool import NullPool
 
 from app.config import get_settings
-from app.db.models import Team, User
+from app.db.models import Team, Tenant, User
 from app.domain.accounts.guards import auth
-from app.domain.accounts.services import RoleService, UserService
+from app.domain.accounts.services import RoleService, TenantService, UserService
 from app.domain.teams.services import TeamService
 from app.server.builder import ApplicationConfigurator
 from app.server.plugins import alchemy
+
+if TYPE_CHECKING:
+    from litestar.plugins import PluginProtocol
 
 here = Path(__file__).parent
 pytestmark = pytest.mark.anyio
@@ -70,6 +73,7 @@ async def fx_session(sessionmaker: async_sessionmaker[AsyncSession]) -> AsyncGen
 async def _seed_db(
     engine: AsyncEngine,
     sessionmaker: async_sessionmaker[AsyncSession],
+    raw_tenants: list[Tenant | dict[str, Any]],
     raw_users: list[User | dict[str, Any]],
     raw_teams: list[Team | dict[str, Any]],
 ) -> AsyncIterator[None]:
@@ -78,6 +82,7 @@ async def _seed_db(
     Args:
         engine: The SQLAlchemy engine instance.
         sessionmaker: The SQLAlchemy sessionmaker factory.
+        raw_tenants: Test tenants to add to the database
         raw_users: Test users to add to the database
         raw_teams: Test teams to add to the database
 
@@ -94,6 +99,8 @@ async def _seed_db(
         for obj in fixture:
             _ = await service.repository.get_or_upsert(match_fields="name", upsert=True, **obj)
         await service.repository.session.commit()
+    async with TenantService.new(sessionmaker()) as tenant_service:
+        await tenant_service.create_many(raw_tenants, auto_commit=True)
     async with UserService.new(sessionmaker()) as users_service:
         await users_service.create_many(raw_users, auto_commit=True)
     async with TeamService.new(sessionmaker()) as teams_services:
@@ -133,7 +140,7 @@ def _patch_redis(app: "Litestar", redis: Redis, monkeypatch: pytest.MonkeyPatch)
     cache_config = app.response_cache_config
     assert cache_config is not None
     saq_plugin = get_saq_plugin(app)
-    app_plugin = app.plugins.get(ApplicationConfigurator)
+    app_plugin: PluginProtocol | None = app.plugins.get(ApplicationConfigurator)
     monkeypatch.setattr(app_plugin, "redis", redis)
     monkeypatch.setattr(app.stores.get(cache_config.store), "_redis", redis)
     if saq_plugin._config.queue_instances is not None:
