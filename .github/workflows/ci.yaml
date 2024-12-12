@@ -64,11 +64,11 @@ jobs:
       - name: Install dependencies
         run: pdm install -G:all
 
-      - name: Install dotenv
-        run: pdm add dotenv-cli
+      - name: Copy .env.testing to .env
+        run: cp .env.testing .env
 
       - name: Test with Coverage
-        run: pdm run dotenv -f .env.testing run pytest tests --cov=app --cov-report=xml
+        run: pdm run pytest tests --cov=app --cov-report=xml
 
       - if: matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
