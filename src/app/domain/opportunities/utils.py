@@ -46,5 +46,5 @@ async def extract_context_from_job_post(html_content: str, product_pitch: str) -
     return [
         {"sentence": str(item["sentence"]), "reason": str(item["reason"])}
         for item in context.get("result", [])
-        if "sentense" in item
+        if "sentence" in item
     ]
