@@ -21,7 +21,6 @@ if TYPE_CHECKING:
     from litestar.params import Parameter
 
 
-
 class TenantController(Controller):
     """Tenant operations."""
 
