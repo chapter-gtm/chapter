@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.11","3.12"]
+        python-version: ["3.11", "3.12"]
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -64,8 +64,11 @@ jobs:
       - name: Install dependencies
         run: pdm install -G:all
 
+      - name: Install dotenv
+        run: pdm add dotenv-cli
+
       - name: Test with Coverage
-        run: pdm run pytest tests --cov=app --cov-report=xml
+        run: pdm run dotenv -f .env.testing run pytest tests --cov=app --cov-report=xml
 
       - if: matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
