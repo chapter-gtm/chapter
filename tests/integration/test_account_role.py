@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 pytestmark = pytest.mark.anyio
 
 
+@pytest.mark.skip(reason="Loading of user roles is disbaled in the model, as they're not being used at the moment.")
 async def test_superuser_role_access(
     client: "AsyncClient",
     user_token_headers: dict[str, str],
