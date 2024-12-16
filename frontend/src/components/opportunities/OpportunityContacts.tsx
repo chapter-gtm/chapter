@@ -133,7 +133,7 @@ export function OpportunityContacts({
                       {contact.summary && (
                         <TooltipContent>
                           <p className="max-w-xs whitespace-normal break-words p-2 text-sm">
-                            {contact.headline}
+                            {contact.summary}
                           </p>
                         </TooltipContent>
                       )}
