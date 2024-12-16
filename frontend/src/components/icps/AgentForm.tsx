@@ -56,13 +56,13 @@ const agentFormSchema = z.object({
       headcountMin: z
         .number({ invalid_type_error: "Min must be a number" })
         .min(1, "Min must be greater than 0")
-        .max(50000, "Min must not be greater than 10,000")
+        .max(100000, "Min must not be greater than 10,000")
         .int()
         .default(1),
       headcountMax: z
         .number({ invalid_type_error: "Max must be a number" })
         .min(1, "Max must be greater than 0")
-        .max(50000, "Max must not be greater than 10,000")
+        .max(100000, "Max must not be greater than 10,000")
         .int()
         .default(10000),
       orgSize: z
@@ -78,7 +78,7 @@ const agentFormSchema = z.object({
             .min(1, "Max must be greater than 0")
             .max(10000, "Max must not be greater than 2000")
             .int()
-            .default(100),
+            .default(500),
         })
         .refine((data) => data.engineeringMax > data.engineeringMin, {
           message: "Max must be greater than Min",
