@@ -335,7 +335,9 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
             <Users width={18} />
             <p>Headcount</p>
           </div>
-          <p className="font-medium">{opportunity.company?.headcount}</p>
+          <p className="font-medium">
+            {opportunity.company?.headcount?.toLocaleString()}
+          </p>
         </div>
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -343,7 +345,7 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
             <p>Eng size</p>
           </div>
           <p className="font-medium">
-            {opportunity.company?.orgSize?.engineering}
+            {opportunity.company?.orgSize?.engineering?.toLocaleString()}
           </p>
         </div>
         <Separator />
