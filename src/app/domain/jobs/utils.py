@@ -73,6 +73,14 @@ canonical_tech_names = [
     "WebSocket",
     "gRPC",
     "PostgreSQL",
+    "Rasa",
+    "Dialogflow",
+    "Amazon Lex",
+    "Cognigy",
+    "Kore.ai",
+    "ManyChat",
+    "Microsoft Bot Framework",
+    "Yellow.ai",
 ]
 
 tool_name_special_cases = {
@@ -82,6 +90,8 @@ tool_name_special_cases = {
     "node": "Node.js",
     "golang": "Go",
     "postgres": "PostgreSQL",
+    "lex": "Amazon Lex",
+    "cognigy.ai": "Cognigy.ai",
 }
 
 

@@ -185,6 +185,14 @@ const stackList = [
   { value: "WebSocket", label: "WebSocket" },
   { value: "gRPC", label: "gRPC" },
   { value: "PostgreSQL", label: "PostgreSQL" },
+  { value: "Rasa", label: "Rasa" },
+  { value: "Dialogflow", label: "Dialogflow" },
+  { value: "Amazon Lex", label: "Amazon Lex" },
+  { value: "Cognigy", label: "Cognigy" },
+  { value: "Kore.ai", label: "Kore.ai" },
+  { value: "ManyChat", label: "ManyChat" },
+  { value: "Microsoft Bot Framework", label: "Microsoft Bot Framework" },
+  { value: "Yellow.ai", label: "Yellow.ai" },
 ]
 stackList.sort((a, b) => a.label.localeCompare(b.label))
 
