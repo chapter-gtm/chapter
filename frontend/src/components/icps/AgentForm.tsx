@@ -194,6 +194,7 @@ const stackList = [
   { value: "Microsoft Bot Framework", label: "Microsoft Bot Framework" },
   { value: "Yellow.ai", label: "Yellow.ai" },
   { value: "ProseMirror", label: "ProseMirror" },
+  { value: "Vertex AI", label: "Vertex AI" },
 ]
 stackList.sort((a, b) => a.label.localeCompare(b.label))
 
