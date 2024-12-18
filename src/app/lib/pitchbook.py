@@ -97,7 +97,7 @@ async def get_company_funding_data(url: str) -> dict[str, Any]:
 
             try:
                 money_raised = results[1]["lastFinancingSize"]["amount"]
-            except ValueError:
+            except (KeyError, ValueError):
                 money_raised = None
 
             return {
