@@ -92,7 +92,7 @@ async def get_company_funding_data(url: str) -> dict[str, Any]:
 
             try:
                 announced_date = date.fromisoformat(results[1]["lastFinancingDate"])
-            except ValueError:
+            except (KeyError, ValueError):
                 announced_date = None
 
             try:
