@@ -164,7 +164,7 @@ def normalise_names(
         )
         if result:
             match, score, _ = result
-            return match if score > 80 else name
+            return match if score > 90 else name
 
         return name
 
