@@ -46,7 +46,6 @@ canonical_tech_names = [
     "Markdown",
     "Authorization",
     "Access Management",
-    "AWS IAM",
     "Django",
     "Spring Boot",
     "Flask",
