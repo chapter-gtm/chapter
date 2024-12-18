@@ -190,6 +190,11 @@ export function getFilters(icp: Icp, users: User[]) {
           icon: DollarSign,
         },
         {
+          value: FundingRound.SERIES_G,
+          label: FundingRound.SERIES_G,
+          icon: DollarSign,
+        },
+        {
           value: FundingRound.SERIES_UNKNOWN,
           label: FundingRound.SERIES_UNKNOWN,
           icon: DollarSign,
