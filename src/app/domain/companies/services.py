@@ -10,9 +10,9 @@ from advanced_alchemy.utils.dataclass import Empty, EmptyType
 
 from app.db.models import Company
 from app.lib.app_store import get_android_app_url, get_ios_app_url
-from app.lib.pdl import get_company_details
+from app.lib.pdl import get_company_details, get_org_size
 from app.lib.pitchbook import get_company_funding_data
-from app.lib.schema import Funding, Location
+from app.lib.schema import Funding, Location, OrgSize
 from app.lib.scraperapi import extract_url_content
 from app.lib.utils import get_domain
 
@@ -37,7 +37,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         self.repository: CompanyRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
-    async def create(  # noqa: PLR0915
+    async def create(  # noqa: PLR0915, PLR0912
         self,
         data: ModelDictT[Company],
         *,
@@ -133,6 +133,15 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
                 obj.twitter_url = company_homepage_data.get("twitter_url")
             except (KeyError, TypeError, IndexError, LookupError) as e:
                 await logger.awarn("Failed to extract links from company homepage", url=obj.url, exc_info=e)
+
+            # Get org size
+            try:
+                engineering_size = await get_org_size(obj.url, "engineering")
+                obj.org_size = OrgSize(
+                    engineering=engineering_size,
+                )
+            except (LookupError, ValueError, TypeError) as e:
+                await logger.awarn("Failed to extract company org size", url=obj.url, exc_info=e)
 
         # TODO: Fix upsert
         return await super().upsert(

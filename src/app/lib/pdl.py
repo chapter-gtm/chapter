@@ -144,3 +144,42 @@ async def search_person_details(
             await logger.awarn(error_msg, response=data, company_url=company_url)
             raise LookupError(error_msg)
         return data.get("data", [])
+
+
+async def get_org_size(
+    company_url: str,
+    org_name: str = "engineering",
+) -> int:
+    """Get org size."""
+    if not company_url:
+        error_msg = "company_url is required"
+        raise LookupError(error_msg)
+
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "X-API-Key": pdl_api_key,
+    }
+
+    search_criteria = {
+        "bool": {"must": [{"term": {"job_title_role": org_name}}, {"term": {"job_company_website": company_url}}]},
+    }
+
+    params: dict[str, str] = {"query": json.dumps(search_criteria), "size": str(1), "data_include": ""}
+    await logger.ainfo("Searching org", company_url=company_url, search_criteria=search_criteria)
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://api.peopledatalabs.com/v5/person/search", headers=headers, params=params)
+        data: dict[str, Any] = response.json()
+        if response.status_code != 200 and not data.get("total"):
+            error_msg = "Org size not found."
+            await logger.awarn(
+                error_msg,
+                status=response.status_code,
+                response=data,
+                company_url=company_url,
+                org_name=org_name,
+            )
+            raise LookupError(error_msg)
+
+        return int(data["total"])
