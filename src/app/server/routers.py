@@ -8,6 +8,7 @@ from app.domain.companies.controllers import CompanyController
 from app.domain.jobs.controllers import JobPostController
 from app.domain.opportunities.controllers import ICPController, OpportunityController
 from app.domain.people.controllers import PersonController
+from app.domain.repos.controllers import RepoController
 from app.domain.system.controllers import SystemController
 from app.domain.tags.controllers import TagController
 from app.domain.teams.controllers import TeamController, TeamMemberController
@@ -28,6 +29,7 @@ route_handlers: list[ControllerRouterHandler] = [
     CompanyController,
     JobPostController,
     PersonController,
+    RepoController,
     OpportunityController,
     ICPController,
     SystemController,

@@ -89,6 +89,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             location = None
 
         # TODO: Move to provider specific code
+        obj.name = company_details.get("name") or obj.name
         obj.description = company_details.get("headline") or obj.description
         obj.type = company_details.get("type") or obj.type
         obj.industry = company_details.get("industry") or obj.industry
@@ -147,6 +148,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         return await super().upsert(
             data=obj,
             item_id=results[0].id if count > 0 else None,
+            match_fields=["url"],
             auto_commit=auto_commit,
             auto_expunge=auto_expunge,
             auto_refresh=auto_refresh,

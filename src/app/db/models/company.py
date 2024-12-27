@@ -13,6 +13,7 @@ from .custom_types import FundingType, LocationType, OrgSizeType
 
 if TYPE_CHECKING:
     from .person import Person
+    from .repo import Repo
 
 
 class Company(UUIDAuditBase, SlugKey):
@@ -50,6 +51,11 @@ class Company(UUIDAuditBase, SlugKey):
     # ORM Relationships
     # ------------
     people: Mapped[list[Person]] = relationship(
+        back_populates="company",
+        innerjoin=True,
+        lazy="noload",
+    )
+    repos: Mapped[list[Repo]] = relationship(
         back_populates="company",
         innerjoin=True,
         lazy="noload",

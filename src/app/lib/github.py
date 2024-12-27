@@ -10,7 +10,7 @@ logger = structlog.get_logger()
 
 async def search_repos(
     query: str,
-    sort: str = "stars",
+    sort: str = "updated",
     order: str = "desc",
     page: int = 1,
     per_page: int = 30,
@@ -21,6 +21,11 @@ async def search_repos(
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url, params=params)
+        if response.status_code != 200 or not response.text:
+            error_msg = "Error searching for repos."
+            await logger.awarn(error_msg, query=query, sort=sort, order=order, page=page, per_page=per_page)
+            raise LookupError(error_msg)
+
         repos_data = response.json()
         repos = []
         for repo in repos_data["items"]:
@@ -48,8 +53,8 @@ async def search_repos(
                     {
                         "name": repo["name"],
                         "description": repo["description"],
-                        "html_url": repo["html_url"],
                         "url": repo["url"],
+                        "html_url": repo["html_url"],
                         "homepage": homepage,
                         "language": repo["language"],
                     },

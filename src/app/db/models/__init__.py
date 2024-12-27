@@ -4,6 +4,7 @@ from .job_post import JobPost
 from .oauth_account import UserOauthAccount
 from .opportunity import Opportunity, OpportunityAuditLog, opportunity_job_post_relation, opportunity_person_relation
 from .person import Person
+from .repo import Repo
 from .role import Role
 from .tag import Tag
 from .team import Team
@@ -35,4 +36,5 @@ __all__ = (
     "opportunity_person_relation",
     "opportunity_job_post_relation",
     "ICP",
+    "Repo",
 )

@@ -1,0 +1,6 @@
+REPO_LIST = "/api/repos"
+REPO_DELETE = "/api/repos/{repo_id:uuid}"
+REPO_DETAIL = "/api/repos/{repo_id:uuid}"
+REPO_UPDATE = "/api/repos/{repo_id:uuid}"
+REPO_CREATE = "/api/repos"
+REPO_CREATE_FROM_SEARCH_CRITERIA = "/api/repos/from-search-criteria"
