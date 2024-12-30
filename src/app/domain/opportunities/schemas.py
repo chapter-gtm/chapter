@@ -10,6 +10,7 @@ from app.domain.accounts.schemas import User  # noqa: TCH001
 from app.domain.companies.schemas import Company  # noqa: TCH001
 from app.domain.jobs.schemas import JobPost  # noqa: TCH001
 from app.domain.people.schemas import Person  # noqa: TCH001
+from app.domain.repos.schemas import Repo  # noqa: TCH001
 from app.lib.schema import (
     CamelizedBaseStruct,
     CompanyCriteria,
@@ -47,6 +48,7 @@ class Opportunity(CamelizedBaseStruct):
     owner: User | None = None
     contacts: list[Person] | None = None
     job_posts: list[JobPost] | None = None
+    repos: list[Repo] | None = None
     logs: list[OpportunityAuditLog] | None = None
 
 
@@ -60,6 +62,7 @@ class OpportunityCreate(CamelizedBaseStruct):
     company_id: UUID | None = None
     contact_ids: list[UUID] | None = None
     job_post_ids: list[UUID] | None = None
+    repo_ids: list[UUID] | None = None
 
 
 class OpportunityScanFor(CamelizedBaseStruct):
