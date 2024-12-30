@@ -62,6 +62,13 @@ def schema_upgrades() -> None:
         "opportunity_repo_relation",
         sa.Column("opportunity_id", sa.GUID(length=16), nullable=False),
         sa.Column("repo_id", sa.GUID(length=16), nullable=False),
+        sa.Column("tenant_id", sa.GUID(length=16), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["tenant_id"],
+            ["tenant.id"],
+            name=op.f("fk_opportunity_repo_relation_tenant_id_tenant"),
+            ondelete="CASCADE",
+        ),
         sa.ForeignKeyConstraint(
             ["repo_id"],
             ["repo.id"],
