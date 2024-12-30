@@ -92,7 +92,9 @@ export function OpportunitiesMain() {
               fundingRound: rec.company?.lastFunding?.roundName,
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
-              tools: rec.jobPosts?.flatMap((jobPost) => jobPost.tools),
+              tools:
+                rec.jobPosts?.flatMap((jobPost) => jobPost.tools) ||
+                rec.repos?.flatMap((repo) => repo.language),
               processes: rec.jobPosts?.flatMap((jobPost) => jobPost.processes),
               investors: rec.company?.lastFunding?.investors,
               owner: rec.owner,

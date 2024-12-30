@@ -2,6 +2,7 @@ import { type User } from "@/types/user"
 import { type Company } from "@/types/company"
 import { type Person } from "@/types/person"
 import { type JobPost } from "@/types/job_post"
+import { type Repo } from "@/types/repo"
 
 export enum OpportunityStage {
   IDENTIFIED = "Identified",
@@ -44,6 +45,7 @@ export type Opportunity = {
   company: Company | null
   contacts: Person[] | null
   jobPosts: JobPost[] | null
+  repos: Repo[] | null
   logs: OpportunityAuditLog[] | null
   createdAt: Date
   updatedAt: Date
