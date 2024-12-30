@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 
 import structlog
 from advanced_alchemy.exceptions import ErrorMessages  # noqa: TCH002
-from advanced_alchemy.filters import LimitOffset, SearchFilter
 from advanced_alchemy.repository._util import LoadSpec
 from advanced_alchemy.service import SQLAlchemyAsyncRepositoryService, is_dict, is_msgspec_model, is_pydantic_model
 from advanced_alchemy.utils.dataclass import Empty, EmptyType
@@ -572,16 +571,7 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
         opportunities_audit_log_service = OpportunityAuditLogService(session=self.repository.session)
 
         # TDOD: Filter for tenant_ids
-        if tenant_ids:
-            icp_filters = [
-                *[SearchFilter(field_name="id", value=str(tenant_id)) for tenant_id in tenant_ids],
-                LimitOffset(limit=10, offset=0),
-            ]
-        else:
-            icp_filters = [
-                LimitOffset(limit=10, offset=0),
-            ]
-        icps = await icp_service.list(*icp_filters)
+        icps = await icp_service.list()
 
         opportunities_found = 0
         for icp in icps:
