@@ -67,6 +67,7 @@ class OpportunityScanFor(CamelizedBaseStruct):
 
     tenant_ids: list[str] | None = None
     last_n_days: int = 7
+    types: list[str] | None = None
 
 
 class OpportunityUpdate(CamelizedBaseStruct):

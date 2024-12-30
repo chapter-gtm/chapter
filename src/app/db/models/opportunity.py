@@ -14,6 +14,7 @@ from .company import Company  # noqa: TCH001
 from .custom_types import OpportunityContextType, OpportunityStageType
 from .job_post import JobPost  # noqa: TCH001
 from .person import Person  # noqa: TCH001
+from .repo import Repo  # noqa: TCH001
 
 if TYPE_CHECKING:
     from .user import User
@@ -34,6 +35,15 @@ opportunity_job_post_relation: Final[Table] = Table(
     Column("job_post_id", ForeignKey("job_post.id", ondelete="CASCADE"), primary_key=True),
     Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
     Index("idx_opportunity_job_post_relation_opportunity_job", "opportunity_id", "job_post_id"),
+)
+
+opportunity_repo_relation: Final[Table] = Table(
+    "opportunity_repo_relation",
+    orm_registry.metadata,
+    Column("opportunity_id", ForeignKey("opportunity.id", ondelete="CASCADE"), primary_key=True, index=True),
+    Column("repo_id", ForeignKey("repo.id", ondelete="CASCADE"), primary_key=True),
+    Column("tenant_id", ForeignKey("tenant.id", ondelete="CASCADE"), primary_key=True),
+    Index("idx_opportunity_repo_relation_opportunity_repo", "opportunity_id", "repo_id"),
 )
 
 
@@ -95,6 +105,12 @@ class Opportunity(UUIDAuditBase, SlugKey):
     )
     job_posts: Mapped[list[JobPost]] = relationship(
         secondary=lambda: opportunity_job_post_relation,
+        cascade="all, delete",
+        passive_deletes=True,
+        lazy="selectin",
+    )
+    repos: Mapped[list[Repo]] = relationship(
+        secondary=lambda: opportunity_repo_relation,
         cascade="all, delete",
         passive_deletes=True,
         lazy="selectin",

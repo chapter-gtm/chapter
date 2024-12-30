@@ -148,7 +148,14 @@ class OpportunityController(Controller):
     ) -> int:
         """Create a new opportunity."""
         # TODO: Run as a backgound job
-        return await opportunities_service.scan(data.tenant_ids, data.last_n_days)
+        count = 0
+        if not data.types or "jobs" in data.types:
+            count += await opportunities_service.scan_jobs(data.tenant_ids, data.last_n_days)
+
+        if not data.types or "repos" in data.types:
+            count += await opportunities_service.scan_repos(data.tenant_ids, data.last_n_days)
+
+        return count
 
     @get(
         operation_id="GetOpportunity",

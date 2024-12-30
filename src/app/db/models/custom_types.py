@@ -19,6 +19,7 @@ from app.lib.schema import (
     PersonCriteria,
     Process,
     ProcessCriteria,
+    RepoCriteria,
     Scale,
     SocialActivity,
     Tool,
@@ -214,6 +215,16 @@ class CompanyCriteriaType(JSONBType):
             if obj.org_size and isinstance(obj.org_size, dict):
                 obj.org_size = OrgSizeCriteria.from_dict(obj.org_size)
             return obj
+        return None
+
+
+class RepoCriteriaType(JSONBType):
+    """Repo Criteria Type."""
+
+    def process_result_value(self, value: Any, dialect: Any) -> RepoCriteria | None:
+        """Convert JSON format to Python object when reading from the database."""
+        if value and isinstance(value, dict):
+            return RepoCriteria.from_dict(value)
         return None
 
 

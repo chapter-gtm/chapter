@@ -182,6 +182,12 @@ class PersonCriteria(CamelizedBaseStruct):
     sub_roles: list[str] | None = None
 
 
+class RepoCriteria(CamelizedBaseStruct):
+    """Repo criteria."""
+
+    query: str | None = None
+
+
 class OpportunityContext(CamelizedBaseStruct):
     """Opportunity context."""
 

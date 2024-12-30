@@ -2,7 +2,13 @@ from .company import Company
 from .icp import ICP
 from .job_post import JobPost
 from .oauth_account import UserOauthAccount
-from .opportunity import Opportunity, OpportunityAuditLog, opportunity_job_post_relation, opportunity_person_relation
+from .opportunity import (
+    Opportunity,
+    OpportunityAuditLog,
+    opportunity_job_post_relation,
+    opportunity_person_relation,
+    opportunity_repo_relation,
+)
 from .person import Person
 from .repo import Repo
 from .role import Role
@@ -35,6 +41,7 @@ __all__ = (
     "OpportunityAuditLog",
     "opportunity_person_relation",
     "opportunity_job_post_relation",
+    "opportunity_repo_relation",
     "ICP",
     "Repo",
 )
