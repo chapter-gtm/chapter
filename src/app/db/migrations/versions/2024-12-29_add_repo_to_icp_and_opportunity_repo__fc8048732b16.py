@@ -58,11 +58,24 @@ def schema_upgrades() -> None:
     with op.batch_alter_table("icp", schema=None) as batch_op:
         batch_op.add_column(sa.Column("repo", RepoCriteriaType(), nullable=True))
 
-    with op.batch_alter_table("opportunity_repo_relation", schema=None) as batch_op:
-        batch_op.drop_index("idx_opportunity_repo_relation_opportunity_job")
-        batch_op.create_index(
-            "idx_opportunity_repo_relation_opportunity_repo", ["opportunity_id", "repo_id"], unique=False
-        )
+    op.create_table(
+        "opportunity_repo_relation",
+        sa.Column("opportunity_id", sa.GUID(length=16), nullable=False),
+        sa.Column("repo_id", sa.GUID(length=16), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["repo_id"],
+            ["repo.id"],
+            name=op.f("fk_opportunity_repo_relation_repo_id_repo"),
+            ondelete="CASCADE",
+        ),
+        sa.ForeignKeyConstraint(
+            ["opportunity_id"],
+            ["opportunity.id"],
+            name=op.f("fk_opportunity_repo_relation_opportunity_id_opportunity"),
+            ondelete="CASCADE",
+        ),
+        sa.PrimaryKeyConstraint("opportunity_id", "repo_id", name=op.f("pk_opportunity_repo_relation")),
+    )
 
     with op.batch_alter_table("repo", schema=None) as batch_op:
         batch_op.create_index(batch_op.f("ix_repo_company_id"), ["company_id"], unique=False)
@@ -80,11 +93,7 @@ def schema_downgrades() -> None:
         batch_op.drop_index(batch_op.f("ix_repo_name"))
         batch_op.drop_index(batch_op.f("ix_repo_company_id"))
 
-    with op.batch_alter_table("opportunity_repo_relation", schema=None) as batch_op:
-        batch_op.drop_index("idx_opportunity_repo_relation_opportunity_repo")
-        batch_op.create_index(
-            "idx_opportunity_repo_relation_opportunity_job", ["opportunity_id", "repo_id"], unique=False
-        )
+    op.drop_table("opportunity_repo_relation")
 
     with op.batch_alter_table("icp", schema=None) as batch_op:
         batch_op.drop_column("repo")
