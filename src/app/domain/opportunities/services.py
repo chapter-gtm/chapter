@@ -483,6 +483,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "Skipping job because company does not match the ICP",
                             job_post_id=job_post.id,
                             tenant_id=icp.tenant_id,
+                            company_id=job_post.company.id,
+                            company_url=job_post.company.url,
                         )
                         continue
 
@@ -618,6 +620,8 @@ class OpportunityService(SQLAlchemyAsyncRepositoryService[Opportunity]):
                             "Skipping repo because company does not match the ICP",
                             repo_id=repo.id,
                             tenant_id=icp.tenant_id,
+                            company_id=repo.company.id,
+                            company_url=repo.company.url,
                         )
                         continue
 
