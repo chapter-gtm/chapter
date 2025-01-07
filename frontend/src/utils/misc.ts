@@ -61,8 +61,8 @@ export function timeAgo(date: Date): string {
     month: 60 * 60 * 24 * 30,
     week: 60 * 60 * 24 * 7,
     day: 60 * 60 * 24,
-    hour: 60 * 60,
-    minute: 60,
+    hr: 60 * 60,
+    min: 60,
     second: 1,
   }
 

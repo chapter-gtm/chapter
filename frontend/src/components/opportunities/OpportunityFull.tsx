@@ -12,16 +12,26 @@ import {
 } from "@/utils/chapter/users"
 import { updateOpportunityNotes } from "@/utils/chapter/opportunity"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  NavTabsTrigger,
+} from "@/components/ui/tabs"
 
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 
 import { Separator } from "@/components/ui/separator"
 
+import { NotebookPen } from "lucide-react"
+
 import { OpportunityStageList } from "./OpportunityStageList"
 import { OpportunityTabs } from "./OpportunityTabs"
 import { OpportunityOwner } from "./OpportunityOwner"
+import { OpportunityHighlights } from "./OpportunityHighlight"
+import { OpportunityMentions } from "./OpportunityMentions"
 
 interface OpportunityFullProps {
   opportunityId: string
@@ -93,59 +103,62 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
       <Toaster theme="light" />
       {opportunity !== null && (
         <div className="bg-background pt-24 p-6 flex flex-1 overflow-hidden">
-          <div className="flex flex-row flex-1 bg-card rounded-lg overflow-hidden border border-border">
-            <div className="basis-[520px] overflow-y-scroll border-e border-border ">
-              <div className="flex flex-col ">
-                <div className="flex flex-row sticky top-0 bg-card justify-between items-center px-3 py-3.5">
-                  <div className="text-sm text-zinc-400">
-                    {opportunity.slug}
-                  </div>
-                  <div className="flex flex-row gap-x-1 items-center">
-                    <OpportunityOwner
-                      opportunity={opportunity}
-                      updateOpportunity={updateOpportunity}
-                    />
-                    <OpportunityStageList
-                      opportunity={opportunity}
-                      updateOpportunity={updateOpportunity}
-                    />
-                  </div>
-                </div>
-                <Separator />
+          <div className="flex flex-col flex-1 bg-card rounded-lg border border-border overflow-hidden">
+            {/* Header */}
+            <div className="flex flex-col sticky top-0 z-20 w-full border-b border-border">
+              <div className="flex flex-row justify-between items-center px-4 py-5">
                 <OpportunityBrand opportunity={opportunity} />
-                <Separator />
-                <OpportunityTabs opportunity={opportunity} icp={icp} />
+
+                <div className="flex flex-row gap-x-1 items-center">
+                  <OpportunityOwner
+                    opportunity={opportunity}
+                    updateOpportunity={updateOpportunity}
+                  />
+                  <OpportunityStageList
+                    opportunity={opportunity}
+                    updateOpportunity={updateOpportunity}
+                  />
+                </div>
               </div>
+              <div className="flex flex-row justify-start items-center border-t border-border">
+                <OpportunityHighlights opportunity={opportunity} />
+              </div>
+              <OpportunityMentions opportunity={opportunity} size={"large"} />
             </div>
 
-            <Tabs defaultValue="opNotes" className="flex-1 overflow-hidden">
-              <TabsList className="h-14 bg-transparent w-full justify-between border-b border-border rounded-none px-3 space-x-3">
-                <div className="flex">
-                  <TabsTrigger
-                    value="opNotes"
-                    className="bg-transparent data-[state=active]:bg-zinc-100 dark:data-[state=active]:bg-zinc-700/20"
-                  >
-                    Notes{" "}
-                  </TabsTrigger>
-                </div>
-                {endType && (
-                  <>
-                    <div className="px-2 py-1.5 bg-popover text-sm rounded-lg">
-                      Auto saved..
+            <div className="flex flex-1 flex-row overflow-hidden ">
+              {/* Left side */}
+              <div className="basis-1/2 border-e border-border">
+                <OpportunityTabs opportunity={opportunity} icp={icp} />
+              </div>
+
+              {/* Right side */}
+              <div className="flex-1 overflow-hidden">
+                <div className="flex flex-row justify-between items-center border-b border-border px-4 h-14">
+                  <div className="border-b border-primary rounded-none h-14 py-2.5">
+                    <div className="text-sm font-normal px-2.5 py-1.5 items-center flex flex-inline gap-1.5 bg-popover border border-border rounded-xl">
+                      <NotebookPen size={"13"} />
+                      Notes
                     </div>
-                  </>
-                )}
-              </TabsList>
-              <div className="h-full w-full">
-                <TabsContent value="opTasks"></TabsContent>
-                <TabsContent value="opNotes">
+                  </div>
+                  {endType && (
+                    <>
+                      <div className="px-2 py-1.5 bg-popover text-sm rounded-lg">
+                        Auto saved..
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="h-full w-full">
+                  {/* <TabsContent value="opNotes"> */}
                   <TextEditor
                     content={opportunity.notes}
                     onChange={onEditorContentChange}
                   />
-                </TabsContent>
+                  {/* </TabsContent> */}
+                </div>
               </div>
-            </Tabs>
+            </div>
           </div>
         </div>
       )}

@@ -28,6 +28,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 
+import { TabContentHeader } from "./TabContentHeader"
 import {
   type Opportunity,
   type OpportunityJobPostContext,
@@ -45,7 +46,7 @@ interface OpportunityDrawerProps {
   opportunity: Opportunity
 }
 
-export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
+export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
   const [jobPostPdfUrl, setJobPostPdfUrl] = useState("")
   const [repo, setRepo] = useState<RepoMetadata | null>(null)
 
@@ -105,87 +106,59 @@ export function OpportunityJobPost({ opportunity }: OpportunityDrawerProps) {
 
   return (
     <>
-      <div className="flex flex-col py-6">
-        {opportunity.jobPosts && opportunity.jobPosts?.length > 0 && (
-          <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
-            <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
-              <DialogContent className="h-[800px] min-w-[900px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
-                <DialogHeader className="p-5 justify-center h-16 align-center">
-                  <DialogTitle>{opportunity?.jobPosts?.[0]?.title}</DialogTitle>
-                  <DialogDescription></DialogDescription>
-                </DialogHeader>
-                {jobPostPdfUrl && (
-                  <iframe
-                    src={jobPostPdfUrl}
-                    height="100%"
-                    className="border w-full [min-h-800px]"
-                    title="Job Post PDF"
-                  />
-                )}
-              </DialogContent>
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <p className="text-base font-medium truncate text-ellipsis ">
-                  {opportunity?.jobPosts?.[0]?.title}
-                </p>
-                <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                  Added{" "}
-                  {opportunity?.jobPosts?.[0]?.createdAt &&
-                    timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
-                </p>
-              </div>
-              <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
-                <DialogTrigger asChild>
-                  <Button variant="outline" onClick={openJobPostModal}>
-                    View
-                  </Button>
-                </DialogTrigger>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={opportunity.jobPosts?.[0]?.url || undefined}
-                >
-                  <Button variant={"outline"}>
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </a>
-
-                <Link href={""} onClick={handleDownload}>
-                  <Button variant={"outline"}>
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
+      <div className="flex flex-col px-2">
+        <TabContentHeader>Sources</TabContentHeader>
+        <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
+          <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
+            <DialogContent className="h-[800px] min-w-[900px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
+              <DialogHeader className="p-5 justify-center h-16 align-center">
+                <DialogTitle>{opportunity?.jobPosts?.[0]?.title}</DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              {jobPostPdfUrl && (
+                <iframe
+                  src={jobPostPdfUrl}
+                  height="100%"
+                  className="border w-full [min-h-800px]"
+                  title="Job Post PDF"
+                />
+              )}
+            </DialogContent>
+            <div className="flex flex-col flex-1 overflow-hidden">
+              <p className="text-base font-medium truncate text-ellipsis ">
+                {opportunity?.jobPosts?.[0]?.title}
+              </p>
+              <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                Added{" "}
+                {opportunity?.jobPosts?.[0]?.createdAt &&
+                  timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
+              </p>
             </div>
-          </Dialog>
-        )}
-        {opportunity?.context !== null &&
-          opportunity?.context.jobPost.length > 0 && (
-            <div className="flex flex-col p-2">
-              <div className="text-xs tracking-wide font-semibold my-3 text-zinc-500 uppercase dark:text-zinc-400">
-                Highlights
-              </div>
+            <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
+              <DialogTrigger asChild>
+                <Button variant="outline" onClick={openJobPostModal}>
+                  View
+                </Button>
+              </DialogTrigger>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={opportunity.jobPosts?.[0]?.url || undefined}
+              >
+                <Button variant={"outline"}>
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </a>
 
-              <div className="flex flex-col gap-y-4">
-                {opportunity?.context?.jobPost.map(
-                  (
-                    jobPostContext: OpportunityJobPostContext,
-                    index: number
-                  ) => (
-                    <div key={index}>
-                      <ul>
-                        <li className="flex gap-x-2">
-                          <span className="min-w-1 h-auto bg-violet-500 rounded-lg"></span>
-                          <p className="text-base">{jobPostContext.sentence}</p>
-                        </li>
-                      </ul>
-                    </div>
-                  )
-                )}
-              </div>
+              <Link href={""} onClick={handleDownload}>
+                <Button variant={"outline"}>
+                  <Download className="h-4 w-4" />
+                </Button>
+              </Link>
             </div>
-          )}
-      </div>
-      <div className="flex flex-col py-6">
+          </div>
+          <div className="flex flex-col py-6"></div>
+        </Dialog>
         {repo && (
           <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
             <div className="flex flex-col flex-1 overflow-hidden">

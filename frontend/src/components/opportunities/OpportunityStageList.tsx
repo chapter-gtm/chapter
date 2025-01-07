@@ -104,7 +104,7 @@ export function OpportunityStageList({
               <div
                 className={classNames(
                   stageColors[opportunity.stage]?.color,
-                  "flex ps-0.5 py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center "
+                  "flex ps-0.5 py-0.5 rounded-full hover:none focus-visible:ring-0 pr-2 items-center "
                 )}
               >
                 <span

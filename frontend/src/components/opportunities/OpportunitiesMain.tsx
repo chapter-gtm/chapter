@@ -1,4 +1,5 @@
 "use client"
+import * as React from "react"
 
 import { type User } from "@/types/user"
 import { type Icp } from "@/types/icp"
@@ -19,6 +20,8 @@ import {
 } from "./columns"
 import { DataTable } from "@/components/data-table/data-table"
 import { OpportunityDrawer } from "./OpportunityDrawer"
+
+import { Progress } from "@/components/ui/progress"
 
 import {
   Tooltip,
@@ -87,6 +90,7 @@ export function OpportunitiesMain() {
               date: new Date(rec.createdAt), // TODO: handle in getOpportunities method
               stage: rec.stage,
               companyName: rec.company?.name,
+              profilePicUrl: rec.company?.profilePicUrl,
               companySize: rec.company?.headcount,
               orgSize: rec.company?.orgSize,
               fundingRound: rec.company?.lastFunding?.roundName,
@@ -203,6 +207,13 @@ export function OpportunitiesMain() {
     setSheetOpen(false)
   }
 
+  const [progress, setProgress] = React.useState(13)
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setProgress(66), 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   const updateOpportunityCallback = useCallback(
     async (updatedOpportunity: Opportunity) => {
       // Update records
@@ -270,7 +281,7 @@ export function OpportunitiesMain() {
                   nonClickableColumns={["select", "stage"]}
                 />
 
-                <SheetContent className="sm:max-w-[525px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-white dark:bg-card border-border">
+                <SheetContent className="sm:max-w-[575px] p-0 h-dvh max-h-dvh flex flex-col overflow-hidden gap-y-0 bg-white dark:bg-card border-border">
                   <TooltipProvider delayDuration={0}>
                     <div className="flex flex-row justify-between pt-2 w-full items-center text-zinc-500 dark:text-zinc-400 pe-3">
                       <div className="flex flex-row justify-start items-center px-3 py-2">
@@ -308,13 +319,6 @@ export function OpportunitiesMain() {
                             </Button>
                           </TooltipTrigger>
                         </Tooltip>
-                        <div className="text-sm ps-2.5 pe-3">|</div>
-
-                        <div className="text-sm">
-                          <span className="text-zinc-500 dark:text-zinc-400">
-                            {selectedRow !== null && <>{selectedRow.slug}</>}
-                          </span>
-                        </div>
                       </div>
 
                       {selectedRow !== null && (
@@ -343,7 +347,14 @@ export function OpportunitiesMain() {
               </Sheet>
             </>
           ) : (
-            <div className="flex flex-col flex-1 pb-12 border-e border-border bg-card"></div>
+            <div className="flex flex-col justify-center items-center flex-1 pb-12 border-e border-border bg-card">
+              <div className="flex flex-col justify-center items-center gap-4 max-w-72">
+                <Progress value={progress} className="w-[60%] h-1" />
+                <p className="text-lg text-center">
+                  Crunching the latest data, just for you. Hang tight...
+                </p>
+              </div>
+            </div>
           )}
         </div>
       </div>

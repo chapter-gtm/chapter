@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons"
@@ -13,7 +12,15 @@ import {
   Dot,
   ChevronDown,
   CircleUserRound,
+  ExternalLink,
 } from "lucide-react"
+
+import { timeAgo, isDateInLastNHours } from "@/utils/misc"
+
+import { BadgeColor } from "@/components/ui/badge-color"
+import { getFundingRoundColor } from "@/utils/chapter/funding"
+
+import Image from "next/image"
 
 import {
   DropdownMenu,
@@ -147,77 +154,77 @@ export function getFilters(icp: Icp, users: User[]) {
         {
           value: FundingRound.GRANT,
           label: FundingRound.GRANT,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.PRE_SEED,
           label: FundingRound.PRE_SEED,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SEED,
           label: FundingRound.SEED,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_A,
           label: FundingRound.SERIES_A,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_B,
           label: FundingRound.SERIES_B,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_C,
           label: FundingRound.SERIES_C,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_D,
           label: FundingRound.SERIES_D,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_E,
           label: FundingRound.SERIES_E,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_F,
           label: FundingRound.SERIES_F,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_G,
           label: FundingRound.SERIES_G,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.SERIES_UNKNOWN,
           label: FundingRound.SERIES_UNKNOWN,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.PRIVATE_EQUITY,
           label: FundingRound.PRIVATE_EQUITY,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.CORPORATE_ROUND,
           label: FundingRound.CORPORATE_ROUND,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.DEBT_FINANCING,
           label: FundingRound.DEBT_FINANCING,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
         {
           value: FundingRound.PUBLIC,
           label: FundingRound.PUBLIC,
-          icon: DollarSign,
+          // icon: DollarSign,
         },
       ],
     },
@@ -391,6 +398,8 @@ function getFundingFromFundingRound(
     (funding) => funding.value === fundingRoundLabel
   )
 
+  console.log("Round: ")
+  console.log(funding?.value)
   return funding
 }
 
@@ -429,6 +438,7 @@ export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
     industry: true,
     stack: true,
     processes: true,
+    profilePicUrl: true,
   }
 
   defaultColumnVisibility.stack = icp.tool.include.length > 0 ? true : false
@@ -448,6 +458,7 @@ export function getFixedColumns(
     {
       id: "id",
       accessorKey: "id",
+
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Id" />
       ),
@@ -461,21 +472,39 @@ export function getFixedColumns(
     {
       id: "companyName",
       accessorKey: "companyName",
+
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Company" />
       ),
       cell: ({ row }) => {
         const id: string = row.getValue("id")
+        const profilePicUrl = row.original.profilePicUrl
+
+        console.log("Company data:", {
+          profilePicUrl,
+          rowOriginal: row.original,
+        })
+
         return (
           <div className="flex flex-row justify-between items-center pe-2">
-            <div>{row.getValue("companyName")}</div>
             <Button
-              className="text-light px-2 max-h-8 py-0.5 rounded-md curser border border-border bg-popover dark:bg-muted/60 hover:bg-popover/20 hover:text-foreground"
+              className="flex flex-1 text-light px-2 max-h-8 py-0.5 rounded-md curser border border-border bg-popover dark:bg-muted/60 hover:bg-popover/20 hover:text-foreground"
               onClick={async () => {
                 await handleOpenDrawer(id)
               }}
             >
-              Open
+              <div className="flex flex-inline flex-1 gap-2">
+                <Image
+                  src={profilePicUrl}
+                  alt="Company logo"
+                  width={20}
+                  height={20}
+                  className="rounded-md me-2"
+                />
+
+                <div>{truncateString(row.getValue("companyName"), 13)}</div>
+              </div>
+              <ExternalLink width={"14"} />
             </Button>
           </div>
         )
@@ -524,7 +553,7 @@ export function getFixedColumns(
                   <div
                     className={classNames(
                       stageColors[stage]?.color,
-                      "flex py-0.5 rounded-md hover:none focus-visible:ring-0 pr-2 items-center"
+                      "flex py-0.5 rounded-full hover:none focus-visible:ring-0 pr-2 items-center"
                     )}
                   >
                     <span
@@ -578,9 +607,7 @@ export function getFixedColumns(
       ),
       cell: ({ row }) => {
         const createdAt: Date = row.getValue("date")
-        return (
-          <div className="flex">{humanDate(createdAt, false, true, false)}</div>
-        )
+        return <div className="flex">{timeAgo(createdAt)}</div>
       },
     },
     {
@@ -600,9 +627,9 @@ export function getFixedColumns(
 
         return (
           <div className="flex items-center">
-            {companySize.hasOwnProperty("icon") && companySize.icon && (
+            {/* {companySize.hasOwnProperty("icon") && companySize.icon && (
               <companySize.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-            )}
+            )} */}
             <span>{companySize.label}</span>
           </div>
         )
@@ -634,10 +661,10 @@ export function getFixedColumns(
           valueA.engineering > valueB.engineering
           ? 1
           : valueA.engineering !== null &&
-              valueB.engineering !== null &&
-              valueA.engineering < valueB.engineering
-            ? -1
-            : 0
+            valueB.engineering !== null &&
+            valueA.engineering < valueB.engineering
+          ? -1
+          : 0
       },
       enableHiding: true,
       enableSorting: true,
@@ -659,10 +686,14 @@ export function getFixedColumns(
 
         return (
           <div className="flex items-center">
-            {funding.hasOwnProperty("icon") && funding.icon && (
+            {/* {funding.hasOwnProperty("icon") && funding.icon && (
               <funding.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-            )}
-            <span>{funding.label}</span>
+            )} */}
+            <BadgeColor
+              color={getFundingRoundColor(funding.label as FundingRound)}
+            >
+              {funding.label}
+            </BadgeColor>
           </div>
         )
       },
@@ -739,15 +770,12 @@ export function getFixedColumns(
                 return icp.tool.include.includes(tool.name)
               })
               .map((tool, index) => (
-                <div
+                <BadgeColor
                   key={index}
-                  className={classNames(
-                    ScaleLabel[tool.certainty]?.color,
-                    "bg-popover dark:bg-muted/80 text-primary font-medium px-2 py-1 text-xs rounded-md"
-                  )}
+                  className={classNames(ScaleLabel[tool.certainty]?.color)}
                 >
                   {tool.name}
-                </div>
+                </BadgeColor>
               ))}
           </div>
         )

@@ -14,6 +14,21 @@ import {
 } from "@/components/data-table/data-table-faceted-filter"
 
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -26,6 +41,12 @@ import {
 } from "@/components/ui/dialog"
 import { Overlay } from "@radix-ui/react-dialog"
 import { Label } from "@radix-ui/react-label"
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 export interface ToolbarFilter {
   tableColumnName: string
@@ -54,6 +75,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
+
         {filters
           .filter((item) => item.filterOptions.length > 0)
           .map((item, index) => (
@@ -64,11 +86,12 @@ export function DataTableToolbar<TData>({
               options={item.filterOptions}
             />
           ))}
+
         {isFiltered && (
           <Button
             variant="ghost"
             onClick={() => table.resetColumnFilters()}
-            className="h-8 px-2 lg:px-3"
+            className="h-8 px-2 lg:px-3 "
           >
             Reset
             <Cross2Icon className="ml-2 h-4 w-4" />

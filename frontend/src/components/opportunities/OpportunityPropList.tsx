@@ -11,14 +11,25 @@ import {
   Triangle,
   Layers,
   CircleCheckBig,
+  Info,
 } from "lucide-react"
 
+import { getFundingRoundColor } from "@/utils/chapter/funding"
+
+import { BadgeColor } from "@/components/ui/badge-color"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 import { humanDate } from "@/utils/misc"
 import { getIcps } from "@/utils/chapter/icp"
@@ -27,10 +38,14 @@ import { useState, useEffect } from "react"
 import { Separator } from "@/components/ui/separator"
 import { Opportunity } from "@/types/opportunity"
 import { Button } from "@/components/ui/button"
+import { ButtonLink } from "../ui/button-link"
 import { Badge } from "@/components/ui/badge"
+import { TabContentHeader } from "./TabContentHeader"
+
 import { toast } from "sonner"
 import { OpportunityStage } from "@/types/opportunity"
 import { type Icp } from "@/types/icp"
+import { FundingRound } from "@/types/company"
 
 interface OpportunityPropListProps {
   opportunity: Opportunity
@@ -65,264 +80,18 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
 
   return (
     <>
-      <div className="flex flex-col gap-y-4 py-6 ps-2">
-        {opportunity.company?.docsUrl !== undefined &&
-          opportunity.company?.docsUrl !== null && (
-            <>
-              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-                  <span>
-                    <FileText width={18} />
-                  </span>
-                  <p>Docs / API</p>
-                </div>
+      <div className="flex flex-col gap-y-4 pb-6 ps-2">
+        <TabContentHeader>Account Info</TabContentHeader>
 
-                <div className="flex flex-1 flex-wrap gap-x-2">
-                  <Button
-                    onClick={() => handleDocLink(opportunity.company?.docsUrl)}
-                    variant={"outline"}
-                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
-                  >
-                    Link
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        {opportunity.company?.blogUrl !== undefined &&
-          opportunity.company?.blogUrl !== null && (
-            <>
-              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-                  <span>
-                    <Newspaper width={18} />
-                  </span>
-                  <p>Blog</p>
-                </div>
-
-                <div className="flex flex-1 flex-wrap gap-x-2">
-                  <Button
-                    onClick={() => handleDocLink(opportunity.company?.blogUrl)}
-                    variant={"outline"}
-                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
-                  >
-                    Link
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        {opportunity.company?.changelogUrl !== undefined &&
-          opportunity.company?.changelogUrl !== null && (
-            <>
-              <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-                  <span>
-                    <Triangle width={18} />
-                  </span>
-                  <p>Changelog</p>
-                </div>
-
-                <div className="flex flex-1 flex-wrap gap-x-2">
-                  <Button
-                    onClick={() =>
-                      handleDocLink(opportunity.company?.changelogUrl)
-                    }
-                    variant={"outline"}
-                    className="px-3 py-2 text-sm items-center bg-transparent font-medium h-auto hover:bg-card dark:hover:bg-popover gap-x-1"
-                  >
-                    {opportunity.company?.productLastReleasedAt &&
-                      "Last Release: " +
-                        humanDate(
-                          new Date(opportunity.company?.productLastReleasedAt)
-                        )}
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </Button>
-                  <p></p>
-                </div>
-              </div>
-            </>
-          )}
-        <Separator />
-
-        {icp && icp.tool.include.length > 0 && (
-          <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-            <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-              <Layers width={18} />
-              <p>Relevant Stack</p>
-            </div>
-            <div className="flex flex-row gap-x-2">
-              {icp &&
-                opportunity.jobPosts
-                  ?.flatMap((jobPost) => jobPost.tools)
-                  .filter(
-                    (tool) => tool && icp.tool.include.includes(tool.name)
-                  )
-                  .map((tool, index) => (
-                    <>
-                      {tool && (
-                        <div
-                          key={index}
-                          className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
-                        >
-                          {tool.name}
-                        </div>
-                      )}
-                    </>
-                  ))}
-            </div>
+        <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
+            <Info width={18} />
+            <p>Description</p>
           </div>
-        )}
-
-        {icp && icp.process.include.length > 0 && (
-          <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-            <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
-              <CircleCheckBig width={18} />
-              <p>Relevant Processes</p>
-            </div>
-            <div className="flex flex-row gap-x-2">
-              {opportunity.jobPosts
-                ?.flatMap((jobPost) => jobPost.processes)
-                .filter(
-                  (process) =>
-                    process && icp.process.include.includes(process.name)
-                )
-                .map((process, index) => (
-                  <>
-                    {process && (
-                      <div
-                        key={index}
-                        className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
-                      >
-                        {process.name}
-                      </div>
-                    )}
-                  </>
-                ))}
-            </div>
-          </div>
-        )}
-
-        <Separator />
-
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
-            <Layers width={18} />
-            <p>Additional stack</p>
-          </div>
-
-          {icp &&
-            opportunity &&
-            Array.isArray(opportunity.jobPosts) &&
-            opportunity.jobPosts.length > 0 &&
-            opportunity.jobPosts[0]?.tools &&
-            opportunity.jobPosts[0]?.tools?.length > 0 && (
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
-                      See all
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
-                    {icp
-                      ? opportunity.jobPosts
-                          ?.flatMap((jobPost) => jobPost.tools)
-                          .filter(
-                            (tool) =>
-                              tool && !icp.tool.include.includes(tool.name)
-                          )
-                          .map((tool, index) => (
-                            <>
-                              {tool && (
-                                <Badge
-                                  key={index}
-                                  variant={"outline"}
-                                  className="border-border"
-                                >
-                                  {tool.name}
-                                </Badge>
-                              )}
-                            </>
-                          ))
-                      : opportunity.jobPosts
-                          ?.flatMap((jobPost) => jobPost.tools)
-                          .map((tool, index) => (
-                            <>
-                              {tool && (
-                                <Badge key={index} variant={"outline"}>
-                                  {tool.name}
-                                </Badge>
-                              )}
-                            </>
-                          ))}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+          <p className="flex-1 font-medium ">
+            {opportunity.company?.description}
+          </p>
         </div>
-
-        <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-          <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
-            <CircleCheckBig width={18} />
-            <p>Additional processes</p>
-          </div>
-
-          {icp &&
-            opportunity &&
-            Array.isArray(opportunity.jobPosts) &&
-            opportunity.jobPosts.length > 0 &&
-            opportunity.jobPosts[0]?.processes &&
-            opportunity.jobPosts[0]?.processes?.length > 0 && (
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
-                      See all
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
-                    {icp
-                      ? opportunity.jobPosts
-                          ?.flatMap((jobPost) => jobPost.processes)
-                          .filter(
-                            (process) =>
-                              process &&
-                              !icp.process.include.includes(process.name)
-                          )
-                          .map((process, index) => (
-                            <>
-                              {process && (
-                                <Badge
-                                  key={index}
-                                  variant={"outline"}
-                                  className="border-border"
-                                >
-                                  {process.name}
-                                </Badge>
-                              )}
-                            </>
-                          ))
-                      : opportunity.jobPosts
-                          ?.flatMap((jobPost) => jobPost.processes)
-                          .map((process, index) => (
-                            <>
-                              {process && (
-                                <Badge key={index} variant={"outline"}>
-                                  {process.name}
-                                </Badge>
-                              )}
-                            </>
-                          ))}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-        </div>
-
-        <Separator />
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
             <Factory width={18} />
@@ -354,9 +123,13 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
             <Landmark width={18} />
             <p>Funding</p>
           </div>
-          <p className="font-medium">
+          <BadgeColor
+            color={getFundingRoundColor(
+              opportunity.company?.lastFunding?.roundName
+            )}
+          >
             {opportunity.company?.lastFunding?.roundName}
-          </p>
+          </BadgeColor>
         </div>
         <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
           <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400">
@@ -377,12 +150,18 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
           </div>
           <p className="font-medium">
             {opportunity.company?.lastFunding?.announcedDate
-              ? humanDate(
-                  new Date(opportunity.company?.lastFunding?.announcedDate),
-                  false,
-                  false,
-                  true
-                )
+              ? (() => {
+                  const monthsAgo = Math.floor(
+                    (Date.now() -
+                      new Date(
+                        opportunity.company.lastFunding.announcedDate
+                      ).getTime()) /
+                      (1000 * 60 * 60 * 24 * 30)
+                  )
+                  return monthsAgo < 24
+                    ? `${monthsAgo} months ago`
+                    : `${Math.floor(monthsAgo / 12)} years ago`
+                })()
               : ""}
           </p>
         </div>
@@ -392,8 +171,16 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
             <p>Amount Raised</p>
           </div>
           <p className="font-medium">
-            {opportunity.company?.lastFunding?.moneyRaised !== null
-              ? opportunity.company?.lastFunding?.moneyRaised.toLocaleString()
+            {opportunity.company?.lastFunding?.moneyRaised != null
+              ? opportunity.company.lastFunding.moneyRaised >= 1000000
+                ? `$${Math.round(
+                    opportunity.company.lastFunding.moneyRaised / 1000000
+                  )}M`
+                : `$${
+                    Math.round(
+                      opportunity.company.lastFunding.moneyRaised / 100000
+                    ) * 100
+                  }K`
               : ""}
           </p>
         </div>
