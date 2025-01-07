@@ -37,7 +37,7 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
         self.repository: CompanyRepository = self.repository_type(**repo_kwargs)
         self.model_type = self.repository.model_type
 
-    async def create(  # noqa: PLR0915, PLR0912
+    async def create(  # noqa: PLR0915, PLR0912, C901
         self,
         data: ModelDictT[Company],
         *,
@@ -76,17 +76,21 @@ class CompanyService(SQLAlchemyAsyncRepositoryService[Company]):
             await logger.ainfo("Company already exists", id=results[0].id, url=results[0].url)
             return results[0]
 
+        company_details = {}
         try:
             company_details = await get_company_details(url=obj.url, social_url=obj.linkedin_profile_url)
+        except (KeyError, TypeError, IndexError, LookupError) as e:
+            await logger.awarn("Error getting company details", exc_info=e)
+
+        location = None
+        try:
             location = Location(
                 country=company_details.get("location", {}).get("country"),
                 region=company_details.get("location", {}).get("region"),
                 city=company_details.get("location", {}).get("locality"),
             )
-        except (KeyError, TypeError, IndexError, LookupError) as e:
-            await logger.awarn("Error getting company details", exc_info=e)
-            company_details = {}
-            location = None
+        except AttributeError as e:
+            await logger.awarn("Company location not found", exc_info=e)
 
         # TODO: Move to provider specific code
         obj.name = company_details.get("name") or obj.name
