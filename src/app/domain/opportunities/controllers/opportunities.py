@@ -249,7 +249,7 @@ class OpportunityController(Controller):
             },
         )
 
-        schema_obj = opportunities_service.to_schema(schema_type=Opportunity, data=db_obj)
+        schema_obj = opportunities_service.to_schema(schema_type=Opportunity, data=opportunity)
 
         # Workaround due to https://github.com/jcrist/msgspec/issues/673
         # tl;dr to_schema uses cast() to build schema object which does not call __post_init__
