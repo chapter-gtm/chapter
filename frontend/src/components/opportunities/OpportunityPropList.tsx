@@ -162,7 +162,7 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
                     ? `${monthsAgo} months ago`
                     : `${Math.floor(monthsAgo / 12)} years ago`
                 })()
-              : ""}
+              : "n/a"}
           </p>
         </div>
         <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200">
@@ -181,7 +181,7 @@ export function OpportunityPropList({ opportunity }: OpportunityPropListProps) {
                       opportunity.company.lastFunding.moneyRaised / 100000
                     ) * 100
                   }K`
-              : ""}
+              : "n/a"}
           </p>
         </div>
       </div>

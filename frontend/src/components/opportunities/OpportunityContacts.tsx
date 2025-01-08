@@ -391,37 +391,37 @@ export function OpportunityContacts({
                                     )
                                     .join(" · ")
                                 : contact.skills.join(" . ")
-                              : "Empty"
+                              : "n/a"
                             : // If not expanded, show truncated version
-                              contact.skills && contact.skills.length > 0
-                              ? icp
-                                ? contact.skills
-                                    .filter((item) =>
-                                      icp.tool.include.some(
-                                        (el) =>
-                                          el.toLowerCase() ===
-                                          item.toLowerCase()
-                                      )
+                            contact.skills && contact.skills.length > 0
+                            ? icp
+                              ? contact.skills
+                                  .filter((item) =>
+                                    icp.tool.include.some(
+                                      (el) =>
+                                        el.toLowerCase() === item.toLowerCase()
                                     )
-                                    .concat(
-                                      contact.skills.filter(
-                                        (item) =>
-                                          !icp.tool.include.includes(item)
-                                      )
+                                  )
+                                  .concat(
+                                    contact.skills.filter(
+                                      (item) => !icp.tool.include.includes(item)
                                     )
-                                    .slice(0, 5) // Show only the first skill
-                                    .join(" · ")
-                                : contact.skills.slice(0, 1).join(" . ")
-                              : "Empty"}
+                                  )
+                                  .slice(0, 5) // Show only the first skill
+                                  .join(" · ")
+                              : contact.skills.slice(0, 1).join(" . ")
+                            : "n/a"}
                         </p>
-                        <button
-                          className="ml-2 text-primary hover:underline"
-                          onClick={() => toggleSkills(index)} // Toggle state for this user
-                        >
-                          {expandedSkillIndex === index
-                            ? "Show Less"
-                            : "Show All"}
-                        </button>
+                        {contact.skills && contact.skills.length > 3 && (
+                          <button
+                            className="ml-2 text-primary hover:underline"
+                            onClick={() => toggleSkills(index)} // Toggle state for this user
+                          >
+                            {expandedSkillIndex === index
+                              ? "Show Less"
+                              : "Show All"}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

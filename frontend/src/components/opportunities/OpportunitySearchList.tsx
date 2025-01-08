@@ -231,7 +231,7 @@ export function OpportunitySearchList({
               <CircleCheckBig width={18} />
               <p>Relevant Workflow</p>
             </div>
-            <div className="flex flex-row gap-x-2">
+            <div className="flex flex-row gap-x-2 text-primary">
               {opportunity.jobPosts
                 ?.flatMap((jobPost) => jobPost.processes)
                 .filter(
@@ -253,68 +253,58 @@ export function OpportunitySearchList({
                     .join(", ")}
                 </div>
               ) : (
-                <p>n/a</p>
+                "n/a"
               )}
             </div>
           </div>
 
           {/* Start of additional Process */}
           <div className="flex flex-row items-center justify-start text-sm text-zinc-700">
-            <div className="flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
-              <CircleCheckBig width={18} />
-              <p>Mentioned processes</p>
-            </div>
-
-            {icp &&
-              opportunity &&
-              Array.isArray(opportunity.jobPosts) &&
-              opportunity.jobPosts.length > 0 &&
-              opportunity.jobPosts[0]?.processes &&
-              opportunity.jobPosts[0]?.processes?.length > 0 && (
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex border border-border rounded-lg dark:text-zinc-100 cursor-default px-2 py-1.5 text-sm items-center font-medium h-auto hover:bg-popover ">
-                        See all
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent className="flex w-64 py-3 flex-wrap gap-2 border-none">
-                      {icp
-                        ? opportunity.jobPosts
-                            ?.flatMap((jobPost) => jobPost.processes)
-                            .filter(
-                              (process) =>
-                                process &&
-                                !icp.process.include.includes(process.name)
-                            )
-                            .map((process, index) => (
-                              <>
-                                {process && (
-                                  <Badge
-                                    key={index}
-                                    variant={"outline"}
-                                    className="border-border"
-                                  >
-                                    {process.name}
-                                  </Badge>
-                                )}
-                              </>
-                            ))
-                        : opportunity.jobPosts
-                            ?.flatMap((jobPost) => jobPost.processes)
-                            .map((process, index) => (
-                              <>
-                                {process && (
-                                  <Badge key={index} variant={"outline"}>
-                                    {process.name}
-                                  </Badge>
-                                )}
-                              </>
-                            ))}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
+            <Accordion type="single" collapsible className="w-full border-none">
+              <AccordionItem value="stack">
+                <AccordionTrigger className="pt-2 pb-4 flex gap-x-2 items-center w-52 text-zinc-500 dark:text-zinc-400 self-start">
+                  Additional processes
+                </AccordionTrigger>
+                <AccordionContent className="flex flex-wrap gap-x-1 gap-y-1.5">
+                  {icp
+                    ? opportunity.jobPosts
+                        ?.flatMap((jobPost) => jobPost.processes)
+                        .filter(
+                          (process) =>
+                            process &&
+                            !icp.process.include.includes(process.name)
+                        )
+                        .map((process, index) => (
+                          <>
+                            {process && (
+                              <Badge
+                                key={index}
+                                variant={"outline"}
+                                className="border-border font-normal"
+                              >
+                                {process.name}
+                              </Badge>
+                            )}
+                          </>
+                        ))
+                    : opportunity.jobPosts
+                        ?.flatMap((jobPost) => jobPost.processes)
+                        .map((process, index) => (
+                          <>
+                            {process && (
+                              <Badge
+                                key={index}
+                                variant={"outline"}
+                                className="font-normal border-border"
+                              >
+                                {process.name}
+                              </Badge>
+                            )}
+                          </>
+                        ))}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </div>
