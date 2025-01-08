@@ -39,7 +39,7 @@ export function BadgeColor({
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset",
+        "inline-flex items-center rounded-lg px-1.5 py-0.5 text-sm font-medium ring-1 ring-inset",
         colorVariants[color],
         "ring-opacity-20 dark:ring-opacity-20",
         className

@@ -136,7 +136,7 @@ export function OpportunityContacts({
                 <div className="flex flex-row gap-x-2 items-center justify-between w-full">
                   <TooltipProvider>
                     <div className="flex flex-row gap-2 px-2 py-2">
-                      <AccordionTrigger className="flex flex-row gap-x-1 items-center bg-muted px-1.5 rounded-full py-0">
+                      <AccordionTrigger className="flex flex-row gap-x-1 items-center bg-popover/60 dark:bg-muted px-1.5 rounded-full py-0">
                         <div className="flex flex-row items-center gap-1 w-full">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +186,10 @@ export function OpportunityContacts({
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Button size={"xs"} className="gap-1">
+                              <Button
+                                size={"xs"}
+                                className="gap-1 bg-trasparent dark:bg-popover border border-border text-primary"
+                              >
                                 <Radio size={"14"} /> Add to audience
                               </Button>
                             </a>

@@ -78,10 +78,10 @@ export function OpportunityHighlights({
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-y-4 py-3 px-4 bg-popover">
+      <div className="flex flex-1 flex-col gap-y-4 py-3 px-4 ">
         {icp && icp.tool.include.length > 0 ? (
           <>
-            <div className="flex flex-row justify-start items-center text-sm text-zinc-700 gap-5">
+            <div className="flex flex-row justify-start items-center text-zinc-700 gap-3">
               <StrengthLabel variant={"good"}>High Signal</StrengthLabel>
               {/* <span className="w-[2px] h-7 rounded-md bg-muted"></span> */}
 

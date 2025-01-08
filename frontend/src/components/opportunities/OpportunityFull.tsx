@@ -106,7 +106,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
           <div className="flex flex-col flex-1 bg-card rounded-lg border border-border overflow-hidden">
             {/* Header */}
             <div className="flex flex-col sticky top-0 z-20 w-full border-b border-border">
-              <div className="flex flex-row justify-between items-center px-4 py-5">
+              <div className="flex flex-row justify-between items-center px-4 py-3">
                 <OpportunityBrand opportunity={opportunity} />
 
                 <div className="flex flex-row gap-x-1 items-center">
@@ -120,10 +120,10 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                   />
                 </div>
               </div>
-              <div className="flex flex-row justify-start items-center border-t border-border">
+              <div className="flex flex-col justify-start items-start border-t border-border bg-popover/30 dark:bg-popover">
                 <OpportunityHighlights opportunity={opportunity} />
+                <OpportunityMentions opportunity={opportunity} size={"large"} />
               </div>
-              <OpportunityMentions opportunity={opportunity} size={"large"} />
             </div>
 
             <div className="flex flex-1 flex-row overflow-hidden ">
@@ -136,7 +136,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
               <div className="flex-1 overflow-hidden">
                 <div className="flex flex-row justify-between items-center border-b border-border px-4 h-14">
                   <div className="border-b border-primary rounded-none h-14 py-2.5">
-                    <div className="text-sm font-normal px-2.5 py-1.5 items-center flex flex-inline gap-1.5 bg-popover border border-border rounded-xl">
+                    <div className="text-sm font-normal px-2.5 py-1.5 items-center flex flex-inline gap-1.5 dark:bg-popover border border-border rounded-xl">
                       <NotebookPen size={"13"} />
                       Notes
                     </div>

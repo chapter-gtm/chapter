@@ -33,7 +33,7 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
             className="border-b border-transparent data-[state=active]:border-primary rounded-none h-14 py-2 group"
             value="account"
           >
-            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
+            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 dark:group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
               <Building size={"13"} />
               Account Info
             </div>
@@ -43,7 +43,7 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
             className="border-b border-transparent data-[state=active]:border-primary rounded-none h-14 py-2 group"
             value="search"
           >
-            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
+            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 dark:group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
               <Zap size={"13"} />
               ICP Matches
             </div>
@@ -53,7 +53,7 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
             value="people"
             className="border-b border-transparent data-[state=active]:border-primary rounded-none h-14 py-2 group"
           >
-            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
+            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 dark:group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
               <User size={"13"} />
               Personas
               <span className="w-5 h-5 items-center rounded-md border border-border text-xs">
@@ -66,7 +66,7 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
             value="evidence"
             className="border-b border-transparent data-[state=active]:border-primary rounded-none h-14 py-2 group"
           >
-            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
+            <div className="text-sm font-normal bg-transparent px-2.5 py-1.5 items-center flex flex-inline gap-1.5 dark:group-data-[state=active]:bg-popover border border-transparent group-data-[state=active]:border-border rounded-xl">
               <Paperclip size={"13"} />
               Sources
               <span className="w-5 h-5 items-center rounded-md border border-border text-xs">

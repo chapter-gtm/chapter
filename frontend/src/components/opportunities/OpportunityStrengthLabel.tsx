@@ -5,13 +5,13 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const labelVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg py-0.5 px-1.5 text-sm font-normal transition-colors border",
   {
     variants: {
       variant: {
-        good: "flex flex-inline gap-x-2 items-center text-green-500 dark:text-green-400 py-1 px-2 rounded-md bg-green-400/20 border-green-500",
+        good: "flex flex-inline gap-x-2 items-center text-green-700 dark:text-green-600 bg-green-600/20 border-green-700",
         great:
-          "flex flex-inline gap-x-2 items-center text-green-500 dark:text-green-400 py-1 px-2 rounded-md bg-green-400/20",
+          "flex flex-inline gap-x-2 items-center text-green-400 dark:text-green-400 bg-green-400/20",
       },
       size: {
         fixed: "w-24 h-7",

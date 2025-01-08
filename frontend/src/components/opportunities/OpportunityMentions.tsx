@@ -78,7 +78,7 @@ export function OpportunityMentions({
 
   return (
     <>
-      <div className="flex flex-1 flex-col gap-y-4 py-3 px-4 bg-popover">
+      <div className="flex flex-1 flex-col gap-y-4 py-3 px-4">
         {icp && icp.tool.include.length > 0 ? (
           <div className="flex flex-row gap-5">
             {opportunity?.context !== null &&
@@ -97,7 +97,7 @@ export function OpportunityMentions({
                         <ul className="">
                           <li className="col-span-1 border-l-2 px-3 border-secondary-foreground/50">
                             {/* <span className="min-w-1 h-auto bg-primary rounded-lg"></span> */}
-                            <p className="text-base text-secondary font-light">
+                            <p className="text-base dark:text-secondary font-light">
                               "{jobPostContext.sentence}"
                             </p>
                           </li>

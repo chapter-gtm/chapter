@@ -22,7 +22,7 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
   return (
     <>
       <div className="flex-1 overflow-y-auto rounded-xl">
-        <div className="flex flex-row gap-y-1">
+        <div className="flex flex-row gap-y-1 overflow-visible py-2">
           <div className="flex flex-row gap-x-3 items-center">
             {opportunity.company?.profilePicUrl && opportunity.company?.url ? (
               <a
@@ -49,7 +49,7 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
               <h2 className="font-medium text-xl text-zinc-700 dark:text-zinc-200">
                 {opportunity.company?.name}
               </h2>
-              <div className="bg-background dark:bg-popover border border-border px-1 py-0.5 rounded-lg drop-shadow-lg">
+              <div className="bg-background dark:bg-popover border border-border px-1 py-0.5 rounded-lg drop-shadow-md">
                 <div className="flex flex-inline max-h-7 gap-x-1.5 items-center justify-center text-xs text-zinc-700 dark:text-zinc-200">
                   {opportunity.company?.url ? (
                     <a
@@ -218,17 +218,6 @@ export function OpportunityBrand({ opportunity }: OpportunityDrawerProps) {
               </div>
             </div>
           </div>
-
-          {/* <div className="flex flex-col items-center justify-center text-base text-center">
-            <div className="flex flex-col">
-              <p className="text-zinc-600 dark:text-zinc-300 mt-3">
-                {opportunity.company?.description}
-              </p>
-              <div className="my-1 text-zinc-400 font-light text-sm">
-                Added about {timeAgo(new Date(opportunity.createdAt))}
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </>
