@@ -23,4 +23,5 @@ export type RepoMetadata = {
   createdAt: Date | null
   updatedAt: Date | null
   pushedAt: Date | null
+  lastReleasePublishedAt: Date | null
 }
