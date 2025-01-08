@@ -188,7 +188,7 @@ export function OpportunityContacts({
                             >
                               <Button
                                 size={"xs"}
-                                className="gap-1 bg-trasparent dark:bg-popover border border-border text-primary"
+                                className="gap-1 bg-trasparent dark:bg-popover border border-border text-primary hover:bg-popover/60"
                               >
                                 <Radio size={"14"} /> Add to audience
                               </Button>
