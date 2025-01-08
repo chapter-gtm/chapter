@@ -398,8 +398,6 @@ function getFundingFromFundingRound(
     (funding) => funding.value === fundingRoundLabel
   )
 
-  console.log("Round: ")
-  console.log(funding?.value)
   return funding
 }
 
@@ -479,11 +477,6 @@ export function getFixedColumns(
       cell: ({ row }) => {
         const id: string = row.getValue("id")
         const profilePicUrl = row.original.profilePicUrl
-
-        console.log("Company data:", {
-          profilePicUrl,
-          rowOriginal: row.original,
-        })
 
         return (
           <div className="flex flex-row justify-between items-center pe-2">
