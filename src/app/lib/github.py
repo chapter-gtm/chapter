@@ -23,7 +23,9 @@ async def search_repos(
         response = await client.get(url, params=params)
         if response.status_code != 200 or not response.text:
             error_msg = "Error searching for repos."
-            await logger.awarn(error_msg, query=query, sort=sort, order=order, page=page, per_page=per_page)
+            await logger.aerror(
+                error_msg, query=query, sort=sort, order=order, page=page, per_page=per_page, response=response.content,
+            )
             raise LookupError(error_msg)
 
         repos_data = response.json()
