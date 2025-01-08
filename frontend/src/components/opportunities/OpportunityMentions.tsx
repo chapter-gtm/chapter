@@ -96,7 +96,6 @@ export function OpportunityMentions({
                       <div key={index}>
                         <ul className="">
                           <li className="col-span-1 border-l-2 px-3 border-secondary-foreground/50">
-                            {/* <span className="min-w-1 h-auto bg-primary rounded-lg"></span> */}
                             <p className="text-base dark:text-secondary font-light">
                               {jobPostContext.sentence}
                             </p>

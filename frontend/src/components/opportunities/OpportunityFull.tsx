@@ -122,6 +122,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
               </div>
               <div className="flex flex-col justify-start items-start border-t border-border bg-popover/30 dark:bg-popover">
                 <OpportunityHighlights opportunity={opportunity} />
+
                 <OpportunityMentions opportunity={opportunity} size={"large"} />
               </div>
             </div>

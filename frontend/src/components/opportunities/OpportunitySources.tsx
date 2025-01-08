@@ -1,4 +1,4 @@
-import { ExternalLink, Download, Github } from "lucide-react"
+import { ExternalLink, Download, Github, UserRoundSearch } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { timeAgo } from "@/utils/misc"
@@ -92,7 +92,7 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
 
         {opportunity.jobPosts && opportunity.jobPosts?.length > 0 && (
           <Dialog open={!!jobPostPdfUrl} onOpenChange={closeJobPostModal}>
-            <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
+            <div className="flex flex-row justify-between rounded-lg p-4 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
               <DialogContent className="h-[800px] min-w-[900px] min-h-[900px] p-0 flex flex-col space-y-0 gap-0">
                 <DialogHeader className="p-5 justify-center h-16 align-center">
                   <DialogTitle>{opportunity?.jobPosts?.[0]?.title}</DialogTitle>
@@ -107,15 +107,20 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                   />
                 )}
               </DialogContent>
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <p className="text-base font-medium truncate text-ellipsis ">
-                  {opportunity?.jobPosts?.[0]?.title}
-                </p>
-                <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                  Added{" "}
-                  {opportunity?.jobPosts?.[0]?.createdAt &&
-                    timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
-                </p>
+              <div className="flex flex-row gap-3">
+                <span className="w-6 rounded-lg h-6 bg-green-600 flex place-items-center justify-center">
+                  <UserRoundSearch size={15} />
+                </span>
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  <p className="text-base font-medium truncate text-ellipsis ">
+                    {opportunity?.jobPosts?.[0]?.title}
+                  </p>
+                  <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                    Added{" "}
+                    {opportunity?.jobPosts?.[0]?.createdAt &&
+                      timeAgo(new Date(opportunity.jobPosts[0].createdAt))}{" "}
+                  </p>
+                </div>
               </div>
               <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
                 <DialogTrigger asChild>
@@ -145,16 +150,48 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
         )}
         {opportunity.repos && opportunity.repos?.length > 0 && (
           <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
-            <div className="flex flex-col flex-1 overflow-hidden">
-              <p className="text-base font-medium truncate text-ellipsis ">
-                <Github className="h-3 w-3" />
-                {opportunity.repos[0].name}
-              </p>
-              {repo && repo.updatedAt && (
-                <p className="flex text-sm text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                  Last updated {timeAgo(new Date(repo.updatedAt))}{" "}
+            <div className="flex flex-row gap-3">
+              <span className="w-6 rounded-lg h-6 bg-yellow-600 flex place-items-center justify-center">
+                <Github size={15} />
+              </span>
+              <div className="flex flex-col flex-1 overflow-hidden gap-2">
+                <p className="text-base font-medium truncate text-ellipsis ">
+                  {opportunity.repos[0].name}
                 </p>
-              )}
+                <div className="flex flex-row gap-2">
+                  {repo && repo.topics && (
+                    <>
+                      {repo.topics.map((topic, index) => (
+                        <p
+                          key={index}
+                          className="flex text-sm rounded-lg bg-popover dark:bg-muted py-0.5 px-1.5"
+                        >
+                          {topic}{" "}
+                        </p>
+                      ))}
+                    </>
+                  )}
+                </div>
+                <div className="flex flex-row gap-1 items-center">
+                  {repo && repo.updatedAt && (
+                    <>
+                      <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                        Last updated {timeAgo(new Date(repo.updatedAt))}{" "}
+                      </p>
+                      <span className="dark:text-secondary-foreground text-muted text-xs">
+                        |
+                      </span>
+                    </>
+                  )}
+                  {repo && repo.watchersCount && (
+                    <>
+                      <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                        {repo.watchersCount} watchers{" "}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
               <a
