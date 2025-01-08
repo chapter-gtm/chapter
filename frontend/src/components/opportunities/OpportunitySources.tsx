@@ -190,6 +190,14 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                       </p>
                     </>
                   )}
+                  {repo && repo.lastReleasePublishedAt && (
+                    <>
+                      <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                        Last release date{" "}
+                        {timeAgo(new Date(repo.lastReleasePublishedAt))}{" "}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
