@@ -149,8 +149,8 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
           </Dialog>
         )}
         {opportunity.repos && opportunity.repos?.length > 0 && (
-          <div className="flex flex-row justify-between rounded-lg p-6 items-center gap-x-3 border border-border bg-card dark:bg-popover w-full">
-            <div className="flex flex-row gap-3">
+          <div className="flex flex-row justify-between rounded-lg p-6 items-start gap-x-3 border border-border bg-card dark:bg-popover w-full">
+            <div className="flex flex-row gap-3 flex-1">
               <span className="w-6 rounded-lg h-6 bg-yellow-600 flex place-items-center justify-center">
                 <Github size={15} />
               </span>
@@ -158,7 +158,7 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                 <p className="text-base font-medium truncate text-ellipsis ">
                   {opportunity.repos[0].name}
                 </p>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-wrap gap-2">
                   {repo && repo.topics && (
                     <>
                       {repo.topics.map((topic, index) => (
@@ -172,7 +172,7 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                     </>
                   )}
                 </div>
-                <div className="flex flex-row gap-1 items-center">
+                <div className="flex flex-wrap gap-1 items-center">
                   {repo && repo.updatedAt && (
                     <>
                       <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
@@ -188,6 +188,9 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                       <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
                         {repo.watchersCount} watchers{" "}
                       </p>
+                      <span className="dark:text-secondary-foreground text-muted text-xs">
+                        |
+                      </span>
                     </>
                   )}
                   {repo && repo.lastReleasePublishedAt && (
@@ -201,7 +204,7 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                 </div>
               </div>
             </div>
-            <div className="flex flex-row justify-end gap-x-2 items-center min-w-48">
+            <div className="flex flex-row justify-end gap-x-2 items-center min-w-24">
               <a
                 target="_blank"
                 rel="noopener noreferrer"
