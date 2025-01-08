@@ -70,7 +70,7 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
               <Paperclip size={"13"} />
               Sources
               <span className="w-5 h-5 items-center rounded-md border border-border text-xs">
-                {opportunity.jobPosts?.length}
+                {opportunity.jobPosts?.length || opportunity.repos?.length}
               </span>
             </div>
           </NavTabsTrigger>
@@ -92,13 +92,14 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
           value="evidence"
           className="flex-1 overflow-y-auto mt-0 p-3"
         >
-          {opportunity.jobPosts !== null && opportunity.jobPosts.length > 0 ? (
+          {(opportunity.jobPosts !== null && opportunity.jobPosts.length > 0) ||
+          (opportunity.repos && opportunity.repos.length > 0) ? (
             <OpportunitySources opportunity={opportunity} />
           ) : (
             <>
               <div className="flex flex-col py-6">
                 <div className="bg-card dark:bg-popover p-3 border border-border rounded-lg text-white text-sm text-center">
-                  Not applicable
+                  Unknown sources
                 </div>
               </div>
             </>
