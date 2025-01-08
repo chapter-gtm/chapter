@@ -164,7 +164,7 @@ class JobPostController(Controller):
 
         # Generate pdf and save to s3
         if db_obj.url:
-            pdf_content = get_pdf(db_obj.url)
+            pdf_content = await get_pdf(db_obj.url)
             s3_client = boto3.client("s3")
             s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{db_obj.id}.pdf", Body=pdf_content)
 
