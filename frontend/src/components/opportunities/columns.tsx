@@ -661,10 +661,10 @@ export function getFixedColumns(
           valueA.engineering > valueB.engineering
           ? 1
           : valueA.engineering !== null &&
-            valueB.engineering !== null &&
-            valueA.engineering < valueB.engineering
-          ? -1
-          : 0
+              valueB.engineering !== null &&
+              valueA.engineering < valueB.engineering
+            ? -1
+            : 0
       },
       enableHiding: true,
       enableSorting: true,

@@ -1,9 +1,40 @@
 import { FundingRound } from "@/types/company"
 
-export function getFundingRoundColor(roundName: FundingRound | undefined | null): "teal" | "lime" | "yellow" | "orange" | "red" | "amber" | "pink" | "indigo" | "violet" | "emerald" | "cyan" | "sky" | "green" | "zinc" {
+export function getFundingRoundColor(
+  roundName: FundingRound | undefined | null
+):
+  | "teal"
+  | "lime"
+  | "yellow"
+  | "orange"
+  | "red"
+  | "amber"
+  | "pink"
+  | "indigo"
+  | "violet"
+  | "emerald"
+  | "cyan"
+  | "sky"
+  | "green"
+  | "zinc" {
   if (!roundName) return "zinc"
-  
-  const colorMap: Record<FundingRound, "teal" | "lime" | "yellow" | "orange" | "red" | "amber" | "pink" | "indigo" | "violet" | "emerald" | "cyan" | "sky" | "green"> = {
+
+  const colorMap: Record<
+    FundingRound,
+    | "teal"
+    | "lime"
+    | "yellow"
+    | "orange"
+    | "red"
+    | "amber"
+    | "pink"
+    | "indigo"
+    | "violet"
+    | "emerald"
+    | "cyan"
+    | "sky"
+    | "green"
+  > = {
     [FundingRound.PRE_SEED]: "teal",
     [FundingRound.SEED]: "lime",
     [FundingRound.SERIES_A]: "yellow",
@@ -18,7 +49,7 @@ export function getFundingRoundColor(roundName: FundingRound | undefined | null)
     [FundingRound.CORPORATE_ROUND]: "teal",
     [FundingRound.DEBT_FINANCING]: "sky",
     [FundingRound.GRANT]: "green",
-    [FundingRound.SERIES_UNKNOWN]: "green"
+    [FundingRound.SERIES_UNKNOWN]: "green",
   }
 
   return colorMap[roundName] || "zinc"
