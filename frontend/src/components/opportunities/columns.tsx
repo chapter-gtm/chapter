@@ -1,21 +1,14 @@
-import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
-import { ChatBubbleIcon, FileTextIcon, StackIcon } from "@radix-ui/react-icons"
 import {
-  PhoneCall,
-  StarHalf,
-  StickyNote,
-  Building2,
-  DollarSign,
-  MapPin,
   CircleUser,
   Dot,
   ChevronDown,
   CircleUserRound,
-  ExternalLink,
+  MapPin,
+  PanelRightOpen,
 } from "lucide-react"
 
-import { timeAgo, isDateInLastNHours } from "@/utils/misc"
+import { timeAgo } from "@/utils/misc"
 
 import { BadgeColor } from "@/components/ui/badge-color"
 import { getFundingRoundColor } from "@/utils/chapter/funding"
@@ -25,7 +18,6 @@ import Image from "next/image"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -39,18 +31,15 @@ import { toast } from "sonner"
 import { ColumnDef, VisibilityState } from "@tanstack/react-table"
 import { z } from "zod"
 
-import { cn } from "@/lib/utils"
-
 import { type User } from "@/types/user"
 import { type Icp } from "@/types/icp"
-import { type Company, FundingRound, OrgSize } from "@/types/company"
+import { FundingRound, OrgSize } from "@/types/company"
 import { type Location } from "@/types/location"
 import { type Tool, type Process } from "@/types/job_post"
-import { type Scale, ScaleLabel } from "@/types/scale"
+import { ScaleLabel } from "@/types/scale"
 import { type Opportunity, OpportunityStage } from "@/types/opportunity"
-import { humanDate, titleCaseToCamelCase } from "@/utils/misc"
 import { updateOpportunityStage } from "@/utils/chapter/opportunity"
-import { toTitleCase, truncateString } from "@/utils/misc"
+import { truncateString } from "@/utils/misc"
 import { getNameInitials } from "@/utils/misc"
 
 export const TableRecord = z.record(z.any())
@@ -497,7 +486,7 @@ export function getFixedColumns(
 
                 <div>{truncateString(row.getValue("companyName"), 13)}</div>
               </div>
-              <ExternalLink width={"14"} />
+              <PanelRightOpen width={"14"} />
             </Button>
           </div>
         )
