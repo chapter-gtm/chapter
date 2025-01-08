@@ -25,6 +25,7 @@ from app.domain.jobs.dependencies import provide_job_posts_service
 from app.domain.jobs.schemas import JobPost, JobPostCreate, JobPostCreateFromURL, JobPostUpdate
 from app.domain.jobs.services import JobPostService
 from app.domain.jobs.utils import extract_job_details_from_html
+from app.lib.pdfshift import get_pdf
 from app.lib.schema import Location, Process, Tool
 from app.lib.scraperapi import extract_url_content
 from app.lib.utils import get_domain
@@ -160,6 +161,13 @@ class JobPostController(Controller):
             company_id=str(company_db_obj.id),
         )
         db_obj = await job_posts_service.create(job_post.to_dict())
+
+        # Generate pdf and save to s3
+        if db_obj.url:
+            pdf_content = get_pdf(db_obj.url)
+            s3_client = boto3.client("s3")
+            s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{db_obj.id}.pdf", Body=pdf_content)
+
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)
 
     @get(
