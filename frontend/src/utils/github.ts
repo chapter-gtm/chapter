@@ -11,7 +11,7 @@ export async function getGitHubRepoDetails(
   }
   const data = await response.json()
 
-  let lastReleasePublishDate: Date
+  let lastReleasePublishDate: Date | null = null
   const releaseResponse = await fetch(url + "/releases")
   if (response.ok) {
     const releaseData = await releaseResponse.json()
@@ -34,7 +34,7 @@ export async function getGitHubRepoDetails(
     createdAt: data.created_at ? new Date(data.created_at) : null,
     updatedAt: data.updated_at ? new Date(data.updated_at) : null,
     pushedAt: data.pushed_at ? new Date(data.pushed_at) : null,
-    lastReleasePublishDate: lastReleasePublishDate
+    lastReleasePublishedAt: lastReleasePublishDate
       ? lastReleasePublishDate
       : null,
   }
