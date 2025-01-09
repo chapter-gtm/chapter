@@ -133,8 +133,8 @@ export default function AuthenticationPage() {
                               messageType === "error"
                                 ? "border-border bg-card"
                                 : messageType === "reset"
-                                ? "border-border bg-card"
-                                : "border-border bg-card"
+                                  ? "border-border bg-card"
+                                  : "border-border bg-card"
                             }`}
                           >
                             {" "}
@@ -201,8 +201,8 @@ export default function AuthenticationPage() {
                         messageType === "error"
                           ? "border-rose-200 bg-rose-50"
                           : messageType === "reset"
-                          ? "border-indigo-200 bg-indigo-100"
-                          : "border-zinc-200 bg-white"
+                            ? "border-indigo-200 bg-indigo-100"
+                            : "border-zinc-200 bg-white"
                       }`}
                     >
                       {" "}
