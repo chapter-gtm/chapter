@@ -207,192 +207,83 @@ export function OpportunityContacts({
                 </div>
 
                 <AccordionContent className="flex flex-row py-0 border-none">
-                  <div className="flex flex-col px-4 py-4 gap-3">
-                    {/* Role */}
-                    <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200 ">
-                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
-                        <PersonIcon width={18} />
-                        <p>Role</p>
+                  <div className="flex flex-col">
+                    <div className="flex flex-col px-4 py-4 gap-3">
+                      <p className="uppercase text-xs text-secondary-foreground font-semibold">
+                        Details
+                      </p>
+                      {/* Role */}
+                      <div className="flex flex-row items-center justify-start text-sm text-zinc-700 dark:text-zinc-200 ">
+                        <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                          <PersonIcon width={18} />
+                          <p>Role</p>
+                        </div>
+                        <p className="font-medium">{contact.title}</p>
                       </div>
-                      <p className="font-medium">{contact.title}</p>
-                    </div>
-                    {/* Contact channels */}
-                    <div className="flex flex-row">
-                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
-                        <Send width={18} />
-                        <p>Channels</p>
-                      </div>
-                      <div className="flex flex-wrap gap-x-2 justify-end pe-3 border-border">
-                        {contact.linkedinProfileUrl && (
-                          <>
-                            <a
-                              href={contact.linkedinProfileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Button
-                                variant={"outline"}
-                                className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                              >
-                                <Linkedin className="h-3 w-3" />
-                              </Button>
-                            </a>
-                          </>
-                        )}
-                        {contact.twitterProfileUrl && (
-                          <>
-                            <a
-                              href={contact.twitterProfileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Button
-                                variant={"outline"}
-                                className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                              >
-                                <Twitter className="h-3 w-3" />
-                              </Button>
-                            </a>
-                          </>
-                        )}
-                        {contact.githubProfileUrl && (
-                          <>
-                            <a
-                              href={contact.githubProfileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Button
-                                variant={"outline"}
-                                className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                              >
-                                <Github className="h-3 w-3" />
-                              </Button>
-                            </a>
-                          </>
-                        )}
-                        {contact.workEmail && (
-                          <>
-                            <a
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() =>
-                                contact.workEmail
-                                  ? handleCopyEmail(contact.workEmail)
-                                  : null
-                              }
-                            >
-                              <Button
-                                variant={"outline"}
-                                className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                                disabled={!contact.workEmail}
-                              >
-                                <Mail className="h-3 w-3" />
-                              </Button>
-                            </a>
-                          </>
-                        )}
-                        {contact.phoneNumbers &&
-                          contact.phoneNumbers.length > 0 && (
-                            <>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={() =>
-                                  contact.phoneNumbers
-                                    ? handleCopyPhone(contact.phoneNumbers[0])
-                                    : null
-                                }
-                              >
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Button
-                                        variant={"outline"}
-                                        className="w-6 h-6 p-1 bg-popover hover:bg-muted"
-                                        disabled={!contact.phoneNumbers}
-                                      >
-                                        <Phone className="h-3 w-3" />
-                                      </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>
-                                        {formatPhoneNumber(
-                                          contact.phoneNumbers[0]
-                                        )}
-                                      </p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              </a>
-                            </>
-                          )}
-                      </div>
-                    </div>
 
-                    {/* Summary */}
-                    <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
-                        <BriefcaseBusiness width={18} />
-                        <p>Summary</p>
-                      </div>
-                      <div className="w-full flex flex-row items-start justify-between pt-1">
-                        <p
-                          className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 ${
-                            expandedSumIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
-                          }`}
-                          onClick={() => toggleSum(index)} // Toggle state for this user
-                        >
-                          {contact.summary || "n/a"}
-                        </p>
-                        {contact.summary && ( // Only show button if summary is not empty
-                          <button
-                            className="ml-2 text-primary hover:underline"
+                      {/* Summary */}
+                      <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                        <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                          <BriefcaseBusiness width={18} />
+                          <p>Summary</p>
+                        </div>
+                        <div className="w-full flex flex-row items-start justify-between pt-1">
+                          <p
+                            className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 ${
+                              expandedSumIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
+                            }`}
                             onClick={() => toggleSum(index)} // Toggle state for this user
                           >
-                            {expandedSumIndex === index
-                              ? "Show Less"
-                              : "Show All"}
-                          </button>
-                        )}
+                            {contact.summary || "n/a"}
+                          </p>
+                          {contact.summary && ( // Only show button if summary is not empty
+                            <button
+                              className="ml-2 text-primary hover:underline"
+                              onClick={() => toggleSum(index)} // Toggle state for this user
+                            >
+                              {expandedSumIndex === index
+                                ? "Show Less"
+                                : "Show All"}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    {/* Skills */}
-                    <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
-                        <GraduationCap width={18} />
-                        <p>Skills</p>
-                      </div>
+                      {/* Skills */}
+                      <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                        <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                          <GraduationCap width={18} />
+                          <p>Skills</p>
+                        </div>
 
-                      <div className="w-full flex flex-row items-start justify-between pt-1">
-                        <p
-                          className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 pe-8 ${
-                            expandedSkillIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
-                          }`}
-                          onClick={() => toggleSkills(index)} // Toggle state for this user
-                        >
-                          {expandedSkillIndex === index
-                            ? // If expanded, show all skills
-                              contact.skills && contact.skills.length > 0
-                              ? icp
-                                ? contact.skills
-                                    .filter((item) =>
-                                      icp.tool.include.some(
-                                        (el) =>
-                                          el.toLowerCase() ===
-                                          item.toLowerCase()
+                        <div className="w-full flex flex-row items-start justify-between pt-1">
+                          <p
+                            className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 pe-8 ${
+                              expandedSkillIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
+                            }`}
+                            onClick={() => toggleSkills(index)} // Toggle state for this user
+                          >
+                            {expandedSkillIndex === index
+                              ? // If expanded, show all skills
+                                contact.skills && contact.skills.length > 0
+                                ? icp
+                                  ? contact.skills
+                                      .filter((item) =>
+                                        icp.tool.include.some(
+                                          (el) =>
+                                            el.toLowerCase() ===
+                                            item.toLowerCase()
+                                        )
                                       )
-                                    )
-                                    .concat(
-                                      contact.skills.filter(
-                                        (item) =>
-                                          !icp.tool.include.includes(item)
+                                      .concat(
+                                        contact.skills.filter(
+                                          (item) =>
+                                            !icp.tool.include.includes(item)
+                                        )
                                       )
-                                    )
-                                    .join(" · ")
-                                : contact.skills.join(" . ")
-                              : "n/a"
-                            : // If not expanded, show truncated version
+                                      .join(" · ")
+                                  : contact.skills.join(" . ")
+                                : "n/a"
+                              : // If not expanded, show truncated version
                               contact.skills && contact.skills.length > 0
                               ? icp
                                 ? contact.skills
@@ -413,19 +304,177 @@ export function OpportunityContacts({
                                     .join(" · ")
                                 : contact.skills.slice(0, 1).join(" . ")
                               : "n/a"}
-                        </p>
-                        {contact.skills && contact.skills.length > 3 && (
-                          <button
-                            className="ml-2 text-primary hover:underline"
-                            onClick={() => toggleSkills(index)} // Toggle state for this user
-                          >
-                            {expandedSkillIndex === index
-                              ? "Show Less"
-                              : "Show All"}
-                          </button>
-                        )}
+                          </p>
+                          {contact.skills && contact.skills.length > 3 && (
+                            <button
+                              className="ml-2 text-primary hover:underline"
+                              onClick={() => toggleSkills(index)} // Toggle state for this user
+                            >
+                              {expandedSkillIndex === index
+                                ? "Show Less"
+                                : "Show All"}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    <div className="flex flex-col px-4 py-4 gap-3">
+                      <p className="uppercase text-xs text-secondary-foreground font-semibold">
+                        Contact
+                      </p>
+                      {/* Contact channels */}
+                      <div className="flex flex-row">
+                        <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                          <Send width={18} />
+                          <p>Channels</p>
+                        </div>
+                        <div className="flex flex-wrap gap-x-2 justify-end pe-3 border-border">
+                          {contact.linkedinProfileUrl && (
+                            <>
+                              <a
+                                href={contact.linkedinProfileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button
+                                  variant={"outline"}
+                                  className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                >
+                                  <Linkedin className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            </>
+                          )}
+                          {contact.twitterProfileUrl && (
+                            <>
+                              <a
+                                href={contact.twitterProfileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button
+                                  variant={"outline"}
+                                  className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                >
+                                  <Twitter className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            </>
+                          )}
+                          {contact.githubProfileUrl && (
+                            <>
+                              <a
+                                href={contact.githubProfileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Button
+                                  variant={"outline"}
+                                  className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                >
+                                  <Github className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            </>
+                          )}
+                          {contact.workEmail && (
+                            <>
+                              <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() =>
+                                  contact.workEmail
+                                    ? handleCopyEmail(contact.workEmail)
+                                    : null
+                                }
+                              >
+                                <Button
+                                  variant={"outline"}
+                                  className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                  disabled={!contact.workEmail}
+                                >
+                                  <Mail className="h-3 w-3" />
+                                </Button>
+                              </a>
+                            </>
+                          )}
+                          {contact.phoneNumbers &&
+                            contact.phoneNumbers.length > 0 && (
+                              <>
+                                <a
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() =>
+                                    contact.phoneNumbers
+                                      ? handleCopyPhone(contact.phoneNumbers[0])
+                                      : null
+                                  }
+                                >
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          variant={"outline"}
+                                          className="w-6 h-6 p-1 bg-popover hover:bg-muted"
+                                          disabled={!contact.phoneNumbers}
+                                        >
+                                          <Phone className="h-3 w-3" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>
+                                          {formatPhoneNumber(
+                                            contact.phoneNumbers[0]
+                                          )}
+                                        </p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </a>
+                              </>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Activity */}
+                    {/* <div className="flex flex-col px-4 py-4 gap-3">
+                      <p className="uppercase text-xs text-secondary-foreground font-semibold">
+                        Activity
+                      </p>
+                      
+                      <div className="flex flex-row gap-2 items-center justify-between">
+                        <div className="flex flex-row gap-2 items-center">
+                          Mentions{" "}
+                          <span className="px-1 py-0.5 bg-green-400 font-medium text-green-800 border border-green-800 text-xs rounded-lg">
+                            APIs
+                          </span>
+                          on LinkedIn
+                          <p className="text-zinc-400">•</p>
+                          <p className="text-zinc-400">2 days ago</p>
+                        </div>
+                        <div className="flex">
+                          <div className="border border-border px-1.5 py-0.5 rounded-lg">
+                            Join discussion
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-row gap-2 items-center justify-between">
+                        <div className="flex flex-row gap-2 items-center">
+                          Mentions{" "}
+                          <span className="px-1 py-0.5 bg-amber-500 font-medium text-amber-800 border border-amber-800 text-xs rounded-lg">
+                            Developer Docs
+                          </span>
+                          on LinkedIn
+                          <p className="text-zinc-400">•</p>
+                          <p className="text-zinc-400">3 days ago</p>
+                        </div>
+                        <div className="flex">
+                          <div className="border border-border px-1.5 py-0.5 rounded-lg">
+                            Join discussion
+                          </div>
+                        </div>
+                      </div>
+                    </div> */}
                   </div>
                 </AccordionContent>
               </AccordionItem>

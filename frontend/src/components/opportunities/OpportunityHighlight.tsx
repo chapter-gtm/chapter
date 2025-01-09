@@ -11,6 +11,8 @@ import {
   Triangle,
   Layers,
   CircleCheckBig,
+  Star,
+  Charts,
 } from "lucide-react"
 
 import {
@@ -81,7 +83,7 @@ export function OpportunityHighlights({
       <div className="flex flex-1 flex-col gap-y-4 py-3 px-4 ">
         {icp && icp.tool.include.length > 0 ? (
           <>
-            <div className="flex flex-row justify-start items-center text-zinc-700 gap-3">
+            <div className="flex flex-row justify-start items-center text-zinc-700 gap-2">
               <StrengthLabel variant={"good"}>High Signal</StrengthLabel>
               {/* <span className="w-[2px] h-7 rounded-md bg-muted"></span> */}
 
@@ -98,8 +100,9 @@ export function OpportunityHighlights({
                         {tool && (
                           <div
                             key={index}
-                            className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
+                            className="bg-popover gap-1 flex items-center dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30"
                           >
+                            <span className="w-1.5 h-1.5 rounded-md bg-violet-400"></span>
                             {tool.name}
                           </div>
                         )}
@@ -107,10 +110,24 @@ export function OpportunityHighlights({
                     ))}
 
                 {/* Team size */}
-                <p className="font-medium px-2 py-1 text-xs rounded-md bg-popover dark:bg-muted text-primary">
+                <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
                   Eng size{" "}
                   {opportunity.company?.orgSize?.engineering?.toLocaleString()}
                 </p>
+
+                {/* Public API/Docs */}
+                {opportunity.company?.docsUrl && (
+                  <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
+                    Public Docs
+                  </p>
+                )}
+
+                {/* Public Changelog */}
+                {opportunity.company?.changelogUrl && (
+                  <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
+                    Public Changelog
+                  </p>
+                )}
 
                 {/* unique person */}
                 {opportunity.contacts !== null &&
@@ -155,7 +172,8 @@ export function OpportunityHighlights({
                           (1000 * 60 * 60 * 24 * 30)
                       )
                       return monthsAgo < 7 ? (
-                        <div className="flex flex-inline gap-1 items-center font-medium px-2 py-1 text-xs rounded-md bg-popover dark:bg-muted text-primary">
+                        <div className="flex flex-inline gap-1 items-center bg-yellow-400/50 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-400 font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-yellow-400 dark:border-yellow-400">
+                          <Star size={"13"} />
                           Just raised
                         </div>
                       ) : null

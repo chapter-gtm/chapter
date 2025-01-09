@@ -5,11 +5,11 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const labelVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg py-0.5 px-1.5 text-sm font-normal transition-colors border",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 text-xs rounded-md border-[0.5px]",
   {
     variants: {
       variant: {
-        good: "flex flex-inline gap-x-2 items-center text-green-700 dark:text-green-600 bg-green-600/20 border-green-700",
+        good: "flex flex-inline gap-x-2 items-center text-green-700 dark:text-green-500 bg-green-600/20 border-green-700",
         great:
           "flex flex-inline gap-x-2 items-center text-green-400 dark:text-green-400 bg-green-400/20",
       },
