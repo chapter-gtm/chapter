@@ -712,9 +712,10 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
               <div className="flex flex-col border border-border rounded-lg p-6 gap-y-6">
                 <div className="flex flex-col gap-y-3 justify-between w-full">
                   <div className="flex flex-col gap-y-2">
-                    <FormLabel className="text-lg">Filters</FormLabel>
+                    <FormLabel className="text-lg">Extra Searches</FormLabel>
                     <FormDescription>
-                      Filter for the following items
+                      Additionally find and highlight companies that have the
+                      following
                     </FormDescription>
                   </div>
 
