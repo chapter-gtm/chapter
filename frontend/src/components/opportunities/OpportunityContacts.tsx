@@ -284,26 +284,26 @@ export function OpportunityContacts({
                                   : contact.skills.join(" . ")
                                 : "n/a"
                               : // If not expanded, show truncated version
-                              contact.skills && contact.skills.length > 0
-                              ? icp
-                                ? contact.skills
-                                    .filter((item) =>
-                                      icp.tool.include.some(
-                                        (el) =>
-                                          el.toLowerCase() ===
-                                          item.toLowerCase()
+                                contact.skills && contact.skills.length > 0
+                                ? icp
+                                  ? contact.skills
+                                      .filter((item) =>
+                                        icp.tool.include.some(
+                                          (el) =>
+                                            el.toLowerCase() ===
+                                            item.toLowerCase()
+                                        )
                                       )
-                                    )
-                                    .concat(
-                                      contact.skills.filter(
-                                        (item) =>
-                                          !icp.tool.include.includes(item)
+                                      .concat(
+                                        contact.skills.filter(
+                                          (item) =>
+                                            !icp.tool.include.includes(item)
+                                        )
                                       )
-                                    )
-                                    .slice(0, 5) // Show only the first skill
-                                    .join(" · ")
-                                : contact.skills.slice(0, 1).join(" . ")
-                              : "n/a"}
+                                      .slice(0, 5) // Show only the first skill
+                                      .join(" · ")
+                                  : contact.skills.slice(0, 1).join(" . ")
+                                : "n/a"}
                           </p>
                           {contact.skills && contact.skills.length > 3 && (
                             <button
@@ -441,7 +441,7 @@ export function OpportunityContacts({
                       <p className="uppercase text-xs text-secondary-foreground font-semibold">
                         Activity
                       </p>
-                      
+
                       <div className="flex flex-row gap-2 items-center justify-between">
                         <div className="flex flex-row gap-2 items-center">
                           Mentions{" "}

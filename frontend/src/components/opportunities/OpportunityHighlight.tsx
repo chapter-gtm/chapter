@@ -12,7 +12,6 @@ import {
   Layers,
   CircleCheckBig,
   Star,
-  Charts,
 } from "lucide-react"
 
 import {
