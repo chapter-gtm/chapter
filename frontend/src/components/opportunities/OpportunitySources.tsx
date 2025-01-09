@@ -29,8 +29,6 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
   const [jobPostPdfUrl, setJobPostPdfUrl] = useState("")
   const [repo, setRepo] = useState<RepoMetadata | null>(null)
 
-  console.log(opportunity)
-
   const handleDownload = async () => {
     if (
       opportunity === null ||
@@ -74,11 +72,19 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
 
   useEffect(() => {
     const fetchGitHubRepoDetails = async () => {
-      if (opportunity.repos && opportunity.repos.length > 0) {
-        const githubRepo = await getGitHubRepoDetails(opportunity.repos[0].url)
-        if (githubRepo) {
-          setRepo(githubRepo)
+      try {
+        if (opportunity.repos && opportunity.repos.length > 0) {
+          const githubRepo = await getGitHubRepoDetails(
+            opportunity.repos[0].url
+          )
+          if (githubRepo) {
+            setRepo(githubRepo)
+          }
         }
+      } catch (error: any) {
+        toast.error("Failed to fetch repo details", {
+          description: error.toString(),
+        })
       }
     }
 
@@ -186,7 +192,7 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                   {repo && repo.watchersCount && (
                     <>
                       <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                        {repo.watchersCount} watchers{" "}
+                        watchers {repo.watchersCount}
                       </p>
                       <span className="dark:text-secondary-foreground text-muted text-xs">
                         |
@@ -196,11 +202,24 @@ export function OpportunitySources({ opportunity }: OpportunityDrawerProps) {
                   {repo && repo.lastReleasePublishedAt && (
                     <>
                       <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
-                        Last release date{" "}
+                        Last release{" "}
                         {timeAgo(new Date(repo.lastReleasePublishedAt))}{" "}
                       </p>
+                      <span className="dark:text-secondary-foreground text-muted text-xs">
+                        |
+                      </span>
                     </>
                   )}
+                  {repo &&
+                    repo.releasePublishAverageFrequencyPerWeek !== null && (
+                      <>
+                        <p className="flex text-xs text-muted-foreground text-zinc-500 dark:text-zinc-400">
+                          Release frequency{" "}
+                          {repo.releasePublishAverageFrequencyPerWeek}
+                          {" per week"}
+                        </p>
+                      </>
+                    )}
                 </div>
               </div>
             </div>

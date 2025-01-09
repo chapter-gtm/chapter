@@ -24,4 +24,5 @@ export type RepoMetadata = {
   updatedAt: Date | null
   pushedAt: Date | null
   lastReleasePublishedAt: Date | null
+  releasePublishAverageFrequencyPerWeek: number
 }
