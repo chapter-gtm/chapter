@@ -70,7 +70,10 @@ export function OpportunityTabs({ opportunity, icp }: OpportunityTabsProps) {
               <Paperclip size={"13"} />
               Sources
               <span className="w-5 h-5 items-center rounded-md border border-border text-xs">
-                {opportunity.jobPosts?.length || opportunity.repos?.length}
+                {opportunity &&
+                  opportunity.jobPosts &&
+                  opportunity.repos &&
+                  opportunity.jobPosts?.length + opportunity.repos?.length}
               </span>
             </div>
           </NavTabsTrigger>
