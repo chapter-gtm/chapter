@@ -1,3 +1,4 @@
+import Fuse from "fuse.js"
 import { parsePhoneNumber } from "libphonenumber-js"
 
 export function getNameInitials(name: string): string {
@@ -102,4 +103,30 @@ export function isDateInLastNHours(date: Date, n: number = 24): boolean {
 export function formatPhoneNumber(phone: string): string {
   const phoneNumber = parsePhoneNumber(phone)
   return phoneNumber.formatInternational()
+}
+
+export function fuzzySearch(
+  dataSet: string[],
+  termsToSearch: string[],
+  fuzzinessThreshold: number
+): string[] {
+  if (!dataSet || !termsToSearch) {
+    return []
+  }
+
+  const fuse = new Fuse(termsToSearch, {
+    threshold: fuzzinessThreshold,
+    includeScore: true,
+  })
+
+  return (
+    dataSet.filter((item) => {
+      const result = fuse.search(item.toLowerCase())
+      return (
+        result.length > 0 &&
+        (result[0].score! === 0.0 ||
+          (result[0].score! <= 0.3 && item.length > 3))
+      )
+    }) || []
+  )
 }

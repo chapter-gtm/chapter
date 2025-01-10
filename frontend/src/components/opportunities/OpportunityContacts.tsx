@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Image from "next/image"
-import { timeAgo, formatPhoneNumber } from "@/utils/misc"
+import { formatPhoneNumber, fuzzySearch } from "@/utils/misc"
 import { type Person } from "@/types/person"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Tooltip,
   TooltipContent,
@@ -12,12 +9,8 @@ import {
 } from "@/components/ui/tooltip"
 
 import { useState } from "react"
-import { useEffect, useRef } from "react" // Import useRef and useEffect
 
-import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-
-import { usePostHog } from "posthog-js/react"
 
 import {
   Accordion,
@@ -28,8 +21,6 @@ import {
 
 import { StrengthLabel } from "./OpportunityStrengthLabel"
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-
 import {
   Linkedin,
   Twitter,
@@ -39,21 +30,13 @@ import {
   Send,
   Phone,
   BriefcaseBusiness,
-  User,
   Radio,
-  InfoIcon,
 } from "lucide-react"
-import Link from "next/link"
 
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
-import { OpportunityPropList } from "./OpportunityPropList"
-import { OpportunityBrand } from "./OpportunityBrand"
 import { TabContentHeader } from "./TabContentHeader"
 
-import { Separator } from "@/components/ui/separator"
-import { Investor } from "@/types/company"
-import posthog from "posthog-js"
 import { PersonIcon } from "@radix-ui/react-icons"
 
 interface OpportunityContactsProps {
@@ -105,14 +88,45 @@ export function OpportunityContacts({
     setExpandedSumIndex((prev) => (prev === index ? null : index))
   }
 
-  const getMatchedSkills = (contact: Person, icp: Icp) => {
-    return (
-      contact.skills?.filter((skill) =>
-        icp.tool.include.some(
-          (tool) => tool.toLowerCase() === skill.toLowerCase()
-        )
-      ) || []
-    )
+  const findIcpMatches = (contact: Person, icp: Icp | null): boolean => {
+    if (!contact || !contact.skills || !icp || !icp.tool.include) {
+      return false
+    }
+
+    if (fuzzySearch(contact.skills, icp.tool.include, 0.3).length > 0) {
+      return true
+    }
+
+    if (
+      contact.headline &&
+      fuzzySearch(contact.headline?.split(/\s+/), icp.tool.include, 0.3)
+        .length > 0
+    ) {
+      return true
+    }
+
+    if (
+      contact.title &&
+      fuzzySearch(contact.title?.split(/\s+/), icp.tool.include, 0.3).length > 0
+    ) {
+      return true
+    }
+
+    if (
+      contact.summary &&
+      fuzzySearch(contact.summary?.split(/\s+/), icp.tool.include, 0.3).length >
+        0
+    ) {
+      return true
+    }
+
+    return false
+  }
+
+  const bringMatchesForward = (originalList: string[], matchList: string[]) => {
+    const overlap = fuzzySearch(originalList, matchList, 0.3)
+    const remaining = originalList.filter((item) => !overlap.includes(item))
+    return [...overlap, ...remaining].join(", ")
   }
 
   return (
@@ -161,19 +175,16 @@ export function OpportunityContacts({
                           </div>
                         </div>
                       </AccordionTrigger>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          {contact.skills &&
-                          contact.skills.length > 0 &&
-                          icp &&
-                          getMatchedSkills(contact, icp).length > 0 ? ( // Use the new function here
+                      {findIcpMatches(contact, icp) && (
+                        <Tooltip>
+                          <TooltipTrigger>
                             <StrengthLabel>Excellent</StrengthLabel>
-                          ) : null}
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Mentions your ICP criteria</p>
-                        </TooltipContent>
-                      </Tooltip>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Mentions your ICP criteria</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                     </div>
                     {/* Right side */}
 
@@ -474,7 +485,53 @@ export function OpportunityContacts({
                           </div>
                         </div>
                       </div>
-                    </div> */}
+                    </div>
+                    {/* Skills */}
+                    <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
+                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                        <GraduationCap width={18} />
+                        <p>Skills</p>
+                      </div>
+
+                      <div className="w-full flex flex-row items-start justify-between pt-1">
+                        <p
+                          className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 pe-8 ${
+                            expandedSkillIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
+                          }`}
+                          onClick={() => toggleSkills(index)} // Toggle state for this user
+                        >
+                          {expandedSkillIndex === index
+                            ? // If expanded, show all skills
+                              contact.skills && contact.skills.length > 0
+                              ? icp
+                                ? bringMatchesForward(
+                                    contact.skills,
+                                    icp.tool.include
+                                  )
+                                : contact.skills.join(" . ")
+                              : "n/a"
+                            : // If not expanded, show truncated version
+                              contact.skills && contact.skills.length > 0
+                              ? icp
+                                ? bringMatchesForward(
+                                    contact.skills,
+                                    icp.tool.include
+                                  )
+                                : contact.skills.slice(0, 1).join(" . ")
+                              : "n/a"}
+                        </p>
+                        {contact.skills && contact.skills.length > 3 && (
+                          <button
+                            className="ml-2 text-primary hover:underline"
+                            onClick={() => toggleSkills(index)} // Toggle state for this user
+                          >
+                            {expandedSkillIndex === index
+                              ? "Show Less"
+                              : "Show All"}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </AccordionContent>
               </AccordionItem>
