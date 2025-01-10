@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { formatPhoneNumber, fuzzySearch } from "@/utils/misc"
+import { formatPhoneNumber, fuzzySearch, findIcpMatches } from "@/utils/misc"
 import { type Person } from "@/types/person"
 import {
   Tooltip,
@@ -86,41 +86,6 @@ export function OpportunityContacts({
   const toggleSum = (index: number) => {
     // If the clicked index is already expanded, collapse it; otherwise, expand the new one
     setExpandedSumIndex((prev) => (prev === index ? null : index))
-  }
-
-  const findIcpMatches = (contact: Person, icp: Icp | null): boolean => {
-    if (!contact || !contact.skills || !icp || !icp.tool.include) {
-      return false
-    }
-
-    if (fuzzySearch(contact.skills, icp.tool.include, 0.3).length > 0) {
-      return true
-    }
-
-    if (
-      contact.headline &&
-      fuzzySearch(contact.headline?.split(/\s+/), icp.tool.include, 0.3)
-        .length > 0
-    ) {
-      return true
-    }
-
-    if (
-      contact.title &&
-      fuzzySearch(contact.title?.split(/\s+/), icp.tool.include, 0.3).length > 0
-    ) {
-      return true
-    }
-
-    if (
-      contact.summary &&
-      fuzzySearch(contact.summary?.split(/\s+/), icp.tool.include, 0.3).length >
-        0
-    ) {
-      return true
-    }
-
-    return false
   }
 
   const bringMatchesForward = (originalList: string[], matchList: string[]) => {

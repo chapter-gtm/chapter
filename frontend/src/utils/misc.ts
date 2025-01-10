@@ -1,5 +1,7 @@
 import Fuse from "fuse.js"
 import { parsePhoneNumber } from "libphonenumber-js"
+import { type Person } from "@/types/person"
+import { type Icp } from "@/types/icp"
 
 export function getNameInitials(name: string): string {
   const words = name.split(" ")
@@ -129,4 +131,41 @@ export function fuzzySearch(
       )
     }) || []
   )
+}
+
+export function findIcpMatches(
+  contact: Person | null,
+  icp: Icp | null
+): boolean {
+  if (!contact || !contact.skills || !icp || !icp.tool.include) {
+    return false
+  }
+
+  if (fuzzySearch(contact.skills, icp.tool.include, 0.3).length > 0) {
+    return true
+  }
+
+  if (
+    contact.headline &&
+    fuzzySearch(contact.headline?.split(/\s+/), icp.tool.include, 0.3).length >
+      0
+  ) {
+    return true
+  }
+
+  if (
+    contact.title &&
+    fuzzySearch(contact.title?.split(/\s+/), icp.tool.include, 0.3).length > 0
+  ) {
+    return true
+  }
+
+  if (
+    contact.summary &&
+    fuzzySearch(contact.summary?.split(/\s+/), icp.tool.include, 0.3).length > 0
+  ) {
+    return true
+  }
+
+  return false
 }
