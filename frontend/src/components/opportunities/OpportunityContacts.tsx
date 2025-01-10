@@ -239,25 +239,14 @@ export function OpportunityContacts({
                             }`}
                             onClick={() => toggleSkills(index)} // Toggle state for this user
                           >
-                            {expandedSkillIndex === index
-                              ? // If expanded, show all skills
-                                contact.skills && contact.skills.length > 0
-                                ? icp
-                                  ? bringMatchesForward(
-                                      contact.skills,
-                                      icp.tool.include
-                                    )
-                                  : contact.skills.join(" . ")
-                                : "n/a"
-                              : // If not expanded, show truncated version
-                                contact.skills && contact.skills.length > 0
-                                ? icp
-                                  ? bringMatchesForward(
-                                      contact.skills,
-                                      icp.tool.include
-                                    )
-                                  : contact.skills.slice(0, 1).join(" . ")
-                                : "n/a"}
+                            {contact.skills && contact.skills.length > 0
+                              ? icp
+                                ? bringMatchesForward(
+                                    contact.skills,
+                                    icp.tool.include
+                                  )
+                                : contact.skills.join(" . ")
+                              : "n/a"}
                           </p>
                           {contact.skills && contact.skills.length > 3 && (
                             <button
