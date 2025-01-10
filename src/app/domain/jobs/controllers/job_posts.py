@@ -165,8 +165,19 @@ class JobPostController(Controller):
         # Generate pdf and save to s3
         if db_obj.url:
             pdf_content = await get_pdf(db_obj.url)
-            s3_client = boto3.client("s3")
-            s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{db_obj.id}.pdf", Body=pdf_content)
+            if pdf_content:
+                s3_client = boto3.client("s3")
+                s3_client.put_object(Bucket=app_s3_bucket_name, Key=f"job_posts/{db_obj.id}.pdf", Body=pdf_content)
+            else:
+                error_msg = "Couldn't get pdf for a job post"
+                await logger.awarn(
+                    error_msg,
+                    job_id=db_obj.id,
+                    job_title=db_obj.title,
+                    company_id=company_db_obj.id,
+                    company_name=company_db_obj.name,
+                    company_url=company_db_obj.url,
+                )
 
         return job_posts_service.to_schema(schema_type=JobPost, data=db_obj)
 
