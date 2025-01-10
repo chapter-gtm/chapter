@@ -181,11 +181,13 @@ export function OpportunitySearchList({
                     (tool) => tool && icp.tool.include.includes(tool.name)
                   )
                   .map((tool, index) => (
-                    <div
-                      key={index}
-                      className="bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md"
-                    >
-                      {tool && <div>{tool.name}</div>}
+                    <div key={index} className="">
+                      {tool && (
+                        <div className="flex flex-inline items-center bg-popover dark:bg-muted text-primary font-medium px-2 py-1 text-xs rounded-md gap-1">
+                          <span className="w-1.5 h-1.5 rounded-md bg-violet-400"></span>
+                          {tool.name}
+                        </div>
+                      )}
                     </div>
                   ))
               ) : (
@@ -212,8 +214,9 @@ export function OpportunitySearchList({
                           <Badge
                             key={index}
                             variant={"outline"}
-                            className="border-border"
+                            className="border-border gap-1"
                           >
+                            <span className="w-1.5 h-1.5 rounded-md bg-amber-400"></span>
                             {tool.name}
                           </Badge>
                         )}

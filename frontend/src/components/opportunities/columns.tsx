@@ -754,8 +754,12 @@ export function getFixedColumns(
               .map((tool, index) => (
                 <BadgeColor
                   key={index}
-                  className={classNames(ScaleLabel[tool.certainty]?.color)}
+                  className={
+                    (classNames(ScaleLabel[tool.certainty]?.color), "gap-1")
+                  }
                 >
+                  <span className="w-1.5 h-1.5 rounded-md bg-violet-400"></span>
+
                   {tool.name}
                 </BadgeColor>
               ))}

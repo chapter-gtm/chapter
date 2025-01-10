@@ -14,6 +14,8 @@ import {
   Star,
 } from "lucide-react"
 
+import { fuzzySearch, findIcpMatches } from "@/utils/misc"
+
 import {
   Tooltip,
   TooltipContent,
@@ -82,62 +84,74 @@ export function OpportunityHighlights({
       <div className="flex flex-1 flex-col gap-y-4 py-3 px-4 ">
         {icp && icp.tool.include.length > 0 ? (
           <>
-            <div className="flex flex-row justify-start items-center text-zinc-700 gap-2">
-              <StrengthLabel variant={"good"}>High Signal</StrengthLabel>
-              {/* <span className="w-[2px] h-7 rounded-md bg-muted"></span> */}
+            <div className="flex flex-wrap justify-start items-center text-zinc-700 gap-2">
+              {opportunity.contacts !== null &&
+              opportunity.contacts.length > 0 &&
+              opportunity.contacts.some(
+                (contact: Person) =>
+                  contact.skills &&
+                  contact.skills.length > 0 &&
+                  icp &&
+                  findIcpMatches(contact, icp)
+              ) ? (
+                <StrengthLabel variant={"great"}>
+                  Excellent Signal
+                </StrengthLabel>
+              ) : (
+                <StrengthLabel variant={"good"}>High Signal</StrengthLabel>
+              )}
 
-              {/* toolstack */}
-              <div className="flex items-center gap-2">
-                {icp &&
-                  opportunity.jobPosts
-                    ?.flatMap((jobPost) => jobPost.tools)
-                    .filter(
-                      (tool) => tool && icp.tool.include.includes(tool.name)
-                    )
-                    .map((tool, index) => (
-                      <>
-                        {tool && (
-                          <div
-                            key={index}
-                            className="bg-popover gap-1 flex items-center dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-md bg-violet-400"></span>
-                            {tool.name}
-                          </div>
-                        )}
-                      </>
-                    ))}
+              {icp &&
+                opportunity.jobPosts
+                  ?.flatMap((jobPost) => jobPost.tools)
+                  .filter(
+                    (tool) => tool && icp.tool.include.includes(tool.name)
+                  )
+                  .map((tool, index) => (
+                    <>
+                      {tool && (
+                        <div
+                          key={index}
+                          className="bg-popover gap-1 flex items-center dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-md bg-violet-400"></span>
+                          {tool.name}
+                        </div>
+                      )}
+                    </>
+                  ))}
 
-                {/* Team size */}
+              {/* Team size */}
+              <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
+                Eng size{" "}
+                {opportunity.company?.orgSize?.engineering?.toLocaleString()}
+              </p>
+
+              {/* Public API/Docs */}
+              {opportunity.company?.docsUrl && (
                 <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
-                  Eng size{" "}
-                  {opportunity.company?.orgSize?.engineering?.toLocaleString()}
+                  Public Docs
                 </p>
+              )}
 
-                {/* Public API/Docs */}
-                {opportunity.company?.docsUrl && (
-                  <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
-                    Public Docs
-                  </p>
-                )}
+              {/* Public Changelog */}
+              {opportunity.company?.changelogUrl && (
+                <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
+                  Public Changelog
+                </p>
+              )}
 
-                {/* Public Changelog */}
-                {opportunity.company?.changelogUrl && (
-                  <p className="bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
-                    Public Changelog
-                  </p>
-                )}
-
-                {/* unique person */}
-                {opportunity.contacts !== null &&
-                  opportunity.contacts.length > 0 &&
-                  opportunity.contacts.map((contact: Person, index) =>
-                    contact.skills &&
-                    contact.skills.length > 0 &&
-                    icp &&
-                    getMatchedSkills(contact, icp).length > 0 ? ( // Use the new function here
+              {/* unique person */}
+              {opportunity.contacts !== null &&
+                opportunity.contacts.length > 0 &&
+                opportunity.contacts.map((contact: Person, index) =>
+                  contact.skills &&
+                  contact.skills.length > 0 &&
+                  icp &&
+                  findIcpMatches(contact, icp) ? (
+                    <>
                       <span key={index}>
-                        <div className="flex flex-inline gap-1 items-center font-medium px-2 py-1 text-xs rounded-md bg-popover dark:bg-muted text-primary">
+                        <div className="flex flex-inline gap-1 items-center bg-popover dark:bg-muted text-primary font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-muted dark:border-secondary/30">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -150,35 +164,32 @@ export function OpportunityHighlights({
                               clip-rule="evenodd"
                             />
                           </svg>
-                          {contact.fullName} |
-                          <span>
-                            {getMatchedSkills(contact, icp).join(", ")}
-                          </span>
+                          {contact.fullName}
                         </div>
                       </span>
-                    ) : null
-                  )}
+                    </>
+                  ) : null
+                )}
 
-                {/* Funding */}
-                {/* If opportunity funding date is less than 6 months, render the date here */}
-                {opportunity.company?.lastFunding?.announcedDate
-                  ? (() => {
-                      const monthsAgo = Math.floor(
-                        (Date.now() -
-                          new Date(
-                            opportunity.company.lastFunding.announcedDate
-                          ).getTime()) /
-                          (1000 * 60 * 60 * 24 * 30)
-                      )
-                      return monthsAgo < 7 ? (
-                        <div className="flex flex-inline gap-1 items-center bg-yellow-400/50 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-400 font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-yellow-400 dark:border-yellow-400">
-                          <Star size={"13"} />
-                          Just raised
-                        </div>
-                      ) : null
-                    })()
-                  : ""}
-              </div>
+              {/* Funding */}
+              {/* If opportunity funding date is less than 6 months, render the date here */}
+              {opportunity.company?.lastFunding?.announcedDate
+                ? (() => {
+                    const monthsAgo = Math.floor(
+                      (Date.now() -
+                        new Date(
+                          opportunity.company.lastFunding.announcedDate
+                        ).getTime()) /
+                        (1000 * 60 * 60 * 24 * 30)
+                    )
+                    return monthsAgo < 7 ? (
+                      <div className="flex flex-inline gap-1 items-center bg-yellow-400/50 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-400 font-normal px-2 py-1 text-xs rounded-md border-[0.5px] border-yellow-400 dark:border-yellow-400">
+                        <Star size={"13"} />
+                        Just raised
+                      </div>
+                    ) : null
+                  })()
+                : ""}
             </div>
           </>
         ) : (
