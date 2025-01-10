@@ -259,6 +259,7 @@ export function OpportunityContacts({
                           )}
                         </div>
                       </div>
+
                       {/* Skills */}
                       <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
                         <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
@@ -277,42 +278,19 @@ export function OpportunityContacts({
                               ? // If expanded, show all skills
                                 contact.skills && contact.skills.length > 0
                                 ? icp
-                                  ? contact.skills
-                                      .filter((item) =>
-                                        icp.tool.include.some(
-                                          (el) =>
-                                            el.toLowerCase() ===
-                                            item.toLowerCase()
-                                        )
-                                      )
-                                      .concat(
-                                        contact.skills.filter(
-                                          (item) =>
-                                            !icp.tool.include.includes(item)
-                                        )
-                                      )
-                                      .join(" · ")
+                                  ? bringMatchesForward(
+                                      contact.skills,
+                                      icp.tool.include
+                                    )
                                   : contact.skills.join(" . ")
                                 : "n/a"
                               : // If not expanded, show truncated version
                                 contact.skills && contact.skills.length > 0
                                 ? icp
-                                  ? contact.skills
-                                      .filter((item) =>
-                                        icp.tool.include.some(
-                                          (el) =>
-                                            el.toLowerCase() ===
-                                            item.toLowerCase()
-                                        )
-                                      )
-                                      .concat(
-                                        contact.skills.filter(
-                                          (item) =>
-                                            !icp.tool.include.includes(item)
-                                        )
-                                      )
-                                      .slice(0, 5) // Show only the first skill
-                                      .join(" · ")
+                                  ? bringMatchesForward(
+                                      contact.skills,
+                                      icp.tool.include
+                                    )
                                   : contact.skills.slice(0, 1).join(" . ")
                                 : "n/a"}
                           </p>
@@ -445,91 +423,6 @@ export function OpportunityContacts({
                               </>
                             )}
                         </div>
-                      </div>
-                    </div>
-                    {/* Activity */}
-                    {/* <div className="flex flex-col px-4 py-4 gap-3">
-                      <p className="uppercase text-xs text-secondary-foreground font-semibold">
-                        Activity
-                      </p>
-
-                      <div className="flex flex-row gap-2 items-center justify-between">
-                        <div className="flex flex-row gap-2 items-center">
-                          Mentions{" "}
-                          <span className="px-1 py-0.5 bg-green-400 font-medium text-green-800 border border-green-800 text-xs rounded-lg">
-                            APIs
-                          </span>
-                          on LinkedIn
-                          <p className="text-zinc-400">•</p>
-                          <p className="text-zinc-400">2 days ago</p>
-                        </div>
-                        <div className="flex">
-                          <div className="border border-border px-1.5 py-0.5 rounded-lg">
-                            Join discussion
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-row gap-2 items-center justify-between">
-                        <div className="flex flex-row gap-2 items-center">
-                          Mentions{" "}
-                          <span className="px-1 py-0.5 bg-amber-500 font-medium text-amber-800 border border-amber-800 text-xs rounded-lg">
-                            Developer Docs
-                          </span>
-                          on LinkedIn
-                          <p className="text-zinc-400">•</p>
-                          <p className="text-zinc-400">3 days ago</p>
-                        </div>
-                        <div className="flex">
-                          <div className="border border-border px-1.5 py-0.5 rounded-lg">
-                            Join discussion
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Skills */}
-                    <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
-                      <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
-                        <GraduationCap width={18} />
-                        <p>Skills</p>
-                      </div>
-
-                      <div className="w-full flex flex-row items-start justify-between pt-1">
-                        <p
-                          className={`-ms-1.5 px-1.5 rounded-md flex-1 cursor-pointer -mr-4 pe-8 ${
-                            expandedSkillIndex === index ? "" : "line-clamp-1" // Apply line-clamp only when not expanded
-                          }`}
-                          onClick={() => toggleSkills(index)} // Toggle state for this user
-                        >
-                          {expandedSkillIndex === index
-                            ? // If expanded, show all skills
-                              contact.skills && contact.skills.length > 0
-                              ? icp
-                                ? bringMatchesForward(
-                                    contact.skills,
-                                    icp.tool.include
-                                  )
-                                : contact.skills.join(" . ")
-                              : "n/a"
-                            : // If not expanded, show truncated version
-                              contact.skills && contact.skills.length > 0
-                              ? icp
-                                ? bringMatchesForward(
-                                    contact.skills,
-                                    icp.tool.include
-                                  )
-                                : contact.skills.slice(0, 1).join(" . ")
-                              : "n/a"}
-                        </p>
-                        {contact.skills && contact.skills.length > 3 && (
-                          <button
-                            className="ml-2 text-primary hover:underline"
-                            onClick={() => toggleSkills(index)} // Toggle state for this user
-                          >
-                            {expandedSkillIndex === index
-                              ? "Show Less"
-                              : "Show All"}
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>
