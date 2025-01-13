@@ -94,11 +94,9 @@ export function OpportunityHighlights({
                   icp &&
                   findIcpMatches(contact, icp)
               ) ? (
-                <StrengthLabel variant={"great"}>
-                  Excellent Signal
-                </StrengthLabel>
+                <StrengthLabel variant={"Excellent"}>Excellent</StrengthLabel>
               ) : (
-                <StrengthLabel variant={"good"}>High Signal</StrengthLabel>
+                <StrengthLabel variant={"Great"}>Great</StrengthLabel>
               )}
 
               {icp &&

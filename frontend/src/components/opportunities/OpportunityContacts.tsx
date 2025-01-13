@@ -143,7 +143,9 @@ export function OpportunityContacts({
                       {findIcpMatches(contact, icp) && (
                         <Tooltip>
                           <TooltipTrigger>
-                            <StrengthLabel>Excellent</StrengthLabel>
+                            <StrengthLabel variant={"Excellent"}>
+                              Excellent
+                            </StrengthLabel>
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Mentions your ICP criteria</p>

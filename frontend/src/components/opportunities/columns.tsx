@@ -13,7 +13,11 @@ import { timeAgo } from "@/utils/misc"
 import { BadgeColor } from "@/components/ui/badge-color"
 import { getFundingRoundColor } from "@/utils/chapter/funding"
 
+import { fuzzySearch, findIcpMatches } from "@/utils/misc"
+
 import Image from "next/image"
+
+import { StrengthLabel } from "./OpportunityStrengthLabel"
 
 import {
   DropdownMenu,
@@ -39,9 +43,11 @@ import { type Tool, type Process } from "@/types/job_post"
 import { ScaleLabel } from "@/types/scale"
 import { type Opportunity, OpportunityStage } from "@/types/opportunity"
 import { updateOpportunityStage } from "@/utils/chapter/opportunity"
+
 import { truncateString } from "@/utils/misc"
 import { getNameInitials } from "@/utils/misc"
 
+import { Score } from "@/types/scale"
 export const TableRecord = z.record(z.any())
 export type RecordSchema = z.infer<typeof TableRecord>
 
@@ -100,6 +106,22 @@ export function getFilters(icp: Icp, users: User[]) {
         },
       ],
     },
+    // {
+    //   tableColumnName: "score",
+    //   label: "Score",
+    //   filterOptions: [
+    //     {
+    //       value: Score.EXCELLENT,
+    //       label: Score.EXCELLENT,
+    //       icon: null,
+    //     },
+    //     {
+    //       value: Score.GREAT,
+    //       label: Score.GREAT,
+    //       icon: null,
+    //     },
+    //   ],
+    // },
     {
       tableColumnName: "companySize",
       label: "Company Size",
@@ -348,6 +370,12 @@ function getStageFromStage(icp: Icp, users: User[], stage: OpportunityStage) {
   return opportunityStage
 }
 
+// func getScoreFromScore(score) {
+//   if score == Score.EXCELLENT {
+//     return filters
+//   }
+// }
+
 function getCompanySizeFromHeadcount(
   icp: Icp,
   users: User[],
@@ -418,6 +446,7 @@ export function getDefaultColumnVisibility(icp: Icp): VisibilityState {
     id: false,
     date: true,
     stage: true,
+    score: true,
     companyName: true,
     companySize: true,
     fundingRound: true,
@@ -466,6 +495,7 @@ export function getFixedColumns(
       cell: ({ row }) => {
         const id: string = row.getValue("id")
         const profilePicUrl = row.original.profilePicUrl
+        const createdAt: Date = row.getValue("date")
 
         return (
           <div className="flex flex-row justify-between items-center pe-2">
@@ -494,6 +524,31 @@ export function getFixedColumns(
       enableSorting: true,
       enableHiding: false,
     },
+    // {
+    //   accessorKey: "score",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="Score" />
+    //   ),
+    //   cell: ({ row }) => {
+    //     const id: string = row.getValue("id")
+    //     const contacts = row.original.contacts as Opportunity["contacts"]
+    //     const icpMatches =
+    //       contacts && contacts.some((contact) => findIcpMatches(contact, icp))
+    //     const score = icpMatches ? Score.EXCELLENT : Score.GREAT
+    //     console.log(contacts)
+
+    //     return (
+    //       <>
+    //         <div className="flex pe-8">
+    //           <StrengthLabel variant={score}>{score}</StrengthLabel>
+    //         </div>
+    //       </>
+    //     )
+    //   },
+    //   enableSorting: true,
+    //   enableHiding: false,
+    // },
+
     {
       accessorKey: "stage",
       header: ({ column }) => (
@@ -609,9 +664,6 @@ export function getFixedColumns(
 
         return (
           <div className="flex items-center">
-            {/* {companySize.hasOwnProperty("icon") && companySize.icon && (
-              <companySize.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-            )} */}
             <span>{companySize.label}</span>
           </div>
         )
@@ -643,10 +695,10 @@ export function getFixedColumns(
           valueA.engineering > valueB.engineering
           ? 1
           : valueA.engineering !== null &&
-              valueB.engineering !== null &&
-              valueA.engineering < valueB.engineering
-            ? -1
-            : 0
+            valueB.engineering !== null &&
+            valueA.engineering < valueB.engineering
+          ? -1
+          : 0
       },
       enableHiding: true,
       enableSorting: true,
@@ -837,7 +889,7 @@ export function getFixedColumns(
         return (
           <>
             {owner ? (
-              <div className="flex items-center space-x-1.5">
+              <div className="flex items-center space-x-1.5 pe-8">
                 <Avatar className="h-[15px] w-[15px] mr-1.5 rounded-lg">
                   <AvatarImage src={owner.avatarUrl} alt={owner.name} />
                   <AvatarFallback className="text-[8px]">

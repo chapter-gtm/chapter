@@ -9,3 +9,8 @@ export enum Scale {
   MEDIUM = "Medium",
   HIGH = "High",
 }
+
+export enum Score {
+  EXCELLENT = "Excellent",
+  GREAT = "Great",
+}

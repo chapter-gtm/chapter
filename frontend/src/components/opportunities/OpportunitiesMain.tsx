@@ -96,6 +96,7 @@ export function OpportunitiesMain() {
               fundingRound: rec.company?.lastFunding?.roundName,
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
+              contacts: rec.contacts,
               tools:
                 rec.jobPosts?.flatMap((jobPost) => jobPost.tools) ||
                 rec.repos?.flatMap((repo) => repo.language),

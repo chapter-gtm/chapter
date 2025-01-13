@@ -5,13 +5,13 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const labelVariants = cva(
-  "flex flex-inline gap-x-2 items-center justify-center whitespace-nowrap rounded-lg px-2 py-1 text-xs rounded-md border-[0.5px]",
+  "flex items-center justify-center rounded-lg px-1.5 py-0.5 text-sm font-medium border-[0.5px]",
   {
     variants: {
       variant: {
-        good: "text-sky-700 dark:text-sky-500 bg-sky-600/20 border-sky-700",
-        great:
-          "text-green-400 dark:text-green-400 bg-green-400/20 border-green-700",
+        Great: "text-sky-700 dark:text-sky-500 bg-sky-600/20 border-sky-700/40",
+        Excellent:
+          "text-green-700 dark:text-green-400 bg-green-400/20 border-green-700/40",
       },
       size: {
         fixed: "w-24 h-7",
@@ -23,7 +23,7 @@ const labelVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "good",
+      variant: "Great",
     },
   }
 )
