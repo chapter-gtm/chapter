@@ -13,8 +13,6 @@ import { timeAgo } from "@/utils/misc"
 import { BadgeColor } from "@/components/ui/badge-color"
 import { getFundingRoundColor } from "@/utils/chapter/funding"
 
-import { fuzzySearch, findIcpMatches } from "@/utils/misc"
-
 import Image from "next/image"
 
 import { StrengthLabel } from "./OpportunityStrengthLabel"
@@ -55,6 +53,22 @@ import { stageColors } from "@/types/opportunity"
 
 export function getFilters(icp: Icp, users: User[]) {
   const filters = [
+    {
+      tableColumnName: "score",
+      label: "Score",
+      filterOptions: [
+        {
+          value: Score.EXCELLENT,
+          label: Score.EXCELLENT,
+          icon: undefined,
+        },
+        {
+          value: Score.GREAT,
+          label: Score.GREAT,
+          icon: undefined,
+        },
+      ],
+    },
     {
       tableColumnName: "stage",
       label: "Stage",
@@ -106,22 +120,6 @@ export function getFilters(icp: Icp, users: User[]) {
         },
       ],
     },
-    // {
-    //   tableColumnName: "score",
-    //   label: "Score",
-    //   filterOptions: [
-    //     {
-    //       value: Score.EXCELLENT,
-    //       label: Score.EXCELLENT,
-    //       icon: null,
-    //     },
-    //     {
-    //       value: Score.GREAT,
-    //       label: Score.GREAT,
-    //       icon: null,
-    //     },
-    //   ],
-    // },
     {
       tableColumnName: "companySize",
       label: "Company Size",
@@ -165,77 +163,77 @@ export function getFilters(icp: Icp, users: User[]) {
         {
           value: FundingRound.GRANT,
           label: FundingRound.GRANT,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.PRE_SEED,
           label: FundingRound.PRE_SEED,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SEED,
           label: FundingRound.SEED,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_A,
           label: FundingRound.SERIES_A,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_B,
           label: FundingRound.SERIES_B,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_C,
           label: FundingRound.SERIES_C,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_D,
           label: FundingRound.SERIES_D,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_E,
           label: FundingRound.SERIES_E,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_F,
           label: FundingRound.SERIES_F,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_G,
           label: FundingRound.SERIES_G,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.SERIES_UNKNOWN,
           label: FundingRound.SERIES_UNKNOWN,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.PRIVATE_EQUITY,
           label: FundingRound.PRIVATE_EQUITY,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.CORPORATE_ROUND,
           label: FundingRound.CORPORATE_ROUND,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.DEBT_FINANCING,
           label: FundingRound.DEBT_FINANCING,
-          // icon: DollarSign,
+          icon: undefined,
         },
         {
           value: FundingRound.PUBLIC,
           label: FundingRound.PUBLIC,
-          // icon: DollarSign,
+          icon: undefined,
         },
       ],
     },
@@ -360,21 +358,22 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
 }
 
+function getScoreFromScore(icp: Icp, users: User[], score: Score) {
+  const filters = getFilters(icp, users)
+  return filters[0].filterOptions.find(
+    (opportunityScore) => opportunityScore.value === score
+  )
+}
+
 function getStageFromStage(icp: Icp, users: User[], stage: OpportunityStage) {
   const filters = getFilters(icp, users)
   const stageLabel: string = stage
-  const opportunityStage = filters[0].filterOptions.find(
+  const opportunityStage = filters[1].filterOptions.find(
     (opportunityStage) => opportunityStage.value === stageLabel
   )
 
   return opportunityStage
 }
-
-// func getScoreFromScore(score) {
-//   if score == Score.EXCELLENT {
-//     return filters
-//   }
-// }
 
 function getCompanySizeFromHeadcount(
   icp: Icp,
@@ -396,7 +395,7 @@ function getCompanySizeFromHeadcount(
   } else {
     companySizeLabel = "1000+"
   }
-  const companySize = filters[1].filterOptions.find(
+  const companySize = filters[2].filterOptions.find(
     (companySize) => companySize.value === companySizeLabel
   )
 
@@ -411,7 +410,7 @@ function getFundingFromFundingRound(
   const filters = getFilters(icp, users)
   const fundingRoundLabel: string = fundingRound
 
-  const funding = filters[2].filterOptions.find(
+  const funding = filters[3].filterOptions.find(
     (funding) => funding.value === fundingRoundLabel
   )
 
@@ -434,7 +433,7 @@ function getLocationFromCountry(icp: Icp, users: User[], country: string) {
   } else {
     locationLabel = "Rest of the World"
   }
-  const location = filters[3].filterOptions.find(
+  const location = filters[4].filterOptions.find(
     (location) => location.value === locationLabel
   )
 
@@ -524,31 +523,42 @@ export function getFixedColumns(
       enableSorting: true,
       enableHiding: false,
     },
-    // {
-    //   accessorKey: "score",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="Score" />
-    //   ),
-    //   cell: ({ row }) => {
-    //     const id: string = row.getValue("id")
-    //     const contacts = row.original.contacts as Opportunity["contacts"]
-    //     const icpMatches =
-    //       contacts && contacts.some((contact) => findIcpMatches(contact, icp))
-    //     const score = icpMatches ? Score.EXCELLENT : Score.GREAT
-    //     console.log(contacts)
+    {
+      accessorKey: "score",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Score" />
+      ),
+      cell: ({ row }) => {
+        const score: Score = row.getValue("score") as Score
+        const opportunityScore = getScoreFromScore(icp, users, score)
 
-    //     return (
-    //       <>
-    //         <div className="flex pe-8">
-    //           <StrengthLabel variant={score}>{score}</StrengthLabel>
-    //         </div>
-    //       </>
-    //     )
-    //   },
-    //   enableSorting: true,
-    //   enableHiding: false,
-    // },
+        if (!opportunityScore) {
+          return null
+        }
 
+        return (
+          <>
+            <div className="flex pe-8">
+              <StrengthLabel variant={score}>
+                {opportunityScore.label}
+              </StrengthLabel>
+            </div>
+          </>
+        )
+      },
+      filterFn: (row, id, value) => {
+        const score: Score = row.getValue("score") as Score
+        const opportunityScore = getScoreFromScore(icp, users, score)
+
+        if (!opportunityScore) {
+          return null
+        }
+
+        return value.includes(opportunityScore.value)
+      },
+      enableHiding: true,
+      enableSorting: true,
+    },
     {
       accessorKey: "stage",
       header: ({ column }) => (
@@ -695,10 +705,10 @@ export function getFixedColumns(
           valueA.engineering > valueB.engineering
           ? 1
           : valueA.engineering !== null &&
-            valueB.engineering !== null &&
-            valueA.engineering < valueB.engineering
-          ? -1
-          : 0
+              valueB.engineering !== null &&
+              valueA.engineering < valueB.engineering
+            ? -1
+            : 0
       },
       enableHiding: true,
       enableSorting: true,

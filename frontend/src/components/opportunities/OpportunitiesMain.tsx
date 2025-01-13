@@ -4,6 +4,7 @@ import * as React from "react"
 import { type User } from "@/types/user"
 import { type Icp } from "@/types/icp"
 import { type Opportunity } from "@/types/opportunity"
+import { Score } from "@/types/scale"
 import { getUsers } from "@/utils/chapter/users"
 import { getIcps } from "@/utils/chapter/icp"
 import { getOpportunities } from "@/utils/chapter/opportunity"
@@ -11,6 +12,7 @@ import {
   getUserProfile,
   addOpportunityToRecentlyViewed,
 } from "@/utils/chapter/users"
+import { findIcpMatches } from "@/utils/misc"
 import {
   RecordSchema,
   TableRecord,
@@ -88,6 +90,14 @@ export function OpportunitiesMain() {
             const record: Record<string, any> = {
               id: rec.id,
               date: new Date(rec.createdAt), // TODO: handle in getOpportunities method
+              score: (() => {
+                const icpMatches =
+                  rec.contacts &&
+                  rec.contacts.some((contact) =>
+                    findIcpMatches(contact, currentUserIcps[0])
+                  )
+                return icpMatches ? Score.EXCELLENT : Score.GREAT
+              })(),
               stage: rec.stage,
               companyName: rec.company?.name,
               profilePicUrl: rec.company?.profilePicUrl,
@@ -96,7 +106,6 @@ export function OpportunitiesMain() {
               fundingRound: rec.company?.lastFunding?.roundName,
               companyLocation: rec.company?.hqLocation,
               industry: rec.company?.industry,
-              contacts: rec.contacts,
               tools:
                 rec.jobPosts?.flatMap((jobPost) => jobPost.tools) ||
                 rec.repos?.flatMap((repo) => repo.language),
