@@ -12,25 +12,15 @@ import {
 } from "@/utils/chapter/users"
 import { updateOpportunityNotes } from "@/utils/chapter/opportunity"
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  NavTabsTrigger,
-} from "@/components/ui/tabs"
-
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-
-import { Separator } from "@/components/ui/separator"
 
 import { NotebookPen } from "lucide-react"
 
 import { OpportunityStageList } from "./OpportunityStageList"
 import { OpportunityTabs } from "./OpportunityTabs"
 import { OpportunityOwner } from "./OpportunityOwner"
-import { OpportunityHighlights } from "./OpportunityHighlight"
+import { OpportunityHighlights } from "./OpportunityHighlights"
 import { OpportunityMentions } from "./OpportunityMentions"
 
 interface OpportunityFullProps {
@@ -101,7 +91,7 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
   return (
     <>
       <Toaster theme="light" />
-      {opportunity !== null && (
+      {opportunity && icp && (
         <div className="bg-background pt-24 p-6 flex flex-1 overflow-hidden">
           <div className="flex flex-col flex-1 bg-card rounded-lg border border-border overflow-hidden">
             {/* Header */}
@@ -121,9 +111,13 @@ export function OpportunityFull({ opportunityId }: OpportunityFullProps) {
                 </div>
               </div>
               <div className="flex flex-col justify-start items-start border-t border-border bg-popover/30 dark:bg-popover">
-                <OpportunityHighlights opportunity={opportunity} />
+                <OpportunityHighlights opportunity={opportunity} icp={icp} />
 
-                <OpportunityMentions opportunity={opportunity} size={"large"} />
+                <OpportunityMentions
+                  opportunity={opportunity}
+                  size={"large"}
+                  icp={icp}
+                />
               </div>
             </div>
 
