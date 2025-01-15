@@ -199,6 +199,17 @@ export function OpportunityContacts({
                         <p className="font-medium">{contact.title}</p>
                       </div>
 
+                      <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200 ">
+                        <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
+                          <PersonIcon width={18} />
+                          <p>Headline</p>
+                        </div>
+                        <p className="font-medium">
+                          {" "}
+                          {contact.headline ? contact.headline : "n/a"}
+                        </p>
+                      </div>
+
                       {/* Summary */}
                       <div className="flex flex-row items-start justify-start text-sm text-zinc-700 dark:text-zinc-200">
                         <div className="flex gap-x-2 items-center w-32 min-w-32 max-w-32 text-zinc-500 dark:text-zinc-400">
