@@ -108,6 +108,9 @@ const agentFormSchema = z.object({
   pitch: z
     .string()
     .max(200, { message: "Pitch cannot exceed 150 characters." }),
+  repo: z.object({
+    query: z.string(),
+  }),
 })
 
 const multiSelectVariants = cva(
@@ -309,6 +312,9 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
       },
       person: { titles: ["Founder", "CTO"], subRoles: [] },
       pitch: "",
+      repo: {
+        query: "",
+      },
     },
   })
 
@@ -331,6 +337,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         process: data.process_,
         person: data.person,
         pitch: data.pitch,
+        repo: data.repo,
       } as Icp)
       refreshIcp(updatedIcp)
       toast.success("ICP Saved!")
@@ -375,6 +382,7 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
         process_: icp.process,
         person: icp.person,
         pitch: icp.pitch,
+        repo: icp.repo,
       })
     }
   }, [icp])
@@ -701,6 +709,32 @@ export function AgentForm({ icp, refreshIcp }: AgentFormProps) {
                             placeholder="Select processes"
                             variant="default"
                           />
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-y-2">
+                      {/* <FormLabel className="text-lg">Agent name</FormLabel> */}
+                      <FormField
+                        control={form.control}
+                        name="repo.query"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex flex-col gap-y-3 justify-between w-full">
+                              <Label
+                                htmlFor="company.headcountMax"
+                                className="text-muted-foreground"
+                              >
+                                GitHub repo search query
+                              </Label>
+                              <Input
+                                {...form.register("repo.query")}
+                                placeholder="e.g. SDK+language:Python"
+                                className="font-medium"
+                              />
+                            </div>
+                            <FormMessage />
+                          </FormItem>
                         )}
                       />
                     </div>
