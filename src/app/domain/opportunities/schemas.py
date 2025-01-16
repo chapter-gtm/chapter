@@ -18,6 +18,7 @@ from app.lib.schema import (
     OpportunityStage,
     PersonCriteria,
     ProcessCriteria,
+    RepoCriteria,
     ToolCriteria,
 )
 
@@ -92,6 +93,7 @@ class ICP(CamelizedBaseStruct):
     process: ProcessCriteria | None = None
     person: PersonCriteria | None = None
     pitch: str | None = None
+    repo: RepoCriteria | None = None
 
 
 class ICPCreate(CamelizedBaseStruct):
@@ -103,6 +105,7 @@ class ICPCreate(CamelizedBaseStruct):
     process: ProcessCriteria | None = None
     person: PersonCriteria | None = None
     pitch: str | None = None
+    repo: RepoCriteria | None = None
 
 
 class ICPUpdate(CamelizedBaseStruct):
@@ -114,3 +117,4 @@ class ICPUpdate(CamelizedBaseStruct):
     process: ProcessCriteria | None | msgspec.UnsetType = msgspec.UNSET
     person: PersonCriteria | None | msgspec.UnsetType = msgspec.UNSET
     pitch: str | None | msgspec.UnsetType = msgspec.UNSET
+    repo: RepoCriteria | None | msgspec.UnsetType = msgspec.UNSET
