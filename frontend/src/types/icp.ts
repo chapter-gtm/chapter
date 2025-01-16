@@ -30,7 +30,7 @@ export type PersonCriteria = {
   subRoles: string[]
 }
 
-export type RepoCriteris = {
+export type RepoCriteria = {
   query: string
 }
 
