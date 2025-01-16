@@ -30,6 +30,10 @@ export type PersonCriteria = {
   subRoles: string[]
 }
 
+export type RepoCriteris = {
+  query: string
+}
+
 export type Icp = {
   id: string
   name: string
@@ -38,4 +42,5 @@ export type Icp = {
   process: ProcessCriteria
   person: PersonCriteria
   pitch: string
+  repo: RepoCriteria
 }
