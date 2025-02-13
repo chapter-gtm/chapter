@@ -81,17 +81,6 @@ class OpportunityController(Controller):
             if opportunity.company and opportunity.company.url:
                 opportunity.company.profile_pic_url = get_logo_dev_link(opportunity.company.url)
 
-            """
-            # Get latest app details
-            if opportunity.company.ios_app_url:
-                ios_app_details = await get_ios_app_details(opportunity.company.ios_app_url)
-                opportunity.company.ios_app_details = AppDetails(**ios_app_details)
-
-            if opportunity.company.android_app_url:
-                android_app_details = await get_android_app_details(opportunity.company.android_app_url)
-                opportunity.company.android_app_details = AppDetails(**android_app_details)
-            """
-
         return paginated_response
 
     @post(
