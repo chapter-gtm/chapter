@@ -80,3 +80,7 @@ docker compose up
 ```
 
 Note: This project integrates with third-party APIs. You will need to obtain the necessary API keys for these services and update them in your `.env` file. For example, see the provided `.env.docker.example` file for the required format.
+
+## Test
+- 1
+
